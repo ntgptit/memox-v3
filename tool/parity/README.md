@@ -9,7 +9,8 @@ không gọi model**:
 | Soát spec có màu bare-hex (chưa token hóa) + thống kê token màu kit dùng | `token_lint.mjs` |
 | Chạy per-node log (`diff.py --spec`) cho TOÀN APP → tổng hợp MISSING?/COLOR?/SHIFT? | `node_audit.mjs` |
 | Phát hiện node **thiếu thật** theo hình học (cây widget vs spec), không lệ thuộc màu/theme | `structural_inventory.mjs` + `test/support/structural_dump.dart` |
-| Phân loại **redesign vs bug** tất định (ý định đã duyệt) | `intent-ledger.json` |
+| Phân loại **FIX (mặc định) vs ngoại lệ có-docs** (behavior/future/rejected/needs-schema) | `intent-ledger.json` |
+| Phát hiện **design đổi** (shots/specs) → bắt FE + docs + golden phải sửa theo | `design_watch.mjs` + `design-baseline.json` |
 
 Triết lý: **mã hóa quyết định MỘT LẦN thành dữ liệu** (`parity-map.json`) → tool đọc và chấm tất
 định mãi mãi. AI chỉ cần khi: build screen mới, một gate fail cần phán đoán, hoặc duyệt baseline
@@ -99,26 +100,31 @@ node tool/parity/node_audit.mjs --screen 02-dashboard --json
 
 ## Vòng khép kín (closed loop): detect → inventory → classify → resolve
 
+> **Nguồn chân lý = shots + specs (gen từ mock).** Mọi lệch so với chúng là **BUG → FIX** (sửa FE cho
+> khớp mock). KHÔNG có cửa "redesign" để bỏ qua. Ngoại lệ DUY NHẤT là thứ **có docs quy định** FE cố ý
+> khác mock (behavior-owned / Future / Rejected / needs-schema) — và chỉ những thứ đó nằm trong
+> `intent-ledger.json`.
+
 ```text
-1. DETECT   node_audit.mjs (pixel)        → MISSING?/COLOR?/SHIFT? (có nhiễu, dark-theme)
-2. INVENTORY structural_inventory.mjs     → node THIẾU THẬT theo hình học (bác/ xác nhận pixel)
-3. CLASSIFY intent-ledger.json            → mỗi node thiếu: redesign (đã duyệt) vs BUG?
-4. RESOLVE  BUG? → sửa code · redesign mới → thêm 1 dòng vào ledger
-            → lần chạy sau tự phân loại đúng (vòng khép lại)
+1. DETECT    node_audit.mjs (pixel)        → MISSING?/COLOR?/SHIFT? (có nhiễu, dark-theme)
+2. INVENTORY structural_inventory.mjs      → node THIẾU THẬT theo hình học (bác/ xác nhận pixel)
+3. CLASSIFY  intent-ledger.json            → node thiếu: FIX (mặc định) vs exception (có docs)
+4. RESOLVE   FIX → sửa FE cho khớp mock · exception có docs → +1 dòng ledger (trích doc)
+             → lần chạy sau tự phân loại (vòng khép lại)
 ```
 
 Vì sao chia tầng: **pixel** nhanh nhưng nhiễu (dark-theme, AA); **structural** chính xác cho "thiếu
-hay không" nhưng cần dump cây widget; **redesign-vs-bug** thì *bản chất không tất định được bằng
-script* — cần ý định thiết kế (docs/owner). Nên quyết định đó được làm **1 lần** rồi GHI vào ledger →
-từ đó máy phân loại tất định. Ví dụ thật (dashboard dark): pixel báo `progress-fill` MISSING →
-structural cho thấy **vẫn render** (bác false-positive) → còn lại là COLOR, ledger ghi "dashboard =
-redesign quiet surface" → không phải bug.
+hay không" nhưng cần dump cây widget; **FIX-vs-exception** mặc định là **FIX**, ledger chỉ giữ ngoại lệ
+có-docs (quyết 1 lần, trích nguồn). Ví dụ thật (dashboard dark): pixel báo `progress-fill` MISSING →
+structural cho thấy **vẫn render** (bác false-positive của pixel). Phần COLOR còn lại (accent bị trầm so
+shot) → theo nguyên tắc **shots = chân lý** thì đây là **FIX candidate** (sửa FE cho khớp accent của
+mock), KHÔNG phải "redesign" — trừ khi có docs nói behavior/Future.
 
 ## `structural_inventory.mjs` — inventory node theo hình học (no pixel, no AI)
 
 So **cây widget render** (dump từ `test/support/structural_dump.dart`, frame 390×780) với bbox node
 trong `specs/NN-*.md`: node spec nào **không có widget nào phủ** = thiếu thật — đúng cả dark, cả
-text/icon (giải hạn chế pixel). Mỗi node thiếu được ledger phân loại `redesign`/`BUG?`.
+text/icon (giải hạn chế pixel). Mỗi node thiếu được ledger phân loại `FIX` (mặc định) / `exception`.
 
 ```bash
 # 1) sinh dump (Flutter test gọi dumpStructure → test/_parity_dump/<name>.json, là artifact commit)
@@ -134,13 +140,34 @@ Loại trừ đúng: node **dưới fold** (`y+h > --viewport`, mặc định 78
 tính missing. Hiện đã **prototype trên 02-dashboard** (0 node thiếu, cả light+dark); rollout = thêm 1
 dump-test/screen.
 
-## `intent-ledger.json` — redesign vs bug (tất định, ghi 1 lần)
+## `intent-ledger.json` — ngoại lệ có-docs (KHÔNG phải cửa "redesign")
 
-Mỗi entry: `{screen, node ("*"=mọi node), kind (missing/color/"*"), verdict:"redesign", reason,
-source}`. `source` BẮT BUỘC trích doc/memory/owner ruling. Khi `structural_inventory` thấy node thiếu:
-khớp ledger → `redesign (source)`; không khớp → `BUG?` để điều tra. Divergence mới được xác nhận
-cố ý → thêm 1 dòng (vòng khép lại). Phán đoán "redesign hay bug" cho ca MỚI vẫn do `ui-parity-checker`
-/owner; ledger chỉ giữ kết quả để khỏi phán lại.
+**Mặc định: lệch so mock = FIX.** Ledger chỉ liệt kê thứ FE **cố ý** khác mock vì **có docs quy định**.
+Mỗi entry: `{screen, node ("*"=mọi node), kind (missing/color/"*"), verdict:"exception", exceptionKind
+(behavior|future|rejected|needs-schema), reason, source}`. `source` BẮT BUỘC trích doc/owner ruling.
+Khi `structural_inventory` thấy node thiếu: khớp ledger → `exception (source)`; không khớp → **`FIX`**
+(sửa FE cho khớp mock). Giữ ledger **tối thiểu** — phân vân thì để trống và sửa FE. Phán đoán "có phải
+ngoại lệ không" cho ca mới vẫn do `ui-parity-checker`/owner dựa trên docs; ledger chỉ giữ kết quả đã
+trích nguồn.
+
+## `design_watch.mjs` — design đổi thì code/docs phải đổi theo (gate)
+
+Vì **shots/specs = chân lý**, khi design đổi thì FE + golden + docs **phải đổi theo**. Tool hash
+`spec + shots` của từng screen, so với baseline đã commit (`design-baseline.json`); lệch = "design đã
+đổi kể từ lần acknowledge cuối → cập nhật downstream rồi re-baseline".
+
+```bash
+node tool/parity/design_watch.mjs           # báo screen nào design đã đổi vs baseline
+node tool/parity/design_watch.mjs --check    # exit 1 nếu có drift (CI gate)
+node tool/parity/design_watch.mjs --update   # re-baseline (SAU khi đã sửa downstream)
+```
+
+Khi báo drift, tool in **checklist downstream bắt buộc** (theo trigger-map của `CLAUDE.md`): FE widget →
+golden (`--update-goldens`) → structural dump → `visual-contract.md` → wireframe → decision table →
+`parity-map.json` → **re-baseline**. Re-baseline (`--update`) chính là **dấu xác nhận** đã làm 1–7 cho
+screen đổi. CI chạy `--check` ⇒ PR đổi design mà chưa cập nhật code/docs (chưa re-baseline) sẽ **đỏ**.
+(Khác với `check_specs_fresh` — cái đó canh specs khớp `index.html`; `design_watch` canh design ⇄
+code/docs.)
 
 ---
 

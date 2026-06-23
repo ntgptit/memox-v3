@@ -38,6 +38,8 @@ jobs:
         run: node tool/parity/report.mjs --check
       - name: Token lint (bare-hex gaps)
         run: node tool/parity/token_lint.mjs --check
+      - name: Design-drift gate (spec/shots ⇄ code/docs acknowledged)
+        run: node tool/parity/design_watch.mjs --check
       - name: Full parity report with SSIM (artifact log)
         if: always()
         run: node tool/parity/report.mjs --ssim

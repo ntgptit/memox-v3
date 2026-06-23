@@ -1,0 +1,109 @@
+{
+  "$comment": "Design baseline for tool/parity/design_watch.mjs — per-screen hash of spec + shots. Re-run with --update ONLY after the FE/goldens/docs have been updated to follow a design change.",
+  "screens": {
+    "00-components": {
+      "hash": "fe957d809a58b1db2c5da694233ff0e2499a3b1d748cc767c0f7e2d27ab44e40",
+      "shots": 2
+    },
+    "01-onboarding": {
+      "hash": "877b87585b85de216a19c86ec1546aeccbc4e80d717cfb2de44e63d1af4b5215",
+      "shots": 18
+    },
+    "02-dashboard": {
+      "hash": "224e29f714c0b107a3e55ef51ba079e2afcd8abf531b64d1ae2aa11f694a7cf6",
+      "shots": 16
+    },
+    "03-library-overview": {
+      "hash": "27bbafd994a1e6860adbaa91a14184f590013936f9c3af75cebb662cac8439b2",
+      "shots": 12
+    },
+    "04-folder-detail": {
+      "hash": "40a818a036204acb0a837d5682e8e0db713e46d5ee89adc6c712623d4b42007a",
+      "shots": 16
+    },
+    "05-library-search": {
+      "hash": "18b354f167af8f71b7a55151855e122e2b422679506719f2fcefc6b5041621ca",
+      "shots": 10
+    },
+    "06-flashcard-list": {
+      "hash": "5b9abb99cbddd5105bc1a9972b1b113a8192746d2def902ef4f145155b070d41",
+      "shots": 16
+    },
+    "07-flashcard-create": {
+      "hash": "7aa0335011e786cb6b6c89ccd3404508697be05ed640865daa9fe7adff2c1d5d",
+      "shots": 12
+    },
+    "08-flashcard-edit": {
+      "hash": "538024dd2268724385c41bec9722261c9a69c421e391ac85b7f88439cea21cc8",
+      "shots": 14
+    },
+    "09-flashcard-history": {
+      "hash": "75b524e52f464784097b3daccd582f81666636a4ec1e3ba7fb6921fdcc9d18d7",
+      "shots": 10
+    },
+    "10-deck-import": {
+      "hash": "d261ec585ee8ac6b48bd703dec39bfbd81a93ed86b1abb0a264c4df429fe89ad",
+      "shots": 18
+    },
+    "11-tag-management": {
+      "hash": "e19004557d2e1c503120637f0d38c3d8715f045f6f14621e3c974f1a7616fa26",
+      "shots": 22
+    },
+    "12-study-review": {
+      "hash": "7d3d480bb3bcd0c712a94fe820597e9b89e0d0bb58b18ffac798e375e734d126",
+      "shots": 2
+    },
+    "13-study-match": {
+      "hash": "5821d9b75cf5e0bd35cfc5ea87964ff2f7f4d717d56543bdc4cd4056ff4e0939",
+      "shots": 6
+    },
+    "14-study-guess": {
+      "hash": "beeb0175e6137f68bc2f693441d47143c9a50859cac283728f6f3c10bf8feb49",
+      "shots": 2
+    },
+    "15-study-recall": {
+      "hash": "2516fcc8cda3c708560aab21aa5b993ef003379d03ae1b78d491139dfe0dd120",
+      "shots": 4
+    },
+    "16-study-fill": {
+      "hash": "718f8d1779093401f0a9a11b5faefca94f023c7383763000615bf19f918871fb",
+      "shots": 4
+    },
+    "17-study-result": {
+      "hash": "a365d69d3ee4aa36dcc5e4f1bd0d777e0081e261441ed9ab6b21d45e257e5445",
+      "shots": 12
+    },
+    "18-stats": {
+      "hash": "8f86f98c7f339a63ea56b8f6fcc5ebd99eb7a912ae67cc577d1e7a0cb2f63a96",
+      "shots": 2
+    },
+    "19-progress": {
+      "hash": "2ad12e6c774d7cd6d56cbb9443639d0901e5774b7eb49929dd8fb47898e1b10b",
+      "shots": 18
+    },
+    "20-settings": {
+      "hash": "1dd135efe95f8d5bedccc24e2d45694be7a5805c06cfa94651659ee612f00c5e",
+      "shots": 10
+    },
+    "21-account-sync": {
+      "hash": "76f71f675dfa5d0a828f797a04825358a16de5794504defe37f01de9ae472c31",
+      "shots": 18
+    },
+    "22-learning-settings": {
+      "hash": "9ce72c4197af57cececb9fa5594cbbb6567b9a1d56088a927cba54938b0d4dff",
+      "shots": 10
+    },
+    "23-audio-speech": {
+      "hash": "00c3d0c2c3151d9c84de133b07e0ab5d80fd44727cee40925e0a4d0ecb4775e5",
+      "shots": 14
+    },
+    "24-appearance": {
+      "hash": "c2339b8a47b7f2cdb6a92ece8a1540cfc7d246f7a829b7771ee01e81574127bd",
+      "shots": 6
+    },
+    "25-language": {
+      "hash": "f08bbe16adce164738f0279d0015c15805faddf67a00879f165d47171f2f7c34",
+      "shots": 6
+    }
+  }
+}

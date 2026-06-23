@@ -104,12 +104,14 @@ function rendered(nd, rects) {
 const isShell = (nd) => exclude.some((p) => nd.name.startsWith(p));
 const inViewport = (nd) => nd.abs[1] + nd.abs[3] <= viewport;
 
-// Intent ledger: classify a divergence as redesign (intended, listed) vs BUG?.
+// Source of truth = the mock's shots/specs; a divergence is a FIX by default.
+// The intent ledger holds ONLY documented exceptions (behavior/future/rejected/
+// needs-schema) — a node matching one is an exception, everything else is FIX.
 const screenId = basename(specPath).replace(/\.md$/, '');
 let ledger = [];
 try {
   const lp = join(HERE, 'intent-ledger.json');
-  if (existsSync(lp)) ledger = JSON.parse(readFileSync(lp, 'utf8')).intentional ?? [];
+  if (existsSync(lp)) ledger = JSON.parse(readFileSync(lp, 'utf8')).exceptions ?? [];
 } catch { ledger = []; }
 function classify(name, kind) {
   const hit = ledger.find(
@@ -117,7 +119,9 @@ function classify(name, kind) {
       && (e.node === '*' || name.startsWith(e.node))
       && (e.kind === '*' || e.kind === kind),
   );
-  return hit ? { verdict: 'redesign', source: hit.source } : { verdict: 'BUG?', source: null };
+  return hit
+    ? { verdict: 'exception', source: `${hit.exceptionKind}: ${hit.source}` }
+    : { verdict: 'FIX', source: null };
 }
 
 let rects;
@@ -143,7 +147,7 @@ for (const nd of checkable) {
     });
   }
 }
-const bugs = missing.filter((m) => m.verdict === 'BUG?').length;
+const bugs = missing.filter((m) => m.verdict === 'FIX').length;
 const screenLedger = ledger.filter((e) => e.screen === screenId);
 
 if (asJson) {
@@ -165,15 +169,16 @@ console.log(
 if (!missing.length) {
   console.log('No structurally-missing content nodes in the viewport — every checkable spec node has a rendered box.');
 } else {
-  console.log(`Spec nodes with NOTHING rendered in their box — ${bugs} BUG?, ${missing.length - bugs} redesign:`);
+  console.log(`Spec nodes with NOTHING rendered in their box — ${bugs} to FIX, ${missing.length - bugs} documented exception:`);
   for (const m of missing) {
-    const tag = m.verdict === 'redesign' ? `redesign (${m.source})` : 'BUG?';
+    const tag = m.verdict === 'exception' ? `exception (${m.source})` : 'FIX';
     console.log(`  [${tag}] ${m.name.padEnd(20)} ${m.bbox.padEnd(16)} intended: ${m.intended}`);
   }
-  console.log('\nBUG? = no intent-ledger entry → investigate. Confirmed-intended → add to tool/parity/intent-ledger.json.');
+  console.log('\nFIX = diverges from the mock (source of truth) → fix the FE. Only a documented');
+  console.log('exception (behavior/future/rejected/needs-schema, with a doc) belongs in intent-ledger.json.');
 }
 if (screenLedger.length) {
-  console.log(`\nScreen-level intent (ledger) for ${screenId}:`);
-  for (const e of screenLedger) console.log(`  - ${e.node}/${e.kind}: ${e.verdict} — ${e.reason}`);
+  console.log(`\nDocumented exceptions (ledger) for ${screenId}:`);
+  for (const e of screenLedger) console.log(`  - ${e.node}/${e.kind}: ${e.exceptionKind} — ${e.reason}`);
 }
 process.exit(0);

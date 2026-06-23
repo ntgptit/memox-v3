@@ -1,13 +1,13 @@
 {
-  "$comment": "Intent ledger — the deterministic 'redesign vs bug' source of truth for the parity closed loop. 'redesign vs bug' cannot be invented by a script; it needs the design intent (docs/ + owner ruling). So each such decision is made ONCE (by ui-parity-checker / owner) and RECORDED here, after which the loop classifies that divergence deterministically forever. A finding (structural-missing node, or a node-level divergence) that MATCHES an entry is 'redesign' (intended); anything not listed is 'BUG?' to investigate. Match: screen == entry.screen AND (entry.node == '*' OR node name startsWith entry.node) AND (entry.kind == '*' OR entry.kind == finding kind). source MUST cite a doc / memory / owner ruling.",
-  "intentional": [
-    {
-      "screen": "02-dashboard",
-      "node": "*",
-      "kind": "color",
-      "verdict": "redesign",
-      "reason": "FE was redesigned to a quiet, low-accent surface; kit-02 is the pre-redesign engagement layout (more accent fills). Colour/quiet divergence on dashboard accent surfaces is intended, not a token bug.",
-      "source": "docs/project-management/parity-loop/parity-state.md (dashboard redesign) + memory: fe-loop-complete-mock-authoritative + design-redesign-ia-2026-06-21"
-    }
-  ]
+  "$comment": "Documented-EXCEPTION ledger for the parity closed loop. SOURCE OF TRUTH = the shots + specs generated from the mock design; any visual divergence from them is a BUG to FIX by default. This ledger holds ONLY the narrow, documented exceptions where the FE intentionally does NOT match the mock, each governed by a doc — it is NOT a 'redesign' escape hatch. Valid exception kinds: 'behavior' (docs/business win behaviour over the mock's visual — e.g. study flip-card), 'future'/'rejected' (feature scope per docs), 'needs-schema' (data not in the read model yet). A finding that MATCHES an entry → exception (cite source); anything not listed → FIX. Match: screen == entry.screen AND (entry.node == '*' OR node startsWith entry.node) AND (entry.kind == '*' OR entry.kind == finding kind). source MUST cite a doc/owner ruling. Keep this MINIMAL — when in doubt, leave it out and fix the FE to match the mock.",
+  "$example": {
+    "screen": "12-study-review",
+    "node": "flip-card",
+    "kind": "*",
+    "verdict": "exception",
+    "exceptionKind": "behavior",
+    "reason": "FE uses swipe/both-sides per study-flow; the kit flip-card is a documented behaviour-owned visual gap, not a fix.",
+    "source": "docs/business/study/study-flow.md:61 + docs/wireframes/13-study-session-review.md:32"
+  },
+  "exceptions": []
 }
