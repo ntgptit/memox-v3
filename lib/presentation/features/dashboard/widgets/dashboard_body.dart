@@ -59,6 +59,7 @@ class DashboardBody extends ConsumerWidget {
     padding: const EdgeInsets.all(MxSpacing.screen),
     children: <Widget>[
       MxDueSummary(
+        key: const ValueKey<String>('mx-node:02-dashboard/due-summary'),
         caughtUp: summary.caughtUp,
         title: summary.caughtUp
             ? l10n.dashboardCaughtUpTitle
@@ -69,6 +70,7 @@ class DashboardBody extends ConsumerWidget {
       ),
       const SizedBox(height: MxSpacing.gapSection),
       MxShortcutRow(
+        key: const ValueKey<String>('mx-node:02-dashboard/shortcut-progress'),
         icon: Icons.insights_outlined,
         label: l10n.progressTitle,
         subtitle: l10n.dashboardProgressShortcutSub,
@@ -76,6 +78,7 @@ class DashboardBody extends ConsumerWidget {
       ),
       const SizedBox(height: MxSpacing.space3),
       MxShortcutRow(
+        key: const ValueKey<String>('mx-node:02-dashboard/shortcut-library'),
         icon: Icons.folder_outlined,
         label: l10n.libraryTitle,
         subtitle: l10n.dashboardLibraryShortcutSub,

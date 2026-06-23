@@ -8,10 +8,9 @@ không gọi model**:
 | Liệt kê kit states → tìm golden → chạy `diff.py` từng state → phát hiện state thiếu golden | `report.mjs` |
 | Soát spec có màu bare-hex (chưa token hóa) + thống kê token màu kit dùng | `token_lint.mjs` |
 | Chạy per-node log (`diff.py --spec`) cho TOÀN APP → tổng hợp MISSING?/COLOR?/SHIFT? | `node_audit.mjs` |
-| Phát hiện node **thiếu thật** theo hình học (cây widget vs spec), không lệ thuộc màu/theme | `structural_inventory.mjs` + `test/support/structural_dump.dart` |
+| Phát hiện **FE thiếu element** so design (spec-driven, identity by KEY — FE thiếu → test đỏ) | parity-contract test + `test/support/parity_contract.dart` |
 | Phân loại **FIX (mặc định) vs ngoại lệ có-docs** (behavior/future/rejected/needs-schema) | `intent-ledger.json` |
 | Phát hiện **design đổi** (shots/specs) → bắt FE + docs + golden phải sửa theo | `design_watch.mjs` + `design-baseline.json` |
-| **Đếm bug toàn app** (structural, mọi screen có dump) | `structural_audit.mjs` |
 
 Triết lý: **mã hóa quyết định MỘT LẦN thành dữ liệu** (`parity-map.json`) → tool đọc và chấm tất
 định mãi mãi. AI chỉ cần khi: build screen mới, một gate fail cần phán đoán, hoặc duyệt baseline
@@ -99,74 +98,48 @@ node tool/parity/node_audit.mjs --screen 02-dashboard --json
 - **`SHIFT?`** phần lớn là residual text-raster/offset.
 - Verdict thị giác cuối vẫn là `ui-parity-checker`.
 
-## Vòng khép kín (closed loop): detect → inventory → classify → resolve
+## Parity contract — phát hiện FE thiếu element (spec-driven, identity by KEY)
 
-> **Nguồn chân lý = shots + specs (gen từ mock).** Mọi lệch so với chúng là **BUG → FIX** (sửa FE cho
-> khớp mock). KHÔNG có cửa "redesign" để bỏ qua. Ngoại lệ DUY NHẤT là thứ **có docs quy định** FE cố ý
-> khác mock (behavior-owned / Future / Rejected / needs-schema) — và chỉ những thứ đó nằm trong
+> **Nguồn chân lý = shots + specs (gen từ mock).** Lệch so chúng là **FIX** (sửa FE cho khớp). Ngoại lệ
+> DUY NHẤT là thứ **có docs quy định** FE cố ý khác mock (behavior/Future/Rejected/needs-schema) →
 > `intent-ledger.json`.
 
+**Vì sao KHÔNG dùng geometry (đã bỏ):** một bản trước so bbox node-spec với toạ độ render thật. Hỏng vì
+**FE render ở toạ độ khác kit** (chính cái lệch đang đo) → lenient ra 0, strict ra ~2400; cả hai đều
+rác. Đã gỡ.
+
+**Vì sao KHÔNG dùng `find.byType(MxFoo)`:** test sẽ phải tham chiếu class FE → **class phải tồn tại mới
+compile được** → không bắt được "FE chưa implement".
+
+**Cách đúng — identity by KEY (string):** mỗi node bắt buộc trong design mang một key ổn định
+`mx-node:<screen>/<node>`; FE gắn `key: ValueKey('mx-node:...')` lên widget tương ứng; test contract
+assert `find.byKey(...)` cho từng key. Key là **string** nên test **compile bất kể FE có gì** — node
+chưa implement = key vắng = **test đỏ** (liệt kê đủ). Đây là thứ golden-image (FE-vs-FE) không bao giờ
+lộ ra.
+
 ```text
-1. DETECT    node_audit.mjs (pixel)        → MISSING?/COLOR?/SHIFT? (có nhiễu, dark-theme)
-2. INVENTORY structural_inventory.mjs      → node THIẾU THẬT theo hình học (bác/ xác nhận pixel)
-3. CLASSIFY  intent-ledger.json            → node thiếu: FIX (mặc định) vs exception (có docs)
-4. RESOLVE   FIX → sửa FE cho khớp mock · exception có docs → +1 dòng ledger (trích doc)
-             → lần chạy sau tự phân loại (vòng khép lại)
+1. CONTRACT  list key `mx-node:...` bắt buộc/screen (từ design)  ← spec-driven
+2. FE        gắn key lên widget thoả node đó (additive, no behavior change)
+3. TEST      parity-contract test: find.byKey từng key → thiếu = đỏ + liệt kê
+4. RESOLVE   đỏ → implement/sửa FE · ngoại lệ có-docs → intent-ledger.json
 ```
 
-Vì sao chia tầng: **pixel** nhanh nhưng nhiễu (dark-theme, AA); **structural** chính xác cho "thiếu
-hay không" nhưng cần dump cây widget; **FIX-vs-exception** mặc định là **FIX**, ledger chỉ giữ ngoại lệ
-có-docs (quyết 1 lần, trích nguồn). Ví dụ thật (dashboard dark): pixel báo `progress-fill` MISSING →
-structural cho thấy **vẫn render** (bác false-positive của pixel). Phần COLOR còn lại (accent bị trầm so
-shot) → theo nguyên tắc **shots = chân lý** thì đây là **FIX candidate** (sửa FE cho khớp accent của
-mock), KHÔNG phải "redesign" — trừ khi có docs nói behavior/Future.
+Helper: `test/support/parity_contract.dart` → `expectParityContract(screen, {label: Finder})` (gom hết
+node thiếu rồi fail 1 lần). Prototype: `test/presentation/features/dashboard/dashboard_parity_test.dart`
+(3 node: due-summary + 2 shortcut, keyed ở `dashboard_body.dart`). Đã chứng minh: thêm 1 key node FE
+chưa có → test đỏ "1/4 required NOT rendered"; gỡ → xanh.
 
-## `structural_inventory.mjs` — inventory node theo hình học (no pixel, no AI)
-
-So **cây widget render** (dump từ `test/support/structural_dump.dart`, frame 390×780) với bbox node
-trong `specs/NN-*.md`: node spec nào **không có widget nào phủ** = thiếu thật — đúng cả dark, cả
-text/icon (giải hạn chế pixel). Mỗi node thiếu được ledger phân loại `FIX` (mặc định) / `exception`.
-
-```bash
-# 1) sinh dump (Flutter test gọi dumpStructure → test/_parity_dump/<name>.json, là artifact commit)
-node tool/verify/run.mjs --test test/presentation/features/dashboard/dashboard_structural_test.dart
-# 2) so dump vs spec
-node tool/parity/structural_inventory.mjs \
-  --dump test/_parity_dump/dashboard_loaded__dark.json \
-  --spec "docs/system-design/MemoX Design System/ui_kits/mobile/specs/02-dashboard.md"
-```
-
-Loại trừ đúng: node **dưới fold** (`y+h > --viewport`, mặc định 780) và node **app-shell**
-(`--exclude bottom-nav,nav-ind`) bị bỏ qua vì screen pump cô lập không có chúng — báo riêng, không
-tính missing.
-
-**Rollout đã làm cho 8 screen FE** (02/03/04/05/06/07/08/17): dump được sinh bằng cách hook 1 dòng
-`dumpStructure(tester, '<golden-basename>')` vào golden test sẵn có của từng screen (tái dùng pump +
-data). Chạy gộp cả app:
-
-## `structural_audit.mjs` — đếm bug toàn app (structural)
-
-Với mỗi state `current` trong `parity-map.json` có dump, chạy `structural_inventory` và cộng số node
-`FIX` (bug) vs `exception` (ledger).
-
-```bash
-node tool/parity/structural_audit.mjs           # bảng + tổng
-node tool/parity/structural_audit.mjs --bugs     # liệt kê từng node FIX
-node tool/parity/structural_audit.mjs --check    # exit 1 nếu có bug (CI gate)
-```
-
-**Kết quả 2026-06-23: TOTAL BUGS = 0** trên 44 lượt state×theme (4778 node checkable) — mọi node mock
-khai báo đều có widget render. Tức **không có bug "thiếu node"** nào. Lưu ý: structural chỉ đo "có
-render hay không"; lệch **màu/spacing/size** (styling) KHÔNG nằm trong số này — đó là việc của
-pixel/SSIM + `ui-parity-checker`.
+Pump-cô-lập chỉ bắt được thiếu element TRONG screen pump được; "cả màn chưa dựng" là check thô hơn
+(route tồn tại / pump được không). **Rollout** = curate danh sách key/screen từ design + gắn key vào FE
+(prototype xong 02; 03–08/17 còn lại).
 
 ## `intent-ledger.json` — ngoại lệ có-docs (KHÔNG phải cửa "redesign")
 
 **Mặc định: lệch so mock = FIX.** Ledger chỉ liệt kê thứ FE **cố ý** khác mock vì **có docs quy định**.
 Mỗi entry: `{screen, node ("*"=mọi node), kind (missing/color/"*"), verdict:"exception", exceptionKind
 (behavior|future|rejected|needs-schema), reason, source}`. `source` BẮT BUỘC trích doc/owner ruling.
-Khi `structural_inventory` thấy node thiếu: khớp ledger → `exception (source)`; không khớp → **`FIX`**
-(sửa FE cho khớp mock). Giữ ledger **tối thiểu** — phân vân thì để trống và sửa FE. Phán đoán "có phải
+Khi parity-contract thấy node thiếu: khớp ledger → ngoại lệ có-docs (bỏ khỏi danh sách bắt buộc); không
+khớp → **`FIX`** (sửa FE cho khớp mock). Giữ ledger **tối thiểu** — phân vân thì để trống và sửa FE. Phán đoán "có phải
 ngoại lệ không" cho ca mới vẫn do `ui-parity-checker`/owner dựa trên docs; ledger chỉ giữ kết quả đã
 trích nguồn.
 
@@ -259,8 +232,8 @@ tất định fail.
      MISSING xếp lên đầu. **Giới hạn trung thực**: phát hiện-thiếu bằng pixel chỉ **đáng tin với block
      đặc** (fill/badge/tile); **text/icon thưa trên theme tối** có mean ≈ nền nên KHÔNG thể tách "thiếu"
      khỏi "có mà mờ" → cố ý KHÔNG gắn MISSING cho chúng (để MISSING giữ độ chính xác cao). Muốn
-     **inventory node đầy đủ** (mọi loại thiếu) thì phải so **cây widget render vs danh sách node spec**
-     theo cấu trúc, không phải pixel.
+     **inventory node đầy đủ** (mọi loại thiếu) thì dùng **parity-contract (identity by KEY)** ở trên,
+     KHÔNG dùng pixel/geometry.
 5. ✅ **SSIM perceptual metric**: `diff.py --ssim [--min-ssim V] [--ssim-out heat.png]` qua
    `skimage.metrics.structural_similarity` (KHÔNG tự viết công thức — dùng lib đã kiểm thử). `report.mjs
    --ssim` thêm cột SSIM; `--check --min-ssim V` làm gate. Dep ở `tool/golden_diff/requirements.txt`
@@ -268,12 +241,13 @@ tất định fail.
 6. ✅ **Unit test cho diff.py**: `tool/golden_diff/test_diff.py` (stdlib `unittest`, dep-free phần
    pixel; SSIM tự skip nếu thiếu skimage) pin phần glue tự viết — resize 780↔770, tolerance mask,
    region crop, spec-parse, và SSIM gate. Chạy: `python tool/golden_diff/test_diff.py` (CI chạy tự động).
+7. ✅ **Parity contract (identity by KEY)** thay structural-geometry (đã gỡ vì FE-toạ-độ ≠ kit): xem
+   mục "Parity contract" ở trên. Prototype 02-dashboard xanh; bắt được FE-thiếu-element (đã chứng minh).
 
 ## Còn để ngỏ
-- Pump screen **trong app-shell** (thay vì cô lập) để bottom-nav không phải loại bằng `--exclude`,
-  và **scroll** để kiểm cả node dưới fold (hiện below-fold + shell bị skip).
-- Mở rộng structural sang **mọi state** (giờ mới hook loaded/primary mỗi screen) — thêm dòng
-  `dumpStructure` cho các state còn lại trong golden loop.
+- **Rollout parity-contract** ra 03–08/17: curate key `mx-node:...` bắt buộc/screen từ design + gắn key
+  vào FE + 1 test contract/screen (pattern: `dashboard_parity_test.dart`).
+- Pump screen **trong app-shell** + **scroll** để contract phủ cả bottom-nav và node dưới fold.
 - Lớp **styling** (màu/spacing/size) chưa có gate tất định ngoài pixel/SSIM — vẫn dựa
   `ui-parity-checker` cho phán đoán cuối.
-- Gắn `report.mjs --check` / `structural_audit --check` vào `tool/verify/run.mjs` khi ổn định.
+- Gắn `report.mjs --check` vào `tool/verify/run.mjs` khi ổn định.

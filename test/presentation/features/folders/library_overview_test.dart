@@ -20,7 +20,6 @@ import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_no_results_state.dart';
 
 import '../../../support/golden_harness.dart';
-import '../../../support/structural_dump.dart';
 
 Folder _folder(
   String id,
@@ -325,10 +324,6 @@ void main() {
             matchesGoldenFile(
               'goldens/library_overview_${c.key}__${brightness.name}.png',
             ),
-          );
-          await dumpStructure(
-            tester,
-            'library_overview_${c.key}__${brightness.name}',
           );
         });
       }

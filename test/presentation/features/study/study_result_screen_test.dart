@@ -18,7 +18,6 @@ import 'package:memox/presentation/features/study/controllers/study_session_resu
 import 'package:memox/presentation/features/study/screens/study_result_screen.dart';
 
 import '../../../support/golden_harness.dart';
-import '../../../support/structural_dump.dart';
 
 const String _sid = 's1';
 final DateTime _t = DateTime.utc(2026);
@@ -217,7 +216,6 @@ void main() {
             'goldens/study_result_loaded__${brightness.name}.png',
           ),
         );
-        await dumpStructure(tester, 'study_result_loaded__${brightness.name}');
       });
 
       testWidgets('result-save-failed — ${brightness.name}', (tester) async {

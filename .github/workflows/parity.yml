@@ -40,8 +40,6 @@ jobs:
         run: node tool/parity/token_lint.mjs --check
       - name: Design-drift gate (spec/shots ⇄ code/docs acknowledged)
         run: node tool/parity/design_watch.mjs --check
-      - name: Structural bug count (no missing nodes)
-        run: node tool/parity/structural_audit.mjs --check
       - name: Full parity report with SSIM (artifact log)
         if: always()
         run: node tool/parity/report.mjs --ssim

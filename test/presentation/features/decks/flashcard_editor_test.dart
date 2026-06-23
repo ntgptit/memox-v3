@@ -21,7 +21,6 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_primary_button.dart
 import 'package:memox/presentation/shared/widgets/inputs/mx_text_field.dart';
 
 import '../../../support/golden_harness.dart';
-import '../../../support/structural_dump.dart';
 
 /// Stubs the action controller so the editor's save in-flight / failure paths
 /// are deterministic: [failure] makes save fail (drives the inline banner);
@@ -533,7 +532,6 @@ void main() {
         find.byType(FlashcardEditorScreen),
         matchesGoldenFile('goldens/flashcard_editor_create-empty__light.png'),
       );
-      await dumpStructure(tester, 'flashcard_editor_create-empty__light');
     });
 
     testWidgets('create-empty — dark', (tester) async {
@@ -542,7 +540,6 @@ void main() {
         find.byType(FlashcardEditorScreen),
         matchesGoldenFile('goldens/flashcard_editor_create-empty__dark.png'),
       );
-      await dumpStructure(tester, 'flashcard_editor_create-empty__dark');
     });
 
     // 07 valid: a create form with both fields filled → Save enabled (solid).
@@ -576,10 +573,6 @@ void main() {
           matchesGoldenFile(
             'goldens/flashcard_editor_edit-loaded__${brightness.name}.png',
           ),
-        );
-        await dumpStructure(
-          tester,
-          'flashcard_editor_edit-loaded__${brightness.name}',
         );
       });
 

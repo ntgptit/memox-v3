@@ -20,7 +20,6 @@ import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 
 import '../../../support/golden_harness.dart';
-import '../../../support/structural_dump.dart';
 
 const String _id = 'f1';
 final DateTime _t = DateTime.utc(2026);
@@ -233,10 +232,6 @@ void main() {
             matchesGoldenFile(
               'goldens/folder_detail_${c.key}__${brightness.name}.png',
             ),
-          );
-          await dumpStructure(
-            tester,
-            'folder_detail_${c.key}__${brightness.name}',
           );
         });
       }
