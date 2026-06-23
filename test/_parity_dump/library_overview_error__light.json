@@ -1,0 +1,154 @@
+[
+  {
+    "kind": "fill",
+    "x": 0,
+    "y": 0,
+    "w": 390,
+    "h": 780
+  },
+  {
+    "kind": "fill",
+    "x": 0,
+    "y": 0,
+    "w": 390,
+    "h": 780
+  },
+  {
+    "kind": "fill",
+    "x": 0,
+    "y": 0,
+    "w": 390,
+    "h": 56
+  },
+  {
+    "kind": "fill",
+    "x": 298,
+    "y": 8,
+    "w": 40,
+    "h": 40
+  },
+  {
+    "kind": "fill",
+    "x": 346,
+    "y": 8,
+    "w": 40,
+    "h": 40
+  },
+  {
+    "kind": "text",
+    "text": "Library",
+    "x": 16,
+    "y": 13,
+    "w": 73,
+    "h": 30
+  },
+  {
+    "kind": "text",
+    "text": "Library",
+    "x": 16,
+    "y": 13,
+    "w": 73,
+    "h": 30
+  },
+  {
+    "kind": "text",
+    "text": "",
+    "x": 306,
+    "y": 16,
+    "w": 24,
+    "h": 24
+  },
+  {
+    "kind": "text",
+    "text": "",
+    "x": 354,
+    "y": 16,
+    "w": 24,
+    "h": 24
+  },
+  {
+    "kind": "fill",
+    "x": 20,
+    "y": 68,
+    "w": 350,
+    "h": 254
+  },
+  {
+    "kind": "fill",
+    "x": 171,
+    "y": 92,
+    "w": 48,
+    "h": 48
+  },
+  {
+    "kind": "text",
+    "text": "",
+    "x": 183,
+    "y": 104,
+    "w": 24,
+    "h": 24
+  },
+  {
+    "kind": "text",
+    "text": "Couldn't load your library",
+    "x": 86,
+    "y": 156,
+    "w": 217,
+    "h": 24
+  },
+  {
+    "kind": "text",
+    "text": "Couldn't load your library",
+    "x": 86,
+    "y": 156,
+    "w": 217,
+    "h": 24
+  },
+  {
+    "kind": "text",
+    "text": "Something went wrong loading your folders.",
+    "x": 44,
+    "y": 188,
+    "w": 302,
+    "h": 42
+  },
+  {
+    "kind": "text",
+    "text": "Something went wrong loading your folders.",
+    "x": 44,
+    "y": 188,
+    "w": 302,
+    "h": 42
+  },
+  {
+    "kind": "fill",
+    "x": 44,
+    "y": 250,
+    "w": 302,
+    "h": 48
+  },
+  {
+    "kind": "text",
+    "text": "",
+    "x": 164,
+    "y": 265,
+    "w": 18,
+    "h": 18
+  },
+  {
+    "kind": "text",
+    "text": "Retry",
+    "x": 190,
+    "y": 265,
+    "w": 37,
+    "h": 19
+  },
+  {
+    "kind": "text",
+    "text": "Retry",
+    "x": 190,
+    "y": 265,
+    "w": 37,
+    "h": 19
+  }
+]

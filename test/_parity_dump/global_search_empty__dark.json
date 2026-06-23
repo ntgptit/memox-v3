@@ -1,0 +1,117 @@
+[
+  {
+    "kind": "fill",
+    "x": 0,
+    "y": 0,
+    "w": 390,
+    "h": 780
+  },
+  {
+    "kind": "fill",
+    "x": 0,
+    "y": 0,
+    "w": 390,
+    "h": 780
+  },
+  {
+    "kind": "fill",
+    "x": 0,
+    "y": 0,
+    "w": 390,
+    "h": 56
+  },
+  {
+    "kind": "text",
+    "text": "Search",
+    "x": 16,
+    "y": 13,
+    "w": 75,
+    "h": 30
+  },
+  {
+    "kind": "text",
+    "text": "Search",
+    "x": 16,
+    "y": 13,
+    "w": 75,
+    "h": 30
+  },
+  {
+    "kind": "fill",
+    "x": 171,
+    "y": 320,
+    "w": 48,
+    "h": 48
+  },
+  {
+    "kind": "text",
+    "text": "",
+    "x": 183,
+    "y": 332,
+    "w": 24,
+    "h": 24
+  },
+  {
+    "kind": "text",
+    "text": "Search your library",
+    "x": 115,
+    "y": 384,
+    "w": 161,
+    "h": 24
+  },
+  {
+    "kind": "text",
+    "text": "Search your library",
+    "x": 115,
+    "y": 384,
+    "w": 161,
+    "h": 24
+  },
+  {
+    "kind": "text",
+    "text": "Find folders, decks, and cards.",
+    "x": 91,
+    "y": 416,
+    "w": 209,
+    "h": 21
+  },
+  {
+    "kind": "text",
+    "text": "Find folders, decks, and cards.",
+    "x": 91,
+    "y": 416,
+    "w": 209,
+    "h": 21
+  },
+  {
+    "kind": "fill",
+    "x": 0,
+    "y": 700,
+    "w": 390,
+    "h": 80
+  },
+  {
+    "kind": "text",
+    "text": "",
+    "x": 32,
+    "y": 728,
+    "w": 24,
+    "h": 24
+  },
+  {
+    "kind": "text",
+    "text": "Search everything",
+    "x": 72,
+    "y": 728,
+    "w": 282,
+    "h": 24
+  },
+  {
+    "kind": "text",
+    "text": "Search everything",
+    "x": 72,
+    "y": 728,
+    "w": 282,
+    "h": 24
+  }
+]

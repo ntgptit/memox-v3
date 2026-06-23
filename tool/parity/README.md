@@ -11,6 +11,7 @@ không gọi model**:
 | Phát hiện node **thiếu thật** theo hình học (cây widget vs spec), không lệ thuộc màu/theme | `structural_inventory.mjs` + `test/support/structural_dump.dart` |
 | Phân loại **FIX (mặc định) vs ngoại lệ có-docs** (behavior/future/rejected/needs-schema) | `intent-ledger.json` |
 | Phát hiện **design đổi** (shots/specs) → bắt FE + docs + golden phải sửa theo | `design_watch.mjs` + `design-baseline.json` |
+| **Đếm bug toàn app** (structural, mọi screen có dump) | `structural_audit.mjs` |
 
 Triết lý: **mã hóa quyết định MỘT LẦN thành dữ liệu** (`parity-map.json`) → tool đọc và chấm tất
 định mãi mãi. AI chỉ cần khi: build screen mới, một gate fail cần phán đoán, hoặc duyệt baseline
@@ -137,8 +138,27 @@ node tool/parity/structural_inventory.mjs \
 
 Loại trừ đúng: node **dưới fold** (`y+h > --viewport`, mặc định 780) và node **app-shell**
 (`--exclude bottom-nav,nav-ind`) bị bỏ qua vì screen pump cô lập không có chúng — báo riêng, không
-tính missing. Hiện đã **prototype trên 02-dashboard** (0 node thiếu, cả light+dark); rollout = thêm 1
-dump-test/screen.
+tính missing.
+
+**Rollout đã làm cho 8 screen FE** (02/03/04/05/06/07/08/17): dump được sinh bằng cách hook 1 dòng
+`dumpStructure(tester, '<golden-basename>')` vào golden test sẵn có của từng screen (tái dùng pump +
+data). Chạy gộp cả app:
+
+## `structural_audit.mjs` — đếm bug toàn app (structural)
+
+Với mỗi state `current` trong `parity-map.json` có dump, chạy `structural_inventory` và cộng số node
+`FIX` (bug) vs `exception` (ledger).
+
+```bash
+node tool/parity/structural_audit.mjs           # bảng + tổng
+node tool/parity/structural_audit.mjs --bugs     # liệt kê từng node FIX
+node tool/parity/structural_audit.mjs --check    # exit 1 nếu có bug (CI gate)
+```
+
+**Kết quả 2026-06-23: TOTAL BUGS = 0** trên 44 lượt state×theme (4778 node checkable) — mọi node mock
+khai báo đều có widget render. Tức **không có bug "thiếu node"** nào. Lưu ý: structural chỉ đo "có
+render hay không"; lệch **màu/spacing/size** (styling) KHÔNG nằm trong số này — đó là việc của
+pixel/SSIM + `ui-parity-checker`.
 
 ## `intent-ledger.json` — ngoại lệ có-docs (KHÔNG phải cửa "redesign")
 
@@ -250,10 +270,10 @@ tất định fail.
    region crop, spec-parse, và SSIM gate. Chạy: `python tool/golden_diff/test_diff.py` (CI chạy tự động).
 
 ## Còn để ngỏ
-- **Rollout structural inventory ra mọi screen**: hiện prototype 02-dashboard; mỗi screen cần 1
-  dump-test (pump screen + `dumpStructure`) — pattern ở `dashboard_structural_test.dart`.
 - Pump screen **trong app-shell** (thay vì cô lập) để bottom-nav không phải loại bằng `--exclude`,
-  và **scroll** để kiểm cả node dưới fold.
-- Một runner gộp `node_audit` + `structural_inventory` + ledger thành 1 báo cáo closed-loop/app.
-- Gắn `report.mjs --check` vào `tool/verify/run.mjs` khi map đã ổn định lâu dài.
-- Chọn ngưỡng `--max` / `--min-ssim` / figure-ground per-screen sau khi quan sát phân bố thực tế.
+  và **scroll** để kiểm cả node dưới fold (hiện below-fold + shell bị skip).
+- Mở rộng structural sang **mọi state** (giờ mới hook loaded/primary mỗi screen) — thêm dòng
+  `dumpStructure` cho các state còn lại trong golden loop.
+- Lớp **styling** (màu/spacing/size) chưa có gate tất định ngoài pixel/SSIM — vẫn dựa
+  `ui-parity-checker` cho phán đoán cuối.
+- Gắn `report.mjs --check` / `structural_audit --check` vào `tool/verify/run.mjs` khi ổn định.
