@@ -29,8 +29,8 @@ const args = process.argv.slice(2);
 const check = args.includes('--check');
 const asJson = args.includes('--json');
 
-// id token emitted by export_specs, e.g. `id:02-dashboard/due-summary`.
-const ID = /\bid:([A-Za-z0-9][\w/-]*)/;
+// id field emitted by export_specs, e.g. `id: 02-dashboard/due-summary`.
+const ID = /\bid:\s*([A-Za-z0-9][\w/-]*)/;
 const NODE = /node:\s*(\S+)/;
 
 if (!existsSync(SPECS)) { console.error(`gen_contract: missing ${SPECS}`); process.exit(2); }

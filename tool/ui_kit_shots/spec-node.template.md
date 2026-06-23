@@ -1,4 +1,7 @@
 {{indent}}- node: {{name}}
+{{#id}}
+{{fieldIndent}}id: {{id}}
+{{/id}}
 {{#itemLabel}}
 {{fieldIndent}}item: {{itemLabel}}
 {{/itemLabel}}
