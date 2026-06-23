@@ -35,8 +35,32 @@ const check = args.includes('--check');
 const minPct = Number(opt('--min', '0'));
 const asJson = args.includes('--json');
 
-// Structural shells: present on every screen, no per-instance identity needed.
-const EXCLUDE = new Set(['MxScaffold', 'MxAppBar', 'MxContentShell']);
+// Structural / global-chrome shells: present on every screen, no per-instance,
+// screen-specific identity (handle the bottom nav once at the app-shell level).
+const EXCLUDE = new Set([
+  'MxScaffold',
+  'MxAppBar',
+  'MxContentShell',
+  'MxBottomNavigationBar',
+]);
+
+/**
+ * The spec is "## Base state: …" followed by per-state sections (some FULL
+ * re-renders). Counting across all of them makes a per-state singleton (the FAB,
+ * the dock — present in every state) look REPEATED. Scope the candidate inventory
+ * to the base-state section so each node is counted once. Falls back to the whole
+ * file when there is no base-state header.
+ */
+function baseSection(md) {
+  const lines = md.split('\n');
+  const start = lines.findIndex((l) => /^##\s+Base state/i.test(l));
+  if (start < 0) return md;
+  let end = lines.length;
+  for (let i = start + 1; i < lines.length; i += 1) {
+    if (/^##\s/.test(lines[i])) { end = i; break; }
+  }
+  return lines.slice(start, end).join('\n');
+}
 
 const NODE = /node:\s*(\S+)/;
 const MX = /\bmx:\s*(\S.*?)\s*$/;
@@ -71,7 +95,7 @@ for (const screen of MAP.screens) {
   if (onlyScreen && screen.id !== onlyScreen) continue;
   const spec = join(SPECS, `${screen.id}.md`);
   if (!existsSync(spec)) continue;
-  const nodes = parseNodes(readFileSync(spec, 'utf8'));
+  const nodes = parseNodes(baseSection(readFileSync(spec, 'utf8')));
   // Dedupe candidates by (name, abs) — a node recurs across state sections.
   const seen = new Set();
   const cands = [];

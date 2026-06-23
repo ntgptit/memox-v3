@@ -142,10 +142,12 @@ Pump-cô-lập chỉ bắt được thiếu element TRONG screen pump được; 
 
 Trả lời "node nào ĐÁNG tag mà chưa có `data-mx-node`?" để rollout không dừng ở vài
 singleton/screen. Ứng viên = node được exporter map tới component (`mx:<Mx>`) hoặc
-interactive chưa map (`mx: ?`), trừ shell cấu trúc (MxScaffold/MxAppBar/MxContentShell).
-Tách **singleton** (tên node duy nhất trên screen — đích tag thật) khỏi **repeated**
-(item list/grid — tag container, KHÔNG tag từng cái: key trùng = Flutter crash). Coverage
-đo trên singleton.
+interactive chưa map (`mx: ?`), trừ shell/chrome toàn cục
+(MxScaffold/MxAppBar/MxContentShell/MxBottomNavigationBar). Chỉ quét **base-state**
+section của spec (các state khác là diff/full-rerender → nếu quét hết sẽ đếm nhầm 1
+singleton thành "repeated"). Tách **singleton** (tên node duy nhất trên screen — đích
+tag thật) khỏi **repeated** (item list/grid — tag container, KHÔNG tag từng cái: key
+trùng = Flutter crash). Coverage đo trên singleton.
 
 ```bash
 node tool/parity/mxnode_coverage.mjs                 # bảng tagged/singletons %/screen + untagged
@@ -154,8 +156,10 @@ node tool/parity/mxnode_coverage.mjs --check --min 60         # exit 1 nếu scr
 node tool/parity/mxnode_coverage.mjs --json
 ```
 
-Hiện ~28% singleton đã tag (CI chạy report; nâng dần rồi bật `--check --min` làm gate
-ratchet). Cột "untagged singletons" chính là danh sách việc còn lại để tag tiếp.
+Hiện **8/27 singleton (~30%)** đã tag (CI chạy report; nâng dần rồi bật `--check --min`
+làm gate ratchet). Cột "untagged singletons" là danh sách việc còn lại để tag tiếp —
+LƯU Ý vài cái là **Future/Rejected** (vd 13 "Keep studying"), không phải gap; những cái
+đó khi xác nhận → ghi `intent-ledger.json`, không tag.
 
 ## `intent-ledger.json` — ngoại lệ có-docs (KHÔNG phải cửa "redesign")
 
