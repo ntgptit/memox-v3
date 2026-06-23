@@ -10,9 +10,9 @@
   const Bar = ({ canSave, saving }) => (
     <>
       <div className="appbar">
-        <button className="icon-btn" aria-label="Back"><Icon name="x" /></button>
+        <button className="icon-btn" aria-label="Back" data-mx-node="flashcard-editor/back-btn"><Icon name="x" /></button>
         <span className="appbar-title" style={{ flex: 1, minWidth: 0, marginLeft: S(2) }}>New card</span>
-        <button className="pill-btn primary sm" disabled={!canSave || saving} style={{ minWidth: '76px' }}>
+        <button className="pill-btn primary sm" disabled={!canSave || saving} style={{ minWidth: '76px' }} data-mx-node="flashcard-editor/save-button">
           {saving ? <span className="spinner" style={{ width: 'var(--memox-icon-sm)', height: 'var(--memox-icon-sm)', borderWidth: '2px' }}></span> : <><Icon name="check" />Save</>}
         </button>
       </div>

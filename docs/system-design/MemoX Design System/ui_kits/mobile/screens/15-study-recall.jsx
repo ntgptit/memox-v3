@@ -7,7 +7,7 @@
   const { Icon, S, StudyShell, AnswerReveal, RateBtn } = window.MX;
 
   const Prompt = () => (
-    <div className="card" style={{ padding: S(5) }}>
+    <div className="card" style={{ padding: S(5) }} data-mx-node="study-session/content-card">
       <div className="ov" style={{ color: 'var(--memox-text-3)', marginBottom: S(2) }}>Recall the meaning</div>
       <div style={{ fontSize: 'calc(var(--memox-size-display) * 1.1)', fontWeight: 'var(--memox-weight-extrabold)', color: 'var(--memox-text-primary)', letterSpacing: 'var(--memox-tracking-tight)', lineHeight: 1.1 }}>水曜日</div>
       <div className="muted" style={{ fontSize: 'var(--memox-size-h2)', fontWeight: 'var(--memox-weight-medium)', fontFamily: 'var(--memox-font-serif)', marginTop: S(1) }}>すいようび · suiyoubi</div>
@@ -25,7 +25,7 @@
         </div>
       </div>
     ) : (
-      <button className="pill-btn primary" style={{ width: '100%' }}><Icon name="eye" />Show answer</button>
+      <button className="pill-btn primary" style={{ width: '100%' }} data-mx-node="study-session/action"><Icon name="eye" />Show answer</button>
     );
 
     return (

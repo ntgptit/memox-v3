@@ -10,12 +10,12 @@
   const Bar = ({ saving, showActions = true }) => (
     <>
       <div className="appbar">
-        <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
+        <button className="icon-btn" aria-label="Back" data-mx-node="flashcard-editor/back-btn"><Icon name="arrow-left" /></button>
         <span className="appbar-title" style={{ flex: 1, minWidth: 0, marginLeft: S(2) }}>Edit card</span>
         {showActions && (
           <>
-            <button className="icon-btn" aria-label="Delete card" style={{ color: 'var(--memox-danger)' }}><Icon name="trash-2" /></button>
-            <button className="pill-btn primary sm" disabled={saving} style={{ minWidth: '76px' }}>
+            <button className="icon-btn" aria-label="Delete card" style={{ color: 'var(--memox-danger)' }} data-mx-node="flashcard-editor/delete-btn"><Icon name="trash-2" /></button>
+            <button className="pill-btn primary sm" disabled={saving} style={{ minWidth: '76px' }} data-mx-node="flashcard-editor/save-button">
               {saving ? <span className="spinner" style={{ width: 'var(--memox-icon-sm)', height: 'var(--memox-icon-sm)', borderWidth: '2px' }}></span> : <><Icon name="check" />Save</>}
             </button>
           </>

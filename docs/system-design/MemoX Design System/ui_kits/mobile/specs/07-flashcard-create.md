@@ -64,6 +64,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       spacing: pad:0/20
       style: bg:bg
       - node: icon-btn
+        id: flashcard-editor/back-btn
         mx: MxIconButton
         box:
           abs: [21,21 40x40]
@@ -87,6 +88,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         spacing: margin:0/0/0/8
         style: font:24/700 color:text tracking:-0.5
       - node: pill-btn
+        id: flashcard-editor/save-button
         text: Save
         mx: MxPrimaryButton
         box:
@@ -303,6 +305,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   spacing: margin:0/0/0/8
   style: font:24/700 color:text tracking:-0.5
 - - node: pill-btn
+- id: flashcard-editor/save-button
 - text: Save
 - mx: MxPrimaryButton
 - box:
@@ -313,6 +316,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - size: minw:76
 - style: bg:accent font:12/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent op:0.38
 + - node: pill-btn
++ id: flashcard-editor/save-button
 + text: Save
 + mx: MxPrimaryButton
 + box:
@@ -404,6 +408,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   spacing: margin:0/0/0/8
   style: font:24/700 color:text tracking:-0.5
 - - node: pill-btn
+- id: flashcard-editor/save-button
 - text: Save
 - mx: MxPrimaryButton
 - box:
@@ -414,6 +419,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - size: minw:76
 - style: bg:accent font:12/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent op:0.38
 + - node: pill-btn
++ id: flashcard-editor/save-button
 + text: Save
 + mx: MxPrimaryButton
 + box:
@@ -741,6 +747,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   spacing: margin:0/0/0/8
   style: font:24/700 color:text tracking:-0.5
 - - node: pill-btn
+- id: flashcard-editor/save-button
 - text: Save
 - mx: MxPrimaryButton
 - box:
@@ -756,6 +763,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - rel: [13,4 16x16]
 - position: clip
 + - node: pill-btn
++ id: flashcard-editor/save-button
 + mx: MxPrimaryButton
 + box:
 + abs: [293,29 76x24]
@@ -856,6 +864,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   spacing: margin:0/0/0/8
   style: font:24/700 color:text tracking:-0.5
 - - node: pill-btn
+- id: flashcard-editor/save-button
 - text: Save
 - mx: MxPrimaryButton
 - box:
@@ -866,6 +875,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - size: minw:76
 - style: bg:accent font:12/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent op:0.38
 + - node: pill-btn
++ id: flashcard-editor/save-button
 + text: Save
 + mx: MxPrimaryButton
 + box:

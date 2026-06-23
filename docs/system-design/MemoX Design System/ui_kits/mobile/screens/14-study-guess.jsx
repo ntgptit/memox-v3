@@ -19,9 +19,9 @@
     return (
       <StudyShell index={5} total={20}
         footer={
-          <button className="pill-btn primary" style={{ width: '100%' }}>Next<Icon name="arrow-right" /></button>
+          <button className="pill-btn primary" style={{ width: '100%' }} data-mx-node="study-session/action">Next<Icon name="arrow-right" /></button>
         }>
-        <div className="card" style={{ marginBottom: S(5), padding: S(5) }}>
+        <div className="card" style={{ marginBottom: S(5), padding: S(5) }} data-mx-node="study-session/content-card">
           <div className="ov" style={{ color: 'var(--memox-text-3)', marginBottom: S(2) }}>What does this mean?</div>
           <div style={{ fontSize: 'calc(var(--memox-size-display) * 1.1)', fontWeight: 'var(--memox-weight-extrabold)', color: 'var(--memox-text-primary)', letterSpacing: 'var(--memox-tracking-tight)', lineHeight: 1.1 }}>火曜日</div>
           <div className="muted" style={{ fontSize: 'var(--memox-size-h2)', fontWeight: 'var(--memox-weight-medium)', fontFamily: 'var(--memox-font-serif)', marginTop: S(1) }}>かようび · kayoubi</div>

@@ -113,6 +113,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       spacing: pad:16/20
       position: layout_hint:scroll
       - node: card
+        id: study-session/content-card
         mx: MxCard
         box:
           abs: [21,85 348x139]
@@ -171,6 +172,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       spacing: pad:12/20/20/20
       style: border-t:1px divider
       - node: pill-btn
+        id: study-session/action
         text: Show answer
         mx: MxPrimaryButton
         box:
@@ -273,6 +275,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   spacing: pad:12/20/20/20
   style: border-t:1px divider
 - - node: pill-btn
+- id: study-session/action
 - text: Show answer
 - mx: MxPrimaryButton
 - box:

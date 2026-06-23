@@ -10,7 +10,7 @@
   // The big flip card. Front = term + reading; a quiet hint invites the flip.
   const FlipCard = () => (
     <div style={{ flex: 1, minHeight: 0, display: 'flex' }}>
-      <div className="card" style={{
+      <div className="card" data-mx-node="study-session/content-card" style={{
         flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
         justifyContent: 'center', gap: S(4), padding: S(6), textAlign: 'center',
       }}>
