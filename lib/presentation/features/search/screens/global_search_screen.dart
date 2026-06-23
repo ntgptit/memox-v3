@@ -34,6 +34,9 @@ class GlobalSearchScreen extends ConsumerWidget {
         children: <Widget>[
           const Expanded(child: GlobalSearchBody()),
           MxSearchDock(
+            key: const ValueKey<String>(
+              'mx-node:05-library-search/search-dock',
+            ),
             hintText: l10n.searchDockHint,
             onChanged: (String term) =>
                 ref.read(globalSearchQueryProvider.notifier).setTerm(term),

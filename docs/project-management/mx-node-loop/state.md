@@ -43,9 +43,9 @@ problems as they surface. One screen per iteration. Branch:
 | 02-dashboard | yes (redesigned) | — | — | **special**: kit-02 is pre-redesign; contract from the redesign, not kit-02 |
 | 03-library-overview | yes | ✅ | new-folder-fab, search-dock | DONE |
 | 04-folder-detail | yes | ✅ | create-deck-fab, new-subfolder-fab, search-dock | DONE |
-| 05-library-search | yes | — | — | next |
+| 05-library-search | yes | ✅ | search-dock | DONE |
 | 06-flashcard-list | yes | ✅ | add-card-fab, search-dock | DONE |
-| 07-flashcard-create | yes | — | — | todo |
+| 07-flashcard-create | yes | — | — | next |
 | 08-flashcard-edit | yes | — | — | todo |
 | 12–16 study | yes (behavior) | — | — | todo (study modes) |
 | 17-study-result | yes | — | — | todo |

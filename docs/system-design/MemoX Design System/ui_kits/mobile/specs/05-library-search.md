@@ -524,6 +524,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
                     rel: [0,0 20x20]
                   position: clip
     - node: search-dock
+      id: 05-library-search/search-dock
       box:
         abs: [1,685 388x69]
         rel: [0,672 388x69]
@@ -1491,6 +1492,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
                   rel: [0,22 110x11]
                 style: bg:surface-2 r:10
     - node: search-dock
+      id: 05-library-search/search-dock
       box:
         abs: [1,636 388x69]
         rel: [0,623 388x69]
@@ -2174,6 +2176,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + size: maxw:260
 + style: font:14/400 color:text-2 text:center
   - node: search-dock
+  id: 05-library-search/search-dock
   box:
   abs: [1,636 388x69]
   rel: [0,623 388x69]
@@ -2286,6 +2289,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
                   rel: [78,14 16x16]
                 position: clip
     - node: search-dock
+      id: 05-library-search/search-dock
       box:
         abs: [1,636 388x69]
         rel: [0,623 388x69]

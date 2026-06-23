@@ -25,6 +25,12 @@
         "node": "search-dock"
       }
     ],
+    "05-library-search": [
+      {
+        "key": "mx-node:05-library-search/search-dock",
+        "node": "search-dock"
+      }
+    ],
     "06-flashcard-list": [
       {
         "key": "mx-node:06-flashcard-list/add-card-fab",
