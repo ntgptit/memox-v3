@@ -12,6 +12,9 @@ không gọi model**:
 | Phân loại **FIX (mặc định) vs ngoại lệ có-docs** (behavior/future/rejected/needs-schema) | `intent-ledger.json` |
 | Phát hiện **design đổi** (shots/specs) → bắt FE + docs + golden phải sửa theo | `design_watch.mjs` + `design-baseline.json` |
 | **Sync** design từ Claude Design về repo rồi nối vào pipeline | `/design-sync` (agent) → `after-sync.mjs` (tất định) |
+| Sinh **parity contract** từ spec `id:` (data-mx-node) | `gen_contract.mjs` → `contracts/contracts.json` |
+
+> Quy trình end-to-end (2 pha, pipeline data-mx-node, gates, ai-làm-gì): **`docs/design/design-sync-process.md`**.
 
 Triết lý: **mã hóa quyết định MỘT LẦN thành dữ liệu** (`parity-map.json`) → tool đọc và chấm tất
 định mãi mãi. AI chỉ cần khi: build screen mới, một gate fail cần phán đoán, hoặc duyệt baseline

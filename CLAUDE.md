@@ -421,6 +421,7 @@ marker when staged changes include code. Rules that survive the automation:
   được) → rồi `node tool/parity/after-sync.mjs` (tất định: check_specs_fresh → design_watch → checklist).
   `design_watch.mjs --check` là gate: design đổi mà code/docs chưa theo kịp ⇒ đỏ tới khi re-baseline
   (`--update`). `data-mx-node` ids nên sống trong project Claude Design để pull về không bị ghi đè.
+  Quy trình đầy đủ (2 pha + pipeline data-mx-node + gates + ai-làm-gì): `docs/design/design-sync-process.md`.
 
 Chi tiết từng tool, lệnh rời để debug một bước, trigger matrix, portability: `tool/README.md`.
 
