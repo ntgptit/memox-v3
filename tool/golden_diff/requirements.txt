@@ -1,0 +1,5 @@
+# golden_diff image-comparison deps.
+# Pixel mode needs only Pillow; SSIM mode (--ssim) needs scikit-image + numpy.
+Pillow>=10
+numpy>=1.26
+scikit-image>=0.22

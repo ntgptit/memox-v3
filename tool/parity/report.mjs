@@ -25,6 +25,11 @@
 //                                          # pick a bar after reading the report)
 //   node tool/parity/report.mjs --screen 03-library-overview
 //                                          # restrict to one screen id
+//   node tool/parity/report.mjs --ssim     # add per-state SSIM columns (perceptual
+//                                          # similarity, 1.0 = identical; needs scikit-image)
+//   node tool/parity/report.mjs --check --min-ssim 0.6
+//                                          # also exit 1 if a current state's SSIM
+//                                          # drops below 0.6 (implies --ssim)
 //
 // NOTE on the threshold: goldens now render the REAL app font (Plus Jakarta Sans,
 // loaded in test/flutter_test_config.dart), so diff% vs the kit shot is a strong
@@ -56,6 +61,8 @@ const opt = (name, def) => {
 const asJson = flag('--json');
 const check = flag('--check');
 const maxPct = opt('--max', null) ? Number(opt('--max', null)) : null;
+const minSsim = opt('--min-ssim', null) != null ? Number(opt('--min-ssim', null)) : null;
+const wantSsim = flag('--ssim') || minSsim != null;
 const onlyScreen = opt('--screen', null);
 const themes = ['light', 'dark'];
 
@@ -77,17 +84,22 @@ try {
 const shotsDir = join(REPO, map.shotsDir);
 const pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
 
-/** Run diff.py for one golden↔shot pair; returns mismatch % or null on error. */
-function diffPct(goldenAbs, shotAbs) {
+/**
+ * Run diff.py for one golden↔shot pair; returns { pct, ssim } (ssim only when
+ * --ssim is requested), or null on error/missing file.
+ */
+function diffPair(goldenAbs, shotAbs) {
   if (!existsSync(goldenAbs) || !existsSync(shotAbs)) return null;
+  const argv = [DIFF_PY, goldenAbs, shotAbs, '--threshold', '100'];
+  if (wantSsim) argv.push('--ssim');
   try {
-    const out = execFileSync(
-      pythonCmd,
-      [DIFF_PY, goldenAbs, shotAbs, '--threshold', '100'],
-      { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] },
-    );
-    const m = out.match(/mismatch:\s*([\d.]+)%/i);
-    return m ? Number(m[1]) : null;
+    const out = execFileSync(pythonCmd, argv, {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    });
+    const pm = out.match(/mismatch:\s*([\d.]+)%/i);
+    const sm = out.match(/ssim:\s*(-?[\d.]+)/i);
+    return { pct: pm ? Number(pm[1]) : null, ssim: sm ? Number(sm[1]) : null };
   } catch {
     return null;
   }
@@ -96,6 +108,7 @@ function diffPct(goldenAbs, shotAbs) {
 const rows = [];
 let missing = 0;
 let overMax = 0;
+let belowMin = 0;
 
 for (const screen of map.screens) {
   if (onlyScreen && screen.id !== onlyScreen) continue;
@@ -113,6 +126,7 @@ for (const screen of map.screens) {
     }
     // current: must have a golden, diff both themes.
     const perTheme = {};
+    const ssimTheme = {};
     let stateMissing = false;
     for (const theme of themes) {
       const goldenAbs = join(REPO, `${st.golden}__${theme}.png`);
@@ -126,9 +140,11 @@ for (const screen of map.screens) {
         perTheme[theme] = 'no-shot';
         continue;
       }
-      const pct = diffPct(goldenAbs, shotAbs);
-      perTheme[theme] = pct == null ? 'diff-err' : pct;
-      if (maxPct != null && typeof pct === 'number' && pct > maxPct) overMax++;
+      const res = diffPair(goldenAbs, shotAbs);
+      perTheme[theme] = res == null ? 'diff-err' : res.pct;
+      ssimTheme[theme] = res?.ssim ?? null;
+      if (maxPct != null && typeof res?.pct === 'number' && res.pct > maxPct) overMax++;
+      if (minSsim != null && typeof res?.ssim === 'number' && res.ssim < minSsim) belowMin++;
     }
     if (stateMissing) missing++;
     rows.push({
@@ -138,6 +154,8 @@ for (const screen of map.screens) {
       status: stateMissing ? 'MISSING' : 'OK',
       light: perTheme.light,
       dark: perTheme.dark,
+      lightSsim: ssimTheme.light,
+      darkSsim: ssimTheme.dark,
       note: st.note ?? '',
     });
   }
@@ -149,12 +167,19 @@ if (asJson) {
   console.log(JSON.stringify({ rows, noFe, missing, overMax }, null, 2));
 } else {
   const fmt = (v) => (typeof v === 'number' ? `${v.toFixed(2)}%` : (v ?? ''));
+  const fmtS = (v) => (typeof v === 'number' ? v.toFixed(3) : '');
   console.log('# Visual-parity report (deterministic — no AI)\n');
-  console.log('| Screen | State | Scope | Status | light | dark | Note |');
-  console.log('| --- | --- | --- | --- | --- | --- | --- |');
+  const head = wantSsim
+    ? '| Screen | State | Scope | Status | light% | dark% | light SSIM | dark SSIM | Note |'
+    : '| Screen | State | Scope | Status | light | dark | Note |';
+  console.log(head);
+  console.log(head.replace(/[^|]+/g, ' --- '));
   for (const r of rows) {
+    const base = `| ${r.screen} | ${r.state} | ${r.scope} | ${r.status} | ${fmt(r.light)} | ${fmt(r.dark)} |`;
     console.log(
-      `| ${r.screen} | ${r.state} | ${r.scope} | ${r.status} | ${fmt(r.light)} | ${fmt(r.dark)} | ${r.note} |`,
+      wantSsim
+        ? `${base} ${fmtS(r.lightSsim)} | ${fmtS(r.darkSsim)} | ${r.note} |`
+        : `${base} ${r.note} |`,
     );
   }
   if (noFe.length) {
@@ -166,6 +191,7 @@ if (asJson) {
     `\nSummary: ${ok}/${current.length} current states have goldens` +
       `${missing ? ` · ${missing} MISSING` : ''}` +
       `${maxPct != null ? ` · ${overMax} over ${maxPct}%` : ''}` +
+      `${minSsim != null ? ` · ${belowMin} under SSIM ${minSsim}` : ''}` +
       ` · ${rows.length - current.length} deferred/behavior/shared · ${noFe.length} no-FE-yet.`,
   );
   console.log(
@@ -173,10 +199,16 @@ if (asJson) {
   );
 }
 
-if (check && (missing > 0 || (maxPct != null && overMax > 0))) {
+if (
+  check &&
+  (missing > 0 ||
+    (maxPct != null && overMax > 0) ||
+    (minSsim != null && belowMin > 0))
+) {
   console.error(
     `\nparity/report: FAIL — ${missing} missing golden(s)` +
-      `${maxPct != null ? `, ${overMax} state(s) over ${maxPct}%` : ''}.`,
+      `${maxPct != null ? `, ${overMax} state(s) over ${maxPct}%` : ''}` +
+      `${minSsim != null ? `, ${belowMin} state(s) under SSIM ${minSsim}` : ''}.`,
   );
   process.exit(1);
 }

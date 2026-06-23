@@ -1,0 +1,166 @@
+"""Unit tests for golden_diff/diff.py — pins the hand-written glue around Pillow
+(resize, tolerance mask, region crop, spec-bbox parse) and the SSIM path.
+
+Dep-free for the pixel parts (stdlib unittest + Pillow, already required).
+SSIM tests skip automatically when scikit-image isn't installed.
+
+Run:  python tool/golden_diff/test_diff.py
+"""
+
+import os
+import sys
+import tempfile
+import unittest
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from PIL import Image  # noqa: E402
+
+import diff  # noqa: E402
+
+try:
+    import skimage  # noqa: F401
+    HAS_SKIMAGE = True
+except ImportError:
+    HAS_SKIMAGE = False
+
+
+def solid(size, color):
+    return Image.new("RGB", size, color)
+
+
+def save(tmp, name, img):
+    p = os.path.join(tmp, name)
+    img.save(p)
+    return p
+
+
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+
+
+class PixelTests(unittest.TestCase):
+    def test_identical_is_zero(self):
+        a = solid((40, 40), BLACK)
+        r = diff.pixel_mismatch(a, a.copy(), tolerance=16)
+        self.assertEqual(r["pct"], 0.0)
+        self.assertIsNone(r["bbox"])
+
+    def test_disjoint_is_full(self):
+        a = solid((40, 40), BLACK)
+        e = solid((40, 40), WHITE)
+        r = diff.pixel_mismatch(a, e, tolerance=16)
+        self.assertEqual(r["pct"], 100.0)
+        self.assertEqual(r["bbox"], (0, 0, 40, 40))
+
+    def test_tolerance_absorbs_small_delta(self):
+        a = solid((20, 20), (100, 100, 100))
+        e = solid((20, 20), (108, 108, 108))  # delta 8 < tolerance 16
+        self.assertEqual(diff.pixel_mismatch(a, e, tolerance=16)["pct"], 0.0)
+        # ...but a delta above tolerance counts.
+        e2 = solid((20, 20), (130, 130, 130))  # delta 30 > 16
+        self.assertEqual(diff.pixel_mismatch(a, e2, tolerance=16)["pct"], 100.0)
+
+    def test_region_pct_localizes(self):
+        # White 10x10 block at (5,5) on a black 40x40 field.
+        e = solid((40, 40), BLACK)
+        a = e.copy()
+        a.paste(solid((10, 10), WHITE), (5, 5))
+        over_block = diff.region_pct(a, e, (5, 5, 15, 15), tolerance=16)
+        off_block = diff.region_pct(a, e, (20, 20, 30, 30), tolerance=16)
+        self.assertEqual(over_block, 100.0)
+        self.assertEqual(off_block, 0.0)
+
+    def test_region_pct_clamps_and_rejects_degenerate(self):
+        e = solid((40, 40), BLACK)
+        self.assertIsNone(diff.region_pct(e, e.copy(), (50, 50, 60, 60), 16))
+        self.assertIsNone(diff.region_pct(e, e.copy(), (10, 10, 10, 20), 16))
+
+    def test_load_pair_resizes_actual_to_expected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            ap = save(tmp, "a.png", solid((100, 100), (50, 60, 70)))
+            ep = save(tmp, "e.png", solid((50, 40), (50, 60, 70)))
+            actual, expected, resized = diff.load_pair(ap, ep)
+            self.assertEqual(actual.size, expected.size)
+            self.assertEqual(expected.size, (50, 40))
+            self.assertEqual(resized, (100, 100))
+            # Same solid color survives resize → zero mismatch.
+            self.assertEqual(diff.pixel_mismatch(actual, expected, 16)["pct"], 0.0)
+
+
+class SpecParseTests(unittest.TestCase):
+    def test_parses_node_and_abs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            spec = save_text(tmp, "03.md", (
+                "- node: app-bar\n"
+                "  abs: [0,0 390x56]\n"
+                "- text: Library\n"
+                "  abs: [20,18 120x24]\n"
+            ))
+            boxes = diff.parse_spec_boxes(spec)
+            self.assertEqual(len(boxes), 2)
+            self.assertEqual(boxes[0], ("app-bar", 0, 0, 390, 56))
+            self.assertEqual(boxes[1][0], '"Library"')
+            self.assertEqual(boxes[1][1:], (20, 18, 120, 24))
+
+    def test_missing_file_returns_empty(self):
+        self.assertEqual(diff.parse_spec_boxes("/no/such/spec.md"), [])
+
+
+@unittest.skipUnless(HAS_SKIMAGE, "scikit-image not installed")
+class SsimTests(unittest.TestCase):
+    def test_identical_is_one(self):
+        a = solid((64, 64), (30, 120, 200))
+        s = diff.ssim_score(a, a.copy())
+        self.assertAlmostEqual(s["score"], 1.0, places=6)
+        self.assertAlmostEqual(s["dssim_pct"], 0.0, places=4)
+
+    def test_disjoint_is_near_zero(self):
+        s = diff.ssim_score(solid((64, 64), BLACK), solid((64, 64), WHITE))
+        self.assertLess(s["score"], 0.1)
+        self.assertEqual(s["dissim_map"].size, (64, 64))
+
+    def test_symmetric(self):
+        a = solid((64, 64), (10, 20, 30))
+        b = a.copy()
+        b.paste(solid((20, 20), WHITE), (5, 5))
+        self.assertAlmostEqual(
+            diff.ssim_score(a, b)["score"], diff.ssim_score(b, a)["score"], places=6
+        )
+
+
+class MainExitCodeTests(unittest.TestCase):
+    def test_identical_passes_with_ssim_gate(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            p = save(tmp, "x.png", solid((40, 40), (12, 34, 56)))
+            argv = [p, p, "--threshold", "0"]
+            if HAS_SKIMAGE:
+                argv += ["--min-ssim", "0.99"]
+            self.assertEqual(diff.main(argv), 0)
+
+    def test_disjoint_fails_pixel_threshold(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            a = save(tmp, "a.png", solid((40, 40), BLACK))
+            e = save(tmp, "e.png", solid((40, 40), WHITE))
+            self.assertEqual(diff.main([a, e, "--threshold", "5"]), 1)
+
+    @unittest.skipUnless(HAS_SKIMAGE, "scikit-image not installed")
+    def test_disjoint_fails_ssim_gate(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            a = save(tmp, "a.png", solid((40, 40), BLACK))
+            e = save(tmp, "e.png", solid((40, 40), WHITE))
+            # huge pixel threshold so only the SSIM gate can fail it
+            self.assertEqual(
+                diff.main([a, e, "--threshold", "100", "--min-ssim", "0.9"]), 1
+            )
+
+
+def save_text(tmp, name, text):
+    p = os.path.join(tmp, name)
+    with open(p, "w", encoding="utf-8") as fh:
+        fh.write(text)
+    return p
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

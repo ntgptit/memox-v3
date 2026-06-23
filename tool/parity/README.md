@@ -30,9 +30,18 @@ golden / gắn scope cho node mới. CI không gọi AI lần nào.
 node tool/parity/report.mjs                 # in bảng markdown
 node tool/parity/report.mjs --json          # JSON cho máy
 node tool/parity/report.mjs --check         # exit 1 nếu state `current` nào THIẾU golden
-node tool/parity/report.mjs --check --max 60  # đồng thời fail nếu diff% > 60 (mặc định TẮT)
+node tool/parity/report.mjs --check --max 60  # đồng thời fail nếu diff% pixel > 60 (mặc định TẮT)
+node tool/parity/report.mjs --ssim          # thêm cột SSIM (perceptual; 1.0 = giống hệt)
+node tool/parity/report.mjs --check --min-ssim 0.6  # fail nếu SSIM < 0.6 (implies --ssim)
 node tool/parity/report.mjs --screen 03-library-overview   # giới hạn 1 screen
 ```
+
+**Hai metric, hai việc** (đều do thư viện đã kiểm thử lo phần lõi):
+- **% pixel** (Pillow) = "bao nhiêu pixel khác" — nhạy với mọi dịch chuyển; dễ báo động giả khi
+  scrim/overlay/anti-alias đổi nhiều pixel delta-thấp.
+- **SSIM** (`--ssim`, scikit-image) = tương đồng cấu trúc perceptual ∈ [-1,1], 1.0 = giống hệt; bền
+  với nhiễu renderer. Ví dụ thật: `03 overflow-sheet` light pixel **63%** (báo động giả do scrim) nhưng
+  SSIM **0.74** → cấu trúc vẫn khớp. Dùng SSIM cho phán đoán "về cơ bản có cùng layout không".
 
 ℹ️ **Golden render bằng font thật** (Plus Jakarta Sans, nạp ở `test/flutter_test_config.dart` — xem
 "Nâng cấp đã làm"). Trước đây golden dùng font khối Ahem nên % so shot bị nhiễu nặng (dark ~2× light);
@@ -127,7 +136,15 @@ tất định fail.
 4. ✅ **Per-element diff**: `diff.py --spec <specfile> [--top N]` → crop từng node bbox trong
    `specs/NN-*.md`, in "node X lệch Y%" sắp xếp giảm dần (localize divergence thay vì cả frame). Nhãn
    node là heuristic (lấy `node:`/`text:` gần nhất) — bbox + % là phần chính xác để cross-ref.
+5. ✅ **SSIM perceptual metric**: `diff.py --ssim [--min-ssim V] [--ssim-out heat.png]` qua
+   `skimage.metrics.structural_similarity` (KHÔNG tự viết công thức — dùng lib đã kiểm thử). `report.mjs
+   --ssim` thêm cột SSIM; `--check --min-ssim V` làm gate. Dep ở `tool/golden_diff/requirements.txt`
+   (Pillow + numpy + scikit-image); pixel-mode vẫn chỉ cần Pillow (import skimage lazy).
+6. ✅ **Unit test cho diff.py**: `tool/golden_diff/test_diff.py` (stdlib `unittest`, dep-free phần
+   pixel; SSIM tự skip nếu thiếu skimage) pin phần glue tự viết — resize 780↔770, tolerance mask,
+   region crop, spec-parse, và SSIM gate. Chạy: `python tool/golden_diff/test_diff.py` (CI chạy tự động).
 
 ## Còn để ngỏ
 - Per-element label tagging chính xác hơn (theo cây DOM thật, không heuristic dòng-gần-nhất).
 - Gắn `report.mjs --check` vào `tool/verify/run.mjs` khi map đã ổn định lâu dài.
+- Chọn ngưỡng `--max` / `--min-ssim` per-screen sau khi quan sát phân bố % và SSIM thực tế.

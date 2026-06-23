@@ -94,13 +94,13 @@ Ví dụ một block trong spec (chính xác đến từng px, màu theo tên to
 | **Khi nào chạy lại** | Trong commit có thay đổi route / schema / use case / screen, hoặc khi thấy file generated ghi commit cũ hơn HEAD nhiều. |
 | **Output** | `docs/_generated/repo-map.md` — "cái gì đang tồn tại" (schema, routes, use cases, screens, tests, commit gần nhất). `docs/_generated/where-is.md` — "feature X nằm đâu": mỗi dòng = docs cần đọc + source files + tests + mock shots + WBS rows. |
 
-### 3.4 `tool/golden_diff/diff.py` — So ảnh app vs mock (Python + Pillow)
+### 3.4 `tool/golden_diff/diff.py` — So ảnh app vs mock (Python: Pillow + scikit-image)
 
 | | |
 | --- | --- |
 | **Mục đích** | Vòng phản hồi visual-parity **không cần vision**: agent (kể cả model nhỏ) đọc kết quả text để biết màn hình lệch mock ở đâu và tự sửa lặp. Đây là gate thực thi cho rule "screen chỉ complete khi pass visual parity". |
-| **Cách hoạt động** | So 2 PNG pixel-by-pixel (mặc định tolerance 16/kênh để hấp thụ khác biệt anti-aliasing giữa renderer), tự resize nếu khác kích thước, in **mismatch % + bounding box vùng lệch** (đối chiếu được với bbox element trong `specs/`), tùy chọn xuất heat-map đỏ cho người xem. Exit 1 khi vượt threshold. |
-| **Cách chạy** | `python tool/golden_diff/diff.py <ảnh-app.png> <ảnh-mock.png> [--out heatmap.png] [--threshold 5.0] [--tolerance 16]`. Cần `pip install Pillow` (máy hiện tại đã có). |
+| **Cách hoạt động** | Hai metric (phần lõi đều do lib đã kiểm thử lo): **(1) % pixel** (Pillow) — so pixel-by-pixel, tolerance 16/kênh hấp thụ anti-alias, tự resize nếu khác kích thước, in mismatch % + bbox vùng lệch (đối chiếu bbox element trong `specs/`); `--spec` → per-element. **(2) SSIM** (`--ssim`, scikit-image) — tương đồng cấu trúc perceptual ∈[-1,1] (1.0=giống hệt), bền với nhiễu renderer hơn % pixel. Tùy chọn heat-map (`--out`, `--ssim-out`). Exit 1 khi `% > --threshold` hoặc `SSIM < --min-ssim`. |
+| **Cách chạy** | `python tool/golden_diff/diff.py <ảnh-app.png> <ảnh-mock.png> [--out heatmap.png] [--threshold 5.0] [--tolerance 16] [--spec <specfile> --top N] [--ssim --min-ssim 0.6]`. Dep: `pip install -r tool/golden_diff/requirements.txt` (pixel-mode chỉ cần Pillow; SSIM cần numpy + scikit-image, import lazy). Test glue tự viết: `python tool/golden_diff/test_diff.py`. |
 | **Khi nào dùng** | Trong UI task: render golden test Flutter → diff với `shots/NN-...--light.png` tương ứng. Gate per-screen sẽ được gắn từ UI task đầu tiên (WBS 9.14). |
 
 ### 3.5 `tool/verify/run.mjs` — Một lệnh verify duy nhất
@@ -162,7 +162,7 @@ Ví dụ một block trong spec (chính xác đến từng px, màu theo tên to
 | --- | --- | --- |
 | `doc_guard`, `verify` | Node ≥ 18, **zero npm dependency** | Chạy được ngay, không cần install |
 | `ui_kit_shots` | Node + `npm install` trong thư mục + Google Chrome + mạng | puppeteer-core dùng Chrome hệ thống, không tải browser |
-| `golden_diff` | Python 3 + Pillow (`pip install Pillow`) | |
+| `golden_diff` | Python 3 + `pip install -r tool/golden_diff/requirements.txt` (Pillow; numpy + scikit-image cho `--ssim`) | Pixel-mode chỉ cần Pillow; SSIM import lazy. Có unit test: `python tool/golden_diff/test_diff.py` |
 | `code-verification-guard` | Tool riêng có sẵn trong repo (Python) | Không thuộc `tool/`; được `verify` gọi tự động |
 | pre-commit hook | `git config core.hooksPath .githooks` (một lần / clone) | Tự chạy `doc_guard check` + whitespace check mỗi commit |
 

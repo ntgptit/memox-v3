@@ -400,11 +400,14 @@ marker when staged changes include code. Rules that survive the automation:
 - Rename thuật ngữ: `node tool/doc_guard/run.mjs terms <old>`. Đổi route/schema/usecase/screen:
   `node tool/doc_guard/run.mjs generate` (regen wiki) trong cùng commit.
 - Visual parity cho UI task: `python tool/golden_diff/diff.py <golden> <mock-shot>` (thêm
-  `--spec <specfile> --top N` để diff per-node). Golden render bằng **font thật** (Plus Jakarta Sans
+  `--spec <specfile> --top N` để diff per-node; `--ssim [--min-ssim V]` để chấm perceptual SSIM, bền với
+  nhiễu renderer hơn % pixel — cần `pip install -r tool/golden_diff/requirements.txt`; test glue:
+  `python tool/golden_diff/test_diff.py`). Golden render bằng **font thật** (Plus Jakarta Sans
   nạp ở `test/flutter_test_config.dart`) nên diff% so shot có nghĩa (không còn nhiễu Ahem). Đổi
   `flutter_test_config.dart` → phải regen toàn bộ golden: `node tool/verify/run.mjs --full --update-goldens`.
-- Soát visual-parity toàn app (tất định, KHÔNG AI): `node tool/parity/report.mjs` (bảng diff% +
-  state-coverage per screen/state, `--check` gate state thiếu golden) và `node tool/parity/token_lint.mjs`
+- Soát visual-parity toàn app (tất định, KHÔNG AI): `node tool/parity/report.mjs` (bảng diff% + SSIM
+  `--ssim` + state-coverage per screen/state, `--check` gate state thiếu golden, `--min-ssim` gate SSIM)
+  và `node tool/parity/token_lint.mjs`
   (bare-hex gap + token inventory). Hợp đồng máy-đọc ở `tool/parity/parity-map.json` — khi thêm/đổi
   screen/state phải cập nhật map trong CÙNG commit. Phần phán đoán "đúng chưa" khi % nhiễu vẫn để agent
   `ui-parity-checker`. Chi tiết: `tool/parity/README.md`.
