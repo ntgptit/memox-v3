@@ -69,6 +69,7 @@ class LibraryOverviewScreen extends ConsumerWidget {
       ),
       floatingActionButton: showFab
           ? MxFab(
+              key: const ValueKey<String>('mx-node:03-library/new-folder-fab'),
               icon: Icons.create_new_folder_outlined,
               tooltip: l10n.libraryCreateFolderTooltip,
               onPressed: () => runCreateFolder(context, ref),
@@ -77,7 +78,11 @@ class LibraryOverviewScreen extends ConsumerWidget {
       // The search dock is a flat, full-bleed bar pinned under the content
       // (kit `03` Search `search-dock`); the bottom-nav slot renders it without
       // the rounded/elevated BottomSheet chrome and reserves its own foot room.
-      bottomNavigationBar: searching ? const LibrarySearchDock() : null,
+      bottomNavigationBar: searching
+          ? const LibrarySearchDock(
+              key: ValueKey<String>('mx-node:03-library/search-dock'),
+            )
+          : null,
       body: _buildBody(searching, hasFolders, folderCount),
     );
   }

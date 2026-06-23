@@ -405,6 +405,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
                   rel: [0,0 20x20]
                 position: clip
     - node: fab
+      id: 03-library/new-folder-fab
       mx: ?
       box:
         abs: [313,633 56x56]
@@ -1151,6 +1152,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - rel: [0,0 20x20]
 - position: clip
 - - node: fab
+- id: 03-library/new-folder-fab
 - mx: ?
 - box:
 - abs: [313,633 56x56]
@@ -1486,6 +1488,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - rel: [0,0 20x20]
 - position: clip
 - - node: fab
+- id: 03-library/new-folder-fab
 - mx: ?
 - box:
 - abs: [313,633 56x56]
@@ -1500,6 +1503,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - rel: [16,16 24x24]
 - position: clip
 + - node: search-dock
++ id: 03-library/search-dock
 + box:
 + abs: [1,636 388x69]
 + rel: [0,623 388x69]
@@ -2065,6 +2069,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - rel: [0,0 20x20]
 - position: clip
 - - node: fab
+- id: 03-library/new-folder-fab
 - mx: ?
 - box:
 - abs: [313,633 56x56]

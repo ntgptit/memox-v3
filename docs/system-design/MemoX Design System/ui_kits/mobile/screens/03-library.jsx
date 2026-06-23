@@ -24,7 +24,7 @@
   );
 
   const SearchBar = ({ query }) => (
-    <SearchDock query={query} placeholder="Search folders" />
+    <SearchDock query={query} placeholder="Search folders" node="03-library/search-dock" />
   );
 
   // ---- List card -----------------------------------------------------------
@@ -77,7 +77,7 @@
   );
 
   const FabSlot = () => (
-    <Fab icon="folder-plus" label="New folder"
+    <Fab icon="folder-plus" label="New folder" data-mx-node="03-library/new-folder-fab"
       style={{ position: 'absolute', right: S(5), bottom: `calc(var(--memox-size-bottom-nav) + ${S(4)})`, zIndex: 5 }} />
   );
 

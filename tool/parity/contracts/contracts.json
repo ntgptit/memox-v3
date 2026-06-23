@@ -1,6 +1,16 @@
 {
   "$generated": "tool/parity/gen_contract.mjs",
   "contracts": {
+    "03-library-overview": [
+      {
+        "key": "mx-node:03-library/new-folder-fab",
+        "node": "fab"
+      },
+      {
+        "key": "mx-node:03-library/search-dock",
+        "node": "search-dock"
+      }
+    ],
     "06-flashcard-list": [
       {
         "key": "mx-node:06-flashcard-list/add-card-fab",

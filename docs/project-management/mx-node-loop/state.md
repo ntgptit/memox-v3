@@ -1,0 +1,62 @@
+# mx-node rollout loop — state (cursor / HINT)
+
+Autonomous loop: tag the kit JSX with `data-mx-node` on required singleton nodes,
+re-export specs, regenerate the parity contract, add matching Flutter `ValueKey`s +
+a parity test per screen, fix any missing/divergent screen, and fix automation
+problems as they surface. One screen per iteration. Branch:
+`feat/parity-contract-flashcard-list`.
+
+## Per-screen recipe (what each iteration does)
+
+1. Pick the next screen with FE (table below). Read its kit `screens/NN-*.jsx` +
+   the FE screen widget.
+2. Tag **singleton** required nodes (FAB, search dock, key header/empty CTA) with
+   `data-mx-node="<screen-id>/<node>"`. `Fab` already spreads `...rest` → tag at the
+   call site; primitives without rest (e.g. `SearchDock`) take a `node` prop added in
+   `_shared.jsx` (common layer). **Never tag repeated list items** (duplicate keys
+   crash Flutter).
+3. `npm --prefix tool/ui_kit_shots run export:specs` (shots are visually unchanged by
+   invisible attrs — only re-run `export:all` if a real visual fix is made).
+4. `node tool/parity/gen_contract.mjs` → `contracts/contracts.json`.
+5. FE: matching `key: ValueKey('mx-node:<screen-id>/<node>')` on the widget.
+6. Parity test `..._parity_test.dart` asserting each node **in the state it renders**
+   (loaded vs search vs empty). Helper `test/support/parity_contract.dart`.
+7. `node tool/parity/design_watch.mjs --update` (the screen's spec changed).
+8. Fix any missing/divergent element found vs the mock while here.
+9. `node tool/verify/run.mjs --test "<parity test> <golden test>"` (golden must still
+   pass — keys don't change render).
+10. Commit. Update this table.
+
+## Conventions / gotchas
+
+- `<screen-id>` in the id = the JSX num-name (`03-library`, `06-flashcard-list`); the
+  **spec filename can differ** (`03-library-overview.md`) — fine, the `mx-node:` key is
+  what the FE matches, gen_contract just groups by spec file.
+- Tag loaded-state singletons first; state-only nodes (search dock, empty CTA) get
+  asserted in a toggled/empty pump.
+- `check-ui-kit.js` must stay 0 errors; specs must stay fresh.
+
+## Screen status
+
+| Screen | FE | mx-node tagged | nodes | status |
+| --- | --- | --- | --- | --- |
+| 02-dashboard | yes (redesigned) | — | — | **special**: kit-02 is pre-redesign; contract from the redesign, not kit-02 |
+| 03-library-overview | yes | ✅ | new-folder-fab, search-dock | DONE |
+| 04-folder-detail | yes | — | — | next |
+| 05-library-search | yes | — | — | todo |
+| 06-flashcard-list | yes | ✅ | add-card-fab, search-dock | DONE |
+| 07-flashcard-create | yes | — | — | todo |
+| 08-flashcard-edit | yes | — | — | todo |
+| 12–16 study | yes (behavior) | — | — | todo (study modes) |
+| 17-study-result | yes | — | — | todo |
+| 00,01,09,10,11,18–25 | no FE | n/a | — | out of scope (no-FE-yet) |
+
+## Automation fixes made during the loop
+
+- (none yet beyond the pipeline built pre-loop: export_specs id-carry, gen_contract
+  regex `id:\s*`, SearchDock `node` prop.)
+
+## Notes for push
+
+When pushing the kit to Claude Design "v3", include `_shared.jsx` + every tagged
+`screens/NN-*.jsx` so the `data-mx-node` ids live at the canonical source.
