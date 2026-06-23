@@ -48,8 +48,8 @@ problems as they surface. One screen per iteration. Branch:
 | 07-flashcard-create | yes | ✅ | flashcard-editor/front-field, back-field | DONE |
 | 08-flashcard-edit | yes | ✅ | (reuses flashcard-editor/front-field, back-field) | DONE |
 | 12-study-review | yes (behavior) | ✅ | study-session/exit, study-session/progress (shared StudyShell) | DONE |
-| 13-study-match | yes | kit✅ | (reuses study-session/exit+progress) | next — key FE + golden assertion |
-| 14-study-guess | yes | kit✅ | (reuses study-session/exit+progress) | todo — key FE + golden assertion |
+| 13-study-match | yes | ✅ | study-session/exit, progress (FE keyed + golden assertion) | DONE |
+| 14-study-guess | yes | kit✅ | (reuses study-session/exit+progress) | next — key FE + golden assertion |
 | 15-study-recall | yes | kit✅ | (reuses study-session/exit+progress) | todo — key FE + golden assertion |
 | 16-study-fill | yes | kit✅ | (reuses study-session/exit+progress) | todo — key FE + golden assertion |
 | 17-study-result | yes | ✅ | done-button | DONE |

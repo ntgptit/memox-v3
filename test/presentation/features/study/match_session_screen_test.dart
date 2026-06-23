@@ -170,6 +170,15 @@ void main() {
       expect(find.text('to study'), findsOneWidget); // a back cell
       expect(find.textContaining('0 matched · 5 left'), findsOneWidget);
       expect(find.text('0 / 5'), findsOneWidget); // matched / total
+      // mx-node parity: shared study chrome (StudyShell → exit + progress).
+      expect(
+        find.byKey(const ValueKey<String>('mx-node:study-session/exit')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey<String>('mx-node:study-session/progress')),
+        findsOneWidget,
+      );
     });
 
     testWidgets('first board: 7 cards → only the first 5 cards render', (
