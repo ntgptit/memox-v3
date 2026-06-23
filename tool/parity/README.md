@@ -156,10 +156,13 @@ node tool/parity/mxnode_coverage.mjs --check --min 60         # exit 1 nếu scr
 node tool/parity/mxnode_coverage.mjs --json
 ```
 
-Hiện **8/27 singleton (~30%)** đã tag (CI chạy report; nâng dần rồi bật `--check --min`
-làm gate ratchet). Cột "untagged singletons" là danh sách việc còn lại để tag tiếp —
-LƯU Ý vài cái là **Future/Rejected** (vd 13 "Keep studying"), không phải gap; những cái
-đó khi xác nhận → ghi `intent-ledger.json`, không tag.
+Hiện **23/27 singleton (~85%)** đã tag (CI chạy report; nâng dần rồi bật `--check --min`
+làm gate ratchet). 4 cái còn lại đều là **ca đặc biệt có lý do**, không phải gap: 02
+(kit pre-redesign → deferred), 13 "Shuffle & restart" (**Future** → `intent-ledger.json`),
+08 `icon-tile` (con **trang trí bên trong** `deck-picker` đã tag — tag container, không
+tag tile con). Để tag được **shared primitive** (StatSummary, PickerRow, IconTile, ListRow,
+SectionHead, HeroCard…) phải thêm prop `node` ở `_shared.jsx` (common-layer first) rồi
+truyền id ở call site — đừng hand-attach trên bản copy.
 
 ## `intent-ledger.json` — ngoại lệ có-docs (KHÔNG phải cửa "redesign")
 

@@ -18,7 +18,7 @@
       "shots": 12
     },
     "04-folder-detail": {
-      "hash": "105f37b12bcb90eda47afe417c5be4a0262b995a4a7479a1af6ae4228b12a698",
+      "hash": "1e82332c5abf8c38d19e996a62de1f864a44dea407d6d4502d9ba42a362afdd6",
       "shots": 16
     },
     "05-library-search": {
@@ -30,11 +30,11 @@
       "shots": 16
     },
     "07-flashcard-create": {
-      "hash": "528dcb2e52aaa658e34b479700e5234ff0684bf1cf220d86b8f7191242bba4a7",
+      "hash": "bf31bb9a39f194164dc404ea12a2893ff3140b4a36fd5792051796f74fcf54c2",
       "shots": 12
     },
     "08-flashcard-edit": {
-      "hash": "f0ff3efa74268a946c5558da7d4548ce5b2c12112bd76cf37ffe326b4323b9c3",
+      "hash": "68d25458f81802f712e558975ca9bcde503c6b47040d4e39d0aa065b8e11424a",
       "shots": 14
     },
     "09-flashcard-history": {

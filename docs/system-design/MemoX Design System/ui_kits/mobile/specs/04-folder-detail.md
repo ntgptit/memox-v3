@@ -160,6 +160,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       spacing: pad:12/20/40/20
       position: layout_hint:scroll
       - node: card
+        id: 04-folder-detail/stat-card
         mx: MxCard
         box:
           abs: [21,107 348x80]
@@ -944,6 +945,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   spacing: pad:12/20/40/20
   position: layout_hint:scroll
 - - node: card
+- id: 04-folder-detail/stat-card
 - mx: MxCard
 - box:
 - abs: [21,107 348x80]
@@ -1336,6 +1338,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   spacing: pad:12/20/40/20
   position: layout_hint:scroll
 - - node: card
+- id: 04-folder-detail/stat-card
 - mx: MxCard
 - box:
 - abs: [21,107 348x80]
@@ -1743,6 +1746,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   spacing: pad:12/20/40/20
   position: layout_hint:scroll
 - - node: card
+- id: 04-folder-detail/stat-card
 - mx: MxCard
 - box:
 - abs: [21,107 348x80]
@@ -2219,6 +2223,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   spacing: pad:12/20/40/20
   position: layout_hint:scroll
 - - node: card
+- id: 04-folder-detail/stat-card
 - mx: MxCard
 - box:
 - abs: [21,107 348x80]

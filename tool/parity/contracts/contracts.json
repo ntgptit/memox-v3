@@ -17,6 +17,10 @@
     ],
     "04-folder-detail": [
       {
+        "key": "mx-node:04-folder-detail/stat-card",
+        "node": "card"
+      },
+      {
         "key": "mx-node:04-folder-detail/create-deck-fab",
         "node": "fab"
       },
@@ -61,6 +65,14 @@
       {
         "key": "mx-node:flashcard-editor/back-field",
         "node": "textarea"
+      },
+      {
+        "key": "mx-node:flashcard-editor/details-toggle",
+        "node": "button"
+      },
+      {
+        "key": "mx-node:flashcard-editor/deck-picker",
+        "node": "card"
       }
     ],
     "08-flashcard-edit": [
@@ -83,6 +95,10 @@
       {
         "key": "mx-node:flashcard-editor/back-field",
         "node": "textarea"
+      },
+      {
+        "key": "mx-node:flashcard-editor/deck-picker",
+        "node": "card"
       }
     ],
     "12-study-review": [

@@ -28,7 +28,7 @@
 
   // Collapsible "Details" disclosure header
   const DetailsHeader = ({ open }) => (
-    <button style={{
+    <button data-mx-node="flashcard-editor/details-toggle" style={{
       display: 'flex', alignItems: 'center', gap: S(2), width: '100%',
       background: 'none', border: 'none', cursor: 'pointer', padding: `0 ${S(1)}`,
       fontFamily: 'var(--memox-font-sans)', color: 'var(--memox-text-secondary)',
@@ -43,7 +43,7 @@
   const DetailsBody = () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: S(4), paddingTop: S(2) }}>
       <FormField label="Deck">
-        <PickerRow icon="languages" tint="var(--memox-status-new)" title="Japanese · N5" />
+        <PickerRow icon="languages" tint="var(--memox-status-new)" title="Japanese · N5" data-mx-node="flashcard-editor/deck-picker" />
       </FormField>
       <FormField label="Tags">
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: S(2) }}>

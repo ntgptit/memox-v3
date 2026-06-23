@@ -35,7 +35,7 @@
     <>
       <div className="hr"></div>
       <FormField label="Deck">
-        <PickerRow icon="languages" tint="var(--memox-status-new)" title="Japanese · N5" />
+        <PickerRow icon="languages" tint="var(--memox-status-new)" title="Japanese · N5" data-mx-node="flashcard-editor/deck-picker" />
       </FormField>
       <FormField label="Tags">
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: S(2) }}>

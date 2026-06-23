@@ -38,23 +38,23 @@
     </nav>
   );
 
-  const IconTile = ({ icon, color, solid, style }) => (
-    <span className={`icon-tile${solid ? ' solid' : ''}`} style={{ '--tile': color, ...style }}><Icon name={icon} /></span>
+  const IconTile = ({ icon, color, solid, style, node }) => (
+    <span className={`icon-tile${solid ? ' solid' : ''}`} data-mx-node={node} style={{ '--tile': color, ...style }}><Icon name={icon} /></span>
   );
 
   // Large hero/resume tile. tonal by default, solid when `solid`.
-  const TileLg = ({ icon, tint, solid, style }) => (
-    <span className={`tile-lg ${solid ? 'solid' : 'tonal'}`} style={{ '--tile': tint, ...style }}><Icon name={icon} /></span>
+  const TileLg = ({ icon, tint, solid, style, node }) => (
+    <span className={`tile-lg ${solid ? 'solid' : 'tonal'}`} data-mx-node={node} style={{ '--tile': tint, ...style }}><Icon name={icon} /></span>
   );
 
-  const Chip = ({ status, solid, icon, children }) => (
-    <span className={`chip${status ? ' ' + status : ''}${solid ? ' solid' : ''}`}>
+  const Chip = ({ status, solid, icon, children, node }) => (
+    <span className={`chip${status ? ' ' + status : ''}${solid ? ' solid' : ''}`} data-mx-node={node}>
       {icon && <Icon name={icon} />}{children}
     </span>
   );
 
-  const Overline = ({ dot, icon, color, children }) => (
-    <div className="ov" style={color ? { color } : undefined}>
+  const Overline = ({ dot, icon, color, children, node }) => (
+    <div className="ov" data-mx-node={node} style={color ? { color } : undefined}>
       {dot && <span className="status-dot" style={{ '--dot': dot }}></span>}
       {icon && <Icon name={icon} />}{children}
     </div>
@@ -64,8 +64,8 @@
     <div className="progress"><div className="progress-fill" style={{ width: value + '%' }}></div></div>
   );
 
-  const SectionHead = ({ title, action }) => (
-    <div className="section-head"><span className="section-head-title">{title}</span>{action}</div>
+  const SectionHead = ({ title, action, node }) => (
+    <div className="section-head" data-mx-node={node}><span className="section-head-title">{title}</span>{action}</div>
   );
 
   // Strong, scannable list row. Trailing affordance is consistent everywhere:
@@ -73,8 +73,8 @@
   // by a chevron, so every row reads as tappable. `trail` is an escape hatch for
   // a custom trailing element; `chevron={false}` drops the chevron.
   const DUE_STRONG = 15; // at/above this many cards due, the badge goes solid
-  const ListRow = ({ icon, color, title, meta, due, trail, chevron = true }) => (
-    <div className="list-row">
+  const ListRow = ({ icon, color, title, meta, due, trail, chevron = true, node }) => (
+    <div className="list-row" data-mx-node={node}>
       <IconTile icon={icon} color={color} />
       <div className="list-row-main">
         <div className="list-row-title">{title}</div>
@@ -92,8 +92,8 @@
 
   // Centered hero / empty-state / error card: tile + title + desc + actions.
   // One place owns the spacing so screens never hand-roll it.
-  const HeroCard = ({ icon, tint, solid, title, desc, children }) => (
-    <div className="card" style={{ textAlign: 'center', padding: S(6) }}>
+  const HeroCard = ({ icon, tint, solid, title, desc, children, node }) => (
+    <div className="card" data-mx-node={node} style={{ textAlign: 'center', padding: S(6) }}>
       <TileLg icon={icon} tint={tint} solid={solid} style={{ margin: `0 auto ${S(4)}` }} />
       <div style={{ fontSize: 'var(--memox-size-h1)', fontWeight: 'var(--memox-weight-extrabold)', letterSpacing: 'var(--memox-tracking-tight)', color: 'var(--memox-text-primary)', marginBottom: S(1) }}>{title}</div>
       {desc && <div className="muted" style={{ fontSize: 'var(--memox-fs-label-large)', lineHeight: 1.5, maxWidth: '280px', margin: `${S(1)} auto 0` }}>{desc}</div>}
@@ -104,8 +104,8 @@
   // Centered empty / no-results state that is NOT wrapped in a card (the bare
   // tile + title + desc used by search-empty and empty list screens). One owner
   // so every empty screen reads identically. Pass actions as children.
-  const EmptyState = ({ icon, tint = 'var(--memox-text-secondary)', title, desc, pad = 8, children }) => (
-    <div style={{ flex: 1, display: 'grid', placeItems: 'center', padding: `${S(pad)} 0` }}>
+  const EmptyState = ({ icon, tint = 'var(--memox-text-secondary)', title, desc, pad = 8, children, node }) => (
+    <div data-mx-node={node} style={{ flex: 1, display: 'grid', placeItems: 'center', padding: `${S(pad)} 0` }}>
       <div style={{ textAlign: 'center' }}>
         <TileLg icon={icon} tint={tint} style={{ margin: '0 auto' }} />
         <div className="title" style={{ marginTop: S(4) }}>{title}</div>
@@ -119,8 +119,8 @@
   // color via the contract class); `tint` overrides it with any token. Optional
   // `action` renders a solid tone-matched button on the right. One owner so every
   // banner — and its retry/CTA button — looks identical across screens.
-  const Banner = ({ tone, icon, tint, action, style, children }) => (
-    <div className={`banner${tone ? ' ' + tone : ''}`} style={{ ...(tint ? { '--bn': tint } : null), ...style }}>
+  const Banner = ({ tone, icon, tint, action, style, children, node }) => (
+    <div className={`banner${tone ? ' ' + tone : ''}`} data-mx-node={node} style={{ ...(tint ? { '--bn': tint } : null), ...style }}>
       {icon && <Icon name={icon} />}
       <span style={{ flex: 1 }}>{children}</span>
       {action && <button className="pill-btn sm solid" style={{ '--btn': 'var(--bn)' }}>{action}</button>}
@@ -128,8 +128,8 @@
   );
 
   // Horizontal info card: tile + title + sub, optional trailing element.
-  const InfoRow = ({ icon, tint, title, desc, trail }) => (
-    <div className="card" style={{ display: 'flex', alignItems: 'center', gap: S(3), padding: S(4) }}>
+  const InfoRow = ({ icon, tint, title, desc, trail, node }) => (
+    <div className="card" data-mx-node={node} style={{ display: 'flex', alignItems: 'center', gap: S(3), padding: S(4) }}>
       <IconTile icon={icon} color={tint} />
       <div style={{ flex: 1 }}>
         <div className="title">{title}</div>
@@ -170,8 +170,8 @@
   // soft tile + count + a SECONDARY/small action (never the big accent hero) so
   // the dashboard refers to work without pressuring the user to study now. The
   // strong study CTAs live in Study / Progress. `caughtUp` shows the all-clear.
-  const DueSummary = ({ count, decks, minutes, action = 'Review', caughtUp }) => (
-    <div className="card" style={{ display: 'flex', alignItems: 'center', gap: S(3), padding: S(4) }}>
+  const DueSummary = ({ count, decks, minutes, action = 'Review', caughtUp, node }) => (
+    <div className="card" data-mx-node={node} style={{ display: 'flex', alignItems: 'center', gap: S(3), padding: S(4) }}>
       <IconTile icon={caughtUp ? 'check' : 'layers'} color={caughtUp ? 'var(--memox-status-mastered)' : 'var(--memox-primary)'} />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div className="title" style={{ fontSize: 'var(--memox-fs-label-large)' }}>{caughtUp ? 'All caught up' : `${count} cards due`}</div>
@@ -223,8 +223,8 @@
   // spaced centered metrics, sentence-case labels, no table dividers. Pass each
   // stat as [value, label, accent?]; the `accent` one sits in a soft tinted
   // column so the action metric (e.g. "Due") reads as the most important number.
-  const StatSummary = ({ stats }) => (
-    <div className="card" style={{ display: 'flex', alignItems: 'stretch', padding: S(2), gap: S(1) }}>
+  const StatSummary = ({ stats, node }) => (
+    <div className="card" data-mx-node={node} style={{ display: 'flex', alignItems: 'stretch', padding: S(2), gap: S(1) }}>
       {stats.map(([value, label, accent]) => (
         <div key={label} style={{
           flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
@@ -242,8 +242,8 @@
   // Native grouped list: an optional overline header (+ count) sits ABOVE the
   // rounded card (iOS-style section grouping), with inset hairlines between rows,
   // so a floating list card reads as a labelled group, not a stray web container.
-  const ListGroup = ({ heading, items, kind }) => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: S(2) }}>
+  const ListGroup = ({ heading, items, kind, node }) => (
+    <div data-mx-node={node} style={{ display: 'flex', flexDirection: 'column', gap: S(2) }}>
       {heading && (
         <div className="ov" style={{ paddingLeft: S(1) }}>
           {heading}<span style={{ marginLeft: S(1), color: 'var(--memox-text-3)' }}>{items.length}</span>

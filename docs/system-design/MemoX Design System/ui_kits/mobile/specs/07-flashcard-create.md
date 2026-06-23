@@ -268,6 +268,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           rel: [20,303 348x21]
         layout: flex:col
         - node: button
+          id: flashcard-editor/details-toggle
           mx: ?
           box:
             abs: [21,398 348x21]
@@ -507,6 +508,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + rel: [20,303 348x308]
 + layout: flex:col gap:16
   - node: button
+  id: flashcard-editor/details-toggle
   mx: ?
   box:
   abs: [21,398 348x21]
@@ -564,6 +566,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + rel: [0,0 37x15]
 + style: font:12/700 color:text-2 tracking:1
 + - node: card
++ id: flashcard-editor/deck-picker
 + mx: MxCard
 + box:
 + abs: [21,466 348x66]
