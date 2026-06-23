@@ -66,6 +66,38 @@ Each screen is a self-contained IIFE in `ui_kits/mobile/screens/NN-name.jsx`:
 - **`specs/`** — auto-generated DOM specs (element tree, bounding boxes, resolved token values, a11y labels). One `.md` per screen + `INDEX.md`.
 - The gallery (`index.html`) is for quick browse / copy text / control order. For visual parity, use the PNGs.
 
+## Parity identity — `data-mx-node` (spec-driven contract)
+
+Tag the kit nodes that represent a **required UI element** with a stable identity so
+the Flutter app can be checked against the design by IDENTITY (not geometry, not
+pixels). This is the source end of the parity-contract pipeline; full runbook:
+`docs/design/design-sync-process.md`.
+
+- **Attribute:** `data-mx-node="<screen-id>/<node>"` on the element, e.g.
+  `data-mx-node="03-library/folder-row"`. In JSX write it as a normal prop:
+  `<div className="list-row" data-mx-node="03-library/folder-row">`.
+- **Pipeline it drives:** kit `data-mx-node` → `tool/ui_kit_shots/export_specs.mjs`
+  emits it as the spec's `id:` field → `tool/parity/gen_contract.mjs` builds the
+  per-screen contract → the Flutter widget carries `key: ValueKey('mx-node:<id>')`
+  and a parity test asserts `find.byKey(...)`. A node tagged here but not built in
+  Flutter ⇒ the test goes red (catches "FE chưa implement đủ").
+- **Common layer first (mandatory, as everywhere):** when the element is a
+  `window.MX` primitive, add an optional `node` prop to it in `screens/_shared.jsx`
+  that renders `data-mx-node={node}`, and pass the id where the screen instantiates
+  it — don't hand-attach on a re-implemented copy. Put `data-mx-node` directly on a
+  raw element only for genuinely screen-specific nodes.
+- **Naming is a CONTRACT — keep it stable:** `<screen-id>` matches the spec file
+  (`03-library`), `<node>` is a short kebab semantic name (`folder-row`, `fab`,
+  `due-badge`). Renaming an id breaks the Flutter key mapping — treat a rename like
+  a schema change (update FE key + test in the same change). Tag only **meaningful
+  required** nodes, not every `div`.
+- **Lives in the kit → survives sync:** because the id is in the JSX, it travels
+  with the design. Author it on **Claude Design** directly, or edit locally and push
+  to the canonical project ("MemoX Design System v3") — either way a pull carries it
+  back to the repo, not overwritten.
+- Adding the attribute is token-/style-neutral, so `node tools/check-ui-kit.js`
+  stays clean; re-run `export:specs` after tagging so the `id:` lands in the spec.
+
 ## Hard design rules
 
 MemoX is a **calm learning app**. Visual restraint is a hard requirement, not a preference.
