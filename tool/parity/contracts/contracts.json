@@ -61,6 +61,36 @@
         "node": "textarea"
       }
     ],
+    "12-study-review": [
+      {
+        "key": "mx-node:study-session/exit",
+        "node": "icon-btn"
+      }
+    ],
+    "13-study-match": [
+      {
+        "key": "mx-node:study-session/exit",
+        "node": "icon-btn"
+      }
+    ],
+    "14-study-guess": [
+      {
+        "key": "mx-node:study-session/exit",
+        "node": "icon-btn"
+      }
+    ],
+    "15-study-recall": [
+      {
+        "key": "mx-node:study-session/exit",
+        "node": "icon-btn"
+      }
+    ],
+    "16-study-fill": [
+      {
+        "key": "mx-node:study-session/exit",
+        "node": "icon-btn"
+      }
+    ],
     "17-study-result": [
       {
         "key": "mx-node:17-study-result/done-button",

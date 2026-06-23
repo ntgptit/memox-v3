@@ -392,8 +392,8 @@
   // card counter. One owner so all five study modes share identical chrome.
   const StudyTopBar = ({ index, total }) => (
     <div className="appbar" style={{ gap: S(3) }}>
-      <button className="icon-btn" aria-label="Exit study"><Icon name="x" /></button>
-      <div style={{ flex: 1 }}><Progress value={total ? Math.min(100, (index / total) * 100) : 0} /></div>
+      <button className="icon-btn" aria-label="Exit study" data-mx-node="study-session/exit"><Icon name="x" /></button>
+      <div style={{ flex: 1 }} data-mx-node="study-session/progress"><Progress value={total ? Math.min(100, (index / total) * 100) : 0} /></div>
       <span style={{ flex: 'none', fontSize: 'var(--memox-fs-label-large)', fontWeight: 'var(--memox-weight-bold)', color: 'var(--memox-text-secondary)', fontVariantNumeric: 'tabular-nums' }}>
         {index}<span style={{ color: 'var(--memox-text-3)' }}>{' / '}{total}</span>
       </span>

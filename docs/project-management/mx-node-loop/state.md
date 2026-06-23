@@ -47,7 +47,11 @@ problems as they surface. One screen per iteration. Branch:
 | 06-flashcard-list | yes | ✅ | add-card-fab, search-dock | DONE |
 | 07-flashcard-create | yes | ✅ | flashcard-editor/front-field, back-field | DONE |
 | 08-flashcard-edit | yes | ✅ | (reuses flashcard-editor/front-field, back-field) | DONE |
-| 12–16 study | yes (behavior) | — | — | next (study modes: top bar / rate / answer) |
+| 12-study-review | yes (behavior) | ✅ | study-session/exit, study-session/progress (shared StudyShell) | DONE |
+| 13-study-match | yes | kit✅ | (reuses study-session/exit+progress) | next — key FE + golden assertion |
+| 14-study-guess | yes | kit✅ | (reuses study-session/exit+progress) | todo — key FE + golden assertion |
+| 15-study-recall | yes | kit✅ | (reuses study-session/exit+progress) | todo — key FE + golden assertion |
+| 16-study-fill | yes | kit✅ | (reuses study-session/exit+progress) | todo — key FE + golden assertion |
 | 17-study-result | yes | ✅ | done-button | DONE |
 | 00,01,09,10,11,18–25 | no FE | n/a | — | out of scope (no-FE-yet) |
 
@@ -61,6 +65,13 @@ problems as they surface. One screen per iteration. Branch:
   tester), not multiple pumps in one test.
 - For a screen with a parametrized local FAB helper (04 `FabSlot`), add a `node`
   prop to the helper and pass a distinct id per call site (decks vs subfolders).
+- **Shared study chrome (12–16):** the kit `StudyShell` (common layer) owns the exit
+  + progress; tagging it once gives `study-session/exit` + `study-session/progress` to
+  ALL 5 study specs. Each FE mode screen builds its OWN chrome, so key exit+progress
+  per mode (study_session=12 review, fill=16, guess=14, match=13, recall=15). The
+  study session pump is heavy (review/controller stubs), so for study modes the parity
+  assertions are added to the existing golden test's loaded case (reuse the pump),
+  not a separate parity test.
 - **Shared-screen ids (07/08):** 07-create and 08-edit are ONE Flutter screen
   (`flashcard_editor_*`). A shared widget can hold only one key, so editor nodes use a
   shared prefix `flashcard-editor/<node>` tagged in BOTH kit 07 + kit 08; the FE keys
