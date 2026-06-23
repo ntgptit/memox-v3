@@ -136,7 +136,7 @@
       <div className="app">
         <div className="appbar"><span className="appbar-title">Search</span></div>
         <Body>{content}</Body>
-        <SearchDock query={query} placeholder="Search everything" />
+        <SearchDock query={query} placeholder="Search everything" node="05-library-search/search-dock" />
         <BottomNav active="Search" />
       </div>
     );

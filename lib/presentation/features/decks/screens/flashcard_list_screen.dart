@@ -117,6 +117,9 @@ class FlashcardListScreen extends ConsumerWidget {
       floatingActionButton: reordering
           ? null
           : MxFab(
+              key: const ValueKey<String>(
+                'mx-node:06-flashcard-list/add-card-fab',
+              ),
               icon: Icons.add,
               tooltip: l10n.flashcardAddCardLabel,
               onPressed: () => runAddCard(context, deckId),
@@ -125,7 +128,12 @@ class FlashcardListScreen extends ConsumerWidget {
       // when the deck has cards; hidden in empty / loading / error / reorder.
       bottomNavigationBar:
           (detail != null && detail.totalCount > 0 && !reordering)
-          ? FlashcardListSearchDock(deckId: deckId)
+          ? FlashcardListSearchDock(
+              key: const ValueKey<String>(
+                'mx-node:06-flashcard-list/search-dock',
+              ),
+              deckId: deckId,
+            )
           : null,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

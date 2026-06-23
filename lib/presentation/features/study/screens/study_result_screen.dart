@@ -128,6 +128,7 @@ class StudyResultScreen extends ConsumerWidget {
             const SizedBox(height: MxSpacing.space3),
           ],
           MxPrimaryButton(
+            key: const ValueKey<String>('mx-node:17-study-result/done-button'),
             label: l10n.studyResultDone,
             fullWidth: true,
             onPressed: () => _done(context, result.session.scope),

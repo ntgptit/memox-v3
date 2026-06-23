@@ -65,6 +65,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       spacing: pad:0/20
       style: bg:bg
       - node: icon-btn
+        id: study-session/exit
         mx: MxIconButton
         box:
           abs: [21,21 40x40]
@@ -451,6 +452,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       spacing: pad:0/20
       style: bg:bg
       - node: icon-btn
+        id: study-session/exit
         mx: MxIconButton
         box:
           abs: [21,21 40x40]
@@ -724,6 +726,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       spacing: pad:0/20
       style: bg:bg
       - node: icon-btn
+        id: study-session/exit
         mx: MxIconButton
         box:
           abs: [21,21 40x40]

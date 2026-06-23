@@ -45,7 +45,7 @@
   );
 
   const SearchBar = ({ query }) => (
-    <SearchDock query={query} placeholder="Search cards" />
+    <SearchDock query={query} placeholder="Search cards" node="06-flashcard-list/search-dock" />
   );
 
   // ---- Card row ------------------------------------------------------------
@@ -61,7 +61,7 @@
   );
 
   const FabSlot = () => (
-    <Fab icon="plus" label="Add card"
+    <Fab icon="plus" label="Add card" data-mx-node="06-flashcard-list/add-card-fab"
       style={{ position: 'absolute', right: S(5), bottom: `calc(var(--memox-size-search-dock) + ${S(4)})`, zIndex: 5 }} />
   );
 

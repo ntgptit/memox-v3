@@ -266,6 +266,9 @@ class FlashcardEditorForm extends HookConsumerWidget {
               const SizedBox(height: MxSpacing.space4),
             ],
             MxTextField(
+              key: const ValueKey<String>(
+                'mx-node:flashcard-editor/front-field',
+              ),
               controller: front.controller,
               labelText: l10n.cardFrontLabel,
               autofocus: !_isEdit,
@@ -273,6 +276,9 @@ class FlashcardEditorForm extends HookConsumerWidget {
             ),
             const SizedBox(height: MxSpacing.space4),
             MxTextField(
+              key: const ValueKey<String>(
+                'mx-node:flashcard-editor/back-field',
+              ),
               controller: back.controller,
               labelText: l10n.cardBackLabel,
               textInputAction: detailsOpen.value

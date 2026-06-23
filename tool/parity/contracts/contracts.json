@@ -1,4 +1,101 @@
 {
   "$generated": "tool/parity/gen_contract.mjs",
-  "contracts": {}
+  "contracts": {
+    "03-library-overview": [
+      {
+        "key": "mx-node:03-library/new-folder-fab",
+        "node": "fab"
+      },
+      {
+        "key": "mx-node:03-library/search-dock",
+        "node": "search-dock"
+      }
+    ],
+    "04-folder-detail": [
+      {
+        "key": "mx-node:04-folder-detail/create-deck-fab",
+        "node": "fab"
+      },
+      {
+        "key": "mx-node:04-folder-detail/new-subfolder-fab",
+        "node": "fab"
+      },
+      {
+        "key": "mx-node:04-folder-detail/search-dock",
+        "node": "search-dock"
+      }
+    ],
+    "05-library-search": [
+      {
+        "key": "mx-node:05-library-search/search-dock",
+        "node": "search-dock"
+      }
+    ],
+    "06-flashcard-list": [
+      {
+        "key": "mx-node:06-flashcard-list/add-card-fab",
+        "node": "fab"
+      },
+      {
+        "key": "mx-node:06-flashcard-list/search-dock",
+        "node": "search-dock"
+      }
+    ],
+    "07-flashcard-create": [
+      {
+        "key": "mx-node:flashcard-editor/front-field",
+        "node": "textarea"
+      },
+      {
+        "key": "mx-node:flashcard-editor/back-field",
+        "node": "textarea"
+      }
+    ],
+    "08-flashcard-edit": [
+      {
+        "key": "mx-node:flashcard-editor/front-field",
+        "node": "textarea"
+      },
+      {
+        "key": "mx-node:flashcard-editor/back-field",
+        "node": "textarea"
+      }
+    ],
+    "12-study-review": [
+      {
+        "key": "mx-node:study-session/exit",
+        "node": "icon-btn"
+      }
+    ],
+    "13-study-match": [
+      {
+        "key": "mx-node:study-session/exit",
+        "node": "icon-btn"
+      }
+    ],
+    "14-study-guess": [
+      {
+        "key": "mx-node:study-session/exit",
+        "node": "icon-btn"
+      }
+    ],
+    "15-study-recall": [
+      {
+        "key": "mx-node:study-session/exit",
+        "node": "icon-btn"
+      }
+    ],
+    "16-study-fill": [
+      {
+        "key": "mx-node:study-session/exit",
+        "node": "icon-btn"
+      }
+    ],
+    "17-study-result": [
+      {
+        "key": "mx-node:17-study-result/done-button",
+        "node": "pill-btn"
+      }
+    ]
+  }
 }

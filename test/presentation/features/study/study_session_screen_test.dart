@@ -137,6 +137,15 @@ void main() {
       expect(find.text('to eat'), findsOneWidget); // back
       expect(find.text('아침을 먹었어요.'), findsOneWidget); // example pill
       expect(find.text('0 / 2'), findsOneWidget); // progress count
+      // mx-node parity: the shared study chrome (kit StudyShell → exit + progress).
+      expect(
+        find.byKey(const ValueKey<String>('mx-node:study-session/exit')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey<String>('mx-node:study-session/progress')),
+        findsOneWidget,
+      );
     });
 
     testWidgets('no example → no example pill', (tester) async {

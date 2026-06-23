@@ -35,7 +35,7 @@
   );
 
   const SearchBar = ({ query }) => (
-    <SearchDock query={query} placeholder="Search this folder" />
+    <SearchDock query={query} placeholder="Search this folder" node="04-folder-detail/search-dock" />
   );
 
   // ---- Delete confirm dialog ----------------------------------------------
@@ -91,8 +91,8 @@
     </div>
   );
 
-  const FabSlot = ({ icon = 'plus' }) => (
-    <Fab icon={icon} label="Create"
+  const FabSlot = ({ icon = 'plus', node }) => (
+    <Fab icon={icon} label="Create" data-mx-node={node}
       style={{ position: 'absolute', right: S(5), bottom: `calc(var(--memox-size-bottom-nav) + ${S(4)})`, zIndex: 5 }} />
   );
 
@@ -172,7 +172,7 @@
             <StatSummary stats={[['2', 'Subfolders'], ['5', 'Decks'], ['31', 'Due', true]]} />
             <ListGroup heading="Folders" items={SUBFOLDERS} kind="folder" />
           </Body>
-          <FabSlot icon="folder-plus" />
+          <FabSlot icon="folder-plus" node="04-folder-detail/new-subfolder-fab" />
           <BottomNav active="Library" />
         </div>
       );
@@ -201,7 +201,7 @@
           <StatSummary stats={[['3', 'Decks'], ['312', 'Cards'], ['31', 'Due', true]]} />
           <ListGroup heading="Decks" items={DECKS} kind="deck" />
         </Body>
-        <FabSlot icon="layers" />
+        <FabSlot icon="layers" node="04-folder-detail/create-deck-fab" />
         <BottomNav active="Library" />
       </div>
     );

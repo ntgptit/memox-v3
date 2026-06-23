@@ -14,27 +14,27 @@
       "shots": 16
     },
     "03-library-overview": {
-      "hash": "27bbafd994a1e6860adbaa91a14184f590013936f9c3af75cebb662cac8439b2",
+      "hash": "a708fadb231496bf19d865647658b62193defa98d3053c26ab3032dc0a8a4b57",
       "shots": 12
     },
     "04-folder-detail": {
-      "hash": "40a818a036204acb0a837d5682e8e0db713e46d5ee89adc6c712623d4b42007a",
+      "hash": "105f37b12bcb90eda47afe417c5be4a0262b995a4a7479a1af6ae4228b12a698",
       "shots": 16
     },
     "05-library-search": {
-      "hash": "18b354f167af8f71b7a55151855e122e2b422679506719f2fcefc6b5041621ca",
+      "hash": "47db6630ab1fc61e0293761fc362cdccabcbc94436d5fc3071f1aeba8e545ebe",
       "shots": 10
     },
     "06-flashcard-list": {
-      "hash": "5b9abb99cbddd5105bc1a9972b1b113a8192746d2def902ef4f145155b070d41",
+      "hash": "eef50cdd741a1752894df2cd25d3d53657ebda3b948669515d24696551c07bdf",
       "shots": 16
     },
     "07-flashcard-create": {
-      "hash": "7aa0335011e786cb6b6c89ccd3404508697be05ed640865daa9fe7adff2c1d5d",
+      "hash": "e587a95adb3606c2d3751ec50736fea8aee42ead05f99ccb539280acfeabcba2",
       "shots": 12
     },
     "08-flashcard-edit": {
-      "hash": "538024dd2268724385c41bec9722261c9a69c421e391ac85b7f88439cea21cc8",
+      "hash": "1e3a8f69cf670a7712001801a8be593707f5a05ef8f7f1fdc64c4814490f035f",
       "shots": 14
     },
     "09-flashcard-history": {
@@ -50,27 +50,27 @@
       "shots": 22
     },
     "12-study-review": {
-      "hash": "7d3d480bb3bcd0c712a94fe820597e9b89e0d0bb58b18ffac798e375e734d126",
+      "hash": "27a80c2b1899632b9851c59a74787ed233c3d2684124f986f8f28b3908bad2c1",
       "shots": 2
     },
     "13-study-match": {
-      "hash": "5821d9b75cf5e0bd35cfc5ea87964ff2f7f4d717d56543bdc4cd4056ff4e0939",
+      "hash": "58ca22119bd60a0baafc63d676f9032dd27cc8f7e232bb0045ef060fb9a215a3",
       "shots": 6
     },
     "14-study-guess": {
-      "hash": "beeb0175e6137f68bc2f693441d47143c9a50859cac283728f6f3c10bf8feb49",
+      "hash": "dec731d56802e9f9fadbb58854ce0aac13ca942d57e90a3c4e64f393856b22b0",
       "shots": 2
     },
     "15-study-recall": {
-      "hash": "2516fcc8cda3c708560aab21aa5b993ef003379d03ae1b78d491139dfe0dd120",
+      "hash": "3fca103193e71f0babcb7e8838c915e5fecd3149c1a8d502f1318d757921ae8a",
       "shots": 4
     },
     "16-study-fill": {
-      "hash": "718f8d1779093401f0a9a11b5faefca94f023c7383763000615bf19f918871fb",
+      "hash": "1b6e56f5c906201b9c6cdbffee7315adf9d3dcf77a0cc154c5ee20c531706092",
       "shots": 4
     },
     "17-study-result": {
-      "hash": "a365d69d3ee4aa36dcc5e4f1bd0d777e0081e261441ed9ab6b21d45e257e5445",
+      "hash": "bf6d8f6ba144cf1bfaab41eaf2667bf587fc9343f8dbead338d0e1eab6854757",
       "shots": 12
     },
     "18-stats": {

@@ -144,6 +144,15 @@ void main() {
       expect(find.text('to eat'), findsOneWidget); // the correct option
       expect(find.text('water'), findsOneWidget); // a distractor
       expect(find.text('0 / 5'), findsOneWidget);
+      // mx-node parity: shared study chrome (StudyShell → exit + progress).
+      expect(
+        find.byKey(const ValueKey<String>('mx-node:study-session/exit')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey<String>('mx-node:study-session/progress')),
+        findsOneWidget,
+      );
     });
 
     testWidgets('a full option set has 5 options (correct + 4 distractors)', (

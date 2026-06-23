@@ -95,6 +95,7 @@ class MatchSessionScreen extends ConsumerWidget {
     appBar: MxAppBar(
       automaticallyImplyLeading: false,
       leading: MxIconButton.toolbar(
+        key: const ValueKey<String>('mx-node:study-session/exit'),
         icon: Icons.close,
         tooltip: l10n.commonCancel,
         onPressed: () => unawaited(_confirmExit(context, l10n, progress)),
@@ -103,6 +104,7 @@ class MatchSessionScreen extends ConsumerWidget {
       titleWidget: progress == null
           ? null
           : MxLinearProgress(
+              key: const ValueKey<String>('mx-node:study-session/progress'),
               value: progress.$2 <= 0 ? 0 : progress.$1 / progress.$2,
             ),
       actions: <Widget>[

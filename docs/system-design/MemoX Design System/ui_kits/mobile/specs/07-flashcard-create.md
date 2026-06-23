@@ -222,6 +222,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
               rel: [0,0 46x15]
             style: font:12/700 color:text-2 tracking:1
         - node: textarea
+          id: flashcard-editor/front-field
           box:
             abs: [21,134 348x96]
             rel: [0,23 348x96]
@@ -246,6 +247,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
               rel: [0,0 38x15]
             style: font:12/700 color:text-2 tracking:1
         - node: textarea
+          id: flashcard-editor/back-field
           box:
             abs: [21,269 348x96]
             rel: [0,23 348x96]
@@ -333,6 +335,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   rel: [0,0 46x15]
   style: font:12/700 color:text-2 tracking:1
 - - node: textarea
+- id: flashcard-editor/front-field
 - box:
 - abs: [21,134 348x96]
 - rel: [0,23 348x96]
@@ -341,6 +344,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: layout_hint:scroll
 - style: bg:accent-contrast r:14 border:1px border
 + - node: textarea
++ id: flashcard-editor/front-field
 + text: 日本
 + box:
 + abs: [21,134 348x96]
@@ -362,6 +366,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   rel: [0,0 38x15]
   style: font:12/700 color:text-2 tracking:1
 - - node: textarea
+- id: flashcard-editor/back-field
 - box:
 - abs: [21,269 348x96]
 - rel: [0,23 348x96]
@@ -370,6 +375,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: layout_hint:scroll
 - style: bg:accent-contrast r:14 border:1px border
 + - node: textarea
++ id: flashcard-editor/back-field
 + text: Japan / にほん
 + box:
 + abs: [21,269 348x96]
@@ -430,6 +436,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   rel: [0,0 46x15]
   style: font:12/700 color:text-2 tracking:1
 - - node: textarea
+- id: flashcard-editor/front-field
 - box:
 - abs: [21,134 348x96]
 - rel: [0,23 348x96]
@@ -438,6 +445,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: layout_hint:scroll
 - style: bg:accent-contrast r:14 border:1px border
 + - node: textarea
++ id: flashcard-editor/front-field
 + text: 日本
 + box:
 + abs: [21,134 348x96]
@@ -459,6 +467,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   rel: [0,0 38x15]
   style: font:12/700 color:text-2 tracking:1
 - - node: textarea
+- id: flashcard-editor/back-field
 - box:
 - abs: [21,269 348x96]
 - rel: [0,23 348x96]
@@ -467,6 +476,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: layout_hint:scroll
 - style: bg:accent-contrast r:14 border:1px border
 + - node: textarea
++ id: flashcard-editor/back-field
 + text: Japan / にほん
 + box:
 + abs: [21,269 348x96]
@@ -682,6 +692,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   rel: [0,0 46x15]
   style: font:12/700 color:text-2 tracking:1
 - - node: textarea
+- id: flashcard-editor/front-field
 - box:
 - abs: [21,134 348x96]
 - rel: [0,23 348x96]
@@ -690,6 +701,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: layout_hint:scroll
 - style: bg:accent-contrast r:14 border:1px border
 + - node: textarea
++ id: flashcard-editor/front-field
 + box:
 + abs: [21,134 348x96]
 + rel: [0,23 348x96]
@@ -775,6 +787,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   rel: [0,0 46x15]
   style: font:12/700 color:text-2 tracking:1
 - - node: textarea
+- id: flashcard-editor/front-field
 - box:
 - abs: [21,134 348x96]
 - rel: [0,23 348x96]
@@ -783,6 +796,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: layout_hint:scroll
 - style: bg:accent-contrast r:14 border:1px border
 + - node: textarea
++ id: flashcard-editor/front-field
 + text: 日本
 + box:
 + abs: [21,134 348x96]
@@ -804,6 +818,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   rel: [0,0 38x15]
   style: font:12/700 color:text-2 tracking:1
 - - node: textarea
+- id: flashcard-editor/back-field
 - box:
 - abs: [21,269 348x96]
 - rel: [0,23 348x96]
@@ -812,6 +827,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: layout_hint:scroll
 - style: bg:accent-contrast r:14 border:1px border
 + - node: textarea
++ id: flashcard-editor/back-field
 + text: Japan / にほん
 + box:
 + abs: [21,269 348x96]
@@ -921,6 +937,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   rel: [0,0 46x15]
   style: font:12/700 color:text-2 tracking:1
 - - node: textarea
+- id: flashcard-editor/front-field
 - box:
 - abs: [21,134 348x96]
 - rel: [0,23 348x96]
@@ -929,6 +946,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: layout_hint:scroll
 - style: bg:accent-contrast r:14 border:1px border
 + - node: textarea
++ id: flashcard-editor/front-field
 + text: 日本
 + box:
 + abs: [21,206 348x96]
@@ -950,6 +968,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   rel: [0,0 38x15]
   style: font:12/700 color:text-2 tracking:1
 - - node: textarea
+- id: flashcard-editor/back-field
 - box:
 - abs: [21,269 348x96]
 - rel: [0,23 348x96]
@@ -958,6 +977,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: layout_hint:scroll
 - style: bg:accent-contrast r:14 border:1px border
 + - node: textarea
++ id: flashcard-editor/back-field
 + text: Japan / にほん
 + box:
 + abs: [21,341 348x96]
