@@ -10,9 +10,9 @@
   const Bar = ({ canSave, saving }) => (
     <>
       <div className="appbar">
-        <button className="icon-btn" aria-label="Back"><Icon name="x" /></button>
+        <button className="icon-btn" aria-label="Back" data-mx-node="flashcard-editor/back-btn"><Icon name="x" /></button>
         <span className="appbar-title" style={{ flex: 1, minWidth: 0, marginLeft: S(2) }}>New card</span>
-        <button className="pill-btn primary sm" disabled={!canSave || saving} style={{ minWidth: '76px' }}>
+        <button className="pill-btn primary sm" disabled={!canSave || saving} style={{ minWidth: '76px' }} data-mx-node="flashcard-editor/save-button">
           {saving ? <span className="spinner" style={{ width: 'var(--memox-icon-sm)', height: 'var(--memox-icon-sm)', borderWidth: '2px' }}></span> : <><Icon name="check" />Save</>}
         </button>
       </div>
@@ -28,7 +28,7 @@
 
   // Collapsible "Details" disclosure header
   const DetailsHeader = ({ open }) => (
-    <button style={{
+    <button data-mx-node="flashcard-editor/details-toggle" style={{
       display: 'flex', alignItems: 'center', gap: S(2), width: '100%',
       background: 'none', border: 'none', cursor: 'pointer', padding: `0 ${S(1)}`,
       fontFamily: 'var(--memox-font-sans)', color: 'var(--memox-text-secondary)',
@@ -43,7 +43,7 @@
   const DetailsBody = () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: S(4), paddingTop: S(2) }}>
       <FormField label="Deck">
-        <PickerRow icon="languages" tint="var(--memox-status-new)" title="Japanese · N5" />
+        <PickerRow icon="languages" tint="var(--memox-status-new)" title="Japanese · N5" data-mx-node="flashcard-editor/deck-picker" />
       </FormField>
       <FormField label="Tags">
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: S(2) }}>

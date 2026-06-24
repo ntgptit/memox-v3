@@ -10,7 +10,7 @@
   const Bar = ({ title }) => (
     <div className="appbar">
       <span className="appbar-title" style={{ flex: 1 }}>{title}</span>
-      <button className="icon-btn" aria-label="Close"><Icon name="x" /></button>
+      <button className="icon-btn" aria-label="Close" data-mx-node="17-study-result/close-btn"><Icon name="x" /></button>
     </div>
   );
 

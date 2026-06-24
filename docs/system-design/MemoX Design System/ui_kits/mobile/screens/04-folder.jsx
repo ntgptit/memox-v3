@@ -169,7 +169,7 @@
         <div className="app" style={{ position: 'relative' }}>
           <Bar title="Languages" />
           <Body>
-            <StatSummary stats={[['2', 'Subfolders'], ['5', 'Decks'], ['31', 'Due', true]]} />
+            <StatSummary stats={[['2', 'Subfolders'], ['5', 'Decks'], ['31', 'Due', true]]} node="04-folder-detail/stat-card" />
             <ListGroup heading="Folders" items={SUBFOLDERS} kind="folder" />
           </Body>
           <FabSlot icon="folder-plus" node="04-folder-detail/new-subfolder-fab" />
@@ -183,7 +183,7 @@
         <div className="app" style={{ position: 'relative' }}>
           <Bar title="Languages" />
           <Body>
-            <StatSummary stats={[['3', 'Decks'], ['312', 'Cards'], ['31', 'Due', true]]} />
+            <StatSummary stats={[['3', 'Decks'], ['312', 'Cards'], ['31', 'Due', true]]} node="04-folder-detail/stat-card" />
             <ListGroup heading="Decks" items={DECKS} kind="deck" />
           </Body>
           <FabSlot icon="layers" />
@@ -198,7 +198,7 @@
       <div className="app" style={{ position: 'relative' }}>
         <Bar title="Languages" />
         <Body>
-          <StatSummary stats={[['3', 'Decks'], ['312', 'Cards'], ['31', 'Due', true]]} />
+          <StatSummary stats={[['3', 'Decks'], ['312', 'Cards'], ['31', 'Due', true]]} node="04-folder-detail/stat-card" />
           <ListGroup heading="Decks" items={DECKS} kind="deck" />
         </Body>
         <FabSlot icon="layers" node="04-folder-detail/create-deck-fab" />

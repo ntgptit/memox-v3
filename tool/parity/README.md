@@ -13,6 +13,7 @@ không gọi model**:
 | Phát hiện **design đổi** (shots/specs) → bắt FE + docs + golden phải sửa theo | `design_watch.mjs` + `design-baseline.json` |
 | **Sync** design từ Claude Design về repo rồi nối vào pipeline | `/design-sync` (agent) → `after-sync.mjs` (tất định) |
 | Sinh **parity contract** từ spec `id:` (data-mx-node) | `gen_contract.mjs` → `contracts/contracts.json` |
+| **Check coverage** `data-mx-node`: node nào (mx-mapped, singleton) còn thiếu id | `mxnode_coverage.mjs` |
 
 > Quy trình end-to-end (2 pha, pipeline data-mx-node, gates, ai-làm-gì): **`docs/design/design-sync-process.md`**.
 
@@ -136,6 +137,40 @@ chưa có → test đỏ "1/4 required NOT rendered"; gỡ → xanh.
 Pump-cô-lập chỉ bắt được thiếu element TRONG screen pump được; "cả màn chưa dựng" là check thô hơn
 (route tồn tại / pump được không). **Rollout** = curate danh sách key/screen từ design + gắn key vào FE
 (prototype xong 02; 03–08/17 còn lại).
+
+## `mxnode_coverage.mjs` — `data-mx-node` đã tag đủ chưa (kit coverage)
+
+Trả lời "node nào ĐÁNG tag mà chưa có `data-mx-node`?" để rollout không dừng ở vài
+singleton/screen. Ứng viên = node được exporter map tới component (`mx:<Mx>`) hoặc
+interactive chưa map (`mx: ?`), trừ shell/chrome toàn cục
+(MxScaffold/MxAppBar/MxContentShell/MxBottomNavigationBar). Chỉ quét **base-state**
+section của spec (các state khác là diff/full-rerender → nếu quét hết sẽ đếm nhầm 1
+singleton thành "repeated"). Tách **singleton** (tên node duy nhất trên screen — đích
+tag thật) khỏi **repeated** (item list/grid — tag container, KHÔNG tag từng cái: key
+trùng = Flutter crash). Coverage đo trên singleton.
+
+**Exempt (ca đặc biệt không tag — `intent-ledger.json` → `coverageExempt`):** một số
+candidate **cố tình không tag**, đọc từ ledger và **loại khỏi gap + mẫu số `--check`**
+(vẫn hiện ở cột `exempt`). 3 kind: `deferred` (kit pre-redesign, lệch FE — tag sau khi
+regen kit), `future`/`rejected` (FE không dựng theo scope), `covered` (con trang trí bên
+trong một node container đã tag — tag container, không tag con). Match: `screen` ==
+entry.screen AND `node` startsWith entry.node AND (entry.mx vắng OR == candidate.mx).
+Mỗi entry phải có `source` trỏ doc/owner ruling. Đây là cơ chế "check ignore" — thêm ca
+mới thì ghi ledger, đừng nới định nghĩa candidate.
+
+```bash
+node tool/parity/mxnode_coverage.mjs                 # bảng tagged/candidates %/screen + exempt + untagged
+node tool/parity/mxnode_coverage.mjs --screen 02-dashboard   # full list 1 screen
+node tool/parity/mxnode_coverage.mjs --check --min 100        # GATE: mọi candidate phải tagged hoặc exempt
+node tool/parity/mxnode_coverage.mjs --json
+```
+
+Hiện **23/23 singleton (100%)** đã tag, **4 exempt** (02 settings-icon + section-head =
+kit pre-redesign deferred; 13 "Shuffle & restart" = Future; 08 `icon-tile` = con của
+`deck-picker` đã tag). CI chạy `--check --min 100` làm **gate ratchet**: thêm candidate
+mới mà chưa tag và chưa ghi ledger ⇒ đỏ. Để tag được **shared primitive** (StatSummary,
+PickerRow, IconTile, ListRow, SectionHead, HeroCard…) phải thêm prop `node` ở
+`_shared.jsx` (common-layer first) rồi truyền id ở call site — đừng hand-attach trên bản copy.
 
 ## `intent-ledger.json` — ngoại lệ có-docs (KHÔNG phải cửa "redesign")
 

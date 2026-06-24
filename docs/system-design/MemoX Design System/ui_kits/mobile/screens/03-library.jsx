@@ -19,7 +19,7 @@
     <div className="appbar">
       <span className="appbar-title">Library</span>
       <span className="spacer"></span>
-      <button className="icon-btn" aria-label="Sort"><Icon name="arrow-up-down" /></button>
+      <button className="icon-btn" aria-label="Sort" data-mx-node="03-library/sort-btn"><Icon name="arrow-up-down" /></button>
     </div>
   );
 

@@ -71,6 +71,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           rel: [20,13 78x30]
         style: font:24/700 color:text tracking:-0.5
       - node: icon-btn
+        id: 03-library/sort-btn
         mx: MxIconButton
         box:
           abs: [329,21 40x40]
@@ -574,6 +575,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           rel: [20,13 78x30]
         style: font:24/700 color:text tracking:-0.5
       - node: icon-btn
+        id: 03-library/sort-btn
         mx: MxIconButton
         box:
           abs: [329,21 40x40]

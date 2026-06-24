@@ -65,6 +65,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       spacing: pad:0/20
       style: bg:bg
       - node: icon-btn
+        id: flashcard-editor/back-btn
         mx: MxIconButton
         box:
           abs: [21,21 40x40]
@@ -88,6 +89,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         spacing: margin:0/0/0/8
         style: font:24/700 color:text tracking:-0.5
       - node: icon-btn
+        id: flashcard-editor/delete-btn
         mx: MxIconButton
         box:
           abs: [243,21 40x40]
@@ -103,6 +105,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             rel: [10,10 20x20]
           position: clip
       - node: pill-btn
+        id: flashcard-editor/save-button
         text: Save
         mx: MxPrimaryButton
         box:
@@ -295,6 +298,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
               rel: [0,0 37x15]
             style: font:12/700 color:text-2 tracking:1
         - node: card
+          id: flashcard-editor/deck-picker
           mx: MxCard
           box:
             abs: [21,433 348x66]
@@ -452,6 +456,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   spacing: margin:0/0/0/8
   style: font:24/700 color:text tracking:-0.5
 - - node: icon-btn
+- id: flashcard-editor/delete-btn
 - mx: MxIconButton
 - box:
 - abs: [243,21 40x40]
@@ -467,6 +472,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - rel: [10,10 20x20]
 - position: clip
 - - node: pill-btn
+- id: flashcard-editor/save-button
 - text: Save
 - mx: MxPrimaryButton
 - box:
@@ -566,6 +572,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - rel: [0,0 37x15]
 - style: font:12/700 color:text-2 tracking:1
 - - node: card
+- id: flashcard-editor/deck-picker
 - mx: MxCard
 - box:
 - abs: [21,433 348x66]
@@ -763,6 +770,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   spacing: margin:0/0/0/8
   style: font:24/700 color:text tracking:-0.5
 - - node: icon-btn
+- id: flashcard-editor/delete-btn
 - mx: MxIconButton
 - box:
 - abs: [243,21 40x40]
@@ -778,6 +786,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - rel: [10,10 20x20]
 - position: clip
 - - node: pill-btn
+- id: flashcard-editor/save-button
 - text: Save
 - mx: MxPrimaryButton
 - box:
@@ -885,6 +894,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - rel: [0,0 37x15]
 - style: font:12/700 color:text-2 tracking:1
 - - node: card
+- id: flashcard-editor/deck-picker
 - mx: MxCard
 - box:
 - abs: [21,433 348x66]
@@ -1114,6 +1124,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   rel: [10,10 20x20]
   position: clip
 - - node: pill-btn
+- id: flashcard-editor/save-button
 - text: Save
 - mx: MxPrimaryButton
 - box:
@@ -1129,6 +1140,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - rel: [13,4 16x16]
 - position: clip
 + - node: pill-btn
++ id: flashcard-editor/save-button
 + mx: MxPrimaryButton
 + box:
 + abs: [293,29 76x24]

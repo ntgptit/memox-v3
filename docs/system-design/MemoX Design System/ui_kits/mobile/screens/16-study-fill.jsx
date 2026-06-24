@@ -7,7 +7,7 @@
   const { Icon, S, StudyShell, FormField, AnswerReveal } = window.MX;
 
   const Prompt = () => (
-    <div className="card" style={{ padding: S(5) }}>
+    <div className="card" style={{ padding: S(5) }} data-mx-node="study-session/content-card">
       <div className="ov" style={{ color: 'var(--memox-text-3)', marginBottom: S(2) }}>Type the reading</div>
       <div style={{ fontSize: 'calc(var(--memox-size-display) * 1.1)', fontWeight: 'var(--memox-weight-extrabold)', color: 'var(--memox-text-primary)', letterSpacing: 'var(--memox-tracking-tight)', lineHeight: 1.1 }}>山</div>
       <div className="muted" style={{ fontSize: 'var(--memox-fs-label-large)', marginTop: S(1) }}>English: mountain</div>
@@ -21,7 +21,7 @@
         <button className="pill-btn primary" style={{ flex: 1 }}>Next<Icon name="arrow-right" /></button>
       </div>
     ) : (
-      <button className="pill-btn primary" style={{ width: '100%' }}><Icon name="check" />Check answer</button>
+      <button className="pill-btn primary" style={{ width: '100%' }} data-mx-node="study-session/action"><Icon name="check" />Check answer</button>
     );
 
     return (

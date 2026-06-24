@@ -133,6 +133,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         layout: flex:row
         flex: grow:1 basis:0 layout_hint:expanded
         - node: card
+          id: study-session/content-card
           mx: MxCard
           box:
             abs: [21,121 348x555]

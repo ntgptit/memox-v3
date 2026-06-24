@@ -71,6 +71,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         flex: grow:1 basis:0 layout_hint:expanded
         style: font:24/700 color:text tracking:-0.5
       - node: icon-btn
+        id: 17-study-result/close-btn
         mx: MxIconButton
         box:
           abs: [329,21 40x40]
@@ -401,6 +402,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         flex: grow:1 basis:0 layout_hint:expanded
         style: font:24/700 color:text tracking:-0.5
       - node: icon-btn
+        id: 17-study-result/close-btn
         mx: MxIconButton
         box:
           abs: [329,21 40x40]
@@ -998,6 +1000,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         flex: grow:1 basis:0 layout_hint:expanded
         style: font:24/700 color:text tracking:-0.5
       - node: icon-btn
+        id: 17-study-result/close-btn
         mx: MxIconButton
         box:
           abs: [329,21 40x40]
