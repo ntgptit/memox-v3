@@ -1771,6 +1771,216 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We couldn\'t fetch this card\'s activity.'**
   String get cardHistoryLoadFailedMessage;
+
+  /// Shared retry action on an operation-failed dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get commonTryAgain;
+
+  /// Shared dismiss action on an operation-failed dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get commonDismiss;
+
+  /// App-bar title for the Tag Management screen (screen 11).
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get tagManagementTitle;
+
+  /// Overline (all-caps) showing the total tag count.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 TAG} other{{count} TAGS}}'**
+  String tagManagementCountLabel(int count);
+
+  /// Card count under a tag name.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 card} other{{count} cards}}'**
+  String tagManagementCardCount(int count);
+
+  /// Tooltip for the per-tag overflow (kebab) button.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag actions'**
+  String get tagManagementActionsTooltip;
+
+  /// Header of the per-tag action sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} · {count, plural, =1{1 card} other{{count} cards}}'**
+  String tagManagementSheetHeader(String name, int count);
+
+  /// Rename action in the per-tag sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get tagManagementRenameAction;
+
+  /// Merge action in the per-tag sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge into…'**
+  String get tagManagementMergeAction;
+
+  /// Delete action in the per-tag sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get tagManagementDeleteAction;
+
+  /// Title of the rename-tag dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename tag'**
+  String get tagManagementRenameTitle;
+
+  /// Field label in the rename-tag dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag name'**
+  String get tagManagementRenameFieldLabel;
+
+  /// Confirm button in the rename-tag dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get tagManagementRenameConfirm;
+
+  /// Confirm button when a rename collides with an existing tag (becomes a merge).
+  ///
+  /// In en, this message translates to:
+  /// **'Merge tags'**
+  String get tagManagementMergeConfirm;
+
+  /// Inline prompt shown when a typed rename collides with an existing tag.
+  ///
+  /// In en, this message translates to:
+  /// **'A tag “{name}” already exists. Merge them?'**
+  String tagManagementMergePrompt(String name);
+
+  /// Title of the merge-target picker sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge “{name}” into'**
+  String tagManagementMergeSheetTitle(String name);
+
+  /// Placeholder of the bottom tag search dock.
+  ///
+  /// In en, this message translates to:
+  /// **'Search tags'**
+  String get tagManagementSearchHint;
+
+  /// Empty-state title when no tags exist.
+  ///
+  /// In en, this message translates to:
+  /// **'No tags yet'**
+  String get tagManagementEmptyTitle;
+
+  /// Empty-state body when no tags exist.
+  ///
+  /// In en, this message translates to:
+  /// **'Add tags to your cards and they\'ll appear here to manage.'**
+  String get tagManagementEmptyMessage;
+
+  /// No-results title when a search matches no tags.
+  ///
+  /// In en, this message translates to:
+  /// **'No tags found'**
+  String get tagManagementSearchEmptyTitle;
+
+  /// No-results body when a search matches no tags.
+  ///
+  /// In en, this message translates to:
+  /// **'No tags match your search.'**
+  String get tagManagementSearchEmptyMessage;
+
+  /// Tag-list load-error title.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load tags'**
+  String get tagManagementLoadFailedTitle;
+
+  /// Tag-list load-error body.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong loading your tags.'**
+  String get tagManagementLoadFailedMessage;
+
+  /// Title of the delete-tag confirm dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete tag “{name}”?'**
+  String tagManagementDeleteTitle(String name);
+
+  /// Body of the delete-tag confirm dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'The tag is removed from {count, plural, =1{1 card} other{{count} cards}}. The cards themselves stay. This can\'t be undone.'**
+  String tagManagementDeleteMessage(int count);
+
+  /// Confirm button in the delete-tag dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get tagManagementDeleteConfirm;
+
+  /// Busy overlay label while renaming a tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Renaming…'**
+  String get tagManagementBusyRenaming;
+
+  /// Busy overlay label while merging tags.
+  ///
+  /// In en, this message translates to:
+  /// **'Merging tags…'**
+  String get tagManagementBusyMerging;
+
+  /// Busy overlay label while deleting a tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleting…'**
+  String get tagManagementBusyDeleting;
+
+  /// Op-error title when a rename fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t rename tag'**
+  String get tagManagementRenameFailedTitle;
+
+  /// Op-error body when a rename fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong updating this tag. Your tags are unchanged.'**
+  String get tagManagementRenameFailedMessage;
+
+  /// Op-error title when a merge fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t merge tags'**
+  String get tagManagementMergeFailedTitle;
+
+  /// Op-error body when a merge fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong merging these tags. Your tags are unchanged.'**
+  String get tagManagementMergeFailedMessage;
+
+  /// Op-error title when a delete fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t delete tag'**
+  String get tagManagementDeleteFailedTitle;
+
+  /// Op-error body when a delete fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong deleting this tag. Your tags are unchanged.'**
+  String get tagManagementDeleteFailedMessage;
 }
 
 class _AppLocalizationsDelegate

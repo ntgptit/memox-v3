@@ -104,6 +104,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         spacing: pad:0/0/0/4
         style: font:12/700 color:text-2 tracking:1
       - node: list-card
+        id: 11-tag-management/tag-list
         box:
           abs: [21,108 348x407]
           rel: [20,39 348x407]
@@ -538,6 +539,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
                     rel: [10,10 20x20]
                   position: clip
     - node: search-dock
+      id: 11-tag-management/search-dock
       box:
         abs: [1,700 388x69]
         rel: [0,687 388x69]
@@ -967,6 +969,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             size: maxw:260
             style: font:14/400 color:text-2 text:center
     - node: search-dock
+      id: 11-tag-management/search-dock
       box:
         abs: [1,700 388x69]
         rel: [0,687 388x69]

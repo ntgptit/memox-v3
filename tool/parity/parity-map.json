@@ -162,13 +162,29 @@
         { "kit": "error", "golden": "test/presentation/features/history/goldens/card_history_error", "scope": "current" },
         { "kit": "partial", "scope": "behavior", "reason": "feed loads fully per card-history.md (per-card scale); incremental pagination + 'older events couldn't load' banner is Future" }
       ]
+    },
+    {
+      "id": "11-tag-management",
+      "title": "Tag management",
+      "states": [
+        { "kit": "loaded", "golden": "test/presentation/features/settings/goldens/tag_management_loaded", "scope": "current" },
+        { "kit": "loading", "golden": "test/presentation/features/settings/goldens/tag_management_loading", "scope": "current" },
+        { "kit": "empty", "golden": "test/presentation/features/settings/goldens/tag_management_empty", "scope": "current" },
+        { "kit": "search-empty", "golden": "test/presentation/features/settings/goldens/tag_management_search-empty", "scope": "current" },
+        { "kit": "action-sheet", "scope": "behavior", "reason": "per-tag overflow MxBottomSheet (Rename/Merge/Delete); interaction-driven, asserted via widget test" },
+        { "kit": "rename", "scope": "behavior", "reason": "rename MxDialog (text field); interaction-driven" },
+        { "kit": "rename-merge", "scope": "behavior", "reason": "rename dialog collision → merge prompt; interaction-driven (collision detection unit-tested via the dialog)" },
+        { "kit": "merge-sheet", "scope": "behavior", "reason": "merge-target MxBottomSheet (tap-to-select, mirrors deck/folder move pickers; radio+confirm is the same deferred refinement)" },
+        { "kit": "delete", "scope": "shared", "reason": "MxConfirmDialog destructive → test/presentation/shared/dialogs/goldens/mx_confirm-destructive" },
+        { "kit": "busy", "scope": "behavior", "reason": "MxBusyOverlay over showDialog during a rename/merge/delete op" },
+        { "kit": "op-error", "scope": "behavior", "reason": "op-failed MxConfirmDialog (Dismiss / Try again retry)" }
+      ]
     }
   ],
   "noFe": [
     "00-components",
     "01-onboarding",
     "10-deck-import",
-    "11-tag-management",
     "19-progress",
     "20-settings",
     "21-account-sync",

@@ -111,6 +111,16 @@
         "node": "list-card"
       }
     ],
+    "11-tag-management": [
+      {
+        "key": "mx-node:11-tag-management/tag-list",
+        "node": "list-card"
+      },
+      {
+        "key": "mx-node:11-tag-management/search-dock",
+        "node": "search-dock"
+      }
+    ],
     "12-study-review": [
       {
         "key": "mx-node:study-session/exit",

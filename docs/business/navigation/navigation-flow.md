@@ -56,7 +56,7 @@ branches.
 |---------------------------|----------------------------------------------------------------------------------------------------------------------------|---------------|
 | `/settings/account`       | Account linking + Drive sync                                                                                               | No            |
 | `/settings/learning`      | Learning settings (daily goal, reminder, tags, future study defaults)                                                     | No            |
-| `/settings/learning/tags` | Tag management (new; see `docs/business/tags/tag-system.md` and wireframe `docs/wireframes/22-settings-tag-management.md`) | No            |
+| `/settings/learning/tags` | Tag management — Current V1: top-level immersive `SettingsTagManagementScreen` (`settingsRoutes()`, outside the shell), list/search + rename/merge/delete (kit screen 11; `docs/wireframes/22-settings-tag-management.md`). Entry from Settings→Learning is Future (hub unbuilt). | No            |
 | `/settings/audio-speech`  | Audio & speech settings (Korean / English tabs, voice list, sliders, preview)                                             | No            |
 
 Route name constants (from `lib/app/router/route_names.dart`): `RouteNames.settings`,

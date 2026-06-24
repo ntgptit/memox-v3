@@ -31,7 +31,7 @@
   );
 
   const SearchBar = ({ query }) => (
-    <SearchDock query={query} placeholder="Search tags" />
+    <SearchDock query={query} placeholder="Search tags" node="11-tag-management/search-dock" />
   );
 
   // ---- Tag row -------------------------------------------------------------
@@ -55,7 +55,7 @@
   const TagList = ({ tags }) => (
     <>
       <div className="ov" style={{ paddingLeft: S(1) }}>{tags.length} tags</div>
-      <div className="list-card">
+      <div className="list-card" data-mx-node="11-tag-management/tag-list">
         {tags.map((t, i) => (
           <div key={t.name}>
             {i > 0 && <div className="hr inset"></div>}
