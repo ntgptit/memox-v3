@@ -3,14 +3,14 @@
 Live cursor for the 12-screen FE+BE build-out. Recipe + done-bar: `plan.md` (same dir).
 One screen per iteration, in order. Update this table as each screen lands.
 
-**NEXT: 19-progress** (the deeper Progress analytics detail — kit screen 19, 9 states).
+**NEXT: 09-flashcard-history** (kit screen 09, 5 states). 19-progress is 🟡 blocked:Q5 (engagement-approval gate) — skipped per the loop's blocking protocol.
 
 ## Status
 
 | # | Screen | Status | PR | Notes |
 | --- | --- | --- | --- | --- |
 | 1 | 18-stats | ✅ done | [#32](https://github.com/ntgptit/memox-v3/pull/32) | Stats tab at `/progress`; weekly chart + per-deck mastery; `MxBarChart`/`MxMasteryBar`. Parked Q1–Q4. |
-| 2 | 19-progress | ⬜ todo | — | Pushed detail (back + Week/Month); needs its own route or `/progress` rename (Q3) + `ProgressOverview` BE (7.4.2). `03-progress.md` drift corrected but screen still unbuilt. |
+| 2 | 19-progress | 🟡 blocked:Q5 | — | **Skipped (blocked).** Mock hero = daily-goal ring (12/20) + streak chip + insights = engagement BE, which `overview.md` marks Future/Target "No engagement persistence/settings/reminders — pending approval". Can't build the goal ring without approved goal-settings BE (fabricating goal/streak values is forbidden by `engagement.md`). Also route collides with Stats (Q3). Unblock = owner approves engagement BE. |
 | 3 | 09-flashcard-history | ⬜ todo | — | |
 | 4 | 11-tag-management | ⬜ todo | — | |
 | 5 | 10-deck-import | ⬜ todo | — | |
@@ -39,6 +39,21 @@ default**, and keep going. The user resolves these in one pass afterwards.
 Format (newest first): `Q<n> (<screen>) — <question>. Default taken: <what you did so the
 loop could continue>. Why/source: <ref>. [blocking? yes/no]`
 
+- **Q5 (19-progress) — BLOCKING: the kit-19 mock's hero is an engagement surface (daily-goal ring
+  `12/20` + flame streak chip + goal-driven insights), but engagement (daily goal + streak +
+  reminders) is documented Future/Target with "No engagement persistence/settings/reminders" for V1
+  and relocating it to Progress is "pending the engagement BE (schema/migration/approval)"
+  (`docs/business/system/overview.md`).** The goal ring needs a real goal TARGET from settings;
+  `docs/contracts/usecase-contracts/engagement.md` explicitly forbids fabricating goal/streak values,
+  so there is no safe default that maps the hero card. Default taken: **parked + marked 19-progress
+  🟡 blocked:Q5 + skipped to 09-flashcard-history** (loop blocking protocol — no hard-stop). The
+  accuracy/time/cards summary + the week/month chart ARE buildable from `study_attempts`
+  (+`duration_ms`), but a Progress screen missing its hero goal-ring/streak/insights cannot reach the
+  "mapped to mock" done-bar. **Also note:** the kit-19 mock (goal ring + streak + accuracy/time/cards
+  + insights) DIFFERS from `docs/wireframes/03-progress.md` (range tabs + box distribution + study-day
+  streak + card states) — a mock↔wireframe conflict to resolve when 19 is unblocked. Unblock = owner
+  approves building the engagement BE (SharedPreferences goal/streak per `engagement.md`; no Drift
+  migration needed). Why/source: `docs/business/system/overview.md` (line ~69), `docs/contracts/usecase-contracts/engagement.md` (Forbidden: fabricate goal/streak). [blocking? **yes**]
 - **Q4 (18-stats / 19-progress) — `docs/wireframes/03-progress.md` claims Progress V1 is fully
   implemented (`ProgressScreen`, `LoadProgressOverviewUseCase`, `lib/presentation/features/progress/**`,
   goldens, P1–P18) but NONE of it exists in code** (the `/progress` branch was a `RoutePlaceholder`;
