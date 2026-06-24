@@ -1,10 +1,6 @@
 {
   "$comment": "Design baseline for tool/parity/design_watch.mjs — per-screen hash of spec + shots. Re-run with --update ONLY after the FE/goldens/docs have been updated to follow a design change.",
   "screens": {
-    "00-components": {
-      "hash": "fe957d809a58b1db2c5da694233ff0e2499a3b1d748cc767c0f7e2d27ab44e40",
-      "shots": 2
-    },
     "01-onboarding": {
       "hash": "877b87585b85de216a19c86ec1546aeccbc4e80d717cfb2de44e63d1af4b5215",
       "shots": 18

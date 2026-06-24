@@ -359,7 +359,10 @@
 
   <!-- ================= SCREENS ================= -->
   <script type="text/babel" src="screens/_shared.jsx"></script>
-  <script type="text/babel" src="screens/00-components.jsx"></script>
+  <!-- 00-components is the internal primitive gallery, not an app screen — not
+       loaded in the index gallery. The file stays in screens/ (still lint-checked
+       by tools/check-ui-kit.js); re-enable this line to browse it. -->
+  <!-- <script type="text/babel" src="screens/00-components.jsx"></script> -->
   <script type="text/babel" src="screens/01-onboarding.jsx"></script>
   <script type="text/babel" src="screens/02-dashboard.jsx"></script>
   <script type="text/babel" src="screens/03-library.jsx"></script>
