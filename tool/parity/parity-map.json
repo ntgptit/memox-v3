@@ -194,6 +194,17 @@
         { "kit": "busy", "scope": "behavior", "reason": "MxBusyOverlay over showDialog during a rename/merge/delete op" },
         { "kit": "op-error", "scope": "behavior", "reason": "op-failed MxConfirmDialog (Dismiss / Try again retry)" }
       ]
+    },
+    {
+      "id": "22-learning-settings",
+      "title": "Learning settings",
+      "states": [
+        { "kit": "goal-on", "golden": "test/presentation/features/settings/goldens/learning_settings_goal-on", "scope": "current" },
+        { "kit": "goal-off", "golden": "test/presentation/features/settings/goldens/learning_settings_goal-off", "scope": "current" },
+        { "kit": "saving", "golden": "test/presentation/features/settings/goldens/learning_settings_saving", "scope": "current" },
+        { "kit": "reminder-on", "scope": "future", "reason": "daily-reminder feature (enable + time + repeat) is Future — no reminder persistence in LearningSettings and no notification-scheduling dependency; engagement reminders pending approval (docs/business/system/overview.md)" },
+        { "kit": "perm-denied", "scope": "future", "reason": "OS notification-permission denied banner + open-settings — part of the Future reminder feature (needs a notification dependency + permission flow)" }
+      ]
     }
   ],
   "noFe": [
@@ -202,7 +213,6 @@
     "19-progress",
     "20-settings",
     "21-account-sync",
-    "22-learning-settings",
     "23-audio-speech",
     "24-appearance",
     "25-language"

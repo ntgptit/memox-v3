@@ -96,6 +96,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       spacing: pad:16/20/24/20
       position: layout_hint:scroll
       - node: card
+        id: 22-learning-settings/goal-card
         mx: MxCard
         box:
           abs: [21,85 348x206]
@@ -140,6 +141,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
               spacing: margin:6/0/0/0
               style: font:13/400 color:text-2
           - node: switch
+            id: 22-learning-settings/goal-toggle
             mx: ?
             box:
               abs: [306,110 46x28]
@@ -170,6 +172,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
               rel: [51,15 75x18]
             style: font:14/600 color:text-2
         - node: slider
+          id: 22-learning-settings/goal-slider
           box:
             abs: [38,228 314x6]
             rel: [17,143 314x6]
@@ -195,6 +198,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
               transform: transform:translate(-11,-11)
               style: bg:accent-contrast r:999 border:2px accent shadow:1/2
         - node: div
+          id: 22-learning-settings/goal-presets
           box:
             abs: [38,250 314x24]
             rel: [17,165 314x24]
@@ -241,6 +245,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             spacing: pad:0/12
             style: bg:color(srgb 0.352941 0.388235 0.470588 / 0.12) font:11/700 color:text-2 tracking:0.1 r:999
       - node: card
+        id: 22-learning-settings/reminder-card
         mx: MxCard
         box:
           abs: [21,307 348x77]
@@ -311,6 +316,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - spacing: margin:6/0/0/0
 - style: font:13/400 color:text-2
 - - node: switch
+- id: 22-learning-settings/goal-toggle
 - mx: ?
 - box:
 - abs: [306,110 46x28]
@@ -341,6 +347,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - rel: [51,15 75x18]
 - style: font:14/600 color:text-2
 - - node: slider
+- id: 22-learning-settings/goal-slider
 - box:
 - abs: [38,228 314x6]
 - rel: [17,143 314x6]
@@ -366,6 +373,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - transform: transform:translate(-11,-11)
 - style: bg:accent-contrast r:999 border:2px accent shadow:1/2
 - - node: div
+- id: 22-learning-settings/goal-presets
 - box:
 - abs: [38,250 314x24]
 - rel: [17,165 314x24]
@@ -419,6 +427,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + spacing: margin:6/0/0/0
 + style: font:13/400 color:text-2
 + - node: switch
++ id: 22-learning-settings/goal-toggle
 + mx: ?
 + box:
 + abs: [306,110 46x28]
@@ -427,6 +436,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + position: pos:relative
 + style: bg:border r:999
   - node: card
+  id: 22-learning-settings/reminder-card
   mx: MxCard
   box:
   abs: [21,178 348x77]
@@ -623,6 +633,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + flex: grow:1 basis:0 layout_hint:expanded
 + style: font:14/600 color:warn
   - node: card
+  id: 22-learning-settings/goal-card
   mx: MxCard
   box:
   abs: [21,161 348x206]
@@ -642,6 +653,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   spacing: pad:0/12
   style: bg:color(srgb 0.352941 0.388235 0.470588 / 0.12) font:11/700 color:text-2 tracking:0.1 r:999
 - - node: card
+- id: 22-learning-settings/reminder-card
 - mx: MxCard
 - box:
 - abs: [21,307 348x77]
@@ -650,6 +662,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - spacing: pad:16
 - style: bg:accent-contrast r:20 border:1px divider shadow:1/2
 + - node: card
++ id: 22-learning-settings/reminder-card
 + mx: MxCard
 + box:
 + abs: [21,383 348x77]

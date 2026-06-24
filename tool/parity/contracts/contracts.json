@@ -228,6 +228,28 @@
         "key": "mx-node:18-stats/mastery-list",
         "node": "list-card"
       }
+    ],
+    "22-learning-settings": [
+      {
+        "key": "mx-node:22-learning-settings/goal-card",
+        "node": "card"
+      },
+      {
+        "key": "mx-node:22-learning-settings/goal-toggle",
+        "node": "switch"
+      },
+      {
+        "key": "mx-node:22-learning-settings/goal-slider",
+        "node": "slider"
+      },
+      {
+        "key": "mx-node:22-learning-settings/goal-presets",
+        "node": "div"
+      },
+      {
+        "key": "mx-node:22-learning-settings/reminder-card",
+        "node": "card"
+      }
     ]
   }
 }

@@ -15,6 +15,10 @@ abstract final class RoutePaths {
   static const String progress = '/progress';
   static const String settings = '/settings';
 
+  /// Learning settings (kit screen 22) — registered as a **top-level** route
+  /// (outside the bottom-nav shell → immersive, shell hidden). WBS 8.2.2.
+  static const String settingsLearning = '/settings/learning';
+
   /// Tag management (kit screen 11) — registered as a **top-level** route
   /// (outside the bottom-nav shell → immersive, shell hidden). WBS 8.3.2.
   static const String settingsLearningTags = '/settings/learning/tags';

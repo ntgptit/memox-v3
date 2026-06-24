@@ -2185,6 +2185,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose another file'**
   String get deckImportChooseAnother;
+
+  /// App-bar title for the Learning settings screen (22).
+  ///
+  /// In en, this message translates to:
+  /// **'Learning'**
+  String get learningSettingsTitle;
+
+  /// Busy overlay label while a learning-settings change is saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving…'**
+  String get learningSettingsSaving;
+
+  /// Error-state title on the Learning settings screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load settings'**
+  String get learningSettingsErrorTitle;
+
+  /// Error-state body on the Learning settings screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong loading your learning settings.'**
+  String get learningSettingsErrorMessage;
+
+  /// Daily goal card title.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily goal'**
+  String get learningGoalTitle;
+
+  /// Daily goal card subtitle when the goal is on.
+  ///
+  /// In en, this message translates to:
+  /// **'Cards to study each day'**
+  String get learningGoalOnDesc;
+
+  /// Daily goal card subtitle when the goal is off.
+  ///
+  /// In en, this message translates to:
+  /// **'Turned off — study freely'**
+  String get learningGoalOffDesc;
+
+  /// Unit label beside the daily goal count.
+  ///
+  /// In en, this message translates to:
+  /// **'cards / day'**
+  String get learningGoalUnit;
+
+  /// Daily reminder card title.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily reminder'**
+  String get learningReminderTitle;
+
+  /// Daily reminder card subtitle when no reminder is set.
+  ///
+  /// In en, this message translates to:
+  /// **'No reminder set'**
+  String get learningReminderOffDesc;
 }
 
 class _AppLocalizationsDelegate
