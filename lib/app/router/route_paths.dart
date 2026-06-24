@@ -46,6 +46,11 @@ abstract final class RoutePaths {
   static const String flashcardHistory =
       '$deckFlashcards/$flashcardHistoryRelative';
 
+  /// Deck CSV/TSV import wizard (kit `10`) — `/library/deck/:deckId/import`,
+  /// a sibling of the deck flashcard list. Registered as a **top-level**
+  /// (immersive, shell hidden) route.
+  static const String deckImport = '$library/deck/:deckId/import';
+
   /// Search-branch variants of the detail routes (reuse the same relative
   /// segments under [search]) so a Search result opens inside the Search branch.
   static const String searchFolder = '$search/$folderRelative';

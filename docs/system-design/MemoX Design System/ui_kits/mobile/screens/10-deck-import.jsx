@@ -38,7 +38,7 @@
 
   // file chip card
   const FileCard = ({ status }) => (
-    <div className="card" style={{ display: 'flex', alignItems: 'center', gap: S(3), padding: S(4) }}>
+    <div className="card" data-mx-node="10-deck-import/file-chip" style={{ display: 'flex', alignItems: 'center', gap: S(3), padding: S(4) }}>
       <IconTile icon="file-text" color="var(--memox-status-new)" />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div className="title" style={{ fontSize: 'var(--memox-fs-label-large)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>japanese-n5.csv</div>
@@ -52,7 +52,7 @@
   const PreviewList = ({ rows }) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: S(2) }}>
       <div className="ov" style={{ paddingLeft: S(1) }}>Preview<span style={{ marginLeft: S(1), color: 'var(--memox-text-3)' }}>{rows.length}</span></div>
-      <div className="list-card">
+      <div className="list-card" data-mx-node="10-deck-import/preview-list">
         {rows.map((r, i) => (
           <div key={i}>
             {i > 0 && <div className="hr inset"></div>}
@@ -72,7 +72,7 @@
 
   // result hero (success / partial / failed)
   const ResultHero = ({ icon, tint, solid, title, desc, primary, secondary }) => (
-    <HeroCard icon={icon} tint={tint} solid={solid} title={title} desc={desc}>
+    <HeroCard icon={icon} tint={tint} solid={solid} title={title} desc={desc} node="10-deck-import/result-card">
       {primary}{secondary}
     </HeroCard>
   );
@@ -84,9 +84,9 @@
         <div className="app">
           <Bar />
           <Body>
-            <HeroCard icon="file-up" tint="var(--memox-primary)" title="Import cards from a file"
+            <HeroCard icon="file-up" tint="var(--memox-primary)" title="Import cards from a file" node="10-deck-import/empty-card"
               desc="Pick a CSV, TSV or Anki (.apkg) file from your device to bring its cards into MemoX.">
-              <button className="pill-btn primary" style={{ width: '100%' }}><Icon name="folder-open" />Choose file</button>
+              <button className="pill-btn primary" data-mx-node="10-deck-import/choose-file" style={{ width: '100%' }}><Icon name="folder-open" />Choose file</button>
             </HeroCard>
             <Banner tone="info" icon="info">Supports CSV, TSV and Anki (.apkg) files. On the web you can also drag a file onto this screen.</Banner>
           </Body>

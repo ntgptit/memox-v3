@@ -1981,6 +1981,210 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong deleting this tag. Your tags are unchanged.'**
   String get tagManagementDeleteFailedMessage;
+
+  /// App-bar title for the Deck Import wizard (screen 10).
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get deckImportTitle;
+
+  /// Empty-state title on the Deck Import screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Import cards from a file'**
+  String get deckImportEmptyTitle;
+
+  /// Empty-state body on the Deck Import screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a CSV or TSV file from your device to bring its cards into MemoX.'**
+  String get deckImportEmptyMessage;
+
+  /// Button that opens the file picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose file'**
+  String get deckImportChooseFile;
+
+  /// Info banner listing the supported import formats (Anki .apkg is Future).
+  ///
+  /// In en, this message translates to:
+  /// **'Supports CSV and TSV files.'**
+  String get deckImportSupportedFormats;
+
+  /// Status suffix on the chosen-file chip before parsing.
+  ///
+  /// In en, this message translates to:
+  /// **'ready to parse'**
+  String get deckImportReadyToParse;
+
+  /// File chip meta line: size, type, and status.
+  ///
+  /// In en, this message translates to:
+  /// **'{size} · {type} · {status}'**
+  String deckImportFileMeta(String size, String type, String status);
+
+  /// File size in bytes.
+  ///
+  /// In en, this message translates to:
+  /// **'{bytes} B'**
+  String deckImportSizeBytes(int bytes);
+
+  /// File size in kilobytes (value already formatted).
+  ///
+  /// In en, this message translates to:
+  /// **'{value} KB'**
+  String deckImportSizeKb(String value);
+
+  /// File size in megabytes (value already formatted).
+  ///
+  /// In en, this message translates to:
+  /// **'{value} MB'**
+  String deckImportSizeMb(String value);
+
+  /// Tooltip for the clear-file (×) button on the chip.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove file'**
+  String get deckImportClearFile;
+
+  /// Button that parses the chosen file into a preview.
+  ///
+  /// In en, this message translates to:
+  /// **'Parse file'**
+  String get deckImportParseFile;
+
+  /// Reassurance under the Parse file button.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll show a preview before anything is imported.'**
+  String get deckImportParseHint;
+
+  /// Loading label while parsing the file.
+  ///
+  /// In en, this message translates to:
+  /// **'Parsing…'**
+  String get deckImportParsing;
+
+  /// Loading label while committing the import.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing…'**
+  String get deckImportImporting;
+
+  /// File chip summary in the preview.
+  ///
+  /// In en, this message translates to:
+  /// **'{found} found · {valid} valid · {skip} to skip'**
+  String deckImportPreviewSummary(int found, int valid, int skip);
+
+  /// Warning banner above the preview list.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 card has problems and will be skipped.} other{{count} cards have problems and will be skipped.}}'**
+  String deckImportSkipWarning(int count);
+
+  /// Success banner above an all-valid preview list.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 card looks good.} other{All {count} cards look good.}}'**
+  String deckImportAllValid(int count);
+
+  /// Overline above the preview list with the number of shown rows.
+  ///
+  /// In en, this message translates to:
+  /// **'PREVIEW {count}'**
+  String deckImportPreviewLabel(int count);
+
+  /// A preview row's front—back pair.
+  ///
+  /// In en, this message translates to:
+  /// **'{front} — {back}'**
+  String deckImportCardPair(String front, String back);
+
+  /// Title for an invalid (unparseable) preview row.
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped row'**
+  String get deckImportSkippedRow;
+
+  /// Reason shown on a duplicate preview row.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate card'**
+  String get deckImportDuplicateReason;
+
+  /// Badge on a skipped preview row.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get deckImportSkipBadge;
+
+  /// Commit button labelled with the valid card count.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Import 1 valid card} other{Import {count} valid cards}}'**
+  String deckImportCommitButton(int count);
+
+  /// Success headline.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 card imported} other{{count} cards imported}}'**
+  String deckImportSuccessTitle(int count);
+
+  /// Success body naming the destination deck.
+  ///
+  /// In en, this message translates to:
+  /// **'They\'re now in your {deck} deck, ready to study.'**
+  String deckImportSuccessMessage(String deck);
+
+  /// Fallback deck name in the success message when the deck name is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'current'**
+  String get deckImportThisDeck;
+
+  /// Partial-result headline.
+  ///
+  /// In en, this message translates to:
+  /// **'{imported} imported · {skipped} skipped'**
+  String deckImportPartialTitle(int imported, int skipped);
+
+  /// Partial-result body.
+  ///
+  /// In en, this message translates to:
+  /// **'Some rows were invalid or duplicates and were left out.'**
+  String get deckImportPartialMessage;
+
+  /// Primary action on the partial result — restart the wizard.
+  ///
+  /// In en, this message translates to:
+  /// **'Import another file'**
+  String get deckImportImportAnother;
+
+  /// Primary action on success — return to the deck.
+  ///
+  /// In en, this message translates to:
+  /// **'Open deck'**
+  String get deckImportOpenDeck;
+
+  /// Failed-result headline.
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed'**
+  String get deckImportFailedTitle;
+
+  /// Failed-result body.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing was imported. The file may be corrupt or in an unsupported format.'**
+  String get deckImportFailedMessage;
+
+  /// Secondary action on failure — restart and pick a new file.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose another file'**
+  String get deckImportChooseAnother;
 }
 
 class _AppLocalizationsDelegate

@@ -35,6 +35,10 @@ abstract final class RouteNames {
   /// pushed within the Library branch (kit screen 09). WBS 7.6.3.
   static const String flashcardHistory = 'flashcardHistory';
 
+  /// CSV/TSV deck import wizard (`/library/deck/:deckId/import`, kit screen 10),
+  /// a top-level immersive route reached from the flashcard list. WBS 6.3.2.
+  static const String deckImport = 'deckImport';
+
   /// Folder detail / deck flashcard list reached from a **Search** result, so
   /// the push stays inside the Search branch (Back returns to `/search`). Same
   /// screens as the Library-branch routes, distinct names per GoRouter's

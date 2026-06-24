@@ -39,10 +39,10 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Deck delete| Specified (deferred — WBS 2.9.x, blocked on flashcards/progress)| `docs/business/deck/deck-management.md`|
 | Deck rename / reorder| Specified (BE Current — WBS 2.8.1 / 2.10.1)| `docs/business/deck/deck-management.md`|
 | Deck target-language picker UI| Specified| `docs/business/deck/deck-management.md`|
-| Deck import| Specified | `docs/business/flashcard/flashcard-management.md` (import section)|
+| Deck import| Implemented (WBS 6.1.1 + 6.3.1, kit screen 10) — `DeckImportScreen` file-picker wizard (CSV/TSV): empty → file → parse → preview (valid/skip) → commit → success/partial/failed. Anki `.apkg` Future.| `docs/business/flashcard/flashcard-management.md` (import section), `docs/wireframes/10-deck-import.md`|
 | Deck export| Specified| `docs/business/export/export.md`|
 | Flashcard CRUD + tag| Specified (BE Current — WBS 2.11.1/2.12.1/2.13.1/2.14.1; create/update/delete/reorder + create-time tags + tag filter WBS 2.18.1. `move`, bulk, and status filter (WBS 2.17.1, blocked on suspend/bury columns) Future)| `docs/business/flashcard/flashcard-management.md`|
-| Flashcard import preview/validation| Specified | `docs/business/flashcard/flashcard-management.md` (import section)|
+| Flashcard import preview/validation| Implemented (WBS 6.2.x BE + 6.3.1 FE) — combined valid/skip preview (rows + parse issues + duplicate detection), per-row reasons, found/valid/skip summary.| `docs/business/flashcard/flashcard-management.md` (import section), `docs/wireframes/10-deck-import.md`|
 | Flashcard selection export| Specified| `docs/business/export/export.md`|
 | Study session| Specified| `docs/business/study/study-flow.md`|
 | Resume / continue session| Specified| `docs/business/resume/resume-session.md`|

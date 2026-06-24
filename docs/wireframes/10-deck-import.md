@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-28
+last_updated: 2026-06-24
 route: /library/deck/:deckId/import
 source_specs:
   - ../business/flashcard/flashcard-management.md (import section)
@@ -7,9 +7,25 @@ source_specs:
 
 # 10 — Deck Import
 
-## V1 verification status (2026-06-09, Prompt MX-FEATURE-20260609-014)
+> **Status (2026-06-24): Implemented to the kit-10 mock (file-picker wizard) — WBS 6.1.1 + 6.3.1.**
+> `DeckImportScreen` (`lib/presentation/features/flashcards/screens/deck_import_screen.dart`) renders
+> at `/library/deck/:deckId/import` as a **top-level immersive route** (shell hidden), over the
+> existing import BE (6.2.x parse/validate + dedup + 6.4.1 commit). A `DeckImportController` state
+> machine drives the nine kit states: **empty → file-selected → parsing → preview (all-valid /
+> mixed) → importing → success / partial / failed**. The user picks a CSV/TSV file (`file_picker`),
+> the separator is **auto-detected**, the preview combines valid rows + parse issues + duplicates with
+> a found/valid/skip summary, and a clean/partial commit imports the valid rows. Goldens:
+> `test/presentation/features/flashcards/goldens/`.
+>
+> **Mock-authoritative: the file-picker flow SUPERSEDES the pre-redesign paste-CSV + 7-way
+> separator-dropdown design described below** (that body section is the older TARGET, kept for
+> reference). **Anki `.apkg` is Future** (the CSV parser cannot read it; the picker accepts
+> `csv`/`tsv`/`txt`). The "Review skipped" affordance on the partial result is replaced by "Import
+> another file" (restart) — a dedicated skipped-rows review is Future.
 
-This screen is **partially Current**. Current V1 is a single-screen CSV paste preview + commit:
+## V1 verification status (2026-06-09 — SUPERSEDED by the file-picker mock above)
+
+The pre-redesign Current V1 was a single-screen CSV **paste** preview + commit:
 route `/library/deck/:deckId/import` opens `DeckImportScreen`, the user pastes CSV, taps
 Preview, sees valid rows plus row-level validation, and can commit a clean preview transactionally.
 File picker, Excel, structured text, duplicate handling, and the standalone result screen remain

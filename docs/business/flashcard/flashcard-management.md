@@ -58,10 +58,15 @@ SRS state is stored in `flashcard_progress`. See `docs/business/srs/srs-review.m
 ## Import rules
 
 - Target deck must exist.
-- Current V1 deck import is CSV paste preview + transactional commit for valid preview rows only
-  (`parse_deck_import_csv_usecase.dart`, `prepare_deck_import_usecase.dart`,
-  `commit_deck_import_usecase.dart`). File picker and Excel remain deferred. Structured text is
-  supported in the backend pipeline; UI entry remains deferred.
+- Current V1 deck import (kit screen 10, WBS 6.1.1/6.3.1) is a **file-picker wizard**:
+  `DeckImportScreen` lets the user pick a **CSV/TSV file** (`file_picker`), auto-detects the
+  separator, shows a preview (valid rows + parse issues + duplicates, with a found/valid/skip
+  summary), and commits the valid subset transactionally — surfacing an inline success / partial /
+  failed result. (`parse_deck_import_csv_usecase.dart`, `prepare_deck_import_usecase.dart`,
+  `commit_deck_import_usecase.dart`.) **Mock-authoritative:** the file-picker flow superseded the
+  pre-redesign paste-CSV + separator-dropdown design. **Anki `.apkg` and Excel remain Future**
+  (the parser reads `csv`/`tsv`/`txt` only); a live "N of M" import-progress counter is Future
+  (atomic commit, no progress stream).
 - Imported rows must pass the same front/back validation as manual creation.
 - Invalid rows must be reported clearly via the preview screen (see "Import preview flow" below).
 - Do not silently create garbage rows.
@@ -89,7 +94,7 @@ dedup, and commit logic land in WBS 6.2.x–6.9.1.
 
 | Source                              | When                              | Notes                                                                                     |
 |-------------------------------------|-----------------------------------|-------------------------------------------------------------------------------------------|
-| `ImportSourceFormat.csv`            | Pasted text                       | Current V1: parse + validation preview + commit of valid rows only. Optional columns are ignored. |
+| `ImportSourceFormat.csv`            | File picker (CSV/TSV file)         | Current V1 (kit screen 10): pick a CSV/TSV file → auto-separator parse + validation + duplicate preview → commit valid rows. Optional columns are ignored. |
 | `ImportSourceFormat.excel`          | Future                            | Deferred. First sheet read. `excelHasHeader` toggle decides if row 1 is skipped.         |
 | `ImportSourceFormat.structuredText` | Backend-supported, UI deferred     | Separator supported: `auto`, `tab`, `comma`, `colon`, `slash`, `semicolon`, `pipe`.      |
 
@@ -191,10 +196,12 @@ The failure snackbar uses `importFailedMessage`.
 
 ### Result screen
 
-> **Future (not in V1).** The standalone result screen below remains the target. V1 does not render a
-> separate result step: on a successful commit the screen shows a localized success snackbar
-> (`importSuccessMessage(count)`) and pops back to the Flashcard List. The imported count is the
-> number of rows actually committed.
+> **Current V1 (kit screen 10, WBS 6.5.1).** The wizard renders **inline terminal result states**
+> (`DeckImportResultView`): **success** ("N cards imported" + Open deck / Done), **partial**
+> ("N imported · M skipped" + Import another / Done), and **failed** ("Import failed" + Try again /
+> Choose another file). The older "success snackbar + pop" plan is superseded by these inline cards.
+> The imported count is the number of rows actually committed. A dedicated "Review skipped" list is
+> Future (the partial primary is "Import another file").
 
 After commit:
 
@@ -250,13 +257,16 @@ V1 create/edit note:
 
 Deck import screen (`/library/deck/:deckId/import`):
 
- - Current V1 route exposes CSV paste input, parse, validation preview, and an atomic commit CTA for
-   clean preview rows only.
- - Shows route-level copy, a CSV textarea, preview action, validation summary, valid rows list,
-   ready/committing/failure callouts, and commit feedback.
- - Does not expose the file picker, Excel import, or structured text import.
- - Duplicate detection runs in the backend pipeline and blocks duplicate commits; a richer
-   duplicate-preview surface in the UI remains deferred.
+ - Current V1 route opens the **file-picker wizard** (`DeckImportScreen`, top-level immersive):
+   choose a CSV/TSV file → parse + duplicate preview → commit the valid subset, with inline
+   success / partial / failed results.
+ - States: empty (Choose file) → file-selected (chip + Parse file) → parsing → preview
+   (all-valid / mixed, with found/valid/skip summary + per-row reasons + Skip badges) → importing →
+   success / partial / failed.
+ - **Anki `.apkg` and Excel are Future** (the picker accepts `csv`/`tsv`/`txt`); the separator is
+   auto-detected (no separator picker).
+ - Duplicate detection runs in the backend pipeline; duplicates are **shown in the preview** (red
+   "Duplicate card" rows with a Skip badge) and excluded from the commit.
 
 ## Form rules
 

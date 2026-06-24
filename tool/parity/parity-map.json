@@ -164,6 +164,21 @@
       ]
     },
     {
+      "id": "10-deck-import",
+      "title": "Deck import",
+      "states": [
+        { "kit": "empty", "golden": "test/presentation/features/flashcards/goldens/deck_import_empty", "scope": "current" },
+        { "kit": "file-selected", "golden": "test/presentation/features/flashcards/goldens/deck_import_file-selected", "scope": "current" },
+        { "kit": "parsing", "golden": "test/presentation/features/flashcards/goldens/deck_import_parsing", "scope": "current" },
+        { "kit": "preview-all-valid", "golden": "test/presentation/features/flashcards/goldens/deck_import_preview-all-valid", "scope": "current" },
+        { "kit": "preview-mixed", "golden": "test/presentation/features/flashcards/goldens/deck_import_preview-mixed", "scope": "current" },
+        { "kit": "importing", "golden": "test/presentation/features/flashcards/goldens/deck_import_importing", "scope": "current" },
+        { "kit": "success", "golden": "test/presentation/features/flashcards/goldens/deck_import_success", "scope": "current" },
+        { "kit": "partial", "golden": "test/presentation/features/flashcards/goldens/deck_import_partial", "scope": "current" },
+        { "kit": "failed", "golden": "test/presentation/features/flashcards/goldens/deck_import_failed", "scope": "current" }
+      ]
+    },
+    {
       "id": "11-tag-management",
       "title": "Tag management",
       "states": [
@@ -184,7 +199,6 @@
   "noFe": [
     "00-components",
     "01-onboarding",
-    "10-deck-import",
     "19-progress",
     "20-settings",
     "21-account-sync",
