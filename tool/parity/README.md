@@ -11,7 +11,8 @@ không gọi model**:
 | Phát hiện **FE thiếu element** so design (spec-driven, identity by KEY — FE thiếu → test đỏ) | parity-contract test + `test/support/parity_contract.dart` |
 | Phân loại **FIX (mặc định) vs ngoại lệ có-docs** (behavior/future/rejected/needs-schema) | `intent-ledger.json` |
 | Phát hiện **design đổi** (shots/specs) → bắt FE + docs + golden phải sửa theo | `design_watch.mjs` + `design-baseline.json` |
-| **Sync** design từ Claude Design về repo rồi nối vào pipeline | `/design-sync` (agent) → `after-sync.mjs` (tất định) |
+| **Sync PULL** design từ Claude Design về repo rồi nối vào pipeline | `/design-sync` (agent) → `after-sync.mjs` (tất định) |
+| **Sync PUSH** thay đổi kit local → Claude Design v3 (bắt buộc sau mọi đổi kit) | `sync-design.mjs` (drive nested `claude -p`) |
 | Sinh **parity contract** từ spec `id:` (data-mx-node) | `gen_contract.mjs` → `contracts/contracts.json` |
 | **Check coverage** `data-mx-node`: node nào (mx-mapped, singleton) còn thiếu id | `mxnode_coverage.mjs` |
 
@@ -217,6 +218,23 @@ node tool/parity/after-sync.mjs --export   # regen shots+specs trước (cần C
 **Nối hai pha:** `design_watch` là cầu — phía tất định **biết** một lần agent-pull đã xảy ra và chặn
 merge tới khi code/docs theo kịp. Vì SYNC không vào được CI, `after-sync` chạy **thủ công/agent sau mỗi
 pull**; CI vẫn gác bằng `design_watch --check` (drift = đỏ tới khi re-baseline).
+
+### PUSH (repo → Claude Design v3) — `sync-design.mjs` — BẮT BUỘC sau mọi thay đổi kit
+
+Chiều ngược lại của Pha A: đẩy thay đổi kit local lên project v3 để canonical không drift. **Standing
+rule (PO 2026-06-24) — không hỏi lại** (xem `CLAUDE.md` Hard rules).
+
+```bash
+node tool/parity/sync-design.mjs            # range lastSyncedCommit..HEAD (ghi trong .design-sync/config.json)
+node tool/parity/sync-design.mjs <from-ref> # range tường minh
+node tool/parity/sync-design.mjs --dry      # in plan writes/deletes, không push
+```
+
+Tính file kit đổi trong git range (`A/M/R`→writes, `D`→deletes, project-relative) rồi **drive nested
+`claude -p`** (CLI đã `/design-login`) chạy `DesignSync finalize_plan` (bounded đúng các path đó — không
+chạm gì khác kể cả headless) → `write_files`/`delete_files`; xong ghi `lastSyncedCommit`. Push cần
+design-auth nên **không CI-hóa được**; surface không có scope vẫn đẩy được nhờ CLI máy. Không có CLI auth
+→ script fail rõ → report ghi `design-sync: skipped (no design-authorized CLI)`. Chạy **sau khi commit**.
 
 > `data-mx-node` ids nên sống **trong project Claude Design** (push lên bằng DesignSync 1 lần) → mỗi pull
 > kéo về là có sẵn, **không bị ghi đè** — đó là lý do dùng DesignSync (ghi được) thay vì sửa JSX chỉ ở repo.
