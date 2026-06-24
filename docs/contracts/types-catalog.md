@@ -387,6 +387,43 @@ enum TtsLanguageCode {
 
 Mapping: `TargetLanguage.korean → koKR`, `TargetLanguage.english → enUS`, `TargetLanguage.unsupported → no TTS`.
 
+### TtsFrontLanguage
+
+The app's default TTS front-side language (kit screen 23). Persisted in
+`tts_settings.front_language`; distinct from `TargetLanguage` (a deck's declared
+language — a deck's `target_language` wins for that deck's playback).
+
+```dart
+enum TtsFrontLanguage {
+  korean,   // 'korean'
+  english,  // 'english'
+}
+```
+
+**Storage:** Drift `tts_settings.front_language` TEXT; unknown/missing falls back
+to `korean` (`TtsFrontLanguage.fromStorage`). App default is Korean.
+
+### TtsSettings
+
+Global TTS settings — the single persisted row (`id = 'default'`) of
+`tts_settings` (WBS 8.4.1). `rate`/`pitch`/`volume` are clamped via
+`normalizeRate`/`normalizePitch`/`normalizeVolume` on both load and save (corrupt
+values self-heal). See `docs/business/tts/tts-settings.md` +
+`docs/contracts/repository-contracts/tts-settings-repository.md`.
+
+```dart
+class TtsSettings {  // freezed
+  bool autoPlay;                 // default false
+  TtsFrontLanguage frontLanguage; // default korean
+  double rate;                   // [0.3, 0.7], default 0.5
+  double pitch;                  // [0.7, 1.5], default 1.0
+  double volume;                 // [0.0, 1.0], default 1.0
+  String? frontVoiceName;        // platform voice id; null = system default
+}
+```
+
+`withFrontLanguage(lang)` switches the language and clears `frontVoiceName`.
+
 ### ValidationCode
 
 See `docs/contracts/error-contract.md` §ValidationFailure subtypes for full enum and meaning.

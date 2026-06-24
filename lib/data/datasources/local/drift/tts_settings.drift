@@ -1,0 +1,18 @@
+-- TTS (text-to-speech) settings: a single-row table (id always 'default') for
+-- the app's global speech preferences. See
+-- docs/database/schema-contract.md §tts_settings and
+-- docs/business/tts/tts-settings.md. Slider ranges are CHECK-enforced; the
+-- repository normalization clamps before write so a write never violates them.
+--
+-- front_language stores a TtsFrontLanguage value ('korean' / 'english');
+-- front_voice_name is the platform voice id (NULL = system default). rate /
+-- pitch / volume are bounded (CHECK) reals with defaults 0.5 / 1.0 / 1.0.
+CREATE TABLE tts_settings (
+  id TEXT NOT NULL PRIMARY KEY,
+  auto_play BOOLEAN NOT NULL DEFAULT 0,
+  front_language TEXT NOT NULL DEFAULT 'korean',
+  rate REAL NOT NULL DEFAULT 0.5 CHECK (rate >= 0.3 AND rate <= 0.7),
+  pitch REAL NOT NULL DEFAULT 1.0 CHECK (pitch >= 0.7 AND pitch <= 1.5),
+  volume REAL NOT NULL DEFAULT 1.0 CHECK (volume >= 0.0 AND volume <= 1.0),
+  front_voice_name TEXT
+) AS TtsSettingsRow;

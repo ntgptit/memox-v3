@@ -149,7 +149,7 @@ When in doubt about whether to use Stream or Future: use Stream.
 **Business specs touching non-Drift storage:**
 
 - `docs/business/engagement/dashboard-engagement.md` → learning settings, streak, reminder time in SharedPreferences
-- `docs/business/tts/tts-settings.md` → per-language TTS settings in SharedPreferences
+- `docs/business/tts/tts-settings.md` → global TTS settings in the Drift `tts_settings` single-row table (shipped v9, WBS 8.4.1 — NOT SharedPreferences)
 - `docs/business/search/global-search.md` → recent searches in SharedPreferences
 - `docs/business/account-sync/account-sync.md` → account link (`sharedPrefsCloudAccountLinkKey`) and
   per-account Drive sync metadata (`sharedPrefsDriveSyncMetadataKey`) in SharedPreferences;
