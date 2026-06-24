@@ -1275,4 +1275,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deckImportChooseAnother => 'Choose another file';
+
+  @override
+  String get learningSettingsTitle => 'Learning';
+
+  @override
+  String get learningSettingsSaving => 'Saving…';
+
+  @override
+  String get learningSettingsErrorTitle => 'Couldn\'t load settings';
+
+  @override
+  String get learningSettingsErrorMessage =>
+      'Something went wrong loading your learning settings.';
+
+  @override
+  String get learningGoalTitle => 'Daily goal';
+
+  @override
+  String get learningGoalOnDesc => 'Cards to study each day';
+
+  @override
+  String get learningGoalOffDesc => 'Turned off — study freely';
+
+  @override
+  String get learningGoalUnit => 'cards / day';
+
+  @override
+  String get learningReminderTitle => 'Daily reminder';
+
+  @override
+  String get learningReminderOffDesc => 'No reminder set';
 }

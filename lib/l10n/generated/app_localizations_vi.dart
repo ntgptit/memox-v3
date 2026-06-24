@@ -1248,4 +1248,35 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get deckImportChooseAnother => 'Chọn tệp khác';
+
+  @override
+  String get learningSettingsTitle => 'Học tập';
+
+  @override
+  String get learningSettingsSaving => 'Đang lưu…';
+
+  @override
+  String get learningSettingsErrorTitle => 'Không tải được cài đặt';
+
+  @override
+  String get learningSettingsErrorMessage =>
+      'Đã xảy ra lỗi khi tải cài đặt học tập của bạn.';
+
+  @override
+  String get learningGoalTitle => 'Mục tiêu mỗi ngày';
+
+  @override
+  String get learningGoalOnDesc => 'Số thẻ học mỗi ngày';
+
+  @override
+  String get learningGoalOffDesc => 'Đã tắt — học tự do';
+
+  @override
+  String get learningGoalUnit => 'thẻ / ngày';
+
+  @override
+  String get learningReminderTitle => 'Nhắc nhở hằng ngày';
+
+  @override
+  String get learningReminderOffDesc => 'Chưa đặt nhắc nhở';
 }

@@ -34,15 +34,13 @@ class MxBusyOverlay extends StatelessWidget {
       type: MaterialType.transparency,
       child: Center(
         child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: MxSpacing.space6,
-            vertical: MxSpacing.space5,
-          ),
+          padding: const EdgeInsets.all(MxSpacing.space5),
           decoration: BoxDecoration(
             color: colors.surface,
             borderRadius: MxRadius.lgAll,
           ),
-          child: Row(
+          // Spinner above the label (kit busy-dialog: a compact centred column).
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               SizedBox(
@@ -53,7 +51,7 @@ class MxBusyOverlay extends StatelessWidget {
                   color: colors.accent,
                 ),
               ),
-              const SizedBox(width: MxSpacing.space4),
+              const SizedBox(height: MxSpacing.space3),
               MxText(label, role: MxTextRole.bodyMedium),
             ],
           ),

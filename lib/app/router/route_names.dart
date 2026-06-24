@@ -16,6 +16,10 @@ abstract final class RouteNames {
   static const String progress = 'progress';
   static const String settings = 'settings';
 
+  /// Learning settings (`/settings/learning`, kit screen 22) — a top-level
+  /// immersive route (shell hidden). WBS 8.2.2.
+  static const String settingsLearning = 'settingsLearning';
+
   /// Tag management (`/settings/learning/tags`, kit screen 11) — a top-level
   /// immersive route (shell hidden). WBS 8.3.2.
   static const String settingsLearningTags = 'settingsLearningTags';

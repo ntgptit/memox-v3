@@ -458,15 +458,15 @@
   );
 
   // On/off switch (.switch). Presentational — the kit shows fixed states.
-  const Toggle = ({ on, disabled }) => (
-    <button className={`switch${on ? ' on' : ''}`} disabled={disabled} aria-label="Toggle" aria-pressed={!!on}></button>
+  const Toggle = ({ on, disabled, node }) => (
+    <button className={`switch${on ? ' on' : ''}`} disabled={disabled} aria-label="Toggle" aria-pressed={!!on} data-mx-node={node}></button>
   );
 
   // Value slider (.slider). `value` within [min,max] positions fill + thumb.
-  const Slider = ({ value, min = 0, max = 100 }) => {
+  const Slider = ({ value, min = 0, max = 100, node }) => {
     const pct = Math.max(0, Math.min(100, ((value - min) / (max - min)) * 100));
     return (
-      <div className="slider">
+      <div className="slider" data-mx-node={node}>
         <div className="slider-track">
           <div className="slider-fill" style={{ width: pct + '%' }}></div>
           <div className="slider-thumb" style={{ left: pct + '%' }}></div>

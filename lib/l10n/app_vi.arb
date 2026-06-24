@@ -349,5 +349,15 @@
   "deckImportOpenDeck": "Mở bộ thẻ",
   "deckImportFailedTitle": "Nhập thất bại",
   "deckImportFailedMessage": "Không có gì được nhập. Tệp có thể bị hỏng hoặc ở định dạng không hỗ trợ.",
-  "deckImportChooseAnother": "Chọn tệp khác"
+  "deckImportChooseAnother": "Chọn tệp khác",
+  "learningSettingsTitle": "Học tập",
+  "learningSettingsSaving": "Đang lưu…",
+  "learningSettingsErrorTitle": "Không tải được cài đặt",
+  "learningSettingsErrorMessage": "Đã xảy ra lỗi khi tải cài đặt học tập của bạn.",
+  "learningGoalTitle": "Mục tiêu mỗi ngày",
+  "learningGoalOnDesc": "Số thẻ học mỗi ngày",
+  "learningGoalOffDesc": "Đã tắt — học tự do",
+  "learningGoalUnit": "thẻ / ngày",
+  "learningReminderTitle": "Nhắc nhở hằng ngày",
+  "learningReminderOffDesc": "Chưa đặt nhắc nhở"
 }
