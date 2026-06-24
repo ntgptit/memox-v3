@@ -149,20 +149,28 @@ singleton thành "repeated"). Tách **singleton** (tên node duy nhất trên sc
 tag thật) khỏi **repeated** (item list/grid — tag container, KHÔNG tag từng cái: key
 trùng = Flutter crash). Coverage đo trên singleton.
 
+**Exempt (ca đặc biệt không tag — `intent-ledger.json` → `coverageExempt`):** một số
+candidate **cố tình không tag**, đọc từ ledger và **loại khỏi gap + mẫu số `--check`**
+(vẫn hiện ở cột `exempt`). 3 kind: `deferred` (kit pre-redesign, lệch FE — tag sau khi
+regen kit), `future`/`rejected` (FE không dựng theo scope), `covered` (con trang trí bên
+trong một node container đã tag — tag container, không tag con). Match: `screen` ==
+entry.screen AND `node` startsWith entry.node AND (entry.mx vắng OR == candidate.mx).
+Mỗi entry phải có `source` trỏ doc/owner ruling. Đây là cơ chế "check ignore" — thêm ca
+mới thì ghi ledger, đừng nới định nghĩa candidate.
+
 ```bash
-node tool/parity/mxnode_coverage.mjs                 # bảng tagged/singletons %/screen + untagged
+node tool/parity/mxnode_coverage.mjs                 # bảng tagged/candidates %/screen + exempt + untagged
 node tool/parity/mxnode_coverage.mjs --screen 02-dashboard   # full list 1 screen
-node tool/parity/mxnode_coverage.mjs --check --min 60         # exit 1 nếu screen < 60%
+node tool/parity/mxnode_coverage.mjs --check --min 100        # GATE: mọi candidate phải tagged hoặc exempt
 node tool/parity/mxnode_coverage.mjs --json
 ```
 
-Hiện **23/27 singleton (~85%)** đã tag (CI chạy report; nâng dần rồi bật `--check --min`
-làm gate ratchet). 4 cái còn lại đều là **ca đặc biệt có lý do**, không phải gap: 02
-(kit pre-redesign → deferred), 13 "Shuffle & restart" (**Future** → `intent-ledger.json`),
-08 `icon-tile` (con **trang trí bên trong** `deck-picker` đã tag — tag container, không
-tag tile con). Để tag được **shared primitive** (StatSummary, PickerRow, IconTile, ListRow,
-SectionHead, HeroCard…) phải thêm prop `node` ở `_shared.jsx` (common-layer first) rồi
-truyền id ở call site — đừng hand-attach trên bản copy.
+Hiện **23/23 singleton (100%)** đã tag, **4 exempt** (02 settings-icon + section-head =
+kit pre-redesign deferred; 13 "Shuffle & restart" = Future; 08 `icon-tile` = con của
+`deck-picker` đã tag). CI chạy `--check --min 100` làm **gate ratchet**: thêm candidate
+mới mà chưa tag và chưa ghi ledger ⇒ đỏ. Để tag được **shared primitive** (StatSummary,
+PickerRow, IconTile, ListRow, SectionHead, HeroCard…) phải thêm prop `node` ở
+`_shared.jsx` (common-layer first) rồi truyền id ở call site — đừng hand-attach trên bản copy.
 
 ## `intent-ledger.json` — ngoại lệ có-docs (KHÔNG phải cửa "redesign")
 

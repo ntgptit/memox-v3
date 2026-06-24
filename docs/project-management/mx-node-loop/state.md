@@ -10,11 +10,20 @@
 > Re-open by: (a) regenerating kit-02 to the redesign then tagging it; (b) deepening any
 > screen's contract with more nodes; (c) pushing the tagged kit to Claude Design "v3".
 >
-> **Coverage gauge (`tool/parity/mxnode_coverage.mjs`):** this loop tagged the PRIMARY
-> singletons per screen — only **~28% of singleton mx-mapped nodes** carry `data-mx-node`
-> so far. The coverage tool lists the untagged singletons per screen (icon-btn,
-> bottom-nav, section-head, card, pill-btn, …) — that's the to-do for a deeper rollout.
-> CI runs it as a report; raise `--check --min` as a ratchet once coverage climbs.
+> **Coverage gauge (`tool/parity/mxnode_coverage.mjs`) — now 100%:** deeper rollout
+> 2026-06-24 took singleton coverage from ~28% to **23/23 (100%)** by (a) giving 13
+> shared `_shared.jsx` primitives an optional `node` prop (common-layer first:
+> IconTile/TileLg/Chip/Overline/SectionHead/ListRow/HeroCard/EmptyState/Banner/InfoRow/
+> DueSummary/StatSummary/ListGroup) and (b) tagging the raw singletons (03 sort, 07/08
+> back/save/delete/deck-picker/details, 12–16 study content-card + action, 17 close).
+> The **4 intentionally-untagged cases live in `intent-ledger.json.coverageExempt`**
+> (02 settings-icon + section-head = kit pre-redesign deferred; 13 Shuffle = Future;
+> 08 icon-tile = child of the tagged deck-picker) — the coverage tool reads the ledger,
+> drops them from gaps + the `--check` denominator, and CI gates `--check --min 100`
+> (a new candidate must be tagged or ledger-exempted). NOTE: the contract now declares
+> 36 nodes but the FE keys only the original ~12 — adding `ValueKey` + parity tests for
+> the newly-tagged nodes (sort/save/back/delete/content-card/action/close/stat-card/
+> deck-picker/details-toggle) is the remaining follow-up.
 
 Autonomous loop: tag the kit JSX with `data-mx-node` on required singleton nodes,
 re-export specs, regenerate the parity contract, add matching Flutter `ValueKey`s +

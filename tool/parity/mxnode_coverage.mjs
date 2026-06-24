@@ -6,15 +6,19 @@
 // Candidate = a spec node the exporter mapped to a MemoX component (`mx:<Mx>`) or
 // flagged as an unmapped interactive control (`mx: ?`) — i.e. a real, identity-worthy
 // UI element — EXCEPT the structural shells in EXCLUDE (scaffold/app-bar/content-shell
-// carry no per-instance identity). A candidate is "tagged" when its node block also
-// has an `id:` line (data-mx-node → spec). Coverage = tagged / candidates per screen.
+// carry no per-instance identity) AND nodes listed in intent-ledger.coverageExempt
+// (intentionally untagged: kit pre-redesign / Future / child of a tagged container).
+// A candidate is "tagged" when its node block also has an `id:` line (data-mx-node →
+// spec). Coverage = tagged / candidates per screen; exempt nodes are shown separately,
+// not counted as gaps or in the --check denominator.
 //
 // Scope: the FE screens listed in parity-map.json (no-FE screens are out of scope).
 //
 // Usage:
 //   node tool/parity/mxnode_coverage.mjs            # per-screen table + untagged list
 //   node tool/parity/mxnode_coverage.mjs --screen 06-flashcard-list
-//   node tool/parity/mxnode_coverage.mjs --check --min 60   # exit 1 if a screen < 60%
+//   node tool/parity/mxnode_coverage.mjs --check --min 100  # gate: every candidate
+//                                                            # tagged or ledger-exempt
 //   node tool/parity/mxnode_coverage.mjs --json
 //
 // Exit: 0 ok, 1 below --min (with --check), 2 IO error.
@@ -27,6 +31,20 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(HERE, '..', '..');
 const MAP = JSON.parse(readFileSync(join(HERE, 'parity-map.json'), 'utf8'));
 const SPECS = resolve(join(REPO, MAP.shotsDir), '..', 'specs');
+
+// Documented tag-exemptions (intent-ledger.coverageExempt): kit candidates that are
+// intentionally NOT given a data-mx-node id (kit pre-redesign / Future / decorative
+// child of a tagged container). They are dropped from the gap list AND the --check
+// denominator, but surfaced in an `exempt` column so they stay visible.
+const EXEMPT = (() => {
+  try {
+    const j = JSON.parse(readFileSync(join(HERE, 'intent-ledger.json'), 'utf8'));
+    return Array.isArray(j.coverageExempt) ? j.coverageExempt : [];
+  } catch { return []; }
+})();
+const isExempt = (screenId, nd) => EXEMPT.some(
+  (e) => e.screen === screenId && nd.name.startsWith(e.node) && (!e.mx || e.mx === nd.mx),
+);
 
 const args = process.argv.slice(2);
 const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 && args[i + 1] ? args[i + 1] : d; };
@@ -91,6 +109,7 @@ if (!existsSync(SPECS)) { console.error(`mxnode_coverage: missing ${SPECS}`); pr
 const rows = [];
 let totCand = 0;
 let totTagged = 0;
+let totExempt = 0;
 for (const screen of MAP.screens) {
   if (onlyScreen && screen.id !== onlyScreen) continue;
   const spec = join(SPECS, `${screen.id}.md`);
@@ -114,37 +133,47 @@ for (const screen of MAP.screens) {
   const singles = cands.filter((c) => byName.get(c.name) === 1);
   const repeated = cands.length - singles.length;
   const tagged = singles.filter((c) => c.id);
-  const untagged = singles.filter((c) => !c.id);
-  totCand += singles.length;
+  // Untagged splits into documented-exempt (intent-ledger) and real gaps. Coverage %
+  // and the --check denominator are measured on real candidates only (tagged + gaps).
+  const untaggedAll = singles.filter((c) => !c.id);
+  const exempt = untaggedAll.filter((c) => isExempt(screen.id, c));
+  const untagged = untaggedAll.filter((c) => !isExempt(screen.id, c));
+  const denom = tagged.length + untagged.length;
+  totCand += denom;
   totTagged += tagged.length;
+  totExempt += exempt.length;
   rows.push({
     screen: screen.id,
-    candidates: singles.length,
+    candidates: denom,
     tagged: tagged.length,
     repeated,
-    pct: singles.length ? Math.round((100 * tagged.length) / singles.length) : 100,
+    exempt: exempt.length,
+    pct: denom ? Math.round((100 * tagged.length) / denom) : 100,
     untagged: untagged.map((u) => ({ node: u.name, mx: u.mx, bbox: u.abs ? `[${u.abs.join(',').replace(/,(\d+),(\d+)$/, ' $1x$2')}]` : '' })),
+    exemptList: exempt.map((u) => ({ node: u.name, mx: u.mx })),
   });
 }
 
 const below = rows.filter((r) => r.candidates > 0 && r.pct < minPct);
 
 if (asJson) {
-  console.log(JSON.stringify({ rows, totals: { candidates: totCand, tagged: totTagged } }, null, 2));
+  console.log(JSON.stringify({ rows, totals: { candidates: totCand, tagged: totTagged, exempt: totExempt } }, null, 2));
   process.exit(check && below.length ? 1 : 0);
 }
 
 console.log('# data-mx-node coverage (kit, deterministic — no AI)\n');
-console.log('| Screen | tagged / singletons | % | repeated | untagged singletons (node:mx) |');
-console.log('| --- | --- | --- | --- | --- |');
+console.log('| Screen | tagged / candidates | % | repeated | exempt | untagged singletons (node:mx) |');
+console.log('| --- | --- | --- | --- | --- | --- |');
 for (const r of rows) {
   const u = r.untagged.slice(0, 6).map((x) => `${x.node}:${x.mx}`).join(', ') + (r.untagged.length > 6 ? ` …+${r.untagged.length - 6}` : '');
-  console.log(`| ${r.screen} | ${r.tagged}/${r.candidates} | ${r.pct}% | ${r.repeated} | ${u} |`);
+  console.log(`| ${r.screen} | ${r.tagged}/${r.candidates} | ${r.pct}% | ${r.repeated} | ${r.exempt} | ${u} |`);
 }
 const overall = totCand ? Math.round((100 * totTagged) / totCand) : 100;
-console.log(`\nOverall: ${totTagged}/${totCand} SINGLETON candidate nodes tagged (${overall}%)${minPct ? ` · ${below.length} screen(s) under ${minPct}%` : ''}.`);
-console.log('Candidate = node mapped to a MemoX component (mx:) or unmapped interactive (mx: ?), excluding ' + [...EXCLUDE].join('/') + '.');
+const exemptNote = totExempt ? ` · ${totExempt} exempt (documented in intent-ledger.coverageExempt)` : '';
+console.log(`\nOverall: ${totTagged}/${totCand} SINGLETON candidate nodes tagged (${overall}%)${exemptNote}${minPct ? ` · ${below.length} screen(s) under ${minPct}%` : ''}.`);
+console.log('Candidate = node mapped to a MemoX component (mx:) or unmapped interactive (mx: ?), excluding ' + [...EXCLUDE].join('/') + ' + documented exempt nodes.');
 console.log('Singleton = node name unique on the screen (the real tag target); "repeated" = list/grid items (tag the container, not each).');
+console.log('"exempt" = intentionally-untagged candidates (kit pre-redesign / Future / child of a tagged container) — see tool/parity/intent-ledger.json.');
 console.log('Run with --screen <id> to see a screen\'s full untagged list, --json for machine output.');
 
 if (check && below.length) {
