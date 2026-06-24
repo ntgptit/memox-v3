@@ -59,3 +59,30 @@ FROM study_attempts;
 -- table → no row → null in the repository.
 lastAttemptTime:
 SELECT attempted_at FROM study_attempts ORDER BY attempted_at DESC LIMIT 1;
+
+-- Stats "Cards this week" (docs/wireframes/18-stats.md): the raw attempt
+-- timestamps from :start onward (the current local week's Monday midnight,
+-- passed as a UTC epoch-ms absolute). A direct single-column select so drift
+-- infers `List<int>`; the repository buckets them into local days in Dart
+-- (toLocal()) — NEVER 'localtime' in SQL (the test sqlite returns NULL for it).
+attemptsSince(:start AS INT):
+SELECT attempted_at FROM study_attempts
+WHERE attempted_at >= :start
+ORDER BY attempted_at ASC;
+
+-- Stats "Per-deck mastery" (docs/wireframes/18-stats.md): the average Leitner
+-- box per deck over `flashcard_progress` (every flashcard has a progress row
+-- from creation, so a brand-new card counts in box 1). The INNER JOINs mean
+-- only decks with at least one card form a group. The repository maps avg_box →
+-- a 0..1 mastery fraction. Ordered by deck name for a stable scan.
+deckMastery:
+SELECT
+  d.id AS deck_id,
+  d.name AS deck_name,
+  AVG(fp.box_number) AS avg_box,
+  COUNT(fp.flashcard_id) AS card_count
+FROM decks d
+JOIN flashcards fc ON fc.deck_id = d.id
+JOIN flashcard_progress fp ON fp.flashcard_id = fc.id
+GROUP BY d.id, d.name
+ORDER BY d.name ASC, d.id ASC;

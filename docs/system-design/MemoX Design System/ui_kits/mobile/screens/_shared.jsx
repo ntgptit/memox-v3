@@ -511,10 +511,10 @@
   // (kept terse + tabular). Every column carries BOTH a visible numeric value and
   // an aria-label so the data never depends on bar color/height alone (a11y +
   // colorblind-safe); a null value renders a dashed "no data" column, labelled too.
-  const BarChart = ({ data, max, dim, unit = 'cards' }) => {
+  const BarChart = ({ data, max, dim, unit = 'cards', node }) => {
     const peak = max || Math.max(1, ...data.map((d) => d.value || 0));
     return (
-      <div role="img" aria-label={`Bar chart: ${data.map((d) => `${d.label} ${d.value != null ? d.value + ' ' + unit : 'no data'}`).join(', ')}`}
+      <div role="img" data-mx-node={node} aria-label={`Bar chart: ${data.map((d) => `${d.label} ${d.value != null ? d.value + ' ' + unit : 'no data'}`).join(', ')}`}
         style={{ display: 'flex', alignItems: 'flex-end', gap: S(2), height: 'calc(var(--memox-space-12) * 3)', opacity: dim ? 'var(--memox-op-disabled)' : 1 }}>
         {data.map((d, i) => {
           const has = d.value != null;

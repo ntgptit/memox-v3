@@ -168,6 +168,24 @@
         "key": "mx-node:17-study-result/done-button",
         "node": "pill-btn"
       }
+    ],
+    "18-stats": [
+      {
+        "key": "mx-node:18-stats/week-card",
+        "node": "card"
+      },
+      {
+        "key": "mx-node:18-stats/week-chart",
+        "node": "div"
+      },
+      {
+        "key": "mx-node:18-stats/mastery-section",
+        "node": "section-head"
+      },
+      {
+        "key": "mx-node:18-stats/mastery-list",
+        "node": "list-card"
+      }
     ]
   }
 }

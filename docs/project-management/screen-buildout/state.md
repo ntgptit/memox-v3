@@ -39,7 +39,28 @@ default**, and keep going. The user resolves these in one pass afterwards.
 Format (newest first): `Q<n> (<screen>) — <question>. Default taken: <what you did so the
 loop could continue>. Why/source: <ref>. [blocking? yes/no]`
 
-_(none yet)_
+- **Q4 (18-stats / 19-progress) — `docs/wireframes/03-progress.md` claims Progress V1 is fully
+  implemented (`ProgressScreen`, `LoadProgressOverviewUseCase`, `lib/presentation/features/progress/**`,
+  goldens, P1–P18) but NONE of it exists in code** (the `/progress` branch was a `RoutePlaceholder`;
+  no `progress` feature dir; `ProgressRepository` has no `loadProgressOverview`). Default taken: treated
+  that wireframe as describing the *future* Progress **detail** (kit screen 19), not the Stats tab;
+  built 18-stats independently with its own read model + `docs/wireframes/18-stats.md`. Marked 7.5.1/7.5.2
+  as the unbuilt detail in WBS. **The 03-progress wireframe is still drifted** (describes unbuilt code as
+  "implemented") — needs an owner pass to mark it Future or build screen 19. Why/source: code vs
+  `docs/wireframes/03-progress.md:16-23`. [blocking? no]
+- **Q3 (18-stats) — Stats tab vs Progress detail both target `/progress`.** Default taken: 18-stats is
+  the tab root at `/progress` (no back, shell nav); screen 19 (Progress detail, pushed, back + Week/Month)
+  will get a pushed route or a rename when it lands. Why/source: 18 mock has bottom nav + no back; 19 mock
+  has a back arrow + range toggle. [blocking? no]
+- **Q2 (18-stats) — Bottom-nav 4th tab label: kit/overview say "Stats" (bar-chart) vs nav-flow said
+  "Progress" (insights).** Default taken: followed the mock + `overview.md` → tab labelled **Stats**,
+  icon `bar_chart`; kept the route name/path `progress` (rename deferred — avoids churn); fixed nav-flow
+  drift. Why/source: `overview.md:63` + kit `18-stats` spec; mock-authoritative ([[fe-loop-complete-mock-authoritative]]). [blocking? no]
+- **Q1 (18-stats) — Per-deck row icon/colour: the mock shows distinct per-deck glyphs but decks carry no
+  stored icon/colour (only folders do).** Default taken: one generic deck glyph (`Icons.style_outlined`)
+  + cycle the four SRS-status tints by row index to echo the mock's varied chips. A real per-deck
+  icon/colour needs a `decks.icon`/`decks.color` migration (schema gap). Why/source: `lib/domain/entities/deck.dart`
+  has no icon/colour field. [blocking? no]
 
 ## Automation fixes made during the loop
 (append findings here so the next iteration doesn't relearn them.)

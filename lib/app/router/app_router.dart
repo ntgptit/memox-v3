@@ -7,13 +7,14 @@ import 'package:memox/app/router/route_placeholder.dart';
 import 'package:memox/presentation/features/dashboard/routes/dashboard_routes.dart';
 import 'package:memox/presentation/features/folders/routes/folder_routes.dart';
 import 'package:memox/presentation/features/search/routes/search_routes.dart';
+import 'package:memox/presentation/features/stats/routes/stats_routes.dart';
 import 'package:memox/presentation/features/study/routes/study_routes.dart';
 
 /// Builds the application [GoRouter].
 ///
 /// Foundation routing baseline (WBS 1.1.3) + bottom-nav shell (WBS 1.2.6): the
 /// five top-level destinations from `docs/business/navigation/navigation-flow.md`
-/// (Home · Library · Search · Progress · Settings) are branches of a
+/// (Home · Library · Search · Stats · Settings) are branches of a
 /// [StatefulShellRoute.indexedStack] hosted by [MxAppShell],
 /// so each tab keeps its own navigation stack. The bare root (`/`) redirects to
 /// [RouteDefaults.initialLocation]. Each destination renders a
@@ -34,16 +35,7 @@ GoRouter createAppRouter() => GoRouter(
         StatefulShellBranch(routes: dashboardBranchRoutes()),
         StatefulShellBranch(routes: libraryBranchRoutes()),
         StatefulShellBranch(routes: searchBranchRoutes()),
-        StatefulShellBranch(
-          routes: <RouteBase>[
-            GoRoute(
-              path: RoutePaths.progress,
-              name: RouteNames.progress,
-              builder: (context, state) =>
-                  const RoutePlaceholder(routeName: RouteNames.progress),
-            ),
-          ],
-        ),
+        StatefulShellBranch(routes: statsBranchRoutes()),
         StatefulShellBranch(
           routes: <RouteBase>[
             GoRoute(

@@ -4,7 +4,7 @@ import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_bottom_nav.dart';
 
 /// Bottom-navigation shell hosting the five top-level destinations
-/// (Home · Library · Search · Progress · Settings).
+/// (Home · Library · Search · Stats · Settings).
 ///
 /// Backed by `StatefulShellRoute.indexedStack`, so each tab keeps its own
 /// navigation stack. Tab switches use `goBranch` (reset semantics), matching
@@ -50,9 +50,9 @@ class MxAppShell extends StatelessWidget {
             label: l10n.searchTitle,
           ),
           MxBottomNavItem(
-            icon: Icons.insights_outlined,
-            selectedIcon: Icons.insights,
-            label: l10n.progressTitle,
+            icon: Icons.bar_chart_outlined,
+            selectedIcon: Icons.bar_chart,
+            label: l10n.statsTitle,
           ),
           MxBottomNavItem(
             icon: Icons.settings_outlined,

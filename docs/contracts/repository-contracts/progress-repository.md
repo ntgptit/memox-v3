@@ -96,6 +96,17 @@ distribution, and study statistics in one call — the first failing part
 short-circuits and propagates; an empty database yields zero-safe parts
 (decision row P11). Use case `LoadProgressReadModelUseCase`.
 
+**WBS 7.5.1 (Stats screen, screen 18)** adds
+`Future<Result<StatsOverview>> loadStatsOverview({required int now})`
+(`lib/domain/models/stats_overview.dart`): the current local week's review
+activity (`WeekActivity` — seven Mon→Sun day buckets counted from `study_attempts`
+via `attemptsSince`, bucketed by **local** day in Dart; decision row P20) plus
+per-deck mastery (`List<DeckMastery>` — average Leitner box per deck via
+`deckMastery`, mapped to a 0..1 fraction; decision row P21). An empty database
+yields a zero-filled week and an empty deck list; a read error → `StorageFailure`.
+Use case `LoadStatsOverviewUseCase`. Local-day grouping is in Dart, never SQL
+`'localtime'`.
+
 ## Transaction requirements
 
 | Operation                        | Tables touched                                                                                                                                     |

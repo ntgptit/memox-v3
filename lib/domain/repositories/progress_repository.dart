@@ -2,6 +2,7 @@ import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/models/box_distribution.dart';
 import 'package:memox/domain/models/due_summary.dart';
 import 'package:memox/domain/models/progress_read_model.dart';
+import 'package:memox/domain/models/stats_overview.dart';
 import 'package:memox/domain/models/study_statistics.dart';
 
 /// Read port for SRS progress aggregates (WBS 7.1.1 slice).
@@ -37,4 +38,12 @@ abstract interface class ProgressRepository {
   /// P11). The first failing part short-circuits and propagates its failure; an
   /// empty database yields zero-safe parts.
   Future<Result<ProgressReadModel>> loadProgressReadModel({required int now});
+
+  /// Composes the Stats screen read model as of [now] (epoch ms): the current
+  /// local week's review activity (Monday→Sunday, zero-filled) plus per-deck
+  /// mastery (Stats, screen 18; decision rows P20/P21). Weekly buckets are
+  /// computed by local day in Dart, never SQL. An empty database yields a
+  /// zero-filled week and an empty deck list. A read error maps to a
+  /// `StorageFailure`.
+  Future<Result<StatsOverview>> loadStatsOverview({required int now});
 }

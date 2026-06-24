@@ -13,14 +13,18 @@ source_specs:
 
 Long-form analytics surface. Dashboard shows "today"; Progress shows trends and totals. Read-only.
 
-> **Status (2026-06-12):** Progress V1 is implemented. `/progress` renders `ProgressScreen`
-> (`lib/presentation/features/progress/screens/progress_screen.dart`) with range tabs,
-> cards-studied chart, accuracy + delta + sparkline, box distribution, streak, and card-state
-> counts, backed by `LoadProgressOverviewUseCase` →
-> `ProgressRepository.loadProgressOverview`. The kit mock
-> (`docs/system-design/MemoX Design System/ui_kits/mobile/shots/19-progress--*.png`) is the
-> canonical visual reference; goldens live at
-> `test/presentation/features/progress/goldens/`.
+> **Status (2026-06-24 — CORRECTED):** This screen (the deeper Progress **detail**, kit screen 19:
+> range tabs, cards-studied chart, accuracy + delta + sparkline, box distribution, streak, card
+> states) is **NOT implemented**. A prior revision of this file claimed it was built
+> (`ProgressScreen`, `LoadProgressOverviewUseCase`, `lib/presentation/features/progress/**`,
+> progress goldens) — **none of those exist in code**; that was doc drift. The `/progress` shell
+> branch currently renders the **Stats tab** (`StatsScreen`, kit screen 18 — weekly activity +
+> per-deck mastery; see `docs/wireframes/18-stats.md`), NOT this detail. WBS 7.5.1/7.5.2 (this
+> detail) remain **Specified**; WBS 7.4.2 (`ProgressOverview` read model) is unbuilt. The sections
+> below describe the TARGET detail screen, not current code. Canonical visual reference for the
+> target: `docs/system-design/MemoX Design System/ui_kits/mobile/shots/19-progress--*.png`. When
+> this detail is built it will need its own route (pushed detail or a `/progress` rename), since
+> `/progress` is taken by the Stats tab (see `state.md` Parked Q3).
 
 ## V1 verification status
 

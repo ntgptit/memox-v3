@@ -35,6 +35,8 @@ applies_to: Progress Overview, Card history, and Daily engagement behavior branc
 | P17 | Load card states | Suspended, currently-buried, and bury-expired cards exist | Count suspended cards and `buried_until > now` cards only; expired burials are excluded | C1 | TBD |
 | P18 | Load overview | Empty database, any range | Return zero-safe overview (zero totals, zero streak, zero card states, full zero-filled day buckets for week/month) | C1 | TBD |
 | P19 | Dashboard progress summary | Same persisted dataset as Progress read model | Due count matches Progress due summary; attempt counts come from `study_attempts`; empty DB returns zero-safe dashboard summary | C1 | TBD |
+| P20 | Stats weekly activity | Attempts in the current local week, prior weeks, and an empty DB | Bucket attempts into the seven days Mon→Sun by **local** day (toLocal(), never SQL `localtime`); zero-fill all seven; prior-week attempts excluded; total = sum of the week; empty DB → all-zero week | C1 | `test/data/repositories/progress_repository_stats_test.dart` |
+| P21 | Stats per-deck mastery | Decks with cards (varying boxes), a deck with no cards, and an empty DB | Map each deck's average Leitner box to a 0..1 fraction `(avgBox - SrsBox.min)/(SrsBox.max - SrsBox.min)`; only decks with at least one card appear; ordered by deck name; empty DB → no rows | C1 | `test/data/repositories/progress_repository_stats_test.dart` |
 
 ## Card History
 

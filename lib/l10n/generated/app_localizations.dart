@@ -1585,6 +1585,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hint'**
   String get studyFillHint;
+
+  /// Title for the Stats screen and its bottom-nav tab (screen 18).
+  ///
+  /// In en, this message translates to:
+  /// **'Stats'**
+  String get statsTitle;
+
+  /// Overline (all-caps) label above the weekly review-activity column chart on the Stats screen.
+  ///
+  /// In en, this message translates to:
+  /// **'CARDS THIS WEEK'**
+  String get statsCardsThisWeekLabel;
+
+  /// Section header above the per-deck mastery list on the Stats screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Per-deck mastery'**
+  String get statsPerDeckMasteryTitle;
+
+  /// Trailing mastery percent on a per-deck mastery row.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}%'**
+  String statsMasteryPercent(int percent);
+
+  /// Card count used in the Stats weekly-chart accessibility label.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 card} other{{count} cards}}'**
+  String statsCardsCount(int count);
+
+  /// Empty hint inside the per-deck mastery card when no deck has cards yet.
+  ///
+  /// In en, this message translates to:
+  /// **'No decks to show yet'**
+  String get statsNoDecksHint;
+
+  /// Stats screen error-state title.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your stats'**
+  String get statsLoadFailedTitle;
+
+  /// Stats screen error-state body.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong loading your stats.'**
+  String get statsLoadFailedMessage;
 }
 
 class _AppLocalizationsDelegate

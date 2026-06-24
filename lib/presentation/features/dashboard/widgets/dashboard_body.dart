@@ -71,8 +71,8 @@ class DashboardBody extends ConsumerWidget {
       const SizedBox(height: MxSpacing.gapSection),
       MxShortcutRow(
         key: const ValueKey<String>('mx-node:02-dashboard/shortcut-progress'),
-        icon: Icons.insights_outlined,
-        label: l10n.progressTitle,
+        icon: Icons.bar_chart_outlined,
+        label: l10n.statsTitle,
         subtitle: l10n.dashboardProgressShortcutSub,
         onTap: () => context.goNamed(RouteNames.progress),
       ),
