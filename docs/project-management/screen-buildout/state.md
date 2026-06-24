@@ -3,11 +3,12 @@
 Live cursor for the 12-screen FE+BE build-out. Recipe + done-bar: `plan.md` (same dir).
 One screen per iteration, in order. Update this table as each screen lands.
 
-**LOOP PAUSED — 7/12 ✅, 5 blocked on owner decisions (no feasible next screen).** All remaining
-unbuilt screens need an owner decision, not more autonomous code: 19-progress (Q5 engagement-BE
-approval), 23-audio-speech (Q13 TTS engine + v9 migration), 21-account-sync (Q14 OAuth+Drive infra,
-WBS 8.6.1/8.6.2 "high-risk, defer"), 20-settings (Q15 depends on 21's account BE), 01-onboarding
-(Q16 "Future Proposal — not in V1", needs owner promotion). Unblock one + re-invoke `/loop` to resume.
+**8/12 ✅. NEXT: 20-settings** (now unblocked — 21's account BE lets the hub render the signed-out
+account card + setting rows; signing-in/sync-error/populated stay parked). Owner picked "21
+signed-out V1" (done, #39), which unblocked 20. Still owner-blocked after 20: 19-progress (Q5
+engagement-BE), 23-audio-speech (Q13 TTS engine + v9 migration), 01-onboarding (Q16 "Future
+Proposal — not in V1"). 21-account-sync is ✅ for its V1 slice; its 8 sync states stay Future
+(Q14, WBS 8.6.1/8.6.2).
 
 ## Status
 
@@ -22,8 +23,8 @@ WBS 8.6.1/8.6.2 "high-risk, defer"), 20-settings (Q15 depends on 21's account BE
 | 7 | 24-appearance | ✅ done | [#37](https://github.com/ntgptit/memox-v3/pull/37) | Theme picker (top-level immersive `/settings/appearance`); Light/Dark/System radio + themed swatches; **new SharedPreferences theme BE** (`AppThemeMode`) wired to `MaterialApp.themeMode` via app-level `AppearanceController`; new shared `MxRadio`. No parked questions. |
 | 8 | 25-language | ✅ done | [#38](https://github.com/ntgptit/memox-v3/pull/38) | App-language picker (top-level immersive `/settings/language`); System/English/Tiếng Việt radio + icon leads; **new SharedPreferences language BE** (`AppLanguage`) wired to `MaterialApp.locale` (live re-localize) via app-level `LanguageController`. Reused `MxRadio`. WBS 8.8.1 now fully done. Parked Q11–Q12. |
 | 9 | 23-audio-speech | 🟡 deferred:Q13 | — | **Deferred (not dependency-blocked — `flutter_tts ^4.2.5` is in pubspec).** The full TTS first slice (WBS 8.4.1) = a Drift `tts_settings` table + **v9 schema migration** + `TtsService`/`FlutterTtsService` engine adapter + voice-listing + 7 engine-dependent states (Korean/English/Playing/Loading/No-voices/Engine-error/Saving). ~30 files, high blast radius (a wrong migration breaks app boot) + a platform engine that can't be verified headless → warrants a focused build with a human checkpoint on the migration, not a single autonomous 60s pass. Contracts: `docs/contracts/usecase-contracts/tts.md`, `docs/business/tts/tts-settings.md`, `docs/wireframes/21-settings-audio-speech.md`. |
-| 10 | 20-settings | 🟡 blocked:Q15 | — | **Blocked on 21.** The hub's 5 states are mostly the account-sync card (Populated/Signed-out/Signing-in/Sync-error + Loading); 4/5 depend on the account-sync BE (21), which is unbuilt + owner-deferred. The setting ROWS (→ appearance/language/tags/learning, all built) are buildable, but the screen can't map the mock without the account card. Unblock = 21 lands (at least the signed-out display-only slice). |
-| 11 | 21-account-sync | 🟡 blocked:Q14 | — | **Blocked on owner-deferred high-risk infra.** 9 states; only `signed-out` is display-only (WBS 8.5.1). The other 8 (signing-in/failed/no-backup/ready/uploading/restore-warn/restoring/token-expired) need **Google OAuth (WBS 8.6.1) + Drive AppData REST backup/restore (8.6.2)** — both marked *"High-risk; defer until core loop complete."* Only `GoogleAuthGateway` port + `google_oauth_config` exist. Unblock = owner approves building 8.6.1/8.6.2 (OAuth + Drive sync; likely needs `googleapis` dep too). |
+| 10 | 20-settings | ⬜ todo (next) | — | **Now unblocked by 21.** The hub = an account summary card (top) + setting-row groups (Account/Learning/Audio-Speech/Appearance/Language/Tags → the built sub-screens). With 21's account BE the card renders the **signed-out** state; the rows link to the existing screens. Buildable V1 slice = signed-out account card + rows + loading; the Populated/Signing-in/Sync-error account-card states stay parked (need the Future sync infra, WBS 8.6.x). No new BE. |
+| 11 | 21-account-sync | ✅ done (V1) | [#39](https://github.com/ntgptit/memox-v3/pull/39) | **Display-only V1** (owner-picked): signed-out sign-in hero (top-level immersive `/settings/account`) over a minimal account BE (`AccountLinkStatus` + `CloudAccountStore` + presence→status repo + `AccountController`); "Continue with Google" CTA disabled. New `account.cloudAccountLink` key. The other 8 states (signing-in/failed/no-backup/ready/uploading/restore-warn/restoring/token-expired) stay **Future** (Q14, WBS 8.6.1/8.6.2 — OAuth + Drive REST, "high-risk; defer"). Unblocks 20-settings. |
 | 12 | 01-onboarding | 🟡 blocked:Q16 | — | **Blocked on V1-scope decision.** `docs/business/system/overview.md` marks the full onboarding flow *"Future Proposal — no standalone route/feature/first-launch wizard in V1"*, and overview:80 forbids implementing Future-Proposal rows without an explicit owner promotion (update overview + WBS §6 register in the same commit). Building it would expose a Future feature (parity rule violation). Unblock = owner promotes onboarding to V1. |
 
 Status legend: ⬜ todo · 🟡 in-progress · ✅ done (mock-mapped + gates green + merged).
