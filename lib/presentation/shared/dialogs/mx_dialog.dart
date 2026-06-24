@@ -67,5 +67,8 @@ Future<T?> showMxDialog<T>(
 }) => showDialog<T>(
   context: context,
   barrierDismissible: barrierDismissible,
+  // Same MemoX scrim token as bottom sheets (kit `--memox-overlay`) so every
+  // modal dims identically — not Flutter's default `black54`.
+  barrierColor: context.mxColors.overlay,
   builder: builder,
 );
