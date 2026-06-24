@@ -153,6 +153,14 @@ void main() {
         find.byKey(const ValueKey<String>('mx-node:study-session/progress')),
         findsOneWidget,
       );
+      // The prompt card; guess auto-advances so there is no manual action button
+      // (study-session/action is a documented behaviour exception, see intent-ledger).
+      expect(
+        find.byKey(
+          const ValueKey<String>('mx-node:study-session/content-card'),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('a full option set has 5 options (correct + 4 distractors)', (

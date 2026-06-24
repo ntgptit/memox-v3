@@ -110,6 +110,7 @@ void main() {
     await pump(tester, decksMode);
     expectParityContract('04-folder-detail (decks)', <String, Finder>{
       'create-deck FAB': node('04-folder-detail/create-deck-fab'),
+      'stat card': node('04-folder-detail/stat-card'),
     });
   });
 

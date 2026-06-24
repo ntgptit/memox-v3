@@ -9,7 +9,44 @@
     "reason": "FE uses swipe/both-sides per study-flow; the kit flip-card is a documented behaviour-owned visual gap, not a fix.",
     "source": "docs/business/study/study-flow.md:61 + docs/wireframes/13-study-session-review.md:32"
   },
-  "exceptions": [],
+  "exceptions": [
+    {
+      "screen": "07-flashcard-create",
+      "node": "deck-picker",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "future",
+      "reason": "The kit tags a deck-selector (deck retargeting), but that is Future (§V1); the FE maps its single 'Note' to the Details fields (example/pronunciation/hint) and does not build a picker. No FE key / parity assertion until deck retargeting ships.",
+      "source": "lib/presentation/features/decks/widgets/flashcard_editor_body.dart:66 + docs/business/flashcard/flashcard-management.md (§V1 create/edit)"
+    },
+    {
+      "screen": "08-flashcard-edit",
+      "node": "deck-picker",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "future",
+      "reason": "Same as 07 — the deck-selector is Future (deck retargeting); the FE edit form has no picker.",
+      "source": "lib/presentation/features/decks/widgets/flashcard_editor_body.dart:66 + docs/business/flashcard/flashcard-management.md (§V1)"
+    },
+    {
+      "screen": "14-study-guess",
+      "node": "action",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "behavior",
+      "reason": "The kit footer has a manual 'Next' pill; the FE guess mode AUTO-ADVANCES after an answer (depleting-bar footer, tappable to skip) per study-flow, so there is no manual primary-action button to key. study-session/action is keyed in recall (Show answer) + fill (Check) where the mode has a manual action.",
+      "source": "lib/presentation/features/study/screens/guess_session_screen.dart:42 + docs/business/study/study-flow.md (guess auto-advance)"
+    },
+    {
+      "screen": "17-study-result",
+      "node": "close-btn",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "rejected",
+      "reason": "The terminal result screen deliberately has no dismiss chrome (automaticallyImplyLeading:false) and uses the body 'Done' button (mx-node:17-study-result/done-button) as the single canonical exit; a redundant top-right close-x was dropped during the FE loop (mock-authoritative ruling: dropped affordances Rejected). FLAGGED for owner: re-add if the close-x is wanted.",
+      "source": "lib/presentation/features/study/screens/study_result_screen.dart:60 + owner ruling 2026-06-22 (dropped affordances Rejected)"
+    }
+  ],
   "$coverageExempt": "Coverage-side ledger, consumed by tool/parity/mxnode_coverage.mjs. Lists kit CANDIDATE nodes that are intentionally NOT given a data-mx-node id, so the coverage report does not count them as gaps and `--check --min` does not trip on them. DISTINCT from `exceptions` (which is FE-differs-from-mock, for the parity test). Each entry is still a documented deviation from the FIX/TAG-by-default rule. Kinds: 'deferred' (the kit layout is PRE-redesign / stale vs the FE — tag once the kit is regenerated to the redesign on Claude Design), 'future'/'rejected' (the element is not built in the FE by scope/owner ruling), 'covered' (a decorative child INSIDE an already-tagged container — tag the container, never its inner parts, same rule as list items). Match: screen == entry.screen AND candidate.node startsWith entry.node AND (entry.mx absent OR entry.mx == candidate.mx). `source` MUST cite a doc / owner ruling. Keep MINIMAL — when in doubt, tag the node instead of exempting it.",
   "coverageExempt": [
     {

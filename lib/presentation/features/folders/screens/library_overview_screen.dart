@@ -61,6 +61,7 @@ class LibraryOverviewScreen extends ConsumerWidget {
             onPressed: () => _toggleSearch(ref, searching),
           ),
           MxIconButton(
+            key: const ValueKey<String>('mx-node:03-library/sort-btn'),
             icon: Icons.swap_vert,
             tooltip: l10n.sortTooltip,
             onPressed: () => _openSort(context, ref),

@@ -220,6 +220,7 @@ class FlashcardEditorForm extends HookConsumerWidget {
           // Edit is a sub-page (back arrow, mock `08`); create is a dismiss (X,
           // mock `07`).
           leading: MxIconButton(
+            key: const ValueKey<String>('mx-node:flashcard-editor/back-btn'),
             icon: _isEdit ? Icons.arrow_back : Icons.close,
             tooltip: l10n.commonCancel,
             onPressed: () => Navigator.maybePop(context),
@@ -229,6 +230,9 @@ class FlashcardEditorForm extends HookConsumerWidget {
             // Edit-mode danger zone: a trash action before Save (mock `08`).
             if (_isEdit)
               MxIconButton(
+                key: const ValueKey<String>(
+                  'mx-node:flashcard-editor/delete-btn',
+                ),
                 icon: Icons.delete_outline,
                 tooltip: l10n.cardDeleteTooltip,
                 onPressed: delete,
@@ -239,6 +243,9 @@ class FlashcardEditorForm extends HookConsumerWidget {
                 vertical: MxSpacing.space2,
               ),
               child: MxPrimaryButton(
+                key: const ValueKey<String>(
+                  'mx-node:flashcard-editor/save-button',
+                ),
                 label: _isEdit ? l10n.cardEditConfirm : l10n.cardCreateConfirm,
                 icon: Icons.check,
                 size: MxButtonSize.xsmall,
@@ -292,6 +299,9 @@ class FlashcardEditorForm extends HookConsumerWidget {
             // `flashcard-management.md` §V1); the single "Note" maps to the
             // business model's example / pronunciation / hint fields.
             MxTappable(
+              key: const ValueKey<String>(
+                'mx-node:flashcard-editor/details-toggle',
+              ),
               onTap: () => detailsOpen.value = !detailsOpen.value,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: MxSpacing.space2),
