@@ -3,7 +3,7 @@
 Live cursor for the 12-screen FE+BE build-out. Recipe + done-bar: `plan.md` (same dir).
 One screen per iteration, in order. Update this table as each screen lands.
 
-**NEXT: 22-learning-settings** (kit screen 22, 5 states). 19-progress is 🟡 blocked:Q5 (engagement-approval gate) — skipped.
+**NEXT: 24-appearance** (kit screen 24, 3 states). 19-progress is 🟡 blocked:Q5 (engagement-approval gate) — skipped.
 
 ## Status
 
@@ -14,7 +14,7 @@ One screen per iteration, in order. Update this table as each screen lands.
 | 3 | 09-flashcard-history | ✅ done | [#33](https://github.com/ntgptit/memox-v3/pull/33) | Card History (top-level immersive); breadcrumb + header + activity feed; redesign-simplified (CURRENT-PROGRESS card / filter / Edit / overflow / heatmap dropped). Built the full read BE (queries/dao/repo/usecase). Entry affordance Future (Q6). |
 | 4 | 11-tag-management | ✅ done | [#34](https://github.com/ntgptit/memox-v3/pull/34) | Global tag list (top-level immersive `/settings/learning/tags`); rename/merge/delete + collision→merge + busy/op-error. Reused 8.3.1 BE; new shared `MxBusyOverlay`. Settings→Learning entry Future (hub unbuilt). |
 | 5 | 10-deck-import | ✅ done | [#35](https://github.com/ntgptit/memox-v3/pull/35) | File-picker wizard (top-level immersive); 9-state machine (empty→file→parse→preview→commit→success/partial/failed). Reused 6.2.x/6.4.1 BE. Parked Q7–Q8. |
-| 6 | 22-learning-settings | ⬜ todo | — | |
+| 6 | 22-learning-settings | ✅ done | [#36](https://github.com/ntgptit/memox-v3/pull/36) | Daily-goal card (top-level immersive `/settings/learning`); toggle + new-card limit slider/chips over `LearningSettings`; new shared `MxSwitch`/`MxSlider`. Reused 8.2.1 BE. Reminder card = disabled Future affordance. Parked Q9–Q10. |
 | 7 | 24-appearance | ⬜ todo | — | |
 | 8 | 25-language | ⬜ todo | — | |
 | 9 | 23-audio-speech | ⬜ todo | — | new TTS BE |
@@ -39,6 +39,20 @@ default**, and keep going. The user resolves these in one pass afterwards.
 Format (newest first): `Q<n> (<screen>) — <question>. Default taken: <what you did so the
 loop could continue>. Why/source: <ref>. [blocking? yes/no]`
 
+- **Q10 (22-learning-settings) — The kit-22 mock has a Daily-reminder card with `reminder-on`
+  (time + repeat rows) and `perm-denied` (OS-permission banner + open-settings) states, but neither
+  is buildable now.** Default taken: the reminder card renders as a **disabled Future affordance**
+  (off toggle only) and the two reminder states are marked Future in `parity-map.json`. Reason: there
+  is no reminder field in `LearningSettings` (engagement reminders are "pending approval" in
+  `overview.md`) and OS notification scheduling needs a new dependency (pubspec → approval). Why/source:
+  `lib/domain/entities/learning_settings.dart` (no reminder field), kit-22 mock. [blocking? no]
+- **Q9 (22-learning-settings) — The kit-22 goal slider exposes a 5..60 range, but the
+  `LearningSettings` contract validates `dailyNewLimit` to 5..200 (step 5).** Default taken: the FE
+  slider matches the **mock's 5..60** (mock-authoritative visual); the model/validation still accepts
+  up to 200, so a larger persisted value stays valid but isn't reachable from this slider (clamped for
+  display). Reason: mock↔contract range conflict — mock wins visual, docs win behavior (the validation
+  is unchanged). Why/source: kit-22 slider `min=5 max=60` vs `docs/contracts/usecase-contracts/learning-settings.md`
+  (5..200). [blocking? no]
 - **Q8 (10-deck-import) — The kit-10 mock mentions Anki `.apkg` + the "importing" state shows a
   live "N of M imported" progress counter, but neither is buildable now.** Default taken: the file
   picker accepts `csv`/`tsv`/`txt` only (the CSV parser can't read `.apkg` zip/sqlite) and the
