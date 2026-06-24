@@ -7,29 +7,35 @@ status: contract
 
 > Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
 
-> **Status (2026-06-25): settings persistence shipped (WBS 8.4.1, schema v9); engine + screen
-> pending.** The `tts_settings` Drift table + `TtsSettings` model + `TtsSettingsDao` +
-> `TtsSettingsRepository` + `GetTtsSettingsUseCase`/`UpdateTtsSettingsUseCase` now **exist** (the
-> per-field Update API below is realized as `updateAutoPlay`/`updateRate`/`updatePitch`/
-> `updateVolume`/`updateVoice`/`updateLanguage`; see
-> `docs/contracts/repository-contracts/tts-settings-repository.md`). Still **target/unbuilt**: the
-> speech runtime — `TtsService`/`FlutterTtsService`, `TtsController`, `SpeakFlashcardUseCase`,
-> `StopSpeechUseCase`, `ListVoicesUseCase`, `TtsPlaybackPolicy` — and the Audio & Speech screen
-> (kit 23, WBS 8.4.2). Those sections below remain the **target** structure. The first slice is
-> global/front-language settings with front-only playback **and** deck `target_language` gating
-> (the `decks.target_language` column already exists). Per-language independent settings/voices are
-> a further Target/Future step.
+> **Status (2026-06-25): settings + engine + Audio & speech screen shipped (WBS 8.4.1 + 8.4.2);
+> study-session playback pending (8.4.3).** Implemented: the `tts_settings` Drift table (schema v9) +
+> `TtsSettings`/`TtsVoice` models + `TtsFrontLanguage`/`TtsLanguageCode` + `TtsSettingsDao` +
+> `TtsSettingsRepository` + `GetTtsSettingsUseCase`/`UpdateTtsSettingsUseCase` (per-field
+> `updateAutoPlay`/`updateRate`/`updatePitch`/`updateVolume`/`updateVoice`/`updateLanguage`; see
+> `docs/contracts/repository-contracts/tts-settings-repository.md`) + the **engine adapter**
+> `TtsService`/`FlutterTtsService` (`init`/`availableVoices`/`applySettings`/`speak`/`stop`) + the
+> **Audio & speech screen** (`AudioSpeechSettingsScreen` over `TtsAudioController`: voice/language
+> picker + sample preview + speed/pitch sliders, kit 23). Still **target/unbuilt (WBS 8.4.3 — study
+> playback)**: `SpeakFlashcardUseCase`, `StopSpeechUseCase`, `ListVoicesUseCase`, `TtsPlaybackPolicy`,
+> a study-session `TtsController`, and `TtsService.state` (`Stream<TtsState>`). The screen's preview
+> calls `TtsService.speak`/`stop` directly (no policy layer yet). The `SpeakFlashcardUseCase` /
+> `TtsPlaybackPolicy` / `TtsState` sections below remain the **target** structure for 8.4.3. The
+> first study slice is global/front-language settings with front-only playback **and** deck
+> `target_language` gating (the `decks.target_language` column already exists). Per-language
+> independent settings/voices are a further Target/Future step.
 
-## Target Runtime Owners (first slice — none exist yet)
+## Runtime Owners
 
-| Behavior | Target owner |
-| --- | --- |
-| Manual preview / explicit text speech | `TtsController.speakText` → `SpeakFlashcardUseCase.speakText` → `TtsService.speak` |
-| Auto-play front text | `TtsController.autoPlayTextSide` gated by `TtsSettings.autoPlay` and `TtsPlaybackPolicy` |
-| Front-only playback policy | `TtsPlaybackPolicy` and `SpeakFlashcardUseCase.speakFlashcardSide` |
-| Global/front-language settings load/save | `TtsSettingsNotifier` → `TtsSettingsRepositoryImpl` → `TtsSettingsDao` |
-| Voice listing | `ttsVoicesProvider(language)` → `TtsService.availableVoices(language)` |
-| Storage | Drift table `tts_settings` (single-row; requires schema migration) |
+| Behavior | Owner | Status |
+| --- | --- | --- |
+| Settings load/save (global/front-language) | `Get`/`UpdateTtsSettingsUseCase` → `TtsSettingsRepositoryImpl` → `TtsSettingsDao` | Current (8.4.1) |
+| Engine adapter (apply settings, voice listing, speak/stop) | `TtsService`/`FlutterTtsService` (`flutter_tts`) | Current (8.4.1) |
+| Audio & speech screen (preview + pickers + sliders) | `TtsAudioController` → `TtsService` + `Update`/`GetTtsSettingsUseCase` | Current (8.4.2) |
+| Voice listing | `TtsService.availableVoices(TtsLanguageCode)` (called by `TtsAudioController`) | Current (8.4.1) |
+| Manual preview / explicit text speech (study) | `SpeakFlashcardUseCase.speakText` → `TtsService.speak` | Target (8.4.3) |
+| Auto-play front text (study reveal) | study `TtsController.autoPlayTextSide` gated by `TtsSettings.autoPlay` + `TtsPlaybackPolicy` | Target (8.4.3) |
+| Front-only playback policy | `TtsPlaybackPolicy` + `SpeakFlashcardUseCase.speakFlashcardSide` | Target (8.4.3) |
+| Storage | Drift table `tts_settings` (single-row, schema v9) | Current (8.4.1) |
 
 ## Target Use Cases
 
@@ -85,7 +91,9 @@ Future<Either<Failure, Unit>> updateRate(double value);   // clamps to [0.3, 0.7
 Future<Either<Failure, Unit>> updatePitch(double value);  // clamps to [0.7, 1.5]
 Future<Either<Failure, Unit>> updateVolume(double value); // clamps to [0.0, 1.0]
 Future<Either<Failure, Unit>> updateVoice(String? voiceName);
-Future<Either<Failure, Unit>> updateLanguage(TtsLanguageCode lang); // also clears frontVoiceName
+// Realized (8.4.1): updateLanguage(TtsFrontLanguage language) — domain front-language enum, not the
+// engine TtsLanguageCode; also clears frontVoiceName.
+Future<Either<Failure, Unit>> updateLanguage(TtsFrontLanguage language); // also clears frontVoiceName
 ```
 
 **Rules:**

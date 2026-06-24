@@ -707,12 +707,52 @@
           "reason": "sync-failed banner + Retry — needs Drive sync (WBS 8.6.2)"
         }
       ]
+    },
+    {
+      "id": "23-audio-speech",
+      "title": "Audio & speech",
+      "states": [
+        {
+          "kit": "korean",
+          "golden": "test/presentation/features/settings/goldens/audio_speech_korean",
+          "scope": "current"
+        },
+        {
+          "kit": "english",
+          "golden": "test/presentation/features/settings/goldens/audio_speech_english",
+          "scope": "current"
+        },
+        {
+          "kit": "playing",
+          "golden": "test/presentation/features/settings/goldens/audio_speech_playing",
+          "scope": "current"
+        },
+        {
+          "kit": "saving",
+          "golden": "test/presentation/features/settings/goldens/audio_speech_saving",
+          "scope": "current"
+        },
+        {
+          "kit": "no-voices",
+          "golden": "test/presentation/features/settings/goldens/audio_speech_no-voices",
+          "scope": "current"
+        },
+        {
+          "kit": "engine-error",
+          "golden": "test/presentation/features/settings/goldens/audio_speech_engine-error",
+          "scope": "current"
+        },
+        {
+          "kit": "loading",
+          "scope": "behavior",
+          "reason": "MxLoadingState while settings + voices load (transient); asserted via widget test"
+        }
+      ]
     }
   ],
   "noFe": [
     "00-components",
     "01-onboarding",
-    "19-progress",
-    "23-audio-speech"
+    "19-progress"
   ]
 }

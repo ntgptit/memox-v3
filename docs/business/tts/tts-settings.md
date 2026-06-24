@@ -5,33 +5,33 @@ applies_to: TTS settings, speech playback, audio settings screen
 
 # TTS Settings
 
-> **Status (2026-06-25): settings persistence shipped (WBS 8.4.1, schema v9); engine + screen
-> pending.** The Drift `tts_settings` single-row table (id `'default'`) now exists (v9 migration
-> `v9_add_tts_settings.dart`) with the `TtsSettings` model (`lib/domain/models/tts_settings.dart` —
-> defaults + slider normalization), `TtsFrontLanguage`, `TtsSettingsDao`, `TtsSettingsRepository`
-> (`Impl`), `Get`/`UpdateTtsSettingsUseCase`, and DI (`lib/app/di/tts_providers.dart`). Still
-> **pending** (the rest of 8.4.1 + screen 8.4.2): the speech engine adapter
-> (`TtsService`/`FlutterTtsService` — voice listing + `speak`/`stop` + auto-play gating) and the
-> Audio & speech settings screen (kit 23). Independent Korean/English setting sets remain a further
-> Target/Future step. Per-deck TTS gating uses `decks.target_language`, which already exists in the
-> schema.
+> **Status (2026-06-25): settings + engine + screen shipped (WBS 8.4.1 + 8.4.2, schema v9).** The
+> Drift `tts_settings` table (v9), the `TtsSettings` model (defaults + slider normalization),
+> `TtsFrontLanguage`/`TtsLanguageCode`/`TtsVoice`, `TtsSettingsDao`/`Repository`, `Get`/`Update`
+> use cases, the `TtsService`/`FlutterTtsService` (`flutter_tts`) engine adapter (voice listing +
+> `speak`/`stop`), and `AudioSpeechSettingsScreen` (`/settings/audio-speech`, kit 23 — voice/language
+> picker + sample preview + speed/pitch tuning; 7 states) all exist. Still **Future:** auto-play on
+> study reveal + the playback policy (`SpeakFlashcardUseCase`/`TtsPlaybackPolicy`, WBS 8.4.3) and
+> independent per-language setting sets. Per-deck TTS gating uses `decks.target_language` (already in
+> the schema).
 
 ## Source files to inspect
 
-Current (the only TTS-related surface that exists):
+Current (shipped — WBS 8.4.1 BE + 8.4.2 screen):
 
-- `lib/presentation/features/settings/screens/audio_speech_settings_screen.dart` (static mock
-  preview with state variants)
-- `lib/presentation/features/settings/widgets/audio_speech_settings_content*.dart`
+- `lib/domain/models/{tts_settings,tts_voice}.dart`, `lib/domain/types/{tts_front_language,tts_language_code}.dart`
+- `lib/domain/services/tts_service.dart` (the engine port) + `lib/data/services/flutter_tts_service.dart` (`flutter_tts`)
+- `lib/domain/repositories/tts_settings_repository.dart` + `lib/data/repositories/tts_settings_repository_impl.dart`
+- `lib/data/datasources/local/daos/tts_settings_dao.dart` + `lib/data/datasources/local/drift/tts_settings.drift` (schema v9)
+- `lib/domain/usecases/tts_settings_usecases.dart` (`Get`/`UpdateTtsSettingsUseCase`)
+- `lib/app/di/tts_providers.dart` (DAO/repo/usecases + the `ttsService` engine)
+- `lib/presentation/features/settings/screens/audio_speech_settings_screen.dart` + `widgets/audio_speech_settings_body.dart` + `controllers/{tts_audio_controller,tts_audio_view}.dart`
 
-Target structure when WBS 8.4.1 is implemented (none of these exist yet):
+Future (WBS 8.4.3 — playback in study, none of these exist yet):
 
-- `lib/domain/services/tts_service.dart` (TtsService, TtsSettings, TtsLanguage, TtsVoice, TtsState)
-- `lib/domain/repositories/tts_settings_repository.dart`
-- `lib/data/repositories/tts_settings_repository_impl.dart`
-- `lib/data/datasources/local/daos/tts_settings_dao.dart` + `tts_settings.drift`
-- `lib/data/services/flutter_tts_service.dart` (platform implementation)
-- DI providers under `lib/app/di/`
+- `lib/domain/services/tts_playback_policy.dart` (`TtsPlaybackPolicy`)
+- `lib/domain/usecases/...` (`SpeakFlashcardUseCase`, `StopSpeechUseCase`, `ListVoicesUseCase`)
+- a `TtsService.state` `Stream<TtsState>` for study-session playback state
 
 ## Data
 
@@ -118,6 +118,13 @@ Source of truth: constants in `TtsSettings` (`minRate`, `maxRate`, `defaultRate`
   independent settings migration exists.
 
 ## Playback policy
+
+> **Future (WBS 8.4.3) — not yet enforced.** `TtsPlaybackPolicy`, `SpeakFlashcardUseCase`,
+> `StopSpeechUseCase`, and `TtsService.state` (`Stream<TtsState>`) do **not** exist yet. The
+> shipped surface (8.4.1 + 8.4.2) is settings persistence + the engine adapter
+> (`TtsService.speak`/`stop`) + the Audio & speech screen's sample preview. This section, the "TTS
+> state" section, and the study-playback rules below describe the **target** study-session playback
+> behavior to build in 8.4.3 — they are not a description of current code.
 
 TTS playback is restricted by `TtsPlaybackPolicy`:
 

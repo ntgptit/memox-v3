@@ -3,6 +3,7 @@ import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/presentation/features/settings/screens/account_settings_screen.dart';
 import 'package:memox/presentation/features/settings/screens/appearance_settings_screen.dart';
+import 'package:memox/presentation/features/settings/screens/audio_speech_settings_screen.dart';
 import 'package:memox/presentation/features/settings/screens/language_settings_screen.dart';
 import 'package:memox/presentation/features/settings/screens/learning_settings_screen.dart';
 import 'package:memox/presentation/features/settings/screens/tag_management_screen.dart';
@@ -35,6 +36,11 @@ List<RouteBase> settingsRoutes() => <RouteBase>[
     path: RoutePaths.settingsAccount,
     name: RouteNames.settingsAccount,
     builder: (context, state) => const AccountSettingsScreen(),
+  ),
+  GoRoute(
+    path: RoutePaths.settingsAudioSpeech,
+    name: RouteNames.settingsAudioSpeech,
+    builder: (context, state) => const AudioSpeechSettingsScreen(),
   ),
   GoRoute(
     path: RoutePaths.settingsLearningTags,

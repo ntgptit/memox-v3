@@ -1431,4 +1431,64 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get settingsErrorMessage => 'Đã xảy ra lỗi khi tải cài đặt của bạn.';
+
+  @override
+  String get audioSpeechTitle => 'Âm thanh & giọng nói';
+
+  @override
+  String get audioLanguageOverline => 'Ngôn ngữ';
+
+  @override
+  String get audioVoiceLanguage => 'Ngôn ngữ giọng đọc';
+
+  @override
+  String get audioVoiceOverline => 'Giọng đọc';
+
+  @override
+  String get audioSystemDefaultVoice => 'Mặc định hệ thống';
+
+  @override
+  String get audioPreviewOverline => 'Nghe thử';
+
+  @override
+  String get audioPlaySample => 'Phát mẫu';
+
+  @override
+  String get audioStop => 'Dừng';
+
+  @override
+  String get audioSpeed => 'Tốc độ';
+
+  @override
+  String get audioPitch => 'Cao độ';
+
+  @override
+  String get audioNoVoicesTitle => 'Chưa cài giọng đọc';
+
+  @override
+  String get audioNoVoicesMessage =>
+      'Thiết bị của bạn chưa có giọng đọc văn bản cho ngôn ngữ này.';
+
+  @override
+  String get audioEngineErrorTitle => 'Không dùng được engine giọng nói';
+
+  @override
+  String get audioEngineErrorMessage =>
+      'MemoX không truy cập được engine chuyển văn bản thành giọng nói của thiết bị.';
+
+  @override
+  String get audioSaving => 'Đang lưu…';
+
+  @override
+  String get audioLangKorean => 'Tiếng Hàn';
+
+  @override
+  String get audioLangEnglish => 'Tiếng Anh';
+
+  @override
+  String get audioSampleKorean => '안녕하세요, 오늘도 공부해요.';
+
+  @override
+  String get audioSampleEnglish =>
+      'The quick brown fox jumps over the lazy dog.';
 }

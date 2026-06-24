@@ -32,6 +32,10 @@ abstract final class RoutePaths {
   /// WBS 8.5.1.
   static const String settingsAccount = '/settings/account';
 
+  /// Audio & speech / TTS settings (kit screen 23) — registered as a **top-level**
+  /// route (outside the bottom-nav shell → immersive, shell hidden). WBS 8.4.2.
+  static const String settingsAudioSpeech = '/settings/audio-speech';
+
   /// Tag management (kit screen 11) — registered as a **top-level** route
   /// (outside the bottom-nav shell → immersive, shell hidden). WBS 8.3.2.
   static const String settingsLearningTags = '/settings/learning/tags';

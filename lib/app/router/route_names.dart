@@ -32,6 +32,10 @@ abstract final class RouteNames {
   /// immersive route (shell hidden). Display-only V1. WBS 8.5.1.
   static const String settingsAccount = 'settingsAccount';
 
+  /// Audio & speech / TTS settings (`/settings/audio-speech`, kit screen 23) — a
+  /// top-level immersive route (shell hidden). WBS 8.4.2.
+  static const String settingsAudioSpeech = 'settingsAudioSpeech';
+
   /// Tag management (`/settings/learning/tags`, kit screen 11) — a top-level
   /// immersive route (shell hidden). WBS 8.3.2.
   static const String settingsLearningTags = 'settingsLearningTags';

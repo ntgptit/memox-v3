@@ -101,7 +101,6 @@ void main() {
       expect(find.text('20/day'), findsOneWidget);
       expect(find.text('System'), findsOneWidget); // theme
       expect(find.text('English'), findsOneWidget); // language
-      expect(find.text('Soon'), findsOneWidget); // Audio & speech (Future)
     });
 
     testWidgets('an account load failure shows the error state', (

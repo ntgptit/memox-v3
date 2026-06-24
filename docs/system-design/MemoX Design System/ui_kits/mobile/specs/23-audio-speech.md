@@ -109,6 +109,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           spacing: pad:0/0/0/4
           style: font:12/700 color:text-2 tracking:1
         - node: list-card
+          id: 23-audio-speech/language-row
           box:
             abs: [21,108 348x82]
             rel: [0,23 348x82]
@@ -179,6 +180,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           spacing: pad:0/0/0/4
           style: font:12/700 color:text-2 tracking:1
         - node: list-card
+          id: 23-audio-speech/voice-list
           box:
             abs: [21,229 348x212]
             rel: [0,23 348x212]
@@ -349,6 +351,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
                 flex: shrink:0
                 style: r:999 border:2px border-strong
       - node: card
+        id: 23-audio-speech/preview-card
         mx: MxCard
         box:
           abs: [21,457 348x142]
@@ -371,6 +374,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             rel: [17,44 314x25]
           style: font:18/600/25 color:text
         - node: pill-btn
+          id: 23-audio-speech/preview-button
           text: Play sample
           mx: MxSecondaryButton
           box:
@@ -691,6 +695,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + rel: [17,44 314x50]
 + style: font:18/600/25 color:text
   - node: pill-btn
+  id: 23-audio-speech/preview-button
   text: Play sample
   mx: MxSecondaryButton
   box:
@@ -712,6 +717,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   rel: [17,44 314x25]
   style: font:18/600/25 color:text
 - - node: pill-btn
+- id: 23-audio-speech/preview-button
 - text: Play sample
 - mx: MxSecondaryButton
 - box:
@@ -731,6 +737,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + rel: [17,81 314x44]
 + layout: flex:row gap:12 align:center
 + - node: pill-btn
++ id: 23-audio-speech/preview-button
 + text: Stop
 + mx: MxPrimaryButton
 + box:
