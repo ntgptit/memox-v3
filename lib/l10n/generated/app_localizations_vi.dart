@@ -1096,4 +1096,156 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get tagManagementDeleteFailedMessage =>
       'Đã xảy ra lỗi khi xóa tag này. Tag của bạn không thay đổi.';
+
+  @override
+  String get deckImportTitle => 'Nhập';
+
+  @override
+  String get deckImportEmptyTitle => 'Nhập thẻ từ tệp';
+
+  @override
+  String get deckImportEmptyMessage =>
+      'Chọn tệp CSV hoặc TSV từ thiết bị để đưa thẻ vào MemoX.';
+
+  @override
+  String get deckImportChooseFile => 'Chọn tệp';
+
+  @override
+  String get deckImportSupportedFormats => 'Hỗ trợ tệp CSV và TSV.';
+
+  @override
+  String get deckImportReadyToParse => 'sẵn sàng phân tích';
+
+  @override
+  String deckImportFileMeta(String size, String type, String status) {
+    return '$size · $type · $status';
+  }
+
+  @override
+  String deckImportSizeBytes(int bytes) {
+    return '$bytes B';
+  }
+
+  @override
+  String deckImportSizeKb(String value) {
+    return '$value KB';
+  }
+
+  @override
+  String deckImportSizeMb(String value) {
+    return '$value MB';
+  }
+
+  @override
+  String get deckImportClearFile => 'Gỡ tệp';
+
+  @override
+  String get deckImportParseFile => 'Phân tích tệp';
+
+  @override
+  String get deckImportParseHint =>
+      'Chúng tôi sẽ hiện bản xem trước trước khi nhập.';
+
+  @override
+  String get deckImportParsing => 'Đang phân tích…';
+
+  @override
+  String get deckImportImporting => 'Đang nhập…';
+
+  @override
+  String deckImportPreviewSummary(int found, int valid, int skip) {
+    return '$found tìm thấy · $valid hợp lệ · $skip bỏ qua';
+  }
+
+  @override
+  String deckImportSkipWarning(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count thẻ có vấn đề và sẽ bị bỏ qua.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String deckImportAllValid(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Tất cả $count thẻ đều hợp lệ.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String deckImportPreviewLabel(int count) {
+    return 'XEM TRƯỚC $count';
+  }
+
+  @override
+  String deckImportCardPair(String front, String back) {
+    return '$front — $back';
+  }
+
+  @override
+  String get deckImportSkippedRow => 'Dòng bị bỏ qua';
+
+  @override
+  String get deckImportDuplicateReason => 'Thẻ trùng';
+
+  @override
+  String get deckImportSkipBadge => 'Bỏ';
+
+  @override
+  String deckImportCommitButton(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Nhập $count thẻ hợp lệ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String deckImportSuccessTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Đã nhập $count thẻ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String deckImportSuccessMessage(String deck) {
+    return 'Chúng đã ở trong bộ thẻ $deck của bạn, sẵn sàng để học.';
+  }
+
+  @override
+  String get deckImportThisDeck => 'hiện tại';
+
+  @override
+  String deckImportPartialTitle(int imported, int skipped) {
+    return '$imported đã nhập · $skipped bỏ qua';
+  }
+
+  @override
+  String get deckImportPartialMessage =>
+      'Một số dòng không hợp lệ hoặc bị trùng và đã bị bỏ qua.';
+
+  @override
+  String get deckImportImportAnother => 'Nhập tệp khác';
+
+  @override
+  String get deckImportOpenDeck => 'Mở bộ thẻ';
+
+  @override
+  String get deckImportFailedTitle => 'Nhập thất bại';
+
+  @override
+  String get deckImportFailedMessage =>
+      'Không có gì được nhập. Tệp có thể bị hỏng hoặc ở định dạng không hỗ trợ.';
+
+  @override
+  String get deckImportChooseAnother => 'Chọn tệp khác';
 }

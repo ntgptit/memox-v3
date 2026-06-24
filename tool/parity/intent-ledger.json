@@ -82,6 +82,14 @@
       "source": "docs/system-design/MemoX Design System/CLAUDE.md (common-layer first; tag meaningful required nodes, not every div)"
     },
     {
+      "screen": "10-deck-import",
+      "node": "icon-btn",
+      "mx": "MxIconButton",
+      "exceptionKind": "covered",
+      "reason": "The app-bar back arrow is the shared MxAppBar AUTOMATIC leading button (platform back), not a screen-specific affordance — the FE never hand-builds or keys it. Same rationale as 09-flashcard-history: the empty base state's app bar carries only the back arrow, so this lone icon-btn surfaces as a singleton (the file-chip's clear-× lives in later states).",
+      "source": "docs/system-design/MemoX Design System/CLAUDE.md (tag meaningful required nodes, not platform chrome) + MxAppBar automaticallyImplyLeading"
+    },
+    {
       "screen": "09-flashcard-history",
       "node": "icon-btn",
       "mx": "MxIconButton",

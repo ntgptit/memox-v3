@@ -95,6 +95,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       spacing: pad:16/20/48/20
       position: layout_hint:scroll
       - node: card
+        id: 10-deck-import/empty-card
         mx: MxCard
         box:
           abs: [21,85 348x260]
@@ -135,6 +136,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           layout: flex:col gap:8
           spacing: margin:20/0/0/0
           - node: pill-btn
+            id: 10-deck-import/choose-file
             text: Choose file
             mx: MxPrimaryButton
             box:
@@ -228,6 +230,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       spacing: pad:16/20/48/20
       position: layout_hint:scroll
       - node: card
+        id: 10-deck-import/file-chip
         mx: MxCard
         box:
           abs: [21,85 348x74]
@@ -324,6 +327,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - spacing: pad:16/20/48/20
 - position: layout_hint:scroll
 - - node: card
+- id: 10-deck-import/empty-card
 - mx: MxCard
 - box:
 - abs: [21,85 348x260]
@@ -364,6 +368,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - layout: flex:col gap:8
 - spacing: margin:20/0/0/0
 - - node: pill-btn
+- id: 10-deck-import/choose-file
 - text: Choose file
 - mx: MxPrimaryButton
 - box:
@@ -492,6 +497,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       spacing: pad:16/20/48/20
       position: layout_hint:scroll
       - node: card
+        id: 10-deck-import/file-chip
         mx: MxCard
         box:
           abs: [21,85 348x74]
@@ -587,6 +593,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             spacing: margin:0/0/0/4
             style: font:12/700 color:text-3 tracking:1
         - node: list-card
+          id: 10-deck-import/preview-list
           box:
             abs: [21,258 348x342]
             rel: [0,23 348x342]
@@ -881,6 +888,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       spacing: pad:16/20/48/20
       position: layout_hint:scroll
       - node: card
+        id: 10-deck-import/file-chip
         mx: MxCard
         box:
           abs: [21,85 348x74]
@@ -976,6 +984,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             spacing: margin:0/0/0/4
             style: font:12/700 color:text-3 tracking:1
         - node: list-card
+          id: 10-deck-import/preview-list
           box:
             abs: [21,274 348x342]
             rel: [0,23 348x342]
@@ -1374,6 +1383,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + spacing: pad:16/20/48/20
 + position: layout_hint:scroll
   - node: card
+  id: 10-deck-import/result-card
   mx: MxCard
   box:
   abs: [21,247 348x312]
@@ -1441,6 +1451,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   layout: flex:col gap:8
   spacing: margin:20/0/0/0
 - - node: pill-btn
+- id: 10-deck-import/choose-file
 - text: Choose file
 - mx: MxPrimaryButton
 - box:
@@ -1527,6 +1538,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + spacing: pad:16/20/48/20
 + position: layout_hint:scroll
   - node: card
+  id: 10-deck-import/result-card
   mx: MxCard
   box:
   abs: [21,247 348x312]
@@ -1594,6 +1606,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   layout: flex:col gap:8
   spacing: margin:20/0/0/0
 - - node: pill-btn
+- id: 10-deck-import/choose-file
 - text: Choose file
 - mx: MxPrimaryButton
 - box:
@@ -1680,6 +1693,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + spacing: pad:16/20/48/20
 + position: layout_hint:scroll
   - node: card
+  id: 10-deck-import/result-card
   mx: MxCard
   box:
   abs: [21,247 348x312]
@@ -1747,6 +1761,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   layout: flex:col gap:8
   spacing: margin:20/0/0/0
 - - node: pill-btn
+- id: 10-deck-import/choose-file
 - text: Choose file
 - mx: MxPrimaryButton
 - box:

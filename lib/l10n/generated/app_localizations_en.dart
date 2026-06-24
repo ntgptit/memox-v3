@@ -1119,4 +1119,160 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get tagManagementDeleteFailedMessage =>
       'Something went wrong deleting this tag. Your tags are unchanged.';
+
+  @override
+  String get deckImportTitle => 'Import';
+
+  @override
+  String get deckImportEmptyTitle => 'Import cards from a file';
+
+  @override
+  String get deckImportEmptyMessage =>
+      'Pick a CSV or TSV file from your device to bring its cards into MemoX.';
+
+  @override
+  String get deckImportChooseFile => 'Choose file';
+
+  @override
+  String get deckImportSupportedFormats => 'Supports CSV and TSV files.';
+
+  @override
+  String get deckImportReadyToParse => 'ready to parse';
+
+  @override
+  String deckImportFileMeta(String size, String type, String status) {
+    return '$size · $type · $status';
+  }
+
+  @override
+  String deckImportSizeBytes(int bytes) {
+    return '$bytes B';
+  }
+
+  @override
+  String deckImportSizeKb(String value) {
+    return '$value KB';
+  }
+
+  @override
+  String deckImportSizeMb(String value) {
+    return '$value MB';
+  }
+
+  @override
+  String get deckImportClearFile => 'Remove file';
+
+  @override
+  String get deckImportParseFile => 'Parse file';
+
+  @override
+  String get deckImportParseHint =>
+      'We\'ll show a preview before anything is imported.';
+
+  @override
+  String get deckImportParsing => 'Parsing…';
+
+  @override
+  String get deckImportImporting => 'Importing…';
+
+  @override
+  String deckImportPreviewSummary(int found, int valid, int skip) {
+    return '$found found · $valid valid · $skip to skip';
+  }
+
+  @override
+  String deckImportSkipWarning(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cards have problems and will be skipped.',
+      one: '1 card has problems and will be skipped.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String deckImportAllValid(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'All $count cards look good.',
+      one: '1 card looks good.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String deckImportPreviewLabel(int count) {
+    return 'PREVIEW $count';
+  }
+
+  @override
+  String deckImportCardPair(String front, String back) {
+    return '$front — $back';
+  }
+
+  @override
+  String get deckImportSkippedRow => 'Skipped row';
+
+  @override
+  String get deckImportDuplicateReason => 'Duplicate card';
+
+  @override
+  String get deckImportSkipBadge => 'Skip';
+
+  @override
+  String deckImportCommitButton(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Import $count valid cards',
+      one: 'Import 1 valid card',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String deckImportSuccessTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cards imported',
+      one: '1 card imported',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String deckImportSuccessMessage(String deck) {
+    return 'They\'re now in your $deck deck, ready to study.';
+  }
+
+  @override
+  String get deckImportThisDeck => 'current';
+
+  @override
+  String deckImportPartialTitle(int imported, int skipped) {
+    return '$imported imported · $skipped skipped';
+  }
+
+  @override
+  String get deckImportPartialMessage =>
+      'Some rows were invalid or duplicates and were left out.';
+
+  @override
+  String get deckImportImportAnother => 'Import another file';
+
+  @override
+  String get deckImportOpenDeck => 'Open deck';
+
+  @override
+  String get deckImportFailedTitle => 'Import failed';
+
+  @override
+  String get deckImportFailedMessage =>
+      'Nothing was imported. The file may be corrupt or in an unsupported format.';
+
+  @override
+  String get deckImportChooseAnother => 'Choose another file';
 }

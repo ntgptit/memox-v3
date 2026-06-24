@@ -5,6 +5,7 @@ import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/app/router/route_placeholder.dart';
 import 'package:memox/presentation/features/dashboard/routes/dashboard_routes.dart';
+import 'package:memox/presentation/features/flashcards/routes/flashcard_routes.dart';
 import 'package:memox/presentation/features/folders/routes/folder_routes.dart';
 import 'package:memox/presentation/features/history/routes/history_routes.dart';
 import 'package:memox/presentation/features/search/routes/search_routes.dart';
@@ -34,6 +35,8 @@ GoRouter createAppRouter() => GoRouter(
     ...historyRoutes(),
     // Settings sub-screens (Tag management, …) are immersive → top-level.
     ...settingsRoutes(),
+    // Deck import wizard is immersive (no bottom nav) → top-level.
+    ...flashcardImmersiveRoutes(),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) =>
           MxAppShell(navigationShell: navigationShell),

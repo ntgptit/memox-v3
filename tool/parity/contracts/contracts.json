@@ -111,6 +111,28 @@
         "node": "list-card"
       }
     ],
+    "10-deck-import": [
+      {
+        "key": "mx-node:10-deck-import/empty-card",
+        "node": "card"
+      },
+      {
+        "key": "mx-node:10-deck-import/choose-file",
+        "node": "pill-btn"
+      },
+      {
+        "key": "mx-node:10-deck-import/file-chip",
+        "node": "card"
+      },
+      {
+        "key": "mx-node:10-deck-import/preview-list",
+        "node": "list-card"
+      },
+      {
+        "key": "mx-node:10-deck-import/result-card",
+        "node": "card"
+      }
+    ],
     "11-tag-management": [
       {
         "key": "mx-node:11-tag-management/tag-list",
