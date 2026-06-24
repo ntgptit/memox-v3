@@ -164,6 +164,7 @@ When in doubt about whether to use Stream or Future: use Stream.
 | Daily new-card limit | SharedPreferences (`lib/data/datasources/local/preferences/learning_settings_store.dart`) | `learning.dailyNewLimit` | `20` | Caps new-card eligibility in study entry. |
 | Goal disabled since | SharedPreferences (`lib/data/datasources/local/preferences/learning_settings_store.dart`) | `learning.goalDisabledSince` | `null` | Local `YYYY-MM-DD`; cleared when the goal is enabled. |
 | Theme mode | SharedPreferences (`lib/data/datasources/local/preferences/appearance_settings_store.dart`) | `appearance.themeMode` | `system` | `AppThemeMode.storageValue` (`system`/`light`/`dark`); unknown/missing recovers to `system`. Drives `MaterialApp.themeMode`. |
+| App language | SharedPreferences (`lib/data/datasources/local/preferences/language_settings_store.dart`) | `language.appLanguage` | `system` | `AppLanguage.storageValue` (`system`/`en`/`vi`); unknown/missing recovers to `system`. Drives `MaterialApp.locale` (`system` → `null` = device locale). |
 
 **Decision table:**
 

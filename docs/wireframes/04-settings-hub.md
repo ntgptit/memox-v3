@@ -28,7 +28,7 @@ Prompt 21 (2026-05-31) verified Settings Hub as a navigation owner, not a settin
 | `/settings` route + shell navigation             | Current                                  | `/settings` renders `SettingsScreen` inside the app shell.                                                                              |
 | Account, Learning, Audio/Speech, Tags navigation | Current                                  | Rows push named settings sub-routes; sub-screens hide shell navigation; back returns to the hub when entered from the hub.              |
 | Appearance row                                   | Route Current (kit 24); hub entry Future | `/settings/appearance` is live (`AppearanceSettingsScreen`, theme picker) but the hub is unbuilt, so it is reached by deep-link, not yet a tappable hub row.                                                                         |
-| Language row                                     | Current (disabled Future row)            | Render as a disabled row with a Soon badge; `/settings/locale` (`25-language`) not yet built.                                            |
+| Language row                                     | Route Current (kit 25); hub entry Future | `/settings/language` is live (`LanguageSettingsScreen`, app-language picker) but the hub is unbuilt, so it is reached by deep-link, not yet a tappable hub row.                                            |
 | About row                                        | Current (dialog) / Target (bottom-sheet) | Current code opens Flutter's `AboutDialog`. The About bottom-sheet remains release-polish target behavior.                              |
 | Hub-owned mutation                               | Current absent                           | Hub rows navigate only. Account/Drive, study defaults, TTS, and tag mutation live in their sub-screens/viewmodels.                      |
 | Subtitle source                                  | Partial — **mock data on screen**        | The current screen renders MOCK account data (`alex@memox.app`) and a mock app version (`_mockAppVersion = '1.4.2 (build 248)'`) from the static preview. No real account/sync state exists. |
@@ -65,7 +65,7 @@ Prompt 21 (2026-05-31) verified Settings Hub as a navigation owner, not a settin
 │  │ 🎨 Appearance                ▸    ││  → /settings/appearance (Current, kit 24; hub row entry Future)
 │  │    System default                 ││
 │  ├───────────────────────────────────┤│
-│  │ 🌐 Language                  ▸    ││  → /settings/locale (future)
+│  │ 🌐 Language                  ▸    ││  → /settings/language (Current, kit 25; hub row entry Future)
 │  │    English                        ││
 │  └───────────────────────────────────┘│
 │                                       │
@@ -104,7 +104,7 @@ Subtitles populate independently; rows render immediately, subtitles fill in.
 - ❌ Host actual settings on this screen (no toggles, no sliders here).
 - ❌ Hide the Account row when signed out. Show "Not signed in — tap to set up backup."
 - ❌ Display a stale subtitle. If data is loading, show "—" or skeleton.
-- ❌ Show unimplemented rows (Language) as enabled. (Appearance is now implemented — kit 24 — and may be enabled once the hub is built.)
+- Appearance and Language are now implemented (kit 24 / 25); their hub rows may be enabled once the hub is built (each route is already live by deep-link).
 
 ## Components
 
@@ -164,7 +164,7 @@ Subtitles populate independently; rows render immediately, subtitles fill in.
 
 - Settings hub MUST NOT host actual settings (no toggles, no sliders).
 - Subtitles MUST reflect current state (not stale).
-- Future-planned rows (Language) MAY be hidden if not implemented. (Appearance is implemented — kit 24.)
+- Appearance and Language are implemented (kit 24 / 25); their routes are live by deep-link.
 
 ## Agent rule
 
@@ -194,9 +194,12 @@ Subtitles populate independently; rows render immediately, subtitles fill in.
 
 **Code paths:**
 
-- `lib/presentation/features/settings/screens/settings_screen.dart`
-- `lib/presentation/features/settings/widgets/settings_overview_groups.dart`
-- `lib/presentation/features/settings/widgets/settings_group.dart`
+- The Settings hub screen itself is **not yet built** — `/settings` renders a
+  placeholder. Planned (Future, kit `20-settings`): a `SettingsScreen` + grouped
+  rows under `lib/presentation/features/settings/`. The sub-screens it will link
+  to already exist as top-level routes: `AppearanceSettingsScreen` (kit 24),
+  `LanguageSettingsScreen` (kit 25), `SettingsTagManagementScreen` (kit 11),
+  `LearningSettingsScreen` (kit 22).
 - `lib/app/router/route_names.dart` → `RouteNames.settings`
 
 **Related wireframes:**

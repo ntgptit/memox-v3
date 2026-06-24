@@ -370,5 +370,16 @@
   "appearanceSystemDesc": "Theo cài đặt thiết bị",
   "appearanceSystemNote": "Hệ thống theo lịch sáng/tối của thiết bị.",
   "appearanceErrorTitle": "Không tải được giao diện",
-  "appearanceErrorMessage": "Đã xảy ra lỗi khi tải cài đặt chủ đề của bạn."
+  "appearanceErrorMessage": "Đã xảy ra lỗi khi tải cài đặt chủ đề của bạn.",
+  "languageTitle": "Ngôn ngữ",
+  "languageOverline": "Ngôn ngữ ứng dụng",
+  "languageSystemTitle": "Mặc định hệ thống",
+  "languageSystemDesc": "Theo ngôn ngữ thiết bị",
+  "languageEnglishTitle": "English",
+  "languageEnglishDesc": "English",
+  "languageVietnameseTitle": "Tiếng Việt",
+  "languageVietnameseDesc": "Vietnamese",
+  "languageRestartNote": "Thay đổi được áp dụng ngay trên toàn ứng dụng.",
+  "languageErrorTitle": "Không tải được ngôn ngữ",
+  "languageErrorMessage": "Đã xảy ra lỗi khi tải cài đặt ngôn ngữ của bạn."
 }

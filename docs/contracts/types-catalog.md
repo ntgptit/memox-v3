@@ -232,6 +232,25 @@ enum AppThemeMode {
 `AppThemeMode.fromStorage`. See
 `docs/contracts/repository-contracts/appearance-settings-repository.md`.
 
+### AppLanguage
+
+The app's UI language preference (kit screen 25 — Language). Mapped to a Flutter
+`Locale?` in the presentation layer (`AppLanguageX.locale`; `system` → `null` =
+follow device). Distinct from `TargetLanguage` (a deck's study target).
+
+```dart
+enum AppLanguage {
+  system,      // Follow the device locale
+  english,     // 'en'
+  vietnamese,  // 'vi'
+}
+```
+
+**Storage:** SharedPreferences `language.appLanguage` TEXT (`storageValue`:
+`system`/`en`/`vi`); unknown/missing recovers to `system` via
+`AppLanguage.fromStorage`. See
+`docs/contracts/repository-contracts/language-settings-repository.md`.
+
 ### SessionStatus
 
 Lifecycle of a study session.

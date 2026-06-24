@@ -24,7 +24,7 @@
         <Bar />
         <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `${S(4)} var(--memox-space-screen) var(--memox-space-6)`, display: 'flex', flexDirection: 'column', gap: S(2) }}>
           <div className="ov" style={{ paddingLeft: S(1) }}>App language</div>
-          <div className="list-card">
+          <div className="list-card" data-mx-node="25-language/language-list">
             {OPTIONS.map((o, i) => (
               <div key={o.key}>
                 {i > 0 && <div className="hr inset"></div>}

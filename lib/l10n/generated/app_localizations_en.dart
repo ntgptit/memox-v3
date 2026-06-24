@@ -1341,4 +1341,38 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get appearanceErrorMessage =>
       'Something went wrong loading your theme setting.';
+
+  @override
+  String get languageTitle => 'Language';
+
+  @override
+  String get languageOverline => 'App language';
+
+  @override
+  String get languageSystemTitle => 'System default';
+
+  @override
+  String get languageSystemDesc => 'Match device language';
+
+  @override
+  String get languageEnglishTitle => 'English';
+
+  @override
+  String get languageEnglishDesc => 'English';
+
+  @override
+  String get languageVietnameseTitle => 'Tiếng Việt';
+
+  @override
+  String get languageVietnameseDesc => 'Vietnamese';
+
+  @override
+  String get languageRestartNote => 'Changes apply across the app right away.';
+
+  @override
+  String get languageErrorTitle => 'Couldn\'t load language';
+
+  @override
+  String get languageErrorMessage =>
+      'Something went wrong loading your language setting.';
 }
