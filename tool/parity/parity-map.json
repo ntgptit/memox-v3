@@ -214,6 +214,15 @@
         { "kit": "light", "golden": "test/presentation/features/settings/goldens/appearance_light", "scope": "current" },
         { "kit": "dark", "golden": "test/presentation/features/settings/goldens/appearance_dark", "scope": "current" }
       ]
+    },
+    {
+      "id": "25-language",
+      "title": "Language",
+      "states": [
+        { "kit": "system", "golden": "test/presentation/features/settings/goldens/language_system", "scope": "current" },
+        { "kit": "english", "golden": "test/presentation/features/settings/goldens/language_en", "scope": "current" },
+        { "kit": "vietnamese", "golden": "test/presentation/features/settings/goldens/language_vi", "scope": "current" }
+      ]
     }
   ],
   "noFe": [
@@ -222,7 +231,6 @@
     "19-progress",
     "20-settings",
     "21-account-sync",
-    "23-audio-speech",
-    "25-language"
+    "23-audio-speech"
   ]
 }

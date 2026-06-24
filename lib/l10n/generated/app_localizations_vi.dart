@@ -1314,4 +1314,39 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get appearanceErrorMessage =>
       'Đã xảy ra lỗi khi tải cài đặt chủ đề của bạn.';
+
+  @override
+  String get languageTitle => 'Ngôn ngữ';
+
+  @override
+  String get languageOverline => 'Ngôn ngữ ứng dụng';
+
+  @override
+  String get languageSystemTitle => 'Mặc định hệ thống';
+
+  @override
+  String get languageSystemDesc => 'Theo ngôn ngữ thiết bị';
+
+  @override
+  String get languageEnglishTitle => 'English';
+
+  @override
+  String get languageEnglishDesc => 'English';
+
+  @override
+  String get languageVietnameseTitle => 'Tiếng Việt';
+
+  @override
+  String get languageVietnameseDesc => 'Vietnamese';
+
+  @override
+  String get languageRestartNote =>
+      'Thay đổi được áp dụng ngay trên toàn ứng dụng.';
+
+  @override
+  String get languageErrorTitle => 'Không tải được ngôn ngữ';
+
+  @override
+  String get languageErrorMessage =>
+      'Đã xảy ra lỗi khi tải cài đặt ngôn ngữ của bạn.';
 }

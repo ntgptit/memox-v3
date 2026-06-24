@@ -256,6 +256,12 @@
         "key": "mx-node:24-appearance/theme-list",
         "node": "list-card"
       }
+    ],
+    "25-language": [
+      {
+        "key": "mx-node:25-language/language-list",
+        "node": "list-card"
+      }
     ]
   }
 }

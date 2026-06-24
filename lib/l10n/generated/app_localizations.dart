@@ -2311,6 +2311,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong loading your theme setting.'**
   String get appearanceErrorMessage;
+
+  /// App-bar title for the Language settings screen (25).
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get languageTitle;
+
+  /// Overline above the app-language list.
+  ///
+  /// In en, this message translates to:
+  /// **'App language'**
+  String get languageOverline;
+
+  /// System (device) language option title.
+  ///
+  /// In en, this message translates to:
+  /// **'System default'**
+  String get languageSystemTitle;
+
+  /// System language option subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Match device language'**
+  String get languageSystemDesc;
+
+  /// English language option title (autonym; not translated).
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get languageEnglishTitle;
+
+  /// English language option subtitle (English name; not translated).
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get languageEnglishDesc;
+
+  /// Vietnamese language option title (autonym; not translated).
+  ///
+  /// In en, this message translates to:
+  /// **'Tiếng Việt'**
+  String get languageVietnameseTitle;
+
+  /// Vietnamese language option subtitle (English name; not translated).
+  ///
+  /// In en, this message translates to:
+  /// **'Vietnamese'**
+  String get languageVietnameseDesc;
+
+  /// Footnote under the language list (the app re-localizes live).
+  ///
+  /// In en, this message translates to:
+  /// **'Changes apply across the app right away.'**
+  String get languageRestartNote;
+
+  /// Error-state title on the Language screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load language'**
+  String get languageErrorTitle;
+
+  /// Error-state body on the Language screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong loading your language setting.'**
+  String get languageErrorMessage;
 }
 
 class _AppLocalizationsDelegate

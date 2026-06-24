@@ -38,6 +38,15 @@
       "source": "lib/presentation/features/study/screens/guess_session_screen.dart:42 + docs/business/study/study-flow.md (guess auto-advance)"
     },
     {
+      "screen": "25-language",
+      "node": "footnote",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "behavior",
+      "reason": "The kit footnote reads 'Changing the language restarts the app.', but the FE wires MaterialApp.locale reactively (AppLanguageX.locale) so the app re-localizes LIVE with no restart. Copy resolved toward accurate behavior ('Changes apply across the app right away.'); documented in nav-flow/overview/WBS. The kit shot/spec keep the original copy (not regenerated) — same mock↔behavior pattern as the study flip-card example.",
+      "source": "lib/app/memox_app.dart (MaterialApp.locale wiring) + docs/business/navigation/navigation-flow.md (/settings/language live re-localize) + lib/l10n/app_en.arb (languageRestartNote description)"
+    },
+    {
       "screen": "17-study-result",
       "node": "close-btn",
       "kind": "*",
@@ -111,6 +120,14 @@
       "mx": "MxIconButton",
       "exceptionKind": "covered",
       "reason": "The app-bar back arrow is the shared MxAppBar AUTOMATIC leading button (platform back via `automaticallyImplyLeading`), not a screen-specific affordance — the FE never hand-builds or keys it. The Appearance bar carries only the back arrow, so this lone icon-btn surfaces as a singleton (same rationale as 09/10/22). The theme radio rows are repeated (covered by the tagged `theme-list` container).",
+      "source": "docs/system-design/MemoX Design System/CLAUDE.md (tag meaningful required nodes, not platform chrome) + MxAppBar automaticallyImplyLeading"
+    },
+    {
+      "screen": "25-language",
+      "node": "icon-btn",
+      "mx": "MxIconButton",
+      "exceptionKind": "covered",
+      "reason": "The app-bar back arrow is the shared MxAppBar AUTOMATIC leading button (platform back via `automaticallyImplyLeading`), not a screen-specific affordance — the FE never hand-builds or keys it. The Language bar carries only the back arrow, so this lone icon-btn surfaces as a singleton (same rationale as 09/10/22/24). The language radio rows are repeated (covered by the tagged `language-list` container).",
       "source": "docs/system-design/MemoX Design System/CLAUDE.md (tag meaningful required nodes, not platform chrome) + MxAppBar automaticallyImplyLeading"
     }
   ]
