@@ -3,14 +3,14 @@
 Live cursor for the 12-screen FE+BE build-out. Recipe + done-bar: `plan.md` (same dir).
 One screen per iteration, in order. Update this table as each screen lands.
 
-**NEXT: 18-stats** (nothing started yet).
+**NEXT: 19-progress** (the deeper Progress analytics detail — kit screen 19, 9 states).
 
 ## Status
 
 | # | Screen | Status | PR | Notes |
 | --- | --- | --- | --- | --- |
-| 1 | 18-stats | ⬜ todo | — | |
-| 2 | 19-progress | ⬜ todo | — | |
+| 1 | 18-stats | ✅ done | [#32](https://github.com/ntgptit/memox-v3/pull/32) | Stats tab at `/progress`; weekly chart + per-deck mastery; `MxBarChart`/`MxMasteryBar`. Parked Q1–Q4. |
+| 2 | 19-progress | ⬜ todo | — | Pushed detail (back + Week/Month); needs its own route or `/progress` rename (Q3) + `ProgressOverview` BE (7.4.2). `03-progress.md` drift corrected but screen still unbuilt. |
 | 3 | 09-flashcard-history | ⬜ todo | — | |
 | 4 | 11-tag-management | ⬜ todo | — | |
 | 5 | 10-deck-import | ⬜ todo | — | |
