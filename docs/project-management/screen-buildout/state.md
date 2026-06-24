@@ -3,7 +3,7 @@
 Live cursor for the 12-screen FE+BE build-out. Recipe + done-bar: `plan.md` (same dir).
 One screen per iteration, in order. Update this table as each screen lands.
 
-**NEXT: 10-deck-import** (kit screen 10, 9 states). 19-progress is 🟡 blocked:Q5 (engagement-approval gate) — skipped.
+**NEXT: 22-learning-settings** (kit screen 22, 5 states). 19-progress is 🟡 blocked:Q5 (engagement-approval gate) — skipped.
 
 ## Status
 
@@ -13,7 +13,7 @@ One screen per iteration, in order. Update this table as each screen lands.
 | 2 | 19-progress | 🟡 blocked:Q5 | — | **Skipped (blocked).** Mock hero = daily-goal ring (12/20) + streak chip + insights = engagement BE, which `overview.md` marks Future/Target "No engagement persistence/settings/reminders — pending approval". Can't build the goal ring without approved goal-settings BE (fabricating goal/streak values is forbidden by `engagement.md`). Also route collides with Stats (Q3). Unblock = owner approves engagement BE. |
 | 3 | 09-flashcard-history | ✅ done | [#33](https://github.com/ntgptit/memox-v3/pull/33) | Card History (top-level immersive); breadcrumb + header + activity feed; redesign-simplified (CURRENT-PROGRESS card / filter / Edit / overflow / heatmap dropped). Built the full read BE (queries/dao/repo/usecase). Entry affordance Future (Q6). |
 | 4 | 11-tag-management | ✅ done | [#34](https://github.com/ntgptit/memox-v3/pull/34) | Global tag list (top-level immersive `/settings/learning/tags`); rename/merge/delete + collision→merge + busy/op-error. Reused 8.3.1 BE; new shared `MxBusyOverlay`. Settings→Learning entry Future (hub unbuilt). |
-| 5 | 10-deck-import | ⬜ todo | — | |
+| 5 | 10-deck-import | ✅ done | [#35](https://github.com/ntgptit/memox-v3/pull/35) | File-picker wizard (top-level immersive); 9-state machine (empty→file→parse→preview→commit→success/partial/failed). Reused 6.2.x/6.4.1 BE. Parked Q7–Q8. |
 | 6 | 22-learning-settings | ⬜ todo | — | |
 | 7 | 24-appearance | ⬜ todo | — | |
 | 8 | 25-language | ⬜ todo | — | |
@@ -39,6 +39,18 @@ default**, and keep going. The user resolves these in one pass afterwards.
 Format (newest first): `Q<n> (<screen>) — <question>. Default taken: <what you did so the
 loop could continue>. Why/source: <ref>. [blocking? yes/no]`
 
+- **Q8 (10-deck-import) — The kit-10 mock mentions Anki `.apkg` + the "importing" state shows a
+  live "N of M imported" progress counter, but neither is buildable now.** Default taken: the file
+  picker accepts `csv`/`tsv`/`txt` only (the CSV parser can't read `.apkg` zip/sqlite) and the
+  importing state uses a plain spinner (`MxLoadingState`) — the live counter needs a chunked/progress
+  commit stream, but `commitDeckImport` is a single atomic batch (no progress events). Both marked
+  **Future**. Why/source: `lib/domain/usecases/flashcard/commit_deck_import_usecase.dart` (atomic
+  commit), kit-10 mock copy. [blocking? no]
+- **Q7 (10-deck-import) — The kit-10 partial result's primary action is "Review skipped" (a dedicated
+  skipped-rows review), but no such surface exists.** Default taken: replaced it with "Import another
+  file" (restart the wizard); the skipped rows are already shown in the preview before commit. A
+  dedicated post-commit skipped-review screen is **Future**. Why/source: kit-10 partial mock; no
+  review surface in scope. [blocking? no]
 - **Q6 (09-flashcard-history) — Entry point: the kit-09 mock implies History opens from a card, but
   ALL "View history" surfaces are documented Future (`docs/business/history/card-history.md` §Future
   surfaces) and no flashcard row-action sheet exists.** Default taken: built the screen + a top-level
