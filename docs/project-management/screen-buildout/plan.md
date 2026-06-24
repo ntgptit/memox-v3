@@ -8,6 +8,11 @@ source of truth. One screen per loop iteration; see `state.md` for the live curs
 > `docs/design/design-language.md` (taste), `docs/design/visual-parity-checklist.md`
 > (final gate), the 3 universal contracts (`docs/contracts/{error-contract,types-catalog,code-style}.md`).
 
+> **No mid-loop interrupts.** Do NOT stop to ask. Any question/ambiguity/decision →
+> append to the "Parked questions" section of `state.md`, take the safest default, and
+> keep going (genuinely blocking items: park + skip that screen, continue the loop). The
+> user resolves the parked list in one batch afterwards.
+
 ## Definition of "mapped to mock" (per-screen done bar)
 
 A screen is DONE only when ALL hold:
