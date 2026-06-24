@@ -3,7 +3,7 @@
 Live cursor for the 12-screen FE+BE build-out. Recipe + done-bar: `plan.md` (same dir).
 One screen per iteration, in order. Update this table as each screen lands.
 
-**NEXT: 24-appearance** (kit screen 24, 3 states). 19-progress is 🟡 blocked:Q5 (engagement-approval gate) — skipped.
+**NEXT: 25-language** (kit screen 25, 3 states). 19-progress is 🟡 blocked:Q5 (engagement-approval gate) — skipped.
 
 ## Status
 
@@ -15,7 +15,7 @@ One screen per iteration, in order. Update this table as each screen lands.
 | 4 | 11-tag-management | ✅ done | [#34](https://github.com/ntgptit/memox-v3/pull/34) | Global tag list (top-level immersive `/settings/learning/tags`); rename/merge/delete + collision→merge + busy/op-error. Reused 8.3.1 BE; new shared `MxBusyOverlay`. Settings→Learning entry Future (hub unbuilt). |
 | 5 | 10-deck-import | ✅ done | [#35](https://github.com/ntgptit/memox-v3/pull/35) | File-picker wizard (top-level immersive); 9-state machine (empty→file→parse→preview→commit→success/partial/failed). Reused 6.2.x/6.4.1 BE. Parked Q7–Q8. |
 | 6 | 22-learning-settings | ✅ done | [#36](https://github.com/ntgptit/memox-v3/pull/36) | Daily-goal card (top-level immersive `/settings/learning`); toggle + new-card limit slider/chips over `LearningSettings`; new shared `MxSwitch`/`MxSlider`. Reused 8.2.1 BE. Reminder card = disabled Future affordance. Parked Q9–Q10. |
-| 7 | 24-appearance | ⬜ todo | — | |
+| 7 | 24-appearance | ✅ done | [#37](https://github.com/ntgptit/memox-v3/pull/37) | Theme picker (top-level immersive `/settings/appearance`); Light/Dark/System radio + themed swatches; **new SharedPreferences theme BE** (`AppThemeMode`) wired to `MaterialApp.themeMode` via app-level `AppearanceController`; new shared `MxRadio`. No parked questions. |
 | 8 | 25-language | ⬜ todo | — | |
 | 9 | 23-audio-speech | ⬜ todo | — | new TTS BE |
 | 10 | 20-settings | ⬜ todo | — | after 21–25 routes exist |
