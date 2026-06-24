@@ -1,11 +1,23 @@
 ---
-last_updated: 2026-06-01
+last_updated: 2026-06-24
 route: /settings/learning/tags
 source_specs:
   - docs/business/tags/tag-system.md
 ---
 
 # 22 — Settings: Tag Management
+
+> **Status (2026-06-24): Implemented (WBS 8.3.2, kit screen 11).** `SettingsTagManagementScreen`
+> (`lib/presentation/features/settings/screens/tag_management_screen.dart`) renders at
+> `/settings/learning/tags` as a **top-level immersive route** (shell hidden), over the 8.3.1 tag BE
+> (`watchTagsWithCount` + rename/merge/delete). It shows the "{n} TAGS" overline, the tag list
+> (`#` tile + name + count + kebab), and a bottom search dock; the kebab opens the per-tag action
+> sheet (Rename / Merge into… / Delete). Rename uses an `MxDialog` that detects a name collision and
+> switches to a merge prompt; Merge opens a tap-to-select target sheet; Delete uses the destructive
+> `MxConfirmDialog`. Mutations run behind a shared `MxBusyOverlay` and surface an op-error dialog with
+> a Try-again retry. **Entry** from Settings → Learning is Future (the Settings hub / Learning screen
+> are unbuilt — reachable by route). The merge sheet uses tap-to-select (the kit radio + "Merge into X"
+> confirm is the same deferred refinement the deck/folder move pickers document).
 
 ## Purpose
 

@@ -971,4 +971,152 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get cardHistoryLoadFailedMessage =>
       'We couldn\'t fetch this card\'s activity.';
+
+  @override
+  String get commonTryAgain => 'Try again';
+
+  @override
+  String get commonDismiss => 'Dismiss';
+
+  @override
+  String get tagManagementTitle => 'Tags';
+
+  @override
+  String tagManagementCountLabel(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count TAGS',
+      one: '1 TAG',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tagManagementCardCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cards',
+      one: '1 card',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tagManagementActionsTooltip => 'Tag actions';
+
+  @override
+  String tagManagementSheetHeader(String name, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cards',
+      one: '1 card',
+    );
+    return '$name · $_temp0';
+  }
+
+  @override
+  String get tagManagementRenameAction => 'Rename';
+
+  @override
+  String get tagManagementMergeAction => 'Merge into…';
+
+  @override
+  String get tagManagementDeleteAction => 'Delete';
+
+  @override
+  String get tagManagementRenameTitle => 'Rename tag';
+
+  @override
+  String get tagManagementRenameFieldLabel => 'Tag name';
+
+  @override
+  String get tagManagementRenameConfirm => 'Save';
+
+  @override
+  String get tagManagementMergeConfirm => 'Merge tags';
+
+  @override
+  String tagManagementMergePrompt(String name) {
+    return 'A tag “$name” already exists. Merge them?';
+  }
+
+  @override
+  String tagManagementMergeSheetTitle(String name) {
+    return 'Merge “$name” into';
+  }
+
+  @override
+  String get tagManagementSearchHint => 'Search tags';
+
+  @override
+  String get tagManagementEmptyTitle => 'No tags yet';
+
+  @override
+  String get tagManagementEmptyMessage =>
+      'Add tags to your cards and they\'ll appear here to manage.';
+
+  @override
+  String get tagManagementSearchEmptyTitle => 'No tags found';
+
+  @override
+  String get tagManagementSearchEmptyMessage => 'No tags match your search.';
+
+  @override
+  String get tagManagementLoadFailedTitle => 'Couldn\'t load tags';
+
+  @override
+  String get tagManagementLoadFailedMessage =>
+      'Something went wrong loading your tags.';
+
+  @override
+  String tagManagementDeleteTitle(String name) {
+    return 'Delete tag “$name”?';
+  }
+
+  @override
+  String tagManagementDeleteMessage(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cards',
+      one: '1 card',
+    );
+    return 'The tag is removed from $_temp0. The cards themselves stay. This can\'t be undone.';
+  }
+
+  @override
+  String get tagManagementDeleteConfirm => 'Delete';
+
+  @override
+  String get tagManagementBusyRenaming => 'Renaming…';
+
+  @override
+  String get tagManagementBusyMerging => 'Merging tags…';
+
+  @override
+  String get tagManagementBusyDeleting => 'Deleting…';
+
+  @override
+  String get tagManagementRenameFailedTitle => 'Couldn\'t rename tag';
+
+  @override
+  String get tagManagementRenameFailedMessage =>
+      'Something went wrong updating this tag. Your tags are unchanged.';
+
+  @override
+  String get tagManagementMergeFailedTitle => 'Couldn\'t merge tags';
+
+  @override
+  String get tagManagementMergeFailedMessage =>
+      'Something went wrong merging these tags. Your tags are unchanged.';
+
+  @override
+  String get tagManagementDeleteFailedTitle => 'Couldn\'t delete tag';
+
+  @override
+  String get tagManagementDeleteFailedMessage =>
+      'Something went wrong deleting this tag. Your tags are unchanged.';
 }

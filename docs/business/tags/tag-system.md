@@ -5,8 +5,10 @@ applies_to: flashcard tags — creation, filtering, study-by-tag, management
 
 # Tag System
 
-> **Status: Partial — backend tag management (list/count/rename/merge/delete) is implemented over
-> `flashcard_tags` (WBS 8.3.1); FE wiring and study-by-tag remain Specified / Future.**
+> **Status: Partial — tag management (list/count/rename/merge/delete) is implemented BE (WBS 8.3.1)
+> AND FE (WBS 8.3.2, kit screen 11: `SettingsTagManagementScreen` at `/settings/learning/tags`);
+> study-by-tag + tag-filter chips remain Future. The Settings→Learning entry to the screen is Future
+> (hub unbuilt) — the screen is reachable by route.**
 >
 > Implemented (WBS 8.3.1, 2026-06-20): `TagRepository`(`Impl`) over `FlashcardTagDao` +
 > `TagValidator` (trim/lowercase, reject comma/empty/>50) + use cases

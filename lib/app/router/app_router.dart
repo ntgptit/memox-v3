@@ -8,6 +8,7 @@ import 'package:memox/presentation/features/dashboard/routes/dashboard_routes.da
 import 'package:memox/presentation/features/folders/routes/folder_routes.dart';
 import 'package:memox/presentation/features/history/routes/history_routes.dart';
 import 'package:memox/presentation/features/search/routes/search_routes.dart';
+import 'package:memox/presentation/features/settings/routes/settings_routes.dart';
 import 'package:memox/presentation/features/stats/routes/stats_routes.dart';
 import 'package:memox/presentation/features/study/routes/study_routes.dart';
 
@@ -31,6 +32,8 @@ GoRouter createAppRouter() => GoRouter(
     ...studyRoutes(),
     // Card History is immersive (no bottom nav) → top-level, outside the shell.
     ...historyRoutes(),
+    // Settings sub-screens (Tag management, …) are immersive → top-level.
+    ...settingsRoutes(),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) =>
           MxAppShell(navigationShell: navigationShell),

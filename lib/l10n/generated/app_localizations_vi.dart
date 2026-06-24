@@ -951,4 +951,149 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get cardHistoryLoadFailedMessage =>
       'Không thể tải hoạt động của thẻ này.';
+
+  @override
+  String get commonTryAgain => 'Thử lại';
+
+  @override
+  String get commonDismiss => 'Bỏ qua';
+
+  @override
+  String get tagManagementTitle => 'Thẻ tag';
+
+  @override
+  String tagManagementCountLabel(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count TAG',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tagManagementCardCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count thẻ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tagManagementActionsTooltip => 'Tác vụ tag';
+
+  @override
+  String tagManagementSheetHeader(String name, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count thẻ',
+    );
+    return '$name · $_temp0';
+  }
+
+  @override
+  String get tagManagementRenameAction => 'Đổi tên';
+
+  @override
+  String get tagManagementMergeAction => 'Gộp vào…';
+
+  @override
+  String get tagManagementDeleteAction => 'Xóa';
+
+  @override
+  String get tagManagementRenameTitle => 'Đổi tên tag';
+
+  @override
+  String get tagManagementRenameFieldLabel => 'Tên tag';
+
+  @override
+  String get tagManagementRenameConfirm => 'Lưu';
+
+  @override
+  String get tagManagementMergeConfirm => 'Gộp tag';
+
+  @override
+  String tagManagementMergePrompt(String name) {
+    return 'Tag “$name” đã tồn tại. Gộp lại?';
+  }
+
+  @override
+  String tagManagementMergeSheetTitle(String name) {
+    return 'Gộp “$name” vào';
+  }
+
+  @override
+  String get tagManagementSearchHint => 'Tìm tag';
+
+  @override
+  String get tagManagementEmptyTitle => 'Chưa có tag nào';
+
+  @override
+  String get tagManagementEmptyMessage =>
+      'Thêm tag vào thẻ và chúng sẽ xuất hiện ở đây để quản lý.';
+
+  @override
+  String get tagManagementSearchEmptyTitle => 'Không tìm thấy tag';
+
+  @override
+  String get tagManagementSearchEmptyMessage =>
+      'Không có tag nào khớp với tìm kiếm của bạn.';
+
+  @override
+  String get tagManagementLoadFailedTitle => 'Không tải được tag';
+
+  @override
+  String get tagManagementLoadFailedMessage =>
+      'Đã xảy ra lỗi khi tải tag của bạn.';
+
+  @override
+  String tagManagementDeleteTitle(String name) {
+    return 'Xóa tag “$name”?';
+  }
+
+  @override
+  String tagManagementDeleteMessage(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count thẻ',
+    );
+    return 'Tag sẽ bị gỡ khỏi $_temp0. Các thẻ vẫn được giữ lại. Không thể hoàn tác.';
+  }
+
+  @override
+  String get tagManagementDeleteConfirm => 'Xóa';
+
+  @override
+  String get tagManagementBusyRenaming => 'Đang đổi tên…';
+
+  @override
+  String get tagManagementBusyMerging => 'Đang gộp tag…';
+
+  @override
+  String get tagManagementBusyDeleting => 'Đang xóa…';
+
+  @override
+  String get tagManagementRenameFailedTitle => 'Không đổi được tên tag';
+
+  @override
+  String get tagManagementRenameFailedMessage =>
+      'Đã xảy ra lỗi khi cập nhật tag này. Tag của bạn không thay đổi.';
+
+  @override
+  String get tagManagementMergeFailedTitle => 'Không gộp được tag';
+
+  @override
+  String get tagManagementMergeFailedMessage =>
+      'Đã xảy ra lỗi khi gộp các tag này. Tag của bạn không thay đổi.';
+
+  @override
+  String get tagManagementDeleteFailedTitle => 'Không xóa được tag';
+
+  @override
+  String get tagManagementDeleteFailedMessage =>
+      'Đã xảy ra lỗi khi xóa tag này. Tag của bạn không thay đổi.';
 }

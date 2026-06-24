@@ -15,6 +15,10 @@ abstract final class RoutePaths {
   static const String progress = '/progress';
   static const String settings = '/settings';
 
+  /// Tag management (kit screen 11) — registered as a **top-level** route
+  /// (outside the bottom-nav shell → immersive, shell hidden). WBS 8.3.2.
+  static const String settingsLearningTags = '/settings/learning/tags';
+
   /// Folder detail — child of [library]. `:id` is the folder id. Relative
   /// segment (`folderRelative`) is used when registering it as a child route;
   /// the absolute form is for reference.
