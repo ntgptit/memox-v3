@@ -7,6 +7,7 @@ import 'package:memox/data/datasources/local/migrations/v5_add_folder_color_icon
 import 'package:memox/data/datasources/local/migrations/v6_add_study_tables.dart';
 import 'package:memox/data/datasources/local/migrations/v7_add_card_history.dart';
 import 'package:memox/data/datasources/local/migrations/v8_add_match_evaluations.dart';
+import 'package:memox/data/datasources/local/migrations/v9_add_tts_settings.dart';
 
 part 'app_database.g.dart';
 
@@ -35,6 +36,10 @@ part 'app_database.g.dart';
 /// v7 (WBS 7.0.1): card-history enabler — added the `card_events` table (+
 /// `idx_card_events_flashcard`), `flashcard_progress.last_reset_at`, and
 /// `study_attempts.duration_ms` (`migrations/v7_add_card_history.dart`).
+/// v8 (WBS 4.5.4): added the append-only `study_match_evaluations` table
+/// (`migrations/v8_add_match_evaluations.dart`).
+/// v9 (WBS 8.4.1): added the single-row `tts_settings` table for global TTS
+/// preferences (`migrations/v9_add_tts_settings.dart`).
 @DriftDatabase(
   include: <String>{
     'drift/folders.drift',
@@ -42,6 +47,7 @@ part 'app_database.g.dart';
     'drift/flashcards.drift',
     'drift/study_tables.drift',
     'drift/card_events.drift',
+    'drift/tts_settings.drift',
   },
 )
 class AppDatabase extends _$AppDatabase {
@@ -54,7 +60,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// Current schema version. Bump on every schema change and add a matching
   /// `onUpgrade` step (`docs/database/migration-contract.md`).
-  static const int currentSchemaVersion = 8;
+  static const int currentSchemaVersion = 9;
 
   @override
   int get schemaVersion => currentSchemaVersion;
@@ -92,6 +98,9 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 8) {
         await migrateV7ToV8(m, this);
+      }
+      if (from < 9) {
+        await migrateV8ToV9(m, this);
       }
     },
     beforeOpen: (OpeningDetails details) async {

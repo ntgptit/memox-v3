@@ -5,16 +5,15 @@ applies_to: TTS settings, speech playback, audio settings screen
 
 # TTS Settings
 
-> **Status: Specified — no TTS backend exists yet (verified 2026-06-10).** The current code has
-> only a static mock Audio & Speech settings screen
-> (`lib/presentation/features/settings/screens/audio_speech_settings_screen.dart`) with **no
-> persistence, no `tts_settings` table, no DAO/repository/service, and no
-> `lib/presentation/features/tts/` feature**. Earlier revisions of this doc claimed a Drift-backed
-> `tts_settings` row as Current; that described a previous project iteration.
-> `docs/database/schema-contract.md` correctly lists `tts_settings` as a remaining target table.
-> The contract below (single global/front-language row) is the **target** for the first TTS slice
-> (WBS 8.4.1). Independent Korean/English setting sets remain a further Target/Future step beyond
-> that. Per-deck TTS gating uses `decks.target_language`, which already exists in the current
+> **Status (2026-06-25): settings persistence shipped (WBS 8.4.1, schema v9); engine + screen
+> pending.** The Drift `tts_settings` single-row table (id `'default'`) now exists (v9 migration
+> `v9_add_tts_settings.dart`) with the `TtsSettings` model (`lib/domain/models/tts_settings.dart` —
+> defaults + slider normalization), `TtsFrontLanguage`, `TtsSettingsDao`, `TtsSettingsRepository`
+> (`Impl`), `Get`/`UpdateTtsSettingsUseCase`, and DI (`lib/app/di/tts_providers.dart`). Still
+> **pending** (the rest of 8.4.1 + screen 8.4.2): the speech engine adapter
+> (`TtsService`/`FlutterTtsService` — voice listing + `speak`/`stop` + auto-play gating) and the
+> Audio & speech settings screen (kit 23). Independent Korean/English setting sets remain a further
+> Target/Future step. Per-deck TTS gating uses `decks.target_language`, which already exists in the
 > schema.
 
 ## Source files to inspect

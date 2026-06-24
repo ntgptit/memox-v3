@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-01
+last_updated: 2026-06-25
 status: contract
 ---
 
@@ -7,14 +7,18 @@ status: contract
 
 > Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
 
-> **Status correction (2026-06-10):** NO TTS runtime exists in the current codebase — no
-> `TtsService`, no `TtsController`, no `SpeakFlashcardUseCase`, no `TtsSettingsDao`, no
-> `tts_settings` table. The Audio & Speech settings screen is a static mock. Everything in this
-> contract, including the "runtime owners" table below, is the **target** structure for WBS 8.4.x
-> (`docs/business/tts/tts-settings.md`). The first slice is global/front-language settings with
-> front-only playback **and** deck `target_language` gating (the `decks.target_language` column
-> already exists in the current schema). Per-language independent settings/voices are a further
-> Target/Future step.
+> **Status (2026-06-25): settings persistence shipped (WBS 8.4.1, schema v9); engine + screen
+> pending.** The `tts_settings` Drift table + `TtsSettings` model + `TtsSettingsDao` +
+> `TtsSettingsRepository` + `GetTtsSettingsUseCase`/`UpdateTtsSettingsUseCase` now **exist** (the
+> per-field Update API below is realized as `updateAutoPlay`/`updateRate`/`updatePitch`/
+> `updateVolume`/`updateVoice`/`updateLanguage`; see
+> `docs/contracts/repository-contracts/tts-settings-repository.md`). Still **target/unbuilt**: the
+> speech runtime — `TtsService`/`FlutterTtsService`, `TtsController`, `SpeakFlashcardUseCase`,
+> `StopSpeechUseCase`, `ListVoicesUseCase`, `TtsPlaybackPolicy` — and the Audio & Speech screen
+> (kit 23, WBS 8.4.2). Those sections below remain the **target** structure. The first slice is
+> global/front-language settings with front-only playback **and** deck `target_language` gating
+> (the `decks.target_language` column already exists). Per-language independent settings/voices are
+> a further Target/Future step.
 
 ## Target Runtime Owners (first slice — none exist yet)
 

@@ -1,7 +1,7 @@
 ---
-last_updated: 2026-06-21
+last_updated: 2026-06-25
 applies_to: Drift schema, all tables, migrations
-schema_version: 8 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`. Target shape documented below.)
+schema_version: 9 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`. Target shape documented below.)
 ---
 
 # Database Schema Contract
@@ -13,7 +13,7 @@ table-area and migration sections below describe the **target** schema (the
 mature shape to migrate toward); they are intentionally ahead of the current
 code per the "do not downgrade target concepts" rule.
 
-**Current schema** (`AppDatabase.currentSchemaVersion`): **8** (rebuild
+**Current schema** (`AppDatabase.currentSchemaVersion`): **9** (rebuild
 baseline v1 2026-06-19 WBS 1.1.5; `decks` added v2 2026-06-20 WBS 2.7.1;
 `flashcards` + `flashcard_progress` + `flashcard_tags` added v3 2026-06-20
 WBS 2.11.1/2.16.1; `flashcard_progress.is_suspended` + `buried_until` added
@@ -21,7 +21,8 @@ v4 2026-06-20 WBS 4.0.2; `folders.color` + `folders.icon` added v5 2026-06-20
 WBS 2.22.1; `study_sessions` + `study_session_items` + `study_attempts` added
 v6 2026-06-21 WBS 4.0.1; `card_events` table + `flashcard_progress.last_reset_at`
 + `study_attempts.duration_ms` added v7 2026-06-21 WBS 7.0.1; `study_match_evaluations`
-table added v8 2026-06-22 WBS 4.5.4 / WP-SM1a). The Drift layer was
+table added v8 2026-06-22 WBS 4.5.4 / WP-SM1a; `tts_settings` single-row table
+added v9 2026-06-25 WBS 8.4.1). The Drift layer was
 reset and is being re-added per feature slice. Tables shipped so far:
 
 | Table     | Columns (current)                                                                                                |
@@ -118,7 +119,7 @@ implementation and require migration before feature implementation.
 | SRS progress  | `flashcard_progress`; `buried_until` + `is_suspended` shipped v4 (WBS 4.0.2, columns only — eligibility read logic lands with 4.11.1); `last_reset_at` shipped v7 (WBS 7.0.1, column only — Card History read logic lands WBS 7.6.1, see `docs/business/history/card-history.md`) |
 | Card history  | `card_events` (shipped v7, WBS 7.0.1; lifecycle feed) + `study_attempts.duration_ms`; read query lands WBS 7.6.1 (`docs/business/history/card-history.md`) |
 | Tags          | `flashcard_tags`                                                                                                                                                                          |
-| TTS settings  | Target: `tts_settings` (single-row, id=`'default'`). If current implementation uses `tts_settings_records`, keep a mapper/migration note before renaming.                                 |
+| TTS settings  | ✅ Shipped v9 (WBS 8.4.1): `tts_settings` single-row table (id=`'default'`). See the current-schema table above + `docs/contracts/repository-contracts/tts-settings-repository.md`.                                 |
 
 ## Settings stored outside Drift
 

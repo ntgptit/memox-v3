@@ -173,7 +173,7 @@ current tree until each table is re-added.
 |---------|------|--------------|
 | v11 | `v11_clear_new_card_due_at.dart` | Data correction: `UPDATE flashcard_progress SET due_at = NULL WHERE review_count = 0 AND due_at IS NOT NULL` so never-studied cards count as NEW (not due). Earlier creation wrote `due_at = now`; brand-new cards must have `due_at = NULL`. Migration test: `test/data/migrations/clear_new_card_due_at_migration_test.dart`. |
 | v10 | `v10_add_study_flow_and_current_mode.dart` | Added `study_sessions.study_flow` (TEXT NOT NULL DEFAULT `'srs_recall_review'`) and `study_sessions.current_mode` (TEXT NULL). Both additive; existing rows migrate to the single-phase recall flow / NULL phase. Migration test: `test/data/migrations/study_flow_current_mode_migration_test.dart`. |
-| v9 | `v9_add_tts_settings.dart` | Added `tts_settings` single-row table (`id`, `auto_play`, `front_language`, `rate`, `pitch`, `volume`, `front_voice_name`). Migration test: `test/data/migrations/tts_settings_migration_test.dart`. |
+| v9 | `v9_add_tts_settings.dart` | Added `tts_settings` single-row table (`id`, `auto_play`, `front_language`, `rate`, `pitch`, `volume`, `front_voice_name`; slider CHECK constraints), WBS 8.4.1. Migration test: `test/data/migrations/v9_add_tts_settings_migration_test.dart`. |
 | v8 | `v8_add_flashcard_pos_and_flag.dart` | Added `flashcards.part_of_speech`, `flashcards.is_flagged`. |
 | v7 | `v7_add_card_events_and_attempt_duration.dart` | Added `card_events` table; `study_attempts.box_before`, `box_after`, `duration_ms`. |
 | v6 | `v6_add_flashcard_progress_last_reset_at.dart` | Added `flashcard_progress.last_reset_at`. |
