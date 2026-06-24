@@ -2533,6 +2533,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong loading your settings.'**
   String get settingsErrorMessage;
+
+  /// App-bar title for the Audio & speech screen (23).
+  ///
+  /// In en, this message translates to:
+  /// **'Audio & speech'**
+  String get audioSpeechTitle;
+
+  /// Overline above the voice-language row.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get audioLanguageOverline;
+
+  /// Voice-language row title + the language picker sheet title.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice language'**
+  String get audioVoiceLanguage;
+
+  /// Overline above the voice list.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice'**
+  String get audioVoiceOverline;
+
+  /// The default (null) voice option.
+  ///
+  /// In en, this message translates to:
+  /// **'System default'**
+  String get audioSystemDefaultVoice;
+
+  /// Overline on the preview card.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get audioPreviewOverline;
+
+  /// Preview play button.
+  ///
+  /// In en, this message translates to:
+  /// **'Play sample'**
+  String get audioPlaySample;
+
+  /// Preview stop button (while playing).
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get audioStop;
+
+  /// Speed (rate) slider label.
+  ///
+  /// In en, this message translates to:
+  /// **'Speed'**
+  String get audioSpeed;
+
+  /// Pitch slider label.
+  ///
+  /// In en, this message translates to:
+  /// **'Pitch'**
+  String get audioPitch;
+
+  /// No-voices state title.
+  ///
+  /// In en, this message translates to:
+  /// **'No voices installed'**
+  String get audioNoVoicesTitle;
+
+  /// No-voices state body.
+  ///
+  /// In en, this message translates to:
+  /// **'Your device has no text-to-speech voices for this language yet.'**
+  String get audioNoVoicesMessage;
+
+  /// Engine-error state title.
+  ///
+  /// In en, this message translates to:
+  /// **'Speech engine unavailable'**
+  String get audioEngineErrorTitle;
+
+  /// Engine-error state body.
+  ///
+  /// In en, this message translates to:
+  /// **'MemoX couldn\'t reach the device\'s text-to-speech engine.'**
+  String get audioEngineErrorMessage;
+
+  /// Busy overlay label while a TTS setting saves.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving…'**
+  String get audioSaving;
+
+  /// Korean voice-language option label.
+  ///
+  /// In en, this message translates to:
+  /// **'Korean'**
+  String get audioLangKorean;
+
+  /// English voice-language option label.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get audioLangEnglish;
+
+  /// Korean TTS preview sample sentence (not translated).
+  ///
+  /// In en, this message translates to:
+  /// **'안녕하세요, 오늘도 공부해요.'**
+  String get audioSampleKorean;
+
+  /// English TTS preview sample sentence (not translated).
+  ///
+  /// In en, this message translates to:
+  /// **'The quick brown fox jumps over the lazy dog.'**
+  String get audioSampleEnglish;
 }
 
 class _AppLocalizationsDelegate

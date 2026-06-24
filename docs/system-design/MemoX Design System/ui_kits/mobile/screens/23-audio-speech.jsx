@@ -35,7 +35,7 @@
   };
 
   const LangRow = ({ lang }) => (
-    <div className="list-card">
+    <div className="list-card" data-mx-node="23-audio-speech/language-row">
       <div className="list-row">
         <span className="icon-tile" style={{ '--tile': 'var(--memox-status-reviewing)' }}><Icon name="languages" /></span>
         <div className="list-row-main"><div className="list-row-title">Voice language</div></div>
@@ -45,16 +45,16 @@
   );
 
   const PreviewCard = ({ sample, playing }) => (
-    <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: S(3) }}>
+    <div className="card" data-mx-node="23-audio-speech/preview-card" style={{ display: 'flex', flexDirection: 'column', gap: S(3) }}>
       <SectionLabel>Preview</SectionLabel>
       <div style={{ fontSize: 'var(--memox-size-h2)', fontWeight: 'var(--memox-weight-semibold)', color: 'var(--memox-text-primary)', fontFamily: 'var(--memox-font-serif)', lineHeight: 1.4 }}>{sample}</div>
       {playing ? (
         <div style={{ display: 'flex', alignItems: 'center', gap: S(3) }}>
-          <button className="pill-btn primary" style={{ flex: 1 }}><Icon name="square" />Stop</button>
+          <button className="pill-btn primary" data-mx-node="23-audio-speech/preview-button" style={{ flex: 1 }}><Icon name="square" />Stop</button>
           <div className="waveform"><span></span><span></span><span></span><span></span><span></span></div>
         </div>
       ) : (
-        <button className="pill-btn secondary" style={{ width: '100%' }}><Icon name="play" />Play sample</button>
+        <button className="pill-btn secondary" data-mx-node="23-audio-speech/preview-button" style={{ width: '100%' }}><Icon name="play" />Play sample</button>
       )}
     </div>
   );
@@ -125,7 +125,7 @@
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: S(2) }}>
             <SectionLabel>Voice</SectionLabel>
-            <div className="list-card">
+            <div className="list-card" data-mx-node="23-audio-speech/voice-list">
               {data.list.map((v, i) => (
                 <div key={v.name}>
                   {i > 0 && <div className="hr inset"></div>}

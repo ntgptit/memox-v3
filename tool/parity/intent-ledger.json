@@ -131,6 +131,14 @@
       "source": "docs/system-design/MemoX Design System/CLAUDE.md (tag meaningful required nodes, not platform chrome) + MxAppBar automaticallyImplyLeading"
     },
     {
+      "screen": "23-audio-speech",
+      "node": "icon-btn",
+      "mx": "MxIconButton",
+      "exceptionKind": "covered",
+      "reason": "The app-bar back arrow is the shared MxAppBar AUTOMATIC leading button (platform back via `automaticallyImplyLeading`), not a screen-specific affordance — the FE never hand-builds or keys it. The Audio & speech bar carries only the back arrow (same rationale as 09/10/22/24/25). The language-row/voice-list/preview-card/preview-button are tagged; voice radio rows are repeated (covered by the tagged voice-list container).",
+      "source": "docs/system-design/MemoX Design System/CLAUDE.md (tag meaningful required nodes, not platform chrome) + MxAppBar automaticallyImplyLeading"
+    },
+    {
       "screen": "21-account-sync",
       "node": "icon-btn",
       "mx": "MxIconButton",

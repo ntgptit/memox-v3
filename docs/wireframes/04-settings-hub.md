@@ -14,8 +14,8 @@ source_specs:
 > card** (signed-out V1, over `AccountController`) + grouped category rows that push the immersive
 > sub-screens: **Learning / Appearance / Language** (with live trailing values — daily goal "N/day",
 > theme name, app-language name — read from their controllers), **Account & sync**, and **About**
-> (the standard about dialog). **Audio & speech is a disabled Future row** (TTS not built, WBS
-> 8.4.1). No fabricated account/version data. **Future (parked):** the account card's
+> (the standard about dialog). **Audio & speech** is now a working row → `/settings/audio-speech`
+> (kit 23, WBS 8.4.2). No fabricated account/version data. **Future (parked):** the account card's
 > Populated / Signing-in / Sync-error states (avatar/email/Synced chip, sync banner) need the
 > Drive-sync infra (WBS 8.6.x); V1 always renders the signed-out card. The behaviour/copy below that
 > describes those signed-in/sync states is the **target** for that Future work.
@@ -31,7 +31,7 @@ Prompt 21 (2026-05-31) verified Settings Hub as a navigation owner, not a settin
 
 > **Release rule (WBS 8.1.2) — satisfied by the V1 build.** The hub shows **no fabricated state**:
 > the account card reads the real `AccountLinkStatus` (V1 → "Not signed in"), the Audio & speech row
-> is a disabled "Soon" affordance, and no fake app version is shown (the About dialog reports the
+> navigates to the working `/settings/audio-speech` screen (kit 23), and no fake app version is shown (the About dialog reports the
 > real version; a row-level version value via `package_info` is a Future enhancement). A user never
 > sees fabricated state presented as their own.
 
@@ -43,7 +43,7 @@ Prompt 21 (2026-05-31) verified Settings Hub as a navigation owner, not a settin
 | Language row                                     | Current (kit 25) | `/settings/language` (`LanguageSettingsScreen`, app-language picker) is a tappable Language hub row. |
 | About row                                        | Current (dialog) / Target (bottom-sheet) | Current code opens Flutter's `AboutDialog`. The About bottom-sheet remains release-polish target behavior.                              |
 | Hub-owned mutation                               | Current absent                           | Hub rows navigate only. Account/Drive, study defaults, TTS, and tag mutation live in their sub-screens/viewmodels.                      |
-| Subtitle / trailing values                       | Current — real data, no mock             | Account card = real `AccountLinkStatus` (V1 signed-out). Learning/Appearance/Language rows show live trailing values from their controllers (daily goal "N/day", theme name, language name). Audio & speech = "Soon" (Future). No fabricated account/version data. |
+| Subtitle / trailing values                       | Current — real data, no mock             | Account card = real `AccountLinkStatus` (V1 signed-out). Learning/Appearance/Language rows show live trailing values from their controllers (daily goal "N/day", theme name, language name). Audio & speech navigates to `/settings/audio-speech` (kit 23). No fabricated account/version data. |
 | Async state                                      | Current                                  | Provider-backed rows keep rows visible and use row-level skeleton/error states; the hub has no full-screen empty state.                 |
 
 ## Layout

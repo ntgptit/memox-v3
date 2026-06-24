@@ -86,9 +86,7 @@ class SettingsBody extends ConsumerWidget {
                 tint: colors.statusReviewing,
                 title: l10n.settingsRowAudio,
                 meta: l10n.settingsRowAudioMeta,
-                // Audio & speech (TTS) is Future — WBS 8.4.1 (engine + migration).
-                value: l10n.settingsValueSoon,
-                onTap: null,
+                onTap: () => context.pushNamed(RouteNames.settingsAudioSpeech),
               ),
               const MxDivider(indent: _rowDividerIndent),
               _SettingsRow(

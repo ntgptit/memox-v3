@@ -271,6 +271,24 @@
         "node": "card"
       }
     ],
+    "23-audio-speech": [
+      {
+        "key": "mx-node:23-audio-speech/language-row",
+        "node": "list-card"
+      },
+      {
+        "key": "mx-node:23-audio-speech/voice-list",
+        "node": "list-card"
+      },
+      {
+        "key": "mx-node:23-audio-speech/preview-card",
+        "node": "card"
+      },
+      {
+        "key": "mx-node:23-audio-speech/preview-button",
+        "node": "pill-btn"
+      }
+    ],
     "24-appearance": [
       {
         "key": "mx-node:24-appearance/theme-list",

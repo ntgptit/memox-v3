@@ -1458,4 +1458,64 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get settingsErrorMessage =>
       'Something went wrong loading your settings.';
+
+  @override
+  String get audioSpeechTitle => 'Audio & speech';
+
+  @override
+  String get audioLanguageOverline => 'Language';
+
+  @override
+  String get audioVoiceLanguage => 'Voice language';
+
+  @override
+  String get audioVoiceOverline => 'Voice';
+
+  @override
+  String get audioSystemDefaultVoice => 'System default';
+
+  @override
+  String get audioPreviewOverline => 'Preview';
+
+  @override
+  String get audioPlaySample => 'Play sample';
+
+  @override
+  String get audioStop => 'Stop';
+
+  @override
+  String get audioSpeed => 'Speed';
+
+  @override
+  String get audioPitch => 'Pitch';
+
+  @override
+  String get audioNoVoicesTitle => 'No voices installed';
+
+  @override
+  String get audioNoVoicesMessage =>
+      'Your device has no text-to-speech voices for this language yet.';
+
+  @override
+  String get audioEngineErrorTitle => 'Speech engine unavailable';
+
+  @override
+  String get audioEngineErrorMessage =>
+      'MemoX couldn\'t reach the device\'s text-to-speech engine.';
+
+  @override
+  String get audioSaving => 'Saving…';
+
+  @override
+  String get audioLangKorean => 'Korean';
+
+  @override
+  String get audioLangEnglish => 'English';
+
+  @override
+  String get audioSampleKorean => '안녕하세요, 오늘도 공부해요.';
+
+  @override
+  String get audioSampleEnglish =>
+      'The quick brown fox jumps over the lazy dog.';
 }
