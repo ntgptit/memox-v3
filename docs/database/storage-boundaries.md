@@ -165,6 +165,7 @@ When in doubt about whether to use Stream or Future: use Stream.
 | Goal disabled since | SharedPreferences (`lib/data/datasources/local/preferences/learning_settings_store.dart`) | `learning.goalDisabledSince` | `null` | Local `YYYY-MM-DD`; cleared when the goal is enabled. |
 | Theme mode | SharedPreferences (`lib/data/datasources/local/preferences/appearance_settings_store.dart`) | `appearance.themeMode` | `system` | `AppThemeMode.storageValue` (`system`/`light`/`dark`); unknown/missing recovers to `system`. Drives `MaterialApp.themeMode`. |
 | App language | SharedPreferences (`lib/data/datasources/local/preferences/language_settings_store.dart`) | `language.appLanguage` | `system` | `AppLanguage.storageValue` (`system`/`en`/`vi`); unknown/missing recovers to `system`. Drives `MaterialApp.locale` (`system` → `null` = device locale). |
+| Cloud account link | SharedPreferences (`lib/data/datasources/local/preferences/cloud_account_store.dart`) | `account.cloudAccountLink` | `null` | The `CloudAccountLink` JSON payload (never Drift — chicken-and-egg with the per-account DB). V1 display-only never writes it → status `signedOut`; full link JSON + parsing lands with interactive sign-in (WBS 8.6.1). |
 
 **Decision table:**
 

@@ -2377,6 +2377,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong loading your language setting.'**
   String get languageErrorMessage;
+
+  /// App-bar title for the Account & Drive sync screen (21).
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get accountTitle;
+
+  /// Sign-in hero title on the signed-out account screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to sync'**
+  String get accountSignInTitle;
+
+  /// Sign-in hero subtitle on the signed-out account screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Back up your decks to Google Drive and restore them on any device.'**
+  String get accountSignInMessage;
+
+  /// Sign-in CTA (disabled in V1 — Google sign-in is Future).
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Google'**
+  String get accountContinueWithGoogle;
+
+  /// Error-state title on the Account screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load account'**
+  String get accountErrorTitle;
+
+  /// Error-state body on the Account screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong loading your account status.'**
+  String get accountErrorMessage;
 }
 
 class _AppLocalizationsDelegate

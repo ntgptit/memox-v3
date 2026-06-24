@@ -381,5 +381,11 @@
   "languageVietnameseDesc": "Vietnamese",
   "languageRestartNote": "Thay đổi được áp dụng ngay trên toàn ứng dụng.",
   "languageErrorTitle": "Không tải được ngôn ngữ",
-  "languageErrorMessage": "Đã xảy ra lỗi khi tải cài đặt ngôn ngữ của bạn."
+  "languageErrorMessage": "Đã xảy ra lỗi khi tải cài đặt ngôn ngữ của bạn.",
+  "accountTitle": "Tài khoản",
+  "accountSignInTitle": "Đăng nhập để đồng bộ",
+  "accountSignInMessage": "Sao lưu bộ thẻ của bạn lên Google Drive và khôi phục trên mọi thiết bị.",
+  "accountContinueWithGoogle": "Tiếp tục với Google",
+  "accountErrorTitle": "Không tải được tài khoản",
+  "accountErrorMessage": "Đã xảy ra lỗi khi tải trạng thái tài khoản của bạn."
 }

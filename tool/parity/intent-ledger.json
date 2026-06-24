@@ -129,6 +129,14 @@
       "exceptionKind": "covered",
       "reason": "The app-bar back arrow is the shared MxAppBar AUTOMATIC leading button (platform back via `automaticallyImplyLeading`), not a screen-specific affordance — the FE never hand-builds or keys it. The Language bar carries only the back arrow, so this lone icon-btn surfaces as a singleton (same rationale as 09/10/22/24). The language radio rows are repeated (covered by the tagged `language-list` container).",
       "source": "docs/system-design/MemoX Design System/CLAUDE.md (tag meaningful required nodes, not platform chrome) + MxAppBar automaticallyImplyLeading"
+    },
+    {
+      "screen": "21-account-sync",
+      "node": "icon-btn",
+      "mx": "MxIconButton",
+      "exceptionKind": "covered",
+      "reason": "The app-bar back arrow is the shared MxAppBar AUTOMATIC leading button (platform back via `automaticallyImplyLeading`), not a screen-specific affordance — the FE never hand-builds or keys it. The Account bar carries only the back arrow (same rationale as 09/10/22/24/25). V1 builds only the signed-out hero (signin-card + signin-button, both tagged); the 8 signed-in/Drive-sync states (and their backup/restore/sign-out controls) are Future (WBS 8.6.1/8.6.2), parked in parity-map.",
+      "source": "docs/system-design/MemoX Design System/CLAUDE.md (tag meaningful required nodes, not platform chrome) + MxAppBar automaticallyImplyLeading"
     }
   ]
 }

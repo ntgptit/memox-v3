@@ -35,8 +35,9 @@
     if (variant === 'signed-out' || variant === 'failed') {
       return (
         <HeroCard icon="cloud" tint="var(--memox-primary)" title="Sign in to sync"
+          node="21-account-sync/signin-card"
           desc="Back up your decks to Google Drive and restore them on any device.">
-          <PillBtn variant="primary" icon="log-in" full>Continue with Google</PillBtn>
+          <PillBtn variant="primary" icon="log-in" full data-mx-node="21-account-sync/signin-button">Continue with Google</PillBtn>
         </HeroCard>
       );
     }

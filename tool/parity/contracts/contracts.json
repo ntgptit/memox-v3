@@ -229,6 +229,16 @@
         "node": "list-card"
       }
     ],
+    "21-account-sync": [
+      {
+        "key": "mx-node:21-account-sync/signin-card",
+        "node": "card"
+      },
+      {
+        "key": "mx-node:21-account-sync/signin-button",
+        "node": "pill-btn"
+      }
+    ],
     "22-learning-settings": [
       {
         "key": "mx-node:22-learning-settings/goal-card",

@@ -251,6 +251,28 @@ enum AppLanguage {
 `AppLanguage.fromStorage`. See
 `docs/contracts/repository-contracts/language-settings-repository.md`.
 
+### AccountLinkStatus
+
+The Google-account link status (kit screen 21 — Account sync). Canonical model:
+`docs/business/account-sync/account-sync.md`. V1 (display-only, WBS 8.5.1) only
+ever resolves `signedOut`; the rest land with interactive sign-in + Drive sync
+(WBS 8.6.1/8.6.2).
+
+```dart
+enum AccountLinkStatus {
+  signedOut,                // No link, or signed out
+  signedIn,                 // Linked + Drive authorized
+  needsDriveAuthorization,  // Linked but Drive scope missing/revoked
+  unconfigured,             // No OAuth config for the platform
+  unsupported,              // Platform has no Google sign-in
+  error,                    // Last operation failed
+}
+```
+
+**Storage:** the `CloudAccountLink` JSON in SharedPreferences
+(`account.cloudAccountLink`); presence → status. See
+`docs/contracts/repository-contracts/account-repository.md`.
+
 ### SessionStatus
 
 Lifecycle of a study session.
