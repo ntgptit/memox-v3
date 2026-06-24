@@ -45,17 +45,17 @@
       <div className="app">
         <div className="appbar"><span className="appbar-title" style={{ flex: 1 }}>Stats</span></div>
         <div style={{ flex: 1, overflowY: 'auto', padding: `${S(2)} var(--memox-space-screen) var(--memox-space-6)`, display: 'flex', flexDirection: 'column', gap: 'var(--memox-gap-section)' }}>
-          <div className="card">
+          <div className="card" data-mx-node="18-stats/week-card">
             <div className="section-head" style={{ marginBottom: S(4) }}>
               <div className="ov"><Icon name="calendar-days" />Cards this week</div>
               <span className="title" style={{ fontSize: 'var(--memox-fs-label-large)', fontVariantNumeric: 'tabular-nums' }}>{total}</span>
             </div>
-            <BarChart data={WEEK} />
+            <BarChart data={WEEK} node="18-stats/week-chart" />
           </div>
 
           <div>
-            <SectionHead title="Per-deck mastery" />
-            <div className="list-card" style={{ marginTop: S(2) }}>
+            <SectionHead title="Per-deck mastery" node="18-stats/mastery-section" />
+            <div className="list-card" data-mx-node="18-stats/mastery-list" style={{ marginTop: S(2) }}>
               {DECKS.map((d, i) => (
                 <div key={d.name}>
                   {i > 0 && <div className="hr inset"></div>}

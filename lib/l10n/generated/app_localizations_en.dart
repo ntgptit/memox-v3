@@ -851,4 +851,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studyFillHint => 'Hint';
+
+  @override
+  String get statsTitle => 'Stats';
+
+  @override
+  String get statsCardsThisWeekLabel => 'CARDS THIS WEEK';
+
+  @override
+  String get statsPerDeckMasteryTitle => 'Per-deck mastery';
+
+  @override
+  String statsMasteryPercent(int percent) {
+    return '$percent%';
+  }
+
+  @override
+  String statsCardsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cards',
+      one: '1 card',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get statsNoDecksHint => 'No decks to show yet';
+
+  @override
+  String get statsLoadFailedTitle => 'Couldn\'t load your stats';
+
+  @override
+  String get statsLoadFailedMessage =>
+      'Something went wrong loading your stats.';
 }

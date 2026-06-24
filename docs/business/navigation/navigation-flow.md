@@ -22,16 +22,18 @@ applies_to: routing, navigation, deep links
 
 ## Top-level destinations
 
-Bottom-nav order (design redesign): **Home · Library · Search · Progress · Settings** (five tabs).
+Bottom-nav order (design redesign): **Home · Library · Search · Stats · Settings** (five tabs).
 Search is a primary, thumb-reachable destination, not a top-app-bar icon; the nav bar splits its
-items evenly (`.bottom-nav-item flex:1 1 0`).
+items evenly (`.bottom-nav-item flex:1 1 0`). The fourth tab is labelled **Stats** (bar-chart icon)
+per the kit mock + `docs/business/system/overview.md`; its route keeps the internal `progress`
+name/path.
 
 | Path        | Responsibility           | Shell visible |
 |-------------|--------------------------|---------------|
 | `/home`     | Dashboard                | Yes           |
 | `/library`  | Library                  | Yes           |
 | `/search`   | Global search (folders/decks/flashcards), bottom search dock | Yes |
-| `/progress` | Progress                 | Yes           |
+| `/progress` | Stats tab — `StatsScreen` (weekly activity + per-deck mastery; `docs/wireframes/18-stats.md`). The deeper Progress analytics detail (screen 19) is pending. | Yes |
 | `/settings` | Settings hub             | Yes           |
 
 Current V1 app boot redirects `/` to `RouteDefaults.initialLocation = RoutePaths.library`. This is

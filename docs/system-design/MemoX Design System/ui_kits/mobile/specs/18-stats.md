@@ -79,6 +79,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       spacing: pad:8/20/24/20
       position: layout_hint:scroll
       - node: card
+        id: 18-stats/week-card
         mx: MxCard
         box:
           abs: [21,77 348x212]
@@ -111,6 +112,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
               rel: [290,0 24x18]
             style: font:14/700 color:text tracking:-0.3
         - node: div
+          id: 18-stats/week-chart
           box:
             abs: [38,128 314x144]
             rel: [17,51 314x144]
@@ -331,6 +333,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           abs: [21,305 348x306]
           rel: [20,236 348x306]
         - node: section-head
+          id: 18-stats/mastery-section
           mx: MxSectionHeader
           box:
             abs: [21,305 348x21]
@@ -343,6 +346,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
               rel: [0,0 137x21]
             style: font:16/700 color:text tracking:-0.3
         - node: list-card
+          id: 18-stats/mastery-list
           box:
             abs: [21,334 348x277]
             rel: [0,29 348x277]

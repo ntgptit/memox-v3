@@ -249,5 +249,13 @@
   "studyFillRetry": "Thử lại",
   "studyFillNext": "Tiếp",
   "studyFillMarkCorrect": "Tôi đã đúng",
-  "studyFillHint": "Gợi ý"
+  "studyFillHint": "Gợi ý",
+  "statsTitle": "Thống kê",
+  "statsCardsThisWeekLabel": "THẺ TUẦN NÀY",
+  "statsPerDeckMasteryTitle": "Mức thành thạo theo bộ thẻ",
+  "statsMasteryPercent": "{percent}%",
+  "statsCardsCount": "{count, plural, other{{count} thẻ}}",
+  "statsNoDecksHint": "Chưa có bộ thẻ nào để hiển thị",
+  "statsLoadFailedTitle": "Không tải được thống kê",
+  "statsLoadFailedMessage": "Đã xảy ra lỗi khi tải thống kê của bạn."
 }

@@ -833,4 +833,38 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyFillHint => 'Gợi ý';
+
+  @override
+  String get statsTitle => 'Thống kê';
+
+  @override
+  String get statsCardsThisWeekLabel => 'THẺ TUẦN NÀY';
+
+  @override
+  String get statsPerDeckMasteryTitle => 'Mức thành thạo theo bộ thẻ';
+
+  @override
+  String statsMasteryPercent(int percent) {
+    return '$percent%';
+  }
+
+  @override
+  String statsCardsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count thẻ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get statsNoDecksHint => 'Chưa có bộ thẻ nào để hiển thị';
+
+  @override
+  String get statsLoadFailedTitle => 'Không tải được thống kê';
+
+  @override
+  String get statsLoadFailedMessage =>
+      'Đã xảy ra lỗi khi tải thống kê của bạn.';
 }

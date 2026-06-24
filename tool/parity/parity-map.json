@@ -144,6 +144,13 @@
         { "kit": "goal-off", "scope": "needs-schema", "reason": "Goal & streak block is a V1-slice Future (engagement read model)" },
         { "kit": "tough-empty", "scope": "needs-schema", "reason": "Keep-studying/tough-cards is Future (SRS due-projection)" }
       ]
+    },
+    {
+      "id": "18-stats",
+      "title": "Stats",
+      "states": [
+        { "kit": "default", "golden": "test/presentation/features/stats/goldens/stats_default", "scope": "current" }
+      ]
     }
   ],
   "noFe": [
@@ -152,7 +159,6 @@
     "09-flashcard-history",
     "10-deck-import",
     "11-tag-management",
-    "18-stats",
     "19-progress",
     "20-settings",
     "21-account-sync",

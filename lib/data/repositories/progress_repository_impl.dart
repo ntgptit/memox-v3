@@ -2,9 +2,12 @@ import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/data/datasources/local/daos/progress_dao.dart';
 import 'package:memox/domain/models/box_distribution.dart';
+import 'package:memox/domain/models/deck_mastery.dart';
 import 'package:memox/domain/models/due_summary.dart';
 import 'package:memox/domain/models/progress_read_model.dart';
+import 'package:memox/domain/models/stats_overview.dart';
 import 'package:memox/domain/models/study_statistics.dart';
+import 'package:memox/domain/models/week_activity.dart';
 import 'package:memox/domain/repositories/progress_repository.dart';
 import 'package:memox/domain/srs/srs_box.dart';
 
@@ -142,4 +145,115 @@ class ProgressRepositoryImpl implements ProgressRepository {
       ),
     );
   }
+
+  @override
+  Future<Result<StatsOverview>> loadStatsOverview({required int now}) async {
+    try {
+      final WeekActivity week = await _loadWeekActivity(now);
+      final List<DeckMastery> decks = await _loadDeckMastery();
+      return (
+        failure: null,
+        data: StatsOverview(weekActivity: week, deckMastery: decks),
+      );
+    } catch (error) {
+      return (
+        failure: Failure.storage(
+          operation: StorageOp.read,
+          table: 'study_attempts',
+          cause: error.toString(),
+        ),
+        data: null,
+      );
+    }
+  }
+
+  /// The current local week's daily review counts (Monday → Sunday), bucketed in
+  /// Dart from raw attempt timestamps so the `'localtime'`-NULL sqlite quirk on
+  /// Windows tests never bites (Stats decision row P20).
+  Future<WeekActivity> _loadWeekActivity(int now) async {
+    final DateTime nowLocal = DateTime.fromMillisecondsSinceEpoch(
+      now,
+    ).toLocal();
+    // Monday of the current local week, at local midnight.
+    final DateTime weekStart = DateTime(
+      nowLocal.year,
+      nowLocal.month,
+      nowLocal.day - (nowLocal.weekday - DateTime.monday),
+    );
+    final List<int> times = await _dao.attemptTimesSince(
+      weekStart.millisecondsSinceEpoch,
+    );
+
+    final List<int> counts = List<int>.filled(_daysPerWeek, 0);
+    for (final int t in times) {
+      final DateTime d = DateTime.fromMillisecondsSinceEpoch(t).toLocal();
+      final int index = _weekdayIndex(
+        weekStart,
+        DateTime(d.year, d.month, d.day),
+      );
+      if (index >= 0 && index < _daysPerWeek) {
+        counts[index]++;
+      }
+    }
+
+    return WeekActivity(
+      days: <DayActivity>[
+        for (int i = 0; i < _daysPerWeek; i++)
+          () {
+            // Day-arithmetic via the constructor normalizes across month/DST.
+            final DateTime day = DateTime(
+              weekStart.year,
+              weekStart.month,
+              weekStart.day + i,
+            );
+            return DayActivity(
+              date: day,
+              weekday: day.weekday,
+              count: counts[i],
+            );
+          }(),
+      ],
+    );
+  }
+
+  /// Index (0..6, Monday-based) of [day] within the week starting [weekStart],
+  /// matched by calendar date so a DST hour shift can't miscount the bucket.
+  int _weekdayIndex(DateTime weekStart, DateTime day) {
+    for (int i = 0; i < _daysPerWeek; i++) {
+      final DateTime wd = DateTime(
+        weekStart.year,
+        weekStart.month,
+        weekStart.day + i,
+      );
+      if (wd.year == day.year && wd.month == day.month && wd.day == day.day) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  Future<List<DeckMastery>> _loadDeckMastery() async {
+    final List<DeckMasteryRow> rows = await _dao.deckMasteryRows();
+    return <DeckMastery>[
+      for (final DeckMasteryRow row in rows)
+        DeckMastery(
+          deckId: row.deckId,
+          deckName: row.deckName,
+          masteryFraction: _masteryFraction(row.avgBox),
+        ),
+    ];
+  }
+
+  /// Maps an average Leitner box onto a 0..1 mastery fraction: box `SrsBox.min`
+  /// → 0.0, box `SrsBox.max` → 1.0 (Stats decision row P21).
+  double _masteryFraction(double avgBox) {
+    const int span = SrsBox.max - SrsBox.min;
+    if (span <= 0) {
+      return 0;
+    }
+    return ((avgBox - SrsBox.min) / span).clamp(0.0, 1.0);
+  }
+
+  /// Days in the Stats weekly chart (Monday → Sunday).
+  static const int _daysPerWeek = 7;
 }

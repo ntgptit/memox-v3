@@ -528,5 +528,21 @@
   "studyFillMarkCorrect": "Mark correct",
   "@studyFillMarkCorrect": { "description": "Link on Fill wrong-feedback that overrides the answer to a recovered grade." },
   "studyFillHint": "Hint",
-  "@studyFillHint": { "description": "Button on the Fill screen that reveals one more leading character of the answer (caps the grade at recovered)." }
+  "@studyFillHint": { "description": "Button on the Fill screen that reveals one more leading character of the answer (caps the grade at recovered)." },
+  "statsTitle": "Stats",
+  "@statsTitle": { "description": "Title for the Stats screen and its bottom-nav tab (screen 18)." },
+  "statsCardsThisWeekLabel": "CARDS THIS WEEK",
+  "@statsCardsThisWeekLabel": { "description": "Overline (all-caps) label above the weekly review-activity column chart on the Stats screen." },
+  "statsPerDeckMasteryTitle": "Per-deck mastery",
+  "@statsPerDeckMasteryTitle": { "description": "Section header above the per-deck mastery list on the Stats screen." },
+  "statsMasteryPercent": "{percent}%",
+  "@statsMasteryPercent": { "description": "Trailing mastery percent on a per-deck mastery row.", "placeholders": { "percent": { "type": "int" } } },
+  "statsCardsCount": "{count, plural, =1{1 card} other{{count} cards}}",
+  "@statsCardsCount": { "description": "Card count used in the Stats weekly-chart accessibility label.", "placeholders": { "count": { "type": "int" } } },
+  "statsNoDecksHint": "No decks to show yet",
+  "@statsNoDecksHint": { "description": "Empty hint inside the per-deck mastery card when no deck has cards yet." },
+  "statsLoadFailedTitle": "Couldn't load your stats",
+  "@statsLoadFailedTitle": { "description": "Stats screen error-state title." },
+  "statsLoadFailedMessage": "Something went wrong loading your stats.",
+  "@statsLoadFailedMessage": { "description": "Stats screen error-state body." }
 }

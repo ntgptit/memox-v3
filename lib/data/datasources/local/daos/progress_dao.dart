@@ -12,6 +12,14 @@ typedef BoxCountRow = ({int boxNumber, int cardCount});
 /// The attempt rollup from the study-statistics query (WBS 7.3.1).
 typedef AttemptStatsRow = ({int total, int forgot, int? lastStudiedAt});
 
+/// One deck's average-box row from the per-deck mastery query (Stats, screen 18).
+typedef DeckMasteryRow = ({
+  String deckId,
+  String deckName,
+  double avgBox,
+  int cardCount,
+});
+
 /// Thin Drift accessor for the progress due-summary query (WBS 7.1.1).
 ///
 /// No business logic here (`docs/database/drift-guide.md`): runs the single
@@ -53,5 +61,25 @@ class ProgressDao extends DatabaseAccessor<AppDatabase>
     final AttemptStatisticsResult row = await attemptStatistics().getSingle();
     final int? last = await lastAttemptTime().getSingleOrNull();
     return (total: row.total, forgot: row.forgot, lastStudiedAt: last);
+  }
+
+  /// Raw attempt timestamps (epoch ms) at or after [start] for the Stats weekly
+  /// chart; the repository buckets them into local days (Stats, screen 18).
+  Future<List<int>> attemptTimesSince(int start) => attemptsSince(start).get();
+
+  /// Per-deck average Leitner box (only decks with cards); the repository maps
+  /// `avgBox` onto a 0..1 mastery fraction (Stats, screen 18).
+  Future<List<DeckMasteryRow>> deckMasteryRows() async {
+    final List<DeckMasteryResult> rows = await deckMastery().get();
+    return <DeckMasteryRow>[
+      for (final DeckMasteryResult row in rows)
+        (
+          deckId: row.deckId,
+          deckName: row.deckName,
+          // AVG over a non-empty group is non-null; coalesce defensively.
+          avgBox: row.avgBox ?? 0,
+          cardCount: row.cardCount,
+        ),
+    ];
   }
 }

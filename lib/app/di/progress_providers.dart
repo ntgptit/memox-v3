@@ -5,6 +5,7 @@ import 'package:memox/domain/repositories/progress_repository.dart';
 import 'package:memox/domain/usecases/progress/load_box_distribution_usecase.dart';
 import 'package:memox/domain/usecases/progress/load_due_summary_usecase.dart';
 import 'package:memox/domain/usecases/progress/load_progress_read_model_usecase.dart';
+import 'package:memox/domain/usecases/progress/load_stats_overview_usecase.dart';
 import 'package:memox/domain/usecases/progress/load_study_statistics_usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -41,3 +42,7 @@ LoadProgressReadModelUseCase loadProgressReadModelUseCase(Ref ref) =>
     LoadProgressReadModelUseCase(
       repository: ref.watch(progressRepositoryProvider),
     );
+
+@riverpod
+LoadStatsOverviewUseCase loadStatsOverviewUseCase(Ref ref) =>
+    LoadStatsOverviewUseCase(repository: ref.watch(progressRepositoryProvider));

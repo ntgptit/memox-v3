@@ -17,7 +17,7 @@ Behavior branches are split into per-feature files. Read only the file(s) your t
 | `docs/decision-tables/study-srs.md` | Study modes, SRS, Bury/Suspend, Resume, Result | S1–S79, BS1–BS16, R1–R18, RES1–RES8 |
 | `docs/decision-tables/tags-bulk-export.md` | Tags, Bulk ops, Export | TG1–TG11, BK1–BK8, EX1–EX7 |
 | `docs/decision-tables/search.md` | Global + scope-local search | SR1–SR10, SR-rank, SR-cap, SR-empty, SR-err |
-| `docs/decision-tables/progress-history.md` | Progress, Card history, Engagement | P1–P19, H1–H9, EN1–EN18 |
+| `docs/decision-tables/progress-history.md` | Progress, Stats, Card history, Engagement | P1–P21, H1–H9, EN1–EN18 |
 | `docs/decision-tables/navigation-ui.md` | Navigation, UI state | N1–N13, U1–U5 |
 | `docs/decision-tables/tts.md` | TTS / Audio playback | T1–T15 |
 | `docs/decision-tables/account-sync.md` | Google account, Drive sync | AC1–AC12, SY1–SY24 |
