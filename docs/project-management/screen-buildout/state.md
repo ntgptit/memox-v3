@@ -3,7 +3,7 @@
 Live cursor for the 12-screen FE+BE build-out. Recipe + done-bar: `plan.md` (same dir).
 One screen per iteration, in order. Update this table as each screen lands.
 
-**NEXT: 25-language** (kit screen 25, 3 states). 19-progress is 🟡 blocked:Q5 (engagement-approval gate) — skipped.
+**NEXT: 23-audio-speech** (kit screen 23 — new TTS BE). 19-progress is 🟡 blocked:Q5 (engagement-approval gate) — skipped.
 
 ## Status
 
@@ -16,7 +16,7 @@ One screen per iteration, in order. Update this table as each screen lands.
 | 5 | 10-deck-import | ✅ done | [#35](https://github.com/ntgptit/memox-v3/pull/35) | File-picker wizard (top-level immersive); 9-state machine (empty→file→parse→preview→commit→success/partial/failed). Reused 6.2.x/6.4.1 BE. Parked Q7–Q8. |
 | 6 | 22-learning-settings | ✅ done | [#36](https://github.com/ntgptit/memox-v3/pull/36) | Daily-goal card (top-level immersive `/settings/learning`); toggle + new-card limit slider/chips over `LearningSettings`; new shared `MxSwitch`/`MxSlider`. Reused 8.2.1 BE. Reminder card = disabled Future affordance. Parked Q9–Q10. |
 | 7 | 24-appearance | ✅ done | [#37](https://github.com/ntgptit/memox-v3/pull/37) | Theme picker (top-level immersive `/settings/appearance`); Light/Dark/System radio + themed swatches; **new SharedPreferences theme BE** (`AppThemeMode`) wired to `MaterialApp.themeMode` via app-level `AppearanceController`; new shared `MxRadio`. No parked questions. |
-| 8 | 25-language | ⬜ todo | — | |
+| 8 | 25-language | ✅ done | [#38](https://github.com/ntgptit/memox-v3/pull/38) | App-language picker (top-level immersive `/settings/language`); System/English/Tiếng Việt radio + icon leads; **new SharedPreferences language BE** (`AppLanguage`) wired to `MaterialApp.locale` (live re-localize) via app-level `LanguageController`. Reused `MxRadio`. WBS 8.8.1 now fully done. Parked Q11–Q12. |
 | 9 | 23-audio-speech | ⬜ todo | — | new TTS BE |
 | 10 | 20-settings | ⬜ todo | — | after 21–25 routes exist |
 | 11 | 21-account-sync | ⬜ todo | — | new Drive-sync BE (largest) |
@@ -39,6 +39,18 @@ default**, and keep going. The user resolves these in one pass afterwards.
 Format (newest first): `Q<n> (<screen>) — <question>. Default taken: <what you did so the
 loop could continue>. Why/source: <ref>. [blocking? yes/no]`
 
+- **Q12 (25-language) — The kit-25 footnote says "Changing the language restarts the app.", but
+  the FE re-localizes live.** Default taken: the FE wires `MaterialApp.locale` reactively
+  (`AppLanguageX.locale`), so changing the language applies **immediately, no restart**; the footnote
+  copy is "Changes apply across the app right away." (accurate). The kit shot/spec keep the original
+  "restarts" copy (not regenerated to avoid a 280-shot pass); the divergence is recorded in
+  `tool/parity/intent-ledger.json` (behavior exception). Why/source: `lib/app/memox_app.dart`
+  (locale wiring), kit-25 footnote. [blocking? no]
+- **Q11 (25-language) — The kit-25 System row subtitle shows the resolved device locale
+  ("English (United States)"), but resolving + pretty-printing the live device locale is out of
+  scope.** Default taken: the System row subtitle is a static localized "Match device language"
+  (parallel to the appearance System option). The resolved-locale display name is Future. Why/source:
+  kit-25 system row; no device-locale display-name resolver in scope. [blocking? no]
 - **Q10 (22-learning-settings) — The kit-22 mock has a Daily-reminder card with `reminder-on`
   (time + repeat rows) and `perm-denied` (OS-permission banner + open-settings) states, but neither
   is buildable now.** Default taken: the reminder card renders as a **disabled Future affordance**
