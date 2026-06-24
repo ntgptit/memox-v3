@@ -1369,4 +1369,66 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get accountErrorMessage =>
       'Đã xảy ra lỗi khi tải trạng thái tài khoản của bạn.';
+
+  @override
+  String get settingsNotSignedIn => 'Chưa đăng nhập';
+
+  @override
+  String get settingsSignInPrompt => 'Đăng nhập để sao lưu bộ thẻ của bạn';
+
+  @override
+  String get settingsSignIn => 'Đăng nhập';
+
+  @override
+  String get settingsRowLearning => 'Học tập';
+
+  @override
+  String get settingsRowLearningMeta => 'Mục tiêu ngày, nhắc nhở';
+
+  @override
+  String get settingsRowAudio => 'Âm thanh & giọng nói';
+
+  @override
+  String get settingsRowAudioMeta => 'Giọng đọc văn bản';
+
+  @override
+  String get settingsRowAppearance => 'Giao diện';
+
+  @override
+  String get settingsRowAppearanceMeta => 'Chủ đề';
+
+  @override
+  String get settingsRowLanguage => 'Ngôn ngữ';
+
+  @override
+  String get settingsRowLanguageMeta => 'Ngôn ngữ ứng dụng';
+
+  @override
+  String get settingsRowAccount => 'Tài khoản & đồng bộ';
+
+  @override
+  String get settingsRowAccountMeta => 'Sao lưu và khôi phục';
+
+  @override
+  String get settingsRowAbout => 'Giới thiệu';
+
+  @override
+  String get settingsRowAboutMeta => 'Phiên bản, giấy phép';
+
+  @override
+  String settingsGoalValue(int count) {
+    return '$count/ngày';
+  }
+
+  @override
+  String get settingsValueOff => 'Tắt';
+
+  @override
+  String get settingsValueSoon => 'Sắp có';
+
+  @override
+  String get settingsErrorTitle => 'Không tải được cài đặt';
+
+  @override
+  String get settingsErrorMessage => 'Đã xảy ra lỗi khi tải cài đặt của bạn.';
 }

@@ -1395,4 +1395,67 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get accountErrorMessage =>
       'Something went wrong loading your account status.';
+
+  @override
+  String get settingsNotSignedIn => 'Not signed in';
+
+  @override
+  String get settingsSignInPrompt => 'Sign in to back up your decks';
+
+  @override
+  String get settingsSignIn => 'Sign in';
+
+  @override
+  String get settingsRowLearning => 'Learning';
+
+  @override
+  String get settingsRowLearningMeta => 'Daily goal, reminders';
+
+  @override
+  String get settingsRowAudio => 'Audio & speech';
+
+  @override
+  String get settingsRowAudioMeta => 'Text-to-speech voices';
+
+  @override
+  String get settingsRowAppearance => 'Appearance';
+
+  @override
+  String get settingsRowAppearanceMeta => 'Theme';
+
+  @override
+  String get settingsRowLanguage => 'Language';
+
+  @override
+  String get settingsRowLanguageMeta => 'App language';
+
+  @override
+  String get settingsRowAccount => 'Account & sync';
+
+  @override
+  String get settingsRowAccountMeta => 'Backup and restore';
+
+  @override
+  String get settingsRowAbout => 'About';
+
+  @override
+  String get settingsRowAboutMeta => 'Version, licenses';
+
+  @override
+  String settingsGoalValue(int count) {
+    return '$count/day';
+  }
+
+  @override
+  String get settingsValueOff => 'Off';
+
+  @override
+  String get settingsValueSoon => 'Soon';
+
+  @override
+  String get settingsErrorTitle => 'Couldn\'t load settings';
+
+  @override
+  String get settingsErrorMessage =>
+      'Something went wrong loading your settings.';
 }

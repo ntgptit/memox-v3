@@ -34,7 +34,7 @@ name/path.
 | `/library`  | Library                  | Yes           |
 | `/search`   | Global search (folders/decks/flashcards), bottom search dock | Yes |
 | `/progress` | Stats tab — `StatsScreen` (weekly activity + per-deck mastery; `docs/wireframes/18-stats.md`). The deeper Progress analytics detail (screen 19) is pending. | Yes |
-| `/settings` | Settings hub             | Yes           |
+| `/settings` | Settings hub — Current V1 (`SettingsScreen`, the shell branch; kit screen 20): account card (signed-out) + category rows → the immersive sub-screens. Audio & speech row disabled (TTS Future). | Yes           |
 
 Current V1 app boot redirects `/` to `RouteDefaults.initialLocation = RoutePaths.library`. This is
 the existing app entry and must not be replaced by an onboarding wizard in V1. Dashboard remains a
@@ -45,8 +45,8 @@ task with route tests and doc updates.
 `StatefulShellRoute.indexedStack` hosted by `MxAppShell` (`lib/app/app_shell.dart`), so each tab
 keeps its own navigation stack. The shell renders the shared `MxBottomNav`; tab switches use
 `navigationShell.goBranch(index, initialLocation: reTapActiveTab)` so re-tapping the active tab
-returns it to its branch root. Each destination renders a `RoutePlaceholder` until its real screen
-ships; feature route registries compose into the matching branch as screens land. Routes whose
+returns it to its branch root. All five destinations now render their real screens (Dashboard /
+Library / Search / Stats / Settings) via feature route registries composed into the matching branch. Routes whose
 "Shell visible" is **No** (e.g. detail/study/search pushed over the root navigator) sit outside the
 branches.
 
@@ -55,10 +55,10 @@ branches.
 | Path                      | Responsibility                                                                                                             | Shell visible |
 |---------------------------|----------------------------------------------------------------------------------------------------------------------------|---------------|
 | `/settings/account`       | Account & Drive sync — Current V1 (display-only): top-level immersive `AccountSettingsScreen` (`settingsRoutes()`, outside the shell), the signed-out sign-in hero over `AccountController` (always `signedOut`); the "Continue with Google" CTA is disabled (kit screen 21). Interactive sign-in + Drive backup/restore (the other 8 kit states) are Future (WBS 8.6.1/8.6.2). | No            |
-| `/settings/learning`      | Learning settings — Current V1: top-level immersive `LearningSettingsScreen` (`settingsRoutes()`, outside the shell), the **daily-goal** card (toggle + new-card limit slider/presets) over `LearningSettings` (kit screen 22; `docs/wireframes/20-settings-learning.md`). The reminder card is a Future affordance (no reminder BE). Entry from the Settings hub is Future (hub unbuilt). | No            |
-| `/settings/learning/tags` | Tag management — Current V1: top-level immersive `SettingsTagManagementScreen` (`settingsRoutes()`, outside the shell), list/search + rename/merge/delete (kit screen 11; `docs/wireframes/22-settings-tag-management.md`). Entry from Settings→Learning is Future (hub unbuilt). | No            |
-| `/settings/appearance`    | Appearance — Current V1: top-level immersive `AppearanceSettingsScreen` (`settingsRoutes()`, outside the shell), the theme-mode picker (Light / Dark / System) over `AppearanceController`; drives `MaterialApp.themeMode` (kit screen 24). Entry from the Settings hub is Future (hub unbuilt).                                       | No            |
-| `/settings/language`      | Language — Current V1: top-level immersive `LanguageSettingsScreen` (`settingsRoutes()`, outside the shell), the app-language picker (System / English / Tiếng Việt) over `LanguageController`; drives `MaterialApp.locale` (live re-localize, kit screen 25). Entry from the Settings hub is Future (hub unbuilt).                              | No            |
+| `/settings/learning`      | Learning settings — Current V1: top-level immersive `LearningSettingsScreen` (`settingsRoutes()`, outside the shell), the **daily-goal** card (toggle + new-card limit slider/presets) over `LearningSettings` (kit screen 22; `docs/wireframes/20-settings-learning.md`). The reminder card is a Future affordance (no reminder BE). Reachable from the Settings hub (kit 20). | No            |
+| `/settings/learning/tags` | Tag management — Current V1: top-level immersive `SettingsTagManagementScreen` (`settingsRoutes()`, outside the shell), list/search + rename/merge/delete (kit screen 11; `docs/wireframes/22-settings-tag-management.md`). Reachable from the Settings hub (kit 20). | No            |
+| `/settings/appearance`    | Appearance — Current V1: top-level immersive `AppearanceSettingsScreen` (`settingsRoutes()`, outside the shell), the theme-mode picker (Light / Dark / System) over `AppearanceController`; drives `MaterialApp.themeMode` (kit screen 24). Reachable from the Settings hub (kit 20).                                       | No            |
+| `/settings/language`      | Language — Current V1: top-level immersive `LanguageSettingsScreen` (`settingsRoutes()`, outside the shell), the app-language picker (System / English / Tiếng Việt) over `LanguageController`; drives `MaterialApp.locale` (live re-localize, kit screen 25). Reachable from the Settings hub (kit 20).                              | No            |
 | `/settings/audio-speech`  | Audio & speech settings (Korean / English tabs, voice list, sliders, preview)                                             | No            |
 
 Route name constants (from `lib/app/router/route_names.dart`): `RouteNames.settings`,

@@ -71,6 +71,7 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Stats tab (screen 18)| Implemented (WBS 7.5.3 BE + 7.5.4 FE) — `/progress` branch renders `StatsScreen`: weekly review activity (`MxBarChart`) + per-deck mastery (`MxMasteryBar`), over `LoadStatsOverviewUseCase`. Read-only.| `docs/wireframes/18-stats.md`, `docs/business/srs/srs-review.md`|
 | Progress analytics detail (screen 19)| Specified — deeper analytics (range tabs, accuracy, box distribution, streak). Not built; the `03-progress.md` wireframe describes this Future detail, not the Stats tab.| `docs/wireframes/03-progress.md`, `docs/business/srs/srs-review.md`|
 | TTS / audio settings| Specified| `docs/business/tts/tts-settings.md`|
+| Settings hub| Implemented (WBS 8.1.1, kit screen 20) — `SettingsScreen` (`/settings` shell branch): account card (signed-out V1) + category rows → the sub-screens, with live row values (goal/theme/language). Audio & speech row disabled (TTS Future).| `docs/wireframes/04-settings-hub.md`|
 | Account linking (Google)| Implemented (display-only V1, WBS 8.5.1, kit screen 21) — `AccountSettingsScreen` signed-out sign-in hero over `AccountLinkStatus` (SharedPreferences `account.cloudAccountLink`, always `signedOut`); CTA disabled. Interactive sign-in pending (8.6.1).| `docs/business/account-sync/account-sync.md`, `docs/contracts/repository-contracts/account-repository.md`|
 | Drive sync (backup/restore with safety)| Specified| `docs/business/account-sync/account-sync.md`|
 | Per-deck TTS override| Planned| not yet specified|

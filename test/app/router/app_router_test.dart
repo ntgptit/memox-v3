@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:memox/app/app_shell.dart';
+import 'package:memox/app/di/app_providers.dart';
 import 'package:memox/app/router/app_router.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/core/theme/mx_theme.dart';
@@ -17,6 +18,7 @@ import 'package:memox/presentation/features/folders/screens/library_overview_scr
 import 'package:memox/presentation/features/folders/viewmodels/library_overview_viewmodel.dart';
 import 'package:memox/presentation/features/stats/viewmodels/stats_viewmodel.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_bottom_nav.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> _pumpRouter(WidgetTester tester, GoRouter router) async {
   await tester.pumpWidget(
@@ -24,6 +26,13 @@ Future<void> _pumpRouter(WidgetTester tester, GoRouter router) async {
       // Stub the Library stream so the router test stays deterministic (no
       // Drift timer); the shell still builds the real Library screen.
       overrides: [
+        // /settings now renders the real SettingsScreen hub, which watches the
+        // account/learning/appearance/language controllers — all backed by
+        // SharedPreferences. Stub prefs so the whole chain loads defaults.
+        sharedPreferencesProvider.overrideWith((ref) async {
+          SharedPreferences.setMockInitialValues(<String, Object>{});
+          return SharedPreferences.getInstance();
+        }),
         libraryOverviewStreamProvider.overrideWith(
           (ref) =>
               Stream<LibraryOverview>.value(const LibraryOverview(folders: [])),

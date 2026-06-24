@@ -24,7 +24,7 @@
   const AccountBlock = ({ variant }) => {
     if (variant === 'signing-in') {
       return (
-        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: S(3) }}>
+        <div className="card" data-mx-node="20-settings/account-card" style={{ display: 'flex', alignItems: 'center', gap: S(3) }}>
           <div className="spinner"></div>
           <div>
             <div className="title">Signing in…</div>
@@ -35,7 +35,7 @@
     }
     if (variant === 'signed-out') {
       return (
-        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: S(3) }}>
+        <div className="card" data-mx-node="20-settings/account-card" style={{ display: 'flex', alignItems: 'center', gap: S(3) }}>
           <Avatar lg icon="user" tint="var(--memox-text-secondary)" />
           <div style={{ flex: 1, minWidth: 0 }}>
             <div className="title">Not signed in</div>
@@ -47,7 +47,7 @@
     }
     const synced = variant !== 'sync-error';
     return (
-      <div className="card" style={{ display: 'flex', alignItems: 'center', gap: S(3) }}>
+      <div className="card" data-mx-node="20-settings/account-card" style={{ display: 'flex', alignItems: 'center', gap: S(3) }}>
         <Avatar lg initials="AN" />
         <div style={{ flex: 1, minWidth: 0 }}>
           <div className="title">An Nguyen</div>
@@ -73,8 +73,8 @@
     { icon: 'info', tint: 'var(--memox-text-secondary)', title: 'About', meta: 'Version, licenses', value: 'v2.4.0' },
   ];
 
-  const Group = ({ items }) => (
-    <div className="list-card">
+  const Group = ({ items, node }) => (
+    <div className="list-card" data-mx-node={node}>
       {items.map((it, i) => (
         <div key={it.title}>
           {i > 0 && <div className="hr inset"></div>}
@@ -117,7 +117,7 @@
         <Body>
           {variant === 'sync-error' && <Banner tone="danger" icon="cloud-off">Last sync failed. Your latest changes aren't backed up.</Banner>}
           <AccountBlock variant={variant} />
-          <Group items={GROUP_1} />
+          <Group items={GROUP_1} node="20-settings/settings-group" />
           <Group items={GROUP_2} />
         </Body>
         <BottomNav active="Settings" />
