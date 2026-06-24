@@ -37,7 +37,7 @@
 
   // ---- Card summary header -------------------------------------------------
   const SummaryHead = () => (
-    <div className="card" style={{ padding: 'var(--memox-space-5)' }}>
+    <div className="card" data-mx-node="09-flashcard-history/header" style={{ padding: 'var(--memox-space-5)' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: S(3) }}>
         <span className="icon-tile" style={{ '--tile': 'var(--memox-status-reviewing)' }}><Icon name="square-stack" /></span>
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -81,7 +81,7 @@
   const Feed = ({ events }) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: S(2) }}>
       <div className="ov" style={{ paddingLeft: S(1) }}>Activity</div>
-      <div className="list-card">
+      <div className="list-card" data-mx-node="09-flashcard-history/activity">
         {events.map((e, i) => (
           <div key={i}>
             {i > 0 && <div className="hr inset"></div>}

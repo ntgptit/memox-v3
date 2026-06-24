@@ -1,6 +1,6 @@
 ---
-last_updated: 2026-06-13
-status: Implemented (V1, promoted 2026-06-13)
+last_updated: 2026-06-24
+status: Implemented (V1 redesign-simplified, 2026-06-24, WBS 7.6.1–7.6.3)
 route: /library/deck/:deckId/flashcards/:flashcardId/history
 source_specs:
   - docs/business/history/card-history.md
@@ -12,13 +12,32 @@ related_decision: docs/project-management/wbs.md (§6 Deferred / Future / Reject
 
 ## V1 decision
 
-This screen is **Implemented** in V1 at `/library/deck/:deckId/flashcards/:flashcardId/history`,
-entered from the flashcard row-action sheet ("View history"). Schema fields
-`flashcard_progress.last_reset_at` (v6), `study_attempts.box_before` / `box_after` (v4) back it.
+> **Status (2026-06-24):** Implemented to the **kit-09 mock** (redesign-simplified). `CardHistoryScreen`
+> (`lib/presentation/features/history/screens/card_history_screen.dart`) renders at
+> `/library/deck/:deckId/flashcards/:flashcardId/history` as a **top-level immersive route** (outside
+> the bottom-nav shell, like Study). Backed by `GetCardHistoryUseCase` →
+> `CardHistoryRepository.loadCardHistory` over the v7 `card_events` + `study_attempts.duration_ms` +
+> `flashcard_progress` reads. Goldens: `test/presentation/features/history/goldens/`.
 
-V1 overflow exposes **Edit / Reset progress / Delete**. Suspend/unsuspend is deferred to the
-Bury/Suspend feature (WBS 4.11.x). Timeline row tap → session result is deferred (rows are
-read-only display in V1).
+The redesigned mock is authoritative. The screen renders (top → bottom): a **breadcrumb** (Root ›
+…folders › Deck › History), a **header card** (tinted tile + card front + deck + `Box n` chip, over
+Reviews / Retention / Avg-time), and a unified **activity feed** (`ACTIVITY` overline + a card of
+rows). Each row is a graded attempt (result tile + "Reviewed · Correct/Recovered/Forgot" + relative
+meta + duration) or a lifecycle event (Card created / edited / reset / audio). Lifetime stats come
+from the stored counters (`(reviewCount − lapseCount)/reviewCount` = retention); avg time =
+`AVG(study_attempts.duration_ms)`. The "Card created" row is **synthesized** from
+`flashcards.created_at` (the feed's floor).
+
+**Dropped vs the pre-redesign design (Rejected / out of scope, mock-authoritative):** the CURRENT
+PROGRESS card (box stepper + 6-stat grid), the "All events" filter, the Edit pill, the overflow
+(Reset progress / Delete), and the heatmap / box-progression graphs are **not** in the kit-09 mock
+and are not built. Reset/Delete/Edit + Suspend/unsuspend (Bury/Suspend, WBS 4.11.x) and the
+timeline-row→session-result tap remain deferred. The body below documents the pre-redesign TARGET,
+not current code.
+
+**Entry point (Future):** all "View history" surfaces are Future per
+`docs/business/history/card-history.md` §Future surfaces (no flashcard row-action sheet exists yet);
+the route is reachable by path/deep-link. Parked as Q6 in `state.md`.
 
 ## Purpose
 

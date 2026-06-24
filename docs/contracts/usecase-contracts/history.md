@@ -1,6 +1,6 @@
 ﻿---
-last_updated: 2026-06-13
-status: Implemented (V1, promoted 2026-06-13)
+last_updated: 2026-06-24
+status: Implemented (V1 redesign-simplified, 2026-06-24, WBS 7.6.1–7.6.3)
 ---
 
 # History Use Cases Contract
@@ -9,69 +9,49 @@ status: Implemented (V1, promoted 2026-06-13)
 > error/result contract style. The project has not yet adopted `fpdart`, so these use cases use the
 > existing `Result<T>` (`Ok`/`Err`) contract (`docs/contracts/error-contract.md`).
 
-Read-only per-card attempt timeline + lifetime stats + progress reset. **Implemented** in V1;
-`flashcard_progress.last_reset_at` shipped with schema v6.
+Read-only per-card attempt timeline + lifetime stats. **Implemented** to the kit-09 mock
+(redesign-simplified) on 2026-06-24.
 
-## GetCardHistoryHeaderUseCase
+## GetCardHistoryUseCase (the V1 read)
 
 ```dart
-Future<Result<CardHistoryHeader>> call({required FlashcardId flashcardId});
+Future<Result<CardHistory>> call({required FlashcardId flashcardId});
 ```
+
+The single full-load read (`lib/domain/usecases/history/get_card_history_usecase.dart`) →
+`CardHistoryRepository.loadCardHistory`. Per-card scale is small, so the feed loads **fully** (no
+pagination — supersedes the earlier paginated `GetCardHistoryPageUseCase` design below;
+`docs/business/history/card-history.md`).
 
 **Rules:**
 
-- READ card preview (`flashcards.front` / `back`) + current SRS state + lifetime counters +
-  `last_reset_at` from `flashcards` LEFT JOIN `flashcard_progress` in one query.
-- `CardHistoryHeader.accuracy` is derived from the stored counters
-  (`(reviewCount - lapseCount) / reviewCount`). Do NOT scan attempts.
+- **Header** (`CardHistoryHeader`): card front + deck name + current `box_number` + lifetime counters
+  + `last_reset_at` from `flashcards` JOIN `decks` LEFT JOIN `flashcard_progress` in one query.
+  `accuracy` (retention) is derived from the stored counters
+  (`(reviewCount - lapseCount) / reviewCount`); `avgDurationMs` = `AVG(study_attempts.duration_ms)`
+  over measured attempts. Do NOT scan attempts for accuracy.
+- **Feed** (`List<CardHistoryEvent>`): all `study_attempts` (joined via `study_session_items`) mapped
+  to `CardHistoryEvent.attempt` + all `card_events` mapped to `CardHistoryEvent.lifecycle` + a
+  **synthesized** `created` event from `flashcards.created_at` (skipped if a real `created` row
+  exists), sorted by `occurred_at` DESC (the synthesized created sinks to the floor).
 
-**Returns:** `CardHistoryHeader`.
+**Returns:** `CardHistory { header, events }`.
 
 **Errors:** `NotFoundFailure` (card), `StorageFailure`.
 
-**Test refs:** H4, H7.
+**Test refs:** H1, H4, H7; `test/data/repositories/card_history_repository_impl_test.dart`.
 
-## GetCardHistoryPageUseCase
+## Deferred / superseded
 
-```dart
-Future<Result<CardHistoryPage>> call({
-  required FlashcardId flashcardId,
-  CardHistoryCursor? before,  // cursor
-  int limit = 50,
-});
-```
-
-**Rules:**
-
-- READ `study_attempts` joined to `study_session_items` / `study_sessions` WHERE
-  `flashcard_id = :id` ORDER BY `(attempted_at, id) DESC` LIMIT :limit (cursor compares on the
-  composite `(attempted_at, id)` when [before] is provided).
-- Cursor pagination (NOT offset).
-
-**Returns:** `CardHistoryPage { attempts: List<CardHistoryAttempt>, nextCursor: CardHistoryCursor? }`.
-
-**Errors:** `StorageFailure`.
-
-**Test refs:** H1.
-
-## ResetFlashcardProgressUseCase
-
-```dart
-Future<Result<void>> call({required FlashcardId flashcardId});
-```
-
-Resets SRS scheduling (box=1, due=now, unburied) and sets `flashcard_progress.last_reset_at = now`.
-Lifetime counters and `study_attempts` rows are retained (cumulative), so the timeline keeps prior
-attempts and renders the reset divider.
-
-**Errors:** `StorageFailure`.
-
-**Test refs:** H3, H5.
+- **`ResetFlashcardProgressUseCase`** (reset SRS + append a `reset` `card_events` row): NOT built —
+  the kit-09 mock exposes no reset/overflow affordance (mock-authoritative). Deferred with the
+  Reset/Delete/Edit actions (decision rows H3/H5). When built it must retain counters + attempts.
+- **`GetCardHistoryHeaderUseCase` / `GetCardHistoryPageUseCase` (paginated split):** superseded by the
+  full-load `GetCardHistoryUseCase` above.
 
 ## Forbidden patterns
 
 - ❌ Compute lifetime accuracy by scanning attempts. Use stored counters.
-- ❌ Use OFFSET pagination. Cursor only.
 - ❌ Allow inline edit of attempts (read-only).
 - ❌ Render `Box 0` for pre-migration rows (box_before=0 or box_after=0). Render `—` instead.
 
@@ -81,7 +61,9 @@ attempts and renders the reset divider.
 `docs/contracts/code-style.md`
 
 **Business spec:** `docs/business/history/card-history.md`
-**Repository:** `docs/contracts/repository-contracts/progress-repository.md` (attempts methods)
+**Repository:** `docs/contracts/repository-contracts/card-history-repository.md`
 **Wireframes:** `docs/wireframes/09-flashcard-history.md`
-**Decision table:** H1-H8
-**Code paths:** `lib/domain/usecases/history/**`
+**Decision table:** H1-H9 in `docs/decision-tables/progress-history.md`
+**Code paths:** `lib/domain/usecases/history/get_card_history_usecase.dart`,
+`lib/data/repositories/card_history_repository_impl.dart`,
+`lib/presentation/features/history/**`

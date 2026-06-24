@@ -101,6 +101,16 @@
         "node": "card"
       }
     ],
+    "09-flashcard-history": [
+      {
+        "key": "mx-node:09-flashcard-history/header",
+        "node": "card"
+      },
+      {
+        "key": "mx-node:09-flashcard-history/activity",
+        "node": "list-card"
+      }
+    ],
     "12-study-review": [
       {
         "key": "mx-node:study-session/exit",

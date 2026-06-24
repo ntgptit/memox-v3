@@ -80,6 +80,14 @@
       "exceptionKind": "covered",
       "reason": "Decorative leading tile INSIDE the tagged deck picker (flashcard-editor/deck-picker). Tag the container, not its inner tile — same rule as 'tag the list, not each item'.",
       "source": "docs/system-design/MemoX Design System/CLAUDE.md (common-layer first; tag meaningful required nodes, not every div)"
+    },
+    {
+      "screen": "09-flashcard-history",
+      "node": "icon-btn",
+      "mx": "MxIconButton",
+      "exceptionKind": "covered",
+      "reason": "The app-bar back arrow is the shared MxAppBar AUTOMATIC leading button (platform back via `automaticallyImplyLeading`), not a screen-specific affordance — the FE never hand-builds or keys it. Sibling pushed screens (04/06/08) leave their app-bar icon-btns untagged too; there the tool classes them REPEATED (those bars carry back+sort+overflow), while History's bar carries only the back arrow, so this lone icon-btn surfaces as a singleton. Tag a real screen-specific control here only if one is added.",
+      "source": "docs/system-design/MemoX Design System/CLAUDE.md (tag meaningful required nodes, not platform chrome) + MxAppBar automaticallyImplyLeading"
     }
   ]
 }

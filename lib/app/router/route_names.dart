@@ -27,6 +27,10 @@ abstract final class RouteNames {
   static const String flashcardCreate = 'flashcardCreate';
   static const String flashcardEdit = 'flashcardEdit';
 
+  /// Per-card read-only history timeline (`…/flashcards/:flashcardId/history`),
+  /// pushed within the Library branch (kit screen 09). WBS 7.6.3.
+  static const String flashcardHistory = 'flashcardHistory';
+
   /// Folder detail / deck flashcard list reached from a **Search** result, so
   /// the push stays inside the Search branch (Back returns to `/search`). Same
   /// screens as the Library-branch routes, distinct names per GoRouter's

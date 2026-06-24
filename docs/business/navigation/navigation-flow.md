@@ -74,7 +74,7 @@ Route name constants (from `lib/app/router/route_names.dart`): `RouteNames.setti
 | Flashcard list (filtered) | `/library/deck/:deckId/flashcards?filter={active\|suspended\|buried\|due}&tag={t1,t2}`                                                                                                                                                                                                  | Yes           |
 | Flashcard create          | `/library/deck/:deckId/flashcards/new`                                                                                                                                                                                                                                                  | No            |
 | Flashcard edit            | `/library/deck/:deckId/flashcards/:flashcardId/edit`                                                                                                                                                                                                                                    | No            |
-| Flashcard history         | `/library/deck/:deckId/flashcards/:flashcardId/history` (Current V1 — opens `CardHistoryScreen` from a card's row action; read-only attempt timeline + reset progress)                                                                                                                    | No            |
+| Flashcard history         | `/library/deck/:deckId/flashcards/:flashcardId/history` (Current V1 — top-level immersive route; `CardHistoryScreen`, read-only header + activity feed. Entry affordance Future; no reset/overflow in this build)                                                                          | No            |
 | Deck import               | `/library/deck/:deckId/import`                                                                                                                                                                                                                                                          | No            |
 | Library search            | In-place folder search inside Library Overview (bottom search-dock toggled by the app-bar `Icons.search`; `librarySearchActiveProvider` → `LibrarySearchDock`). No dedicated route in current code. A top-level global Search destination (`/search`) is introduced by the design redesign — see §Top-level destinations and `docs/business/search/global-search.md`                                                                                                  | n/a (in-place) |
 | Study entry               | `/library/study/:entryType/:entryRefId` (Current entryType: `deck` \| `folder`; `tag` is Blocked/Future). **WP-SR1a:** `StudyEntryScreen` resolves the scope via `ResolveStudyEntryStartUseCase` (no silent resume) and renders preparing / a generic empty surface (per-reason matrix = WP-SR1b) / Resume-or-Start-over / error, and `pushReplacement`s to `/library/study/session/:sessionId` after auto-creating a session for an eligible scope. The `?study_type=` override + the `today` route are built (**WP-SR1b-1**); the per-reason empty matrix is **WP-SR1b-2**; the deck/folder screen CTAs that link here stay **Future** | No            |
@@ -95,10 +95,12 @@ Notes:
   declarations in `lib/presentation/features/**/routes/*.dart`.
 - The `tag` entry type is Blocked/Future until `StudyEntryType.tag` and tag-scope queries are
   promoted.
-- Flashcard history is Current: `RouteNames.flashcardHistory` /
-  `RoutePaths.flashcardHistoryTemplate`
-  (`/library/deck/:deckId/flashcards/:flashcardId/history`), pushed over the shell from the
-  root navigator (shell hidden), entered via the flashcard row-action sheet ("View history").
+- Flashcard history is Current: `RouteNames.flashcardHistory` / `RoutePaths.flashcardHistory`
+  (`/library/deck/:deckId/flashcards/:flashcardId/history`), registered as a **top-level** route
+  (`historyRoutes()` in `lib/presentation/features/history/routes/history_routes.dart`, composed in
+  `app_router.dart` outside the bottom-nav shell → immersive, shell hidden, like Study). Renders
+  `CardHistoryScreen` (read-only). **Entry point is Future** — no flashcard row-action sheet exists
+  yet (`docs/business/history/card-history.md` §Future surfaces); reachable by path/deep-link.
 - Library search (current code): in-place folder search inside Library Overview, toggled by the
   app-bar search icon (`librarySearchActiveProvider` → bottom `LibrarySearchDock` mounted in the
   `bottomNavigationBar` slot). There is **no**

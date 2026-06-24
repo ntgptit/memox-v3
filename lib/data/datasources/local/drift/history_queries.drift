@@ -1,0 +1,56 @@
+import 'decks.drift';
+import 'flashcards.drift';
+import 'study_tables.drift';
+import 'card_events.drift';
+
+-- Card History read queries (kit screen 09, WBS 7.6.1). Per-card scale is small,
+-- so the feed loads FULLY (no pagination) — see docs/business/history/card-history.md.
+-- The repository merges attempts + lifecycle events (+ a synthesized `created`
+-- event from flashcards.created_at) in Dart by occurred_at DESC.
+
+-- Header: card preview + deck + current SRS snapshot + lifetime counters.
+-- flashcard_progress exists from card creation (flashcard.md C1); LEFT JOIN +
+-- COALESCE stays defensive. created_at backs the synthesized "Card created" row.
+-- getSingleOrNull → no row = card not found (NotFoundFailure).
+cardHistoryHeader(:flashcardId AS TEXT):
+SELECT
+  f.front AS front,
+  f.created_at AS created_at,
+  d.name AS deck_name,
+  COALESCE(fp.box_number, 1) AS box_number,
+  COALESCE(fp.review_count, 0) AS review_count,
+  COALESCE(fp.lapse_count, 0) AS lapse_count,
+  fp.last_reset_at AS last_reset_at
+FROM flashcards f
+JOIN decks d ON d.id = f.deck_id
+LEFT JOIN flashcard_progress fp ON fp.flashcard_id = f.id
+WHERE f.id = :flashcardId;
+
+-- Mean measured attempt duration (ms); NULL when no attempt has a logged
+-- duration. Single column so drift infers a nullable scalar.
+cardHistoryAvgDuration(:flashcardId AS TEXT):
+SELECT AVG(a.duration_ms)
+FROM study_attempts a
+JOIN study_session_items i ON a.session_item_id = i.id
+WHERE i.flashcard_id = :flashcardId AND a.duration_ms IS NOT NULL;
+
+-- All graded attempts for the card, newest first (composite tiebreak by id).
+cardHistoryAttempts(:flashcardId AS TEXT):
+SELECT
+  a.result AS result,
+  a.study_mode AS study_mode,
+  a.box_before AS box_before,
+  a.box_after AS box_after,
+  a.duration_ms AS duration_ms,
+  a.attempted_at AS attempted_at
+FROM study_attempts a
+JOIN study_session_items i ON a.session_item_id = i.id
+WHERE i.flashcard_id = :flashcardId
+ORDER BY a.attempted_at DESC, a.id DESC;
+
+-- Lifecycle events (created/edited/reset/audio_added) for the card, newest first.
+cardHistoryEvents(:flashcardId AS TEXT):
+SELECT e.type AS type, e.occurred_at AS occurred_at, e.detail AS detail
+FROM card_events e
+WHERE e.flashcard_id = :flashcardId
+ORDER BY e.occurred_at DESC, e.id DESC;

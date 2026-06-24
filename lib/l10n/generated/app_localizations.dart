@@ -1633,6 +1633,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong loading your stats.'**
   String get statsLoadFailedMessage;
+
+  /// App-bar title + breadcrumb leaf for the Card History screen (screen 09).
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get cardHistoryTitle;
+
+  /// Overline (all-caps) above the Card History activity feed.
+  ///
+  /// In en, this message translates to:
+  /// **'ACTIVITY'**
+  String get cardHistoryActivityLabel;
+
+  /// Header stat label: lifetime review count.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviews'**
+  String get cardHistoryReviewsLabel;
+
+  /// Header stat label: lifetime accuracy/retention percent.
+  ///
+  /// In en, this message translates to:
+  /// **'Retention'**
+  String get cardHistoryRetentionLabel;
+
+  /// Header stat label: average measured time per attempt.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg time'**
+  String get cardHistoryAvgTimeLabel;
+
+  /// Placeholder for a Card History header stat with no data yet (em dash).
+  ///
+  /// In en, this message translates to:
+  /// **'—'**
+  String get cardHistoryStatEmpty;
+
+  /// Leitner box chip on the Card History header.
+  ///
+  /// In en, this message translates to:
+  /// **'Box {box}'**
+  String cardHistoryBoxChip(int box);
+
+  /// Per-attempt / average duration in seconds (value already formatted, e.g. 5.4).
+  ///
+  /// In en, this message translates to:
+  /// **'{value}s'**
+  String cardHistoryDurationSeconds(String value);
+
+  /// Activity-row meta line combining a relative day and a 24h time.
+  ///
+  /// In en, this message translates to:
+  /// **'{relative} · {time}'**
+  String cardHistoryRowMeta(String relative, String time);
+
+  /// Relative day label for an event that occurred today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get cardHistoryToday;
+
+  /// Relative day label for an event that occurred yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get cardHistoryYesterday;
+
+  /// Relative day label for an event within the past week.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, =1{1 day ago} other{{days} days ago}}'**
+  String cardHistoryDaysAgo(int days);
+
+  /// Activity row title for a perfect attempt (box advanced).
+  ///
+  /// In en, this message translates to:
+  /// **'Reviewed · Correct'**
+  String get cardHistoryAttemptCorrect;
+
+  /// Activity row title for a recovered attempt (corrected after a slip; box held).
+  ///
+  /// In en, this message translates to:
+  /// **'Reviewed · Recovered'**
+  String get cardHistoryAttemptRecovered;
+
+  /// Activity row title for a forgot attempt (box reset to 1).
+  ///
+  /// In en, this message translates to:
+  /// **'Reviewed · Forgot'**
+  String get cardHistoryAttemptForgot;
+
+  /// Activity row title for the card-created lifecycle event.
+  ///
+  /// In en, this message translates to:
+  /// **'Card created'**
+  String get cardHistoryEventCreated;
+
+  /// Activity row title for the card-edited lifecycle event.
+  ///
+  /// In en, this message translates to:
+  /// **'Card edited'**
+  String get cardHistoryEventEdited;
+
+  /// Activity row title for the progress-reset lifecycle event.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress reset'**
+  String get cardHistoryEventReset;
+
+  /// Activity row title for the audio-added lifecycle event (reserved).
+  ///
+  /// In en, this message translates to:
+  /// **'Audio added'**
+  String get cardHistoryEventAudio;
+
+  /// Empty-state title when a card has no reviews yet.
+  ///
+  /// In en, this message translates to:
+  /// **'No history yet'**
+  String get cardHistoryEmptyTitle;
+
+  /// Empty-state body when a card has no reviews yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Study this card and your reviews will show up here.'**
+  String get cardHistoryEmptyMessage;
+
+  /// Card History error-state title.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load history'**
+  String get cardHistoryLoadFailedTitle;
+
+  /// Card History error-state body.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t fetch this card\'s activity.'**
+  String get cardHistoryLoadFailedMessage;
 }
 
 class _AppLocalizationsDelegate

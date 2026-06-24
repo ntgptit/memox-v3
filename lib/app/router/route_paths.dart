@@ -35,6 +35,13 @@ abstract final class RoutePaths {
   static const String flashcardEditRelative = ':flashcardId/edit';
   static const String flashcardEdit = '$deckFlashcards/$flashcardEditRelative';
 
+  /// Per-card history timeline — child of the deck flashcard list (kit `09`).
+  /// `:flashcardId` is the inspected card (matches
+  /// `docs/business/navigation/navigation-flow.md` §Library routes).
+  static const String flashcardHistoryRelative = ':flashcardId/history';
+  static const String flashcardHistory =
+      '$deckFlashcards/$flashcardHistoryRelative';
+
   /// Search-branch variants of the detail routes (reuse the same relative
   /// segments under [search]) so a Search result opens inside the Search branch.
   static const String searchFolder = '$search/$folderRelative';
