@@ -19,6 +19,10 @@ abstract final class RoutePaths {
   /// (outside the bottom-nav shell → immersive, shell hidden). WBS 8.2.2.
   static const String settingsLearning = '/settings/learning';
 
+  /// Appearance / theme settings (kit screen 24) — registered as a **top-level**
+  /// route (outside the bottom-nav shell → immersive, shell hidden). WBS 8.8.1.
+  static const String settingsAppearance = '/settings/appearance';
+
   /// Tag management (kit screen 11) — registered as a **top-level** route
   /// (outside the bottom-nav shell → immersive, shell hidden). WBS 8.3.2.
   static const String settingsLearningTags = '/settings/learning/tags';

@@ -359,5 +359,16 @@
   "learningGoalOffDesc": "Đã tắt — học tự do",
   "learningGoalUnit": "thẻ / ngày",
   "learningReminderTitle": "Nhắc nhở hằng ngày",
-  "learningReminderOffDesc": "Chưa đặt nhắc nhở"
+  "learningReminderOffDesc": "Chưa đặt nhắc nhở",
+  "appearanceTitle": "Giao diện",
+  "appearanceThemeLabel": "Chủ đề",
+  "appearanceLight": "Sáng",
+  "appearanceLightDesc": "Luôn sáng",
+  "appearanceDark": "Tối",
+  "appearanceDarkDesc": "Luôn tối",
+  "appearanceSystem": "Hệ thống",
+  "appearanceSystemDesc": "Theo cài đặt thiết bị",
+  "appearanceSystemNote": "Hệ thống theo lịch sáng/tối của thiết bị.",
+  "appearanceErrorTitle": "Không tải được giao diện",
+  "appearanceErrorMessage": "Đã xảy ra lỗi khi tải cài đặt chủ đề của bạn."
 }

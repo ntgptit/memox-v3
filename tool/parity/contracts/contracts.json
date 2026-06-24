@@ -250,6 +250,12 @@
         "key": "mx-node:22-learning-settings/reminder-card",
         "node": "card"
       }
+    ],
+    "24-appearance": [
+      {
+        "key": "mx-node:24-appearance/theme-list",
+        "node": "list-card"
+      }
     ]
   }
 }

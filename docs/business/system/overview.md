@@ -119,7 +119,8 @@ Settings sub-areas:
 | Account| Google account linking + Drive sync| `docs/business/account-sync/account-sync.md`|
 | Learning| Current V1 study defaults; daily-goal/streak/reminder controls remain Target/Future| `docs/business/study/study-flow.md`, `docs/wireframes/20-settings-learning.md`|
 | Audio/Speech| Current V1 global/front-language TTS settings; independent per-language tabs remain Target/Future| `docs/business/tts/tts-settings.md`, `docs/wireframes/21-settings-audio-speech.md`|
-| Appearance/Locale| Disabled Future rows on Settings Hub| `docs/wireframes/04-settings-hub.md`|
+| Appearance (theme mode)| Implemented (WBS 8.8.1 theme half, kit screen 24) — `AppearanceSettingsScreen` Light/Dark/System picker over `AppThemeMode` (SharedPreferences `appearance.themeMode`); drives `MaterialApp.themeMode`.| `docs/wireframes/04-settings-hub.md`, `docs/contracts/repository-contracts/appearance-settings-repository.md`|
+| Locale (language)| Future — Settings Hub row; `25-language` screen pending (WBS 8.8.1 language half)| `docs/wireframes/04-settings-hub.md`|
 
 ## Study modes
 

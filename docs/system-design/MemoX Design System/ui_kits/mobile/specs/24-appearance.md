@@ -103,6 +103,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         spacing: pad:0/0/0/4
         style: font:12/700 color:text-2 tracking:1
       - node: list-card
+        id: 24-appearance/theme-list
         box:
           abs: [21,108 348x260]
           rel: [20,39 348x260]
