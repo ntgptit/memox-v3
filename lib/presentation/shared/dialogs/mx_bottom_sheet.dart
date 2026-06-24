@@ -96,6 +96,10 @@ Future<T?> showMxBottomSheet<T>(
     context: context,
     useRootNavigator: true,
     isScrollControlled: isScrollControlled,
+    // The MemoX scrim token (kit `--memox-overlay`): bluish-navy 45% in light,
+    // black 60% in dark. Without it, Flutter falls back to `black54` — a heavy
+    // grey scrim that diverges from the mock in light mode.
+    barrierColor: colors.overlay,
     backgroundColor: colors.surface,
     constraints: BoxConstraints(
       maxHeight: MediaQuery.sizeOf(context).height * 0.9,
