@@ -85,6 +85,7 @@ Bảng này map giữa loại thay đổi code và các file docs BẮT BUỘC k
 | `lib/l10n/app_*.arb` (new key) | Đảm bảo key được ref trong wireframe/business doc tương ứng |
 | `pubspec.yaml` (new dependency) | Stop and ask. Approval needed. |
 | Theme tokens (`lib/core/theme/**`) | `docs/ui-ux/ui-ux-contract.md` + `docs/system-design/MemoX Design System/README.md` + `docs/system-design/MemoX Design System/colors_and_type.css` |
+| Kit mock (`docs/system-design/MemoX Design System/ui_kits/**`) — JSX/`index.html`/specs/shots | **Sync lên Claude Design v3**: `node tool/parity/sync-design.mjs` (Hard rule — standing authorization) + nếu đổi `index.html`/screens thì re-export specs (`npm --prefix tool/ui_kit_shots run export:specs`) + `node tool/parity/design_watch.mjs --update` |
 
 Nếu code change rơi vào nhiều rows, kiểm tra tất cả.
 
@@ -188,6 +189,7 @@ This convention applies to **backtick references** in markdown body text and tab
 - KHÔNG thêm route mới mà không update route constants AND `docs/business/navigation/navigation-flow.md` trong cùng commit.
 - KHÔNG để docs reference đến term/route/field cũ sau khi rename.
 - KHÔNG đánh dấu task "done" nếu chưa pass Pre-commit parity check.
+- **KHÔNG để kit (mock design) drift khỏi Claude Design v3.** Bất kỳ thay đổi nào dưới `docs/system-design/MemoX Design System/ui_kits/**` (JSX screens, `_shared.jsx`, `index.html`, regenerated specs/shots) PHẢI được đồng bộ lên Claude Design project **v3** (`c83bf9df-9f34-4480-8351-3acbaa1e3246`) trong CÙNG task, bằng `node tool/parity/sync-design.mjs` (sau khi commit). Đây là **standing authorization (PO 2026-06-24) — KHÔNG hỏi lại**. Push cần một `claude` CLI đã design-login (script tự drive nested `claude -p`); nếu CLI không có/không auth, script báo lỗi → ghi rõ `design-sync: skipped (no design-authorized CLI)` trong report thay vì bỏ qua im lặng. Chi tiết: `docs/design/design-sync-process.md`.
 - KHÔNG báo cáo complete nếu `code-verification-guard` tồn tại trong repo mà chưa chạy pass. Nếu tool không tồn tại, ghi rõ: `guard: skipped (tool not present)`.
 - **KHÔNG chạy lệnh verification rời** (`flutter analyze`, `flutter test`, `dart fix`, `dart format`, `build_runner`, `flutter gen-l10n`, guard, doc_guard) trực tiếp — KỂ CẢ trong lúc đang dev. Mọi bước verification đi qua MỘT entry: `node tool/verify/run.mjs` (inner loop: `--quick [--test <paths>]`; cuối task: full chain). Verify PASS ghi pass-marker gắn với trạng thái nội dung tree; **pre-commit hook từ chối commit không có marker hợp lệ** — chạy lẻ tẻ không sinh marker nên không commit được. Sửa file sau khi PASS → marker hết hiệu lực → chạy lại verify.
 
@@ -416,12 +418,19 @@ marker when staged changes include code. Rules that survive the automation:
   chưa dựng → thiếu = đỏ). Helper `test/support/parity_contract.dart`; prototype
   `test/presentation/features/dashboard/dashboard_parity_test.dart`. KHÔNG dùng `find.byType` (class phải
   tồn tại mới compile) hay geometry (FE toạ-độ ≠ kit). Ngoại lệ có-docs → `tool/parity/intent-ledger.json`.
-- **Sync design từ Claude Design** (design sống ở claude.ai, không phải repo): 2 pha — `/design-sync` +
-  tool `DesignSync` (agent, cần auth claude.ai; pull/ghi project, thay download tay; KHÔNG CLI/CI hóa
-  được) → rồi `node tool/parity/after-sync.mjs` (tất định: check_specs_fresh → design_watch → checklist).
-  `design_watch.mjs --check` là gate: design đổi mà code/docs chưa theo kịp ⇒ đỏ tới khi re-baseline
-  (`--update`). `data-mx-node` ids nên sống trong project Claude Design để pull về không bị ghi đè.
-  Quy trình đầy đủ (2 pha + pipeline data-mx-node + gates + ai-làm-gì): `docs/design/design-sync-process.md`.
+- **Sync design ⇄ Claude Design v3** (design sống ở claude.ai, không phải repo). Project pin trong
+  `.design-sync/config.json` (`c83bf9df…`, off-script bundle).
+  - **PULL** (Claude Design → repo): `/design-sync` + tool `DesignSync` (agent, cần auth claude.ai)
+    → rồi `node tool/parity/after-sync.mjs` (tất định: check_specs_fresh → design_watch → checklist).
+  - **PUSH** (repo → Claude Design v3) — **BẮT BUỘC sau MỌI thay đổi kit** (Hard rule, standing auth):
+    `node tool/parity/sync-design.mjs [<from-ref>]` (mặc định `lastSyncedCommit..HEAD`; `--dry` để xem
+    plan). Nó tự tính file kit đổi trong range → drive nested `claude -p` (CLI đã design-login) chạy
+    `DesignSync finalize_plan`(plan-bounded: chỉ writes/deletes đã tính) → `write_files`/`delete_files`,
+    rồi ghi `lastSyncedCommit`. Surface không có design scope vẫn push được nhờ CLI máy; nếu không có
+    CLI auth thì script báo lỗi → report ghi `design-sync: skipped (no design-authorized CLI)`.
+  - `design_watch.mjs --check` là gate: design đổi mà code/docs chưa theo kịp ⇒ đỏ tới khi re-baseline
+    (`--update`). `data-mx-node` ids sống trong project Claude Design để pull về không bị ghi đè.
+  - Quy trình đầy đủ (PULL/PUSH + pipeline data-mx-node + gates + ai-làm-gì): `docs/design/design-sync-process.md`.
 
 Chi tiết từng tool, lệnh rời để debug một bước, trigger matrix, portability: `tool/README.md`.
 

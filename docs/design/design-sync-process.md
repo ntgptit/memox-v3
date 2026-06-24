@@ -43,6 +43,35 @@ Claude Design project ──(A) /design-sync · DesignSync pull──► ui_kits
 > MemoX the project already exists, so **pull** (target its uuid); only push when
 > seeding `data-mx-node` ids back up (below).
 
+## Phase A′ — PUSH repo → Claude Design v3 (MANDATORY after any kit change)
+
+The kit is the source of truth, but it is edited in BOTH places: on Claude Design by
+the design agent, and locally (e.g. seeding `data-mx-node` ids, hiding a screen, a token
+tweak). Any local change under `docs/system-design/MemoX Design System/ui_kits/**` MUST
+be pushed back up so the canonical project never drifts. This is a **standing
+authorization (PO 2026-06-24)** — do it automatically, do NOT ask each time (see
+`CLAUDE.md` Hard rules).
+
+```bash
+node tool/parity/sync-design.mjs            # lastSyncedCommit..HEAD (recorded in .design-sync/config.json)
+node tool/parity/sync-design.mjs <from-ref> # explicit range
+node tool/parity/sync-design.mjs --dry      # print the write/delete plan, don't push
+```
+
+How it works (and why it isn't a git hook / CI step): pushing needs design-system auth,
+which only a `claude` CLI that has run `/design-login` (or `/login` with a subscription)
+carries — it is **not** CI-able. The script therefore computes the changed kit files in
+the git range (`A/M/R` → writes, `D` → deletes, project-relative), then drives a nested
+`claude -p` session to run the `DesignSync` tool directly: `finalize_plan` (bounded to
+exactly those paths — it cannot touch anything else, even headless), then
+`write_files`/`delete_files`. On a confirmed `SYNCED` it records `lastSyncedCommit` so
+the next run only pushes the new delta. If no design-authorized CLI is present it fails
+loudly → report `design-sync: skipped (no design-authorized CLI)` rather than drifting.
+
+Run it **after committing** the kit change (so the range is well-defined). A surface
+without design scope (some app clients) still pushes fine because the script uses the
+machine's CLI login, not the current session's token.
+
 ## Phase B — wire the pull into the pipeline (deterministic)
 
 After files land, one command:
