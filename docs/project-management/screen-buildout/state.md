@@ -3,7 +3,7 @@
 Live cursor for the 12-screen FE+BE build-out. Recipe + done-bar: `plan.md` (same dir).
 One screen per iteration, in order. Update this table as each screen lands.
 
-**NEXT: 09-flashcard-history** (kit screen 09, 5 states). 19-progress is 🟡 blocked:Q5 (engagement-approval gate) — skipped per the loop's blocking protocol.
+**NEXT: 11-tag-management** (kit screen 11, 11 states). 19-progress is 🟡 blocked:Q5 (engagement-approval gate) — skipped.
 
 ## Status
 
@@ -11,7 +11,7 @@ One screen per iteration, in order. Update this table as each screen lands.
 | --- | --- | --- | --- | --- |
 | 1 | 18-stats | ✅ done | [#32](https://github.com/ntgptit/memox-v3/pull/32) | Stats tab at `/progress`; weekly chart + per-deck mastery; `MxBarChart`/`MxMasteryBar`. Parked Q1–Q4. |
 | 2 | 19-progress | 🟡 blocked:Q5 | — | **Skipped (blocked).** Mock hero = daily-goal ring (12/20) + streak chip + insights = engagement BE, which `overview.md` marks Future/Target "No engagement persistence/settings/reminders — pending approval". Can't build the goal ring without approved goal-settings BE (fabricating goal/streak values is forbidden by `engagement.md`). Also route collides with Stats (Q3). Unblock = owner approves engagement BE. |
-| 3 | 09-flashcard-history | ⬜ todo | — | |
+| 3 | 09-flashcard-history | ✅ done | [#33](https://github.com/ntgptit/memox-v3/pull/33) | Card History (top-level immersive); breadcrumb + header + activity feed; redesign-simplified (CURRENT-PROGRESS card / filter / Edit / overflow / heatmap dropped). Built the full read BE (queries/dao/repo/usecase). Entry affordance Future (Q6). |
 | 4 | 11-tag-management | ⬜ todo | — | |
 | 5 | 10-deck-import | ⬜ todo | — | |
 | 6 | 22-learning-settings | ⬜ todo | — | |
@@ -39,6 +39,13 @@ default**, and keep going. The user resolves these in one pass afterwards.
 Format (newest first): `Q<n> (<screen>) — <question>. Default taken: <what you did so the
 loop could continue>. Why/source: <ref>. [blocking? yes/no]`
 
+- **Q6 (09-flashcard-history) — Entry point: the kit-09 mock implies History opens from a card, but
+  ALL "View history" surfaces are documented Future (`docs/business/history/card-history.md` §Future
+  surfaces) and no flashcard row-action sheet exists.** Default taken: built the screen + a top-level
+  route reachable by path/deep-link; left the entry affordance unbuilt (Future). Wiring an entry needs
+  either a new flashcard row-action sheet (out of this screen's scope) or an owner decision on which
+  surface exposes it. Why/source: `docs/business/history/card-history.md` §Future surfaces; no
+  `flashcard_row_actions_sheet.dart` in the repo. [blocking? no]
 - **Q5 (19-progress) — BLOCKING: the kit-19 mock's hero is an engagement surface (daily-goal ring
   `12/20` + flame streak chip + goal-driven insights), but engagement (daily goal + streak +
   reminders) is documented Future/Target with "No engagement persistence/settings/reminders" for V1
