@@ -2245,6 +2245,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No reminder set'**
   String get learningReminderOffDesc;
+
+  /// App-bar title for the Appearance settings screen (24).
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearanceTitle;
+
+  /// Overline above the theme-mode list.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get appearanceThemeLabel;
+
+  /// Light theme option title.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get appearanceLight;
+
+  /// Light theme option subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Always light'**
+  String get appearanceLightDesc;
+
+  /// Dark theme option title.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get appearanceDark;
+
+  /// Dark theme option subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Always dark'**
+  String get appearanceDarkDesc;
+
+  /// System theme option title.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get appearanceSystem;
+
+  /// System theme option subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Match device setting'**
+  String get appearanceSystemDesc;
+
+  /// Footnote under the theme list explaining the System option.
+  ///
+  /// In en, this message translates to:
+  /// **'System follows your device\'s light/dark schedule.'**
+  String get appearanceSystemNote;
+
+  /// Error-state title on the Appearance screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load appearance'**
+  String get appearanceErrorTitle;
+
+  /// Error-state body on the Appearance screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong loading your theme setting.'**
+  String get appearanceErrorMessage;
 }
 
 class _AppLocalizationsDelegate

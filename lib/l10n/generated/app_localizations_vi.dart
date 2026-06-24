@@ -1279,4 +1279,39 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get learningReminderOffDesc => 'Chưa đặt nhắc nhở';
+
+  @override
+  String get appearanceTitle => 'Giao diện';
+
+  @override
+  String get appearanceThemeLabel => 'Chủ đề';
+
+  @override
+  String get appearanceLight => 'Sáng';
+
+  @override
+  String get appearanceLightDesc => 'Luôn sáng';
+
+  @override
+  String get appearanceDark => 'Tối';
+
+  @override
+  String get appearanceDarkDesc => 'Luôn tối';
+
+  @override
+  String get appearanceSystem => 'Hệ thống';
+
+  @override
+  String get appearanceSystemDesc => 'Theo cài đặt thiết bị';
+
+  @override
+  String get appearanceSystemNote =>
+      'Hệ thống theo lịch sáng/tối của thiết bị.';
+
+  @override
+  String get appearanceErrorTitle => 'Không tải được giao diện';
+
+  @override
+  String get appearanceErrorMessage =>
+      'Đã xảy ra lỗi khi tải cài đặt chủ đề của bạn.';
 }

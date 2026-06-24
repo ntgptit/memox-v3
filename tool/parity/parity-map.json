@@ -205,6 +205,15 @@
         { "kit": "reminder-on", "scope": "future", "reason": "daily-reminder feature (enable + time + repeat) is Future — no reminder persistence in LearningSettings and no notification-scheduling dependency; engagement reminders pending approval (docs/business/system/overview.md)" },
         { "kit": "perm-denied", "scope": "future", "reason": "OS notification-permission denied banner + open-settings — part of the Future reminder feature (needs a notification dependency + permission flow)" }
       ]
+    },
+    {
+      "id": "24-appearance",
+      "title": "Appearance",
+      "states": [
+        { "kit": "system", "golden": "test/presentation/features/settings/goldens/appearance_system", "scope": "current" },
+        { "kit": "light", "golden": "test/presentation/features/settings/goldens/appearance_light", "scope": "current" },
+        { "kit": "dark", "golden": "test/presentation/features/settings/goldens/appearance_dark", "scope": "current" }
+      ]
     }
   ],
   "noFe": [
@@ -214,7 +223,6 @@
     "20-settings",
     "21-account-sync",
     "23-audio-speech",
-    "24-appearance",
     "25-language"
   ]
 }

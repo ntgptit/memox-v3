@@ -213,6 +213,25 @@ enum StudyType {
 
 **Storage:** `study_sessions.study_type` TEXT, snake_case (`new_cards`, `srs_review`).
 
+### AppThemeMode
+
+The app's theme preference (kit screen 24 — Appearance). Mapped to Flutter's
+`ThemeMode` in the presentation layer (`AppThemeModeX.materialThemeMode`); the
+domain stays Flutter-free.
+
+```dart
+enum AppThemeMode {
+  system,  // Follow the device light/dark schedule
+  light,   // Always light
+  dark,    // Always dark
+}
+```
+
+**Storage:** SharedPreferences `appearance.themeMode` TEXT (`storageValue`:
+`system`/`light`/`dark`); unknown/missing recovers to `system` via
+`AppThemeMode.fromStorage`. See
+`docs/contracts/repository-contracts/appearance-settings-repository.md`.
+
 ### SessionStatus
 
 Lifecycle of a study session.

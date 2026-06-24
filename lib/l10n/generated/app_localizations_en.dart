@@ -1306,4 +1306,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get learningReminderOffDesc => 'No reminder set';
+
+  @override
+  String get appearanceTitle => 'Appearance';
+
+  @override
+  String get appearanceThemeLabel => 'Theme';
+
+  @override
+  String get appearanceLight => 'Light';
+
+  @override
+  String get appearanceLightDesc => 'Always light';
+
+  @override
+  String get appearanceDark => 'Dark';
+
+  @override
+  String get appearanceDarkDesc => 'Always dark';
+
+  @override
+  String get appearanceSystem => 'System';
+
+  @override
+  String get appearanceSystemDesc => 'Match device setting';
+
+  @override
+  String get appearanceSystemNote =>
+      'System follows your device\'s light/dark schedule.';
+
+  @override
+  String get appearanceErrorTitle => 'Couldn\'t load appearance';
+
+  @override
+  String get appearanceErrorMessage =>
+      'Something went wrong loading your theme setting.';
 }

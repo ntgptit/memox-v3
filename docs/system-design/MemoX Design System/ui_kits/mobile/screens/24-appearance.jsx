@@ -47,7 +47,7 @@
         <Bar />
         <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `${S(4)} var(--memox-space-screen) var(--memox-space-6)`, display: 'flex', flexDirection: 'column', gap: S(2) }}>
           <div className="ov" style={{ paddingLeft: S(1) }}>Theme</div>
-          <div className="list-card">
+          <div className="list-card" data-mx-node="24-appearance/theme-list">
             {OPTIONS.map((o, i) => (
               <div key={o.key}>
                 {i > 0 && <div className="hr"></div>}

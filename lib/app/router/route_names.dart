@@ -20,6 +20,10 @@ abstract final class RouteNames {
   /// immersive route (shell hidden). WBS 8.2.2.
   static const String settingsLearning = 'settingsLearning';
 
+  /// Appearance / theme settings (`/settings/appearance`, kit screen 24) — a
+  /// top-level immersive route (shell hidden). WBS 8.8.1.
+  static const String settingsAppearance = 'settingsAppearance';
+
   /// Tag management (`/settings/learning/tags`, kit screen 11) — a top-level
   /// immersive route (shell hidden). WBS 8.3.2.
   static const String settingsLearningTags = 'settingsLearningTags';

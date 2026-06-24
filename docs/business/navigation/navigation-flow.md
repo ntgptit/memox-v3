@@ -57,6 +57,7 @@ branches.
 | `/settings/account`       | Account linking + Drive sync                                                                                               | No            |
 | `/settings/learning`      | Learning settings — Current V1: top-level immersive `LearningSettingsScreen` (`settingsRoutes()`, outside the shell), the **daily-goal** card (toggle + new-card limit slider/presets) over `LearningSettings` (kit screen 22; `docs/wireframes/20-settings-learning.md`). The reminder card is a Future affordance (no reminder BE). Entry from the Settings hub is Future (hub unbuilt). | No            |
 | `/settings/learning/tags` | Tag management — Current V1: top-level immersive `SettingsTagManagementScreen` (`settingsRoutes()`, outside the shell), list/search + rename/merge/delete (kit screen 11; `docs/wireframes/22-settings-tag-management.md`). Entry from Settings→Learning is Future (hub unbuilt). | No            |
+| `/settings/appearance`    | Appearance — Current V1: top-level immersive `AppearanceSettingsScreen` (`settingsRoutes()`, outside the shell), the theme-mode picker (Light / Dark / System) over `AppearanceController`; drives `MaterialApp.themeMode` (kit screen 24). Entry from the Settings hub is Future (hub unbuilt).                                       | No            |
 | `/settings/audio-speech`  | Audio & speech settings (Korean / English tabs, voice list, sliders, preview)                                             | No            |
 
 Route name constants (from `lib/app/router/route_names.dart`): `RouteNames.settings`,
