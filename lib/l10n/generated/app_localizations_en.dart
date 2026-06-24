@@ -886,4 +886,89 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get statsLoadFailedMessage =>
       'Something went wrong loading your stats.';
+
+  @override
+  String get cardHistoryTitle => 'History';
+
+  @override
+  String get cardHistoryActivityLabel => 'ACTIVITY';
+
+  @override
+  String get cardHistoryReviewsLabel => 'Reviews';
+
+  @override
+  String get cardHistoryRetentionLabel => 'Retention';
+
+  @override
+  String get cardHistoryAvgTimeLabel => 'Avg time';
+
+  @override
+  String get cardHistoryStatEmpty => '—';
+
+  @override
+  String cardHistoryBoxChip(int box) {
+    return 'Box $box';
+  }
+
+  @override
+  String cardHistoryDurationSeconds(String value) {
+    return '${value}s';
+  }
+
+  @override
+  String cardHistoryRowMeta(String relative, String time) {
+    return '$relative · $time';
+  }
+
+  @override
+  String get cardHistoryToday => 'Today';
+
+  @override
+  String get cardHistoryYesterday => 'Yesterday';
+
+  @override
+  String cardHistoryDaysAgo(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days days ago',
+      one: '1 day ago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardHistoryAttemptCorrect => 'Reviewed · Correct';
+
+  @override
+  String get cardHistoryAttemptRecovered => 'Reviewed · Recovered';
+
+  @override
+  String get cardHistoryAttemptForgot => 'Reviewed · Forgot';
+
+  @override
+  String get cardHistoryEventCreated => 'Card created';
+
+  @override
+  String get cardHistoryEventEdited => 'Card edited';
+
+  @override
+  String get cardHistoryEventReset => 'Progress reset';
+
+  @override
+  String get cardHistoryEventAudio => 'Audio added';
+
+  @override
+  String get cardHistoryEmptyTitle => 'No history yet';
+
+  @override
+  String get cardHistoryEmptyMessage =>
+      'Study this card and your reviews will show up here.';
+
+  @override
+  String get cardHistoryLoadFailedTitle => 'Couldn\'t load history';
+
+  @override
+  String get cardHistoryLoadFailedMessage =>
+      'We couldn\'t fetch this card\'s activity.';
 }

@@ -1,23 +1,28 @@
 ---
-last_updated: 2026-06-21
+last_updated: 2026-06-24
 applies_to: per-card study history view, attempt timeline
-status: Schema enabler shipped (WBS 7.0.1, schema v7); read query + screen pending (WBS 7.6.x)
+status: Implemented (V1 redesign-simplified, 2026-06-24, WBS 7.6.1–7.6.3)
 related_decision: docs/project-management/wbs.md (§6 Deferred / Future / Rejected register)
 ---
 
 # Card History
 
-> **Status: Schema enabler shipped (WBS 7.0.1, schema v7); feature read/UI pending.**
-> The 2026-06-19 rebuild reset the Drift layer, so the prior "Implemented" claim no longer holds.
-> The card-history **schema** is now in place: `card_events` table (+ `idx_card_events_flashcard`),
-> `flashcard_progress.last_reset_at`, and `study_attempts.duration_ms` shipped with schema v7
-> (WBS 7.0.1). There is **no read logic yet** — the review-history query lands in WBS 7.6.1 and the
-> use cases + screen in WBS 7.6.2 / 7.6.3.
+> **Status (2026-06-24): Implemented to the kit-09 mock (redesign-simplified).**
+> `CardHistoryScreen` renders at `/library/deck/:deckId/flashcards/:flashcardId/history` (top-level
+> immersive route, no bottom nav), backed by `GetCardHistoryUseCase` →
+> `CardHistoryRepository.loadCardHistory` (`lib/data/repositories/card_history_repository_impl.dart`)
+> over `lib/data/datasources/local/drift/history_queries.drift`. The screen shows a breadcrumb, a
+> header card (front/deck + `Box n` chip + Reviews/Retention/Avg-time), and the unified activity feed.
 >
-> **Data dependencies:** `study_attempts.box_before` / `box_after` (v6) and
-> `flashcard_progress.last_reset_at` + `study_attempts.duration_ms` + `card_events` (v7) all exist;
-> they are not yet populated/read. Suspend/unsuspend from the overflow remains deferred with the
-> Bury/Suspend feature (WBS 4.11.x).
+> **Redesign-simplified scope:** the kit-09 mock is authoritative and is **simpler** than the
+> pre-redesign design below. The CURRENT PROGRESS card (box stepper + 6-stat grid), the "All events"
+> filter, the Edit pill, the overflow (Reset progress / Delete), and the heatmap/box-progression
+> graphs are **NOT** in the mock and are **not built** — the sections below describe the older TARGET
+> design, kept for reference. Reset/Delete/Edit + Suspend/unsuspend remain deferred (Bury/Suspend,
+> WBS 4.11.x). `card_events` is still never written (no created/edited/reset emitter yet); the feed
+> synthesizes the `created` row from `flashcards.created_at` and renders any real `card_events` rows
+> if/when emitted. **Entry point is Future** (no "View history" surface wired yet; see §Future
+> surfaces) — reachable by path/deep-link.
 
 ## V1 decision
 

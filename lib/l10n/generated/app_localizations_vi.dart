@@ -867,4 +867,88 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get statsLoadFailedMessage =>
       'Đã xảy ra lỗi khi tải thống kê của bạn.';
+
+  @override
+  String get cardHistoryTitle => 'Lịch sử';
+
+  @override
+  String get cardHistoryActivityLabel => 'HOẠT ĐỘNG';
+
+  @override
+  String get cardHistoryReviewsLabel => 'Lượt ôn';
+
+  @override
+  String get cardHistoryRetentionLabel => 'Ghi nhớ';
+
+  @override
+  String get cardHistoryAvgTimeLabel => 'TG trung bình';
+
+  @override
+  String get cardHistoryStatEmpty => '—';
+
+  @override
+  String cardHistoryBoxChip(int box) {
+    return 'Hộp $box';
+  }
+
+  @override
+  String cardHistoryDurationSeconds(String value) {
+    return '${value}s';
+  }
+
+  @override
+  String cardHistoryRowMeta(String relative, String time) {
+    return '$relative · $time';
+  }
+
+  @override
+  String get cardHistoryToday => 'Hôm nay';
+
+  @override
+  String get cardHistoryYesterday => 'Hôm qua';
+
+  @override
+  String cardHistoryDaysAgo(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days ngày trước',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardHistoryAttemptCorrect => 'Đã ôn · Đúng';
+
+  @override
+  String get cardHistoryAttemptRecovered => 'Đã ôn · Gỡ lại';
+
+  @override
+  String get cardHistoryAttemptForgot => 'Đã ôn · Quên';
+
+  @override
+  String get cardHistoryEventCreated => 'Đã tạo thẻ';
+
+  @override
+  String get cardHistoryEventEdited => 'Đã sửa thẻ';
+
+  @override
+  String get cardHistoryEventReset => 'Đặt lại tiến độ';
+
+  @override
+  String get cardHistoryEventAudio => 'Đã thêm âm thanh';
+
+  @override
+  String get cardHistoryEmptyTitle => 'Chưa có lịch sử';
+
+  @override
+  String get cardHistoryEmptyMessage =>
+      'Hãy học thẻ này, các lượt ôn sẽ xuất hiện ở đây.';
+
+  @override
+  String get cardHistoryLoadFailedTitle => 'Không tải được lịch sử';
+
+  @override
+  String get cardHistoryLoadFailedMessage =>
+      'Không thể tải hoạt động của thẻ này.';
 }

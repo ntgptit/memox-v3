@@ -57,7 +57,7 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Answer re-grade before finalize| Specified (ships with first retry mode)| `docs/business/study/study-flow.md`|
 | Manual-create duplicate soft-warning| Specified (BE Implemented — WBS 2.20.1)| `docs/business/flashcard/flashcard-management.md`|
 | Due-time local-midnight normalization| Implemented (BE — WBS 4.6.4, finalization `dueAtFor`)| `docs/business/srs/srs-review.md`|
-| Card history view| Specified| `docs/business/history/card-history.md`, `docs/wireframes/09-flashcard-history.md`|
+| Card history view| Implemented (V1 redesign-simplified, WBS 7.6.1–7.6.3) — `CardHistoryScreen` (top-level immersive route): breadcrumb + header (front/deck + `Box n` + Reviews/Retention/Avg-time) + activity feed, over `GetCardHistoryUseCase`. Read-only; CURRENT-PROGRESS card / filter / Edit / overflow / heatmap dropped (mock-authoritative); entry affordance Future.| `docs/business/history/card-history.md`, `docs/wireframes/09-flashcard-history.md`|
 | Inline/scope-local search| V1 guideline| `docs/business/search/global-search.md`|
 | Global search screen (folders/decks/flashcards)| Implemented (WBS 3.5.1 BE + 3.5.2/3.5.3 FE) — top-level `/search` with a bottom search dock (design redesign)| `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md`|
 | Bottom-nav primary destinations| Redesign: 5 tabs — Home · Library · Search · Stats · Settings (was 4; Search promoted from app-bar icon to a thumb-reachable destination)| `docs/business/navigation/navigation-flow.md`|

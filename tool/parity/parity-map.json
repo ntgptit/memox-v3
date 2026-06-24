@@ -151,12 +151,22 @@
       "states": [
         { "kit": "default", "golden": "test/presentation/features/stats/goldens/stats_default", "scope": "current" }
       ]
+    },
+    {
+      "id": "09-flashcard-history",
+      "title": "Flashcard history",
+      "states": [
+        { "kit": "loaded", "golden": "test/presentation/features/history/goldens/card_history_loaded", "scope": "current" },
+        { "kit": "empty", "golden": "test/presentation/features/history/goldens/card_history_empty", "scope": "current" },
+        { "kit": "loading", "golden": "test/presentation/features/history/goldens/card_history_loading", "scope": "current" },
+        { "kit": "error", "golden": "test/presentation/features/history/goldens/card_history_error", "scope": "current" },
+        { "kit": "partial", "scope": "behavior", "reason": "feed loads fully per card-history.md (per-card scale); incremental pagination + 'older events couldn't load' banner is Future" }
+      ]
     }
   ],
   "noFe": [
     "00-components",
     "01-onboarding",
-    "09-flashcard-history",
     "10-deck-import",
     "11-tag-management",
     "19-progress",

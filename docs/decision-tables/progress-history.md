@@ -42,15 +42,15 @@ applies_to: Progress Overview, Card history, and Daily engagement behavior branc
 
 | ID | Event | Condition | Expected | Coverage | Test |
 |----|-------|-----------|----------|----------|------|
-| H1 | Open history | Card with events | Show activity feed (attempts + lifecycle) newest-first | C0+C1 | TBD |
-| H2 | Open history | Card with zero events | Show empty state with "Study this card now" CTA | C1 | TBD |
-| H3 | Reset progress | From history screen overflow | Reset SRS (box=1, due=now), set `last_reset_at=now`, append a `card_events` reset row, retain attempts + cumulative counters | C0+C1 | TBD |
-| H4 | Lifetime stats | Recall-rate calculation | (reviewCount - lapseCount) / reviewCount from stored counters | C0 | TBD |
-| H5 | Timeline | Card progress reset | Reset appears as a lifecycle event in the feed | C0+C1 | TBD |
-| H6 | Timeline | `box_before=0` (pre-migration row) | Omit the box transition; show "Logged with missing details" + "duration not logged" | C1 | TBD |
-| H7 | Header sub-label | `last_reset_at != null` | Show "Includes attempts before last reset on {date}." | C1 | TBD |
-| H8 | New attempt insert | Any | `box_before`, `box_after`, `duration_ms` recorded | C0+C1 | TBD |
-| H9 | Timeline | Lifecycle event (created/edited/reset) | Render a lifecycle row with its chip + description | C1 | TBD |
+| H1 | Open history | Card with events | Show activity feed (attempts + lifecycle) newest-first | C0+C1 | `test/data/repositories/card_history_repository_impl_test.dart` |
+| H2 | Open history | Card with zero attempts | Show empty state ("No history yet") | C1 | `test/presentation/features/history/card_history_test.dart` |
+| H3 | Reset progress | From history screen overflow | Reset SRS (box=1, due=now), set `last_reset_at=now`, append a `card_events` reset row, retain attempts + cumulative counters | C0+C1 | Deferred (no reset/overflow in the kit-09 mock — mock-authoritative) |
+| H4 | Lifetime stats | Recall-rate calculation | (reviewCount - lapseCount) / reviewCount from stored counters | C0 | `test/data/repositories/card_history_repository_impl_test.dart` |
+| H5 | Timeline | Card progress reset | Reset appears as a lifecycle event in the feed (rendered when a `reset` `card_events` row exists) | C0+C1 | `test/data/repositories/card_history_repository_impl_test.dart` |
+| H6 | Timeline | `box_before=0` (pre-migration row) | Redesign-simplified V1 does not display the box transition at all (mock rows = result + meta + duration); pre-migration handling moot | C1 | Deferred (box transition dropped, mock-authoritative) |
+| H7 | Header sub-label | `last_reset_at != null` | "Includes attempts before last reset" sub-label NOT shown (kit-09 header omits it); `lastResetAt` retained in the model | C1 | Deferred (sub-label dropped, mock-authoritative) |
+| H8 | New attempt insert | Any | `box_before`, `box_after`, `duration_ms` recorded | C0+C1 | TBD (study-write path) |
+| H9 | Timeline | Lifecycle event (created/edited/reset/audio) | Render a lifecycle row with its tile + title | C1 | `test/data/repositories/card_history_repository_impl_test.dart` |
 
 ## Daily Engagement
 
