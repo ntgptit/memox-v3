@@ -1,14 +1,13 @@
 import 'package:go_router/go_router.dart';
 import 'package:memox/app/app_shell.dart';
 import 'package:memox/app/router/redirect.dart';
-import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
-import 'package:memox/app/router/route_placeholder.dart';
 import 'package:memox/presentation/features/dashboard/routes/dashboard_routes.dart';
 import 'package:memox/presentation/features/flashcards/routes/flashcard_routes.dart';
 import 'package:memox/presentation/features/folders/routes/folder_routes.dart';
 import 'package:memox/presentation/features/history/routes/history_routes.dart';
 import 'package:memox/presentation/features/search/routes/search_routes.dart';
+import 'package:memox/presentation/features/settings/routes/settings_branch_routes.dart';
 import 'package:memox/presentation/features/settings/routes/settings_routes.dart';
 import 'package:memox/presentation/features/stats/routes/stats_routes.dart';
 import 'package:memox/presentation/features/study/routes/study_routes.dart';
@@ -20,11 +19,11 @@ import 'package:memox/presentation/features/study/routes/study_routes.dart';
 /// (Home · Library · Search · Stats · Settings) are branches of a
 /// [StatefulShellRoute.indexedStack] hosted by [MxAppShell],
 /// so each tab keeps its own navigation stack. The bare root (`/`) redirects to
-/// [RouteDefaults.initialLocation]. Each destination renders a
-/// [RoutePlaceholder] until its real screen ships; feature route registries
-/// (`lib/presentation/features/**/routes/*.dart`) compose into the matching
-/// branch as features land. `app_router.dart` must not import feature screens
-/// directly (see `memox.routing.app_router_no_feature_screen_imports`).
+/// [RouteDefaults.initialLocation]. All five destinations now render their real
+/// screens (Dashboard / Library / Search / Stats / Settings) via feature route
+/// registries (`lib/presentation/features/**/routes/*.dart`) composed into the
+/// matching branch; `app_router.dart` must not import feature screens directly
+/// (see `memox.routing.app_router_no_feature_screen_imports`).
 GoRouter createAppRouter() => GoRouter(
   initialLocation: RoutePaths.root,
   redirect: rootRedirect,
@@ -45,16 +44,7 @@ GoRouter createAppRouter() => GoRouter(
         StatefulShellBranch(routes: libraryBranchRoutes()),
         StatefulShellBranch(routes: searchBranchRoutes()),
         StatefulShellBranch(routes: statsBranchRoutes()),
-        StatefulShellBranch(
-          routes: <RouteBase>[
-            GoRoute(
-              path: RoutePaths.settings,
-              name: RouteNames.settings,
-              builder: (context, state) =>
-                  const RoutePlaceholder(routeName: RouteNames.settings),
-            ),
-          ],
-        ),
+        StatefulShellBranch(routes: settingsBranchRoutes()),
       ],
     ),
   ],

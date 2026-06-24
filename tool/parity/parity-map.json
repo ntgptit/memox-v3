@@ -676,13 +676,43 @@
           "scope": "current"
         }
       ]
+    },
+    {
+      "id": "20-settings",
+      "title": "Settings hub",
+      "states": [
+        {
+          "kit": "signed-out",
+          "golden": "test/presentation/features/settings/goldens/settings_signed-out",
+          "scope": "current"
+        },
+        {
+          "kit": "loading",
+          "scope": "behavior",
+          "reason": "MxLoadingState while the account status loads (transient); asserted via widget test"
+        },
+        {
+          "kit": "populated",
+          "scope": "future",
+          "reason": "signed-in account card (avatar/email/Synced chip) — needs Google sign-in (WBS 8.6.1)"
+        },
+        {
+          "kit": "signing-in",
+          "scope": "future",
+          "reason": "OAuth in-progress account card — needs Google sign-in (WBS 8.6.1)"
+        },
+        {
+          "kit": "sync-error",
+          "scope": "future",
+          "reason": "sync-failed banner + Retry — needs Drive sync (WBS 8.6.2)"
+        }
+      ]
     }
   ],
   "noFe": [
     "00-components",
     "01-onboarding",
     "19-progress",
-    "20-settings",
     "23-audio-speech"
   ]
 }

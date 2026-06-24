@@ -2413,6 +2413,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong loading your account status.'**
   String get accountErrorMessage;
+
+  /// Settings-hub account card title when signed out.
+  ///
+  /// In en, this message translates to:
+  /// **'Not signed in'**
+  String get settingsNotSignedIn;
+
+  /// Settings-hub account card subtitle when signed out.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to back up your decks'**
+  String get settingsSignInPrompt;
+
+  /// Settings-hub account card sign-in button.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get settingsSignIn;
+
+  /// Settings-hub Learning row title.
+  ///
+  /// In en, this message translates to:
+  /// **'Learning'**
+  String get settingsRowLearning;
+
+  /// Settings-hub Learning row subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily goal, reminders'**
+  String get settingsRowLearningMeta;
+
+  /// Settings-hub Audio & speech row title.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio & speech'**
+  String get settingsRowAudio;
+
+  /// Settings-hub Audio & speech row subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Text-to-speech voices'**
+  String get settingsRowAudioMeta;
+
+  /// Settings-hub Appearance row title.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get settingsRowAppearance;
+
+  /// Settings-hub Appearance row subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get settingsRowAppearanceMeta;
+
+  /// Settings-hub Language row title.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get settingsRowLanguage;
+
+  /// Settings-hub Language row subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'App language'**
+  String get settingsRowLanguageMeta;
+
+  /// Settings-hub Account & sync row title.
+  ///
+  /// In en, this message translates to:
+  /// **'Account & sync'**
+  String get settingsRowAccount;
+
+  /// Settings-hub Account & sync row subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup and restore'**
+  String get settingsRowAccountMeta;
+
+  /// Settings-hub About row title.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settingsRowAbout;
+
+  /// Settings-hub About row subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Version, licenses'**
+  String get settingsRowAboutMeta;
+
+  /// Settings-hub Learning row trailing value (daily new-card goal).
+  ///
+  /// In en, this message translates to:
+  /// **'{count}/day'**
+  String settingsGoalValue(int count);
+
+  /// Settings-hub trailing value when a setting is off (e.g. daily goal).
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get settingsValueOff;
+
+  /// Settings-hub trailing value for a Future row (Audio & speech).
+  ///
+  /// In en, this message translates to:
+  /// **'Soon'**
+  String get settingsValueSoon;
+
+  /// Error-state title on the Settings hub.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load settings'**
+  String get settingsErrorTitle;
+
+  /// Error-state body on the Settings hub.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong loading your settings.'**
+  String get settingsErrorMessage;
 }
 
 class _AppLocalizationsDelegate

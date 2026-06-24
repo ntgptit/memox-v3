@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-26
+last_updated: 2026-06-25
 route: /settings
 source_specs:
   - docs/business/navigation/navigation-flow.md
@@ -7,6 +7,18 @@ source_specs:
 ---
 
 # 04 — Settings Hub
+
+> **Status (2026-06-25): Built — Current V1 (WBS 8.1.1, kit screen 20).** `/settings` now renders
+> `SettingsScreen` (`lib/presentation/features/settings/screens/settings_screen.dart`) as the shell
+> branch (`settingsBranchRoutes()`), replacing the `RoutePlaceholder`. It shows an **account summary
+> card** (signed-out V1, over `AccountController`) + grouped category rows that push the immersive
+> sub-screens: **Learning / Appearance / Language** (with live trailing values — daily goal "N/day",
+> theme name, app-language name — read from their controllers), **Account & sync**, and **About**
+> (the standard about dialog). **Audio & speech is a disabled Future row** (TTS not built, WBS
+> 8.4.1). No fabricated account/version data. **Future (parked):** the account card's
+> Populated / Signing-in / Sync-error states (avatar/email/Synced chip, sync banner) need the
+> Drive-sync infra (WBS 8.6.x); V1 always renders the signed-out card. The behaviour/copy below that
+> describes those signed-in/sync states is the **target** for that Future work.
 
 ## Purpose
 
@@ -17,21 +29,21 @@ status indicators.
 
 Prompt 21 (2026-05-31) verified Settings Hub as a navigation owner, not a settings mutation owner.
 
-> **Release rule (adopted 2026-06-10, WBS 8.1.2):** the hub currently shows MOCK data as if real —
-> a fake signed-in account ("alex@memox.app", "Synced 2h ago") and a fake app version. Before any
-> release/testing with real users: hide or disable the account row until real account state
-> exists (show "Not signed in" / Soon), and read the version from package info. A user must never
-> see fabricated state presented as their own.
+> **Release rule (WBS 8.1.2) — satisfied by the V1 build.** The hub shows **no fabricated state**:
+> the account card reads the real `AccountLinkStatus` (V1 → "Not signed in"), the Audio & speech row
+> is a disabled "Soon" affordance, and no fake app version is shown (the About dialog reports the
+> real version; a row-level version value via `package_info` is a Future enhancement). A user never
+> sees fabricated state presented as their own.
 
 | Aspect                                           | V1 status                                | Notes                                                                                                                                   |
 |--------------------------------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
 | `/settings` route + shell navigation             | Current                                  | `/settings` renders `SettingsScreen` inside the app shell.                                                                              |
 | Account, Learning, Audio/Speech, Tags navigation | Current                                  | Rows push named settings sub-routes; sub-screens hide shell navigation; back returns to the hub when entered from the hub.              |
-| Appearance row                                   | Route Current (kit 24); hub entry Future | `/settings/appearance` is live (`AppearanceSettingsScreen`, theme picker) but the hub is unbuilt, so it is reached by deep-link, not yet a tappable hub row.                                                                         |
-| Language row                                     | Route Current (kit 25); hub entry Future | `/settings/language` is live (`LanguageSettingsScreen`, app-language picker) but the hub is unbuilt, so it is reached by deep-link, not yet a tappable hub row.                                            |
+| Appearance row                                   | Current (kit 24) | `/settings/appearance` (`AppearanceSettingsScreen`, theme picker) is a tappable Appearance hub row. |
+| Language row                                     | Current (kit 25) | `/settings/language` (`LanguageSettingsScreen`, app-language picker) is a tappable Language hub row. |
 | About row                                        | Current (dialog) / Target (bottom-sheet) | Current code opens Flutter's `AboutDialog`. The About bottom-sheet remains release-polish target behavior.                              |
 | Hub-owned mutation                               | Current absent                           | Hub rows navigate only. Account/Drive, study defaults, TTS, and tag mutation live in their sub-screens/viewmodels.                      |
-| Subtitle source                                  | Partial — **mock data on screen**        | The current screen renders MOCK account data (`alex@memox.app`) and a mock app version (`_mockAppVersion = '1.4.2 (build 248)'`) from the static preview. No real account/sync state exists. |
+| Subtitle / trailing values                       | Current — real data, no mock             | Account card = real `AccountLinkStatus` (V1 signed-out). Learning/Appearance/Language rows show live trailing values from their controllers (daily goal "N/day", theme name, language name). Audio & speech = "Soon" (Future). No fabricated account/version data. |
 | Async state                                      | Current                                  | Provider-backed rows keep rows visible and use row-level skeleton/error states; the hub has no full-screen empty state.                 |
 
 ## Layout
@@ -62,10 +74,10 @@ Prompt 21 (2026-05-31) verified Settings Hub as a navigation owner, not a settin
 │                                       │
 │  APP                                  │
 │  ┌───────────────────────────────────┐│
-│  │ 🎨 Appearance                ▸    ││  → /settings/appearance (Current, kit 24; hub row entry Future)
+│  │ 🎨 Appearance                ▸    ││  → /settings/appearance (Current, kit 24 — tappable hub row)
 │  │    System default                 ││
 │  ├───────────────────────────────────┤│
-│  │ 🌐 Language                  ▸    ││  → /settings/language (Current, kit 25; hub row entry Future)
+│  │ 🌐 Language                  ▸    ││  → /settings/language (Current, kit 25 — tappable hub row)
 │  │    English                        ││
 │  └───────────────────────────────────┘│
 │                                       │
@@ -90,7 +102,7 @@ Prompt 21 (2026-05-31) verified Settings Hub as a navigation owner, not a settin
 
 | Data                                         | Source                                           | Refresh trigger |
 |----------------------------------------------|--------------------------------------------------|-----------------|
-| Account sign-in state (email, signed-in/out) | `AuthService` + SharedPreferences                | watch           |
+| Account sign-in state (email, signed-in/out) | `AccountController` (V1) → `CloudAccountStore` (SharedPreferences) | watch           |
 | Last sync result (success/failed/never)      | SharedPreferences                                | watch           |
 | Daily goal (for subtitle)                    | SharedPreferences                                | watch           |
 | TTS default voice label                      | SharedPreferences                                | watch           |
@@ -104,7 +116,7 @@ Subtitles populate independently; rows render immediately, subtitles fill in.
 - ❌ Host actual settings on this screen (no toggles, no sliders here).
 - ❌ Hide the Account row when signed out. Show "Not signed in — tap to set up backup."
 - ❌ Display a stale subtitle. If data is loading, show "—" or skeleton.
-- Appearance and Language are now implemented (kit 24 / 25); their hub rows may be enabled once the hub is built (each route is already live by deep-link).
+- Appearance and Language are implemented (kit 24 / 25) and are tappable hub rows (the hub is built — kit 20).
 
 ## Components
 

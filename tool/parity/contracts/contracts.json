@@ -229,6 +229,16 @@
         "node": "list-card"
       }
     ],
+    "20-settings": [
+      {
+        "key": "mx-node:20-settings/account-card",
+        "node": "card"
+      },
+      {
+        "key": "mx-node:20-settings/settings-group",
+        "node": "list-card"
+      }
+    ],
     "21-account-sync": [
       {
         "key": "mx-node:21-account-sync/signin-card",

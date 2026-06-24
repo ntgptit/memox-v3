@@ -83,6 +83,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       spacing: pad:8/20/24/20
       position: layout_hint:scroll
       - node: card
+        id: 20-settings/account-card
         mx: MxCard
         box:
           abs: [21,109 348x90]
@@ -132,6 +133,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
               rel: [12,0 24x24]
             position: clip
       - node: list-card
+        id: 20-settings/settings-group
         box:
           abs: [21,215 348x277]
           rel: [20,114 348x277]
@@ -654,6 +656,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 
 ```diff
   - node: card
+  id: 20-settings/account-card
   mx: MxCard
   box:
   abs: [21,109 348x93]
@@ -743,6 +746,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + rel: [13,4 16x16]
 + position: clip
   - node: list-card
+  id: 20-settings/settings-group
   box:
   abs: [21,218 348x277]
   rel: [20,117 348x277]
@@ -756,6 +760,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 
 ```diff
   - node: card
+  id: 20-settings/account-card
   mx: MxCard
   box:
   abs: [21,109 348x77]
@@ -827,6 +832,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + spacing: margin:6/0/0/0
 + style: font:13/400 color:text-2
   - node: list-card
+  id: 20-settings/settings-group
   box:
   abs: [21,202 348x277]
   rel: [20,101 348x277]
@@ -892,6 +898,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + flex: grow:1 basis:0 layout_hint:expanded
 + style: font:14/600 color:danger
   - node: card
+  id: 20-settings/account-card
   mx: MxCard
   box:
   abs: [21,185 348x90]
@@ -936,6 +943,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + rel: [13,4 16x16]
 + position: clip
   - node: list-card
+  id: 20-settings/settings-group
   box:
   abs: [21,291 348x277]
   rel: [20,190 348x277]
