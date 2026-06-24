@@ -28,8 +28,10 @@
 > content-card (12/14/15/16) + action (15 Show-answer, 16 Check). The remaining 4
 > contract nodes are FE-side **`exceptions`** in `intent-ledger.json` (not built by
 > design): 07/08 `deck-picker` (Future — deck retargeting), 14 `action` (guess
-> AUTO-ADVANCES, no manual button), 17 `close-btn` (result screen uses Done as the sole
-> exit; FLAGGED for owner — re-add the close-x if wanted). All parity + study tests pass.
+> AUTO-ADVANCES, no manual button), 17 `close-btn` (mock↔doc conflict resolved toward
+> wireframe 18 — the result screen has ONE exit, scope-aware `Done`, not kept in the
+> back stack; a second close-x would break that nav contract, so it stays Rejected).
+> All parity + study tests pass.
 
 Autonomous loop: tag the kit JSX with `data-mx-node` on required singleton nodes,
 re-export specs, regenerate the parity contract, add matching Flutter `ValueKey`s +
