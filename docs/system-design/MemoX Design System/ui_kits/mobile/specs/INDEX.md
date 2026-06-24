@@ -5,12 +5,11 @@ UI kit for agents without strong image input: element trees with containment hie
 layout intent, repeated-item runs, bounding boxes, and `--memox-*` token-resolved styles.
 Pair with `../shots/*.png` when vision is available.
 
-Source `index.html` sha256: `6cb7c16e995a541228bda4ae407dc1aff551ae34c2eda8c707ca4835971b07c6` (mirror of `specs/.source-hash`; the
+Source `index.html` sha256: `3a9450e22daf369356d7215248c6186eb05bef1e6710dcb1495594447ba7f3bb` (mirror of `specs/.source-hash`; the
 freshness check in `tool/verify/run.mjs` fails if `index.html` changed without re-export).
 
 | # | Screen | Spec file | States |
 | --- | --- | --- | --- |
-| 00 | Components | `00-components.md` | 1 |
 | 01 | Onboarding | `01-onboarding.md` | 9 |
 | 02 | Dashboard | `02-dashboard.md` | 8 |
 | 03 | Library overview | `03-library-overview.md` | 6 |
@@ -37,4 +36,4 @@ freshness check in `tool/verify/run.mjs` fails if `index.html` changed without r
 | 24 | Appearance | `24-appearance.md` | 3 |
 | 25 | Language | `25-language.md` | 3 |
 
-Total: 26 screens · 140 states.
+Total: 25 screens · 139 states.

@@ -7,12 +7,6 @@ Every screen state ships as a light + dark PNG pair at 390px width. These PNGs
 are the canonical visual mock reference for UI tasks — read the PNG, not the
 10k-line `index.html` source.
 
-## 00 — Components
-
-| State | Light | Dark |
-| --- | --- | --- |
-| Default | `00-components--default--light.png` | `00-components--default--dark.png` |
-
 ## 01 — Onboarding
 
 | State | Light | Dark |
