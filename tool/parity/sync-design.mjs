@@ -31,6 +31,9 @@ const CONFIG = join(REPO, '.design-sync', 'config.json');
 
 const args = process.argv.slice(2);
 const dry = args.includes('--dry');
+// --no-record: push but do not write lastSyncedCommit (for the pre-push hook, where the
+// range is "what's being pushed", not "since the last manual sync").
+const noRecord = args.includes('--no-record');
 const fromRefArg = args.find((a) => !a.startsWith('--'));
 
 const git = (...a) => execFileSync('git', a, { cwd: REPO, encoding: 'utf8' }).trim();
@@ -119,6 +122,10 @@ if (!/^SYNCED /.test(lastLine)) {
   process.exit(1);
 }
 
+if (noRecord) {
+  console.log('sync-design: done (--no-record, lastSyncedCommit unchanged).');
+  process.exit(0);
+}
 cfg.lastSyncedCommit = head;
 writeFileSync(CONFIG, `${JSON.stringify(cfg, null, 2)}\n`);
 console.log(`sync-design: done. lastSyncedCommit → ${head.slice(0, 8)}`);

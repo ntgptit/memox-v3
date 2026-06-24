@@ -236,6 +236,12 @@ chạm gì khác kể cả headless) → `write_files`/`delete_files`; xong ghi 
 design-auth nên **không CI-hóa được**; surface không có scope vẫn đẩy được nhờ CLI máy. Không có CLI auth
 → script fail rõ → report ghi `design-sync: skipped (no design-authorized CLI)`. Chạy **sau khi commit**.
 
+**Tự động trên push — `.githooks/pre-push`:** trên máy có `claude` CLI đã design-login thì KHÔNG cần
+chạy tay — hook phát hiện kit đổi trong range đang push (guard `git diff` rẻ; push thường không spawn gì)
+rồi chạy `sync-design.mjs <from> --no-record`. **Non-fatal** (fail thì cảnh báo, không chặn push; drift
+vẫn bị `design_watch --check` bắt). Tắt: `MEMOX_NO_DESIGN_SYNC=1`. Git-hook chạy được CHÍNH VÌ CLI máy đã
+auth — caveat "không CI-hóa" là cho máy sạch/CI không có login đó.
+
 > `data-mx-node` ids nên sống **trong project Claude Design** (push lên bằng DesignSync 1 lần) → mỗi pull
 > kéo về là có sẵn, **không bị ghi đè** — đó là lý do dùng DesignSync (ghi được) thay vì sửa JSX chỉ ở repo.
 

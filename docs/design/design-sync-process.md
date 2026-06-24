@@ -72,6 +72,15 @@ Run it **after committing** the kit change (so the range is well-defined). A sur
 without design scope (some app clients) still pushes fine because the script uses the
 machine's CLI login, not the current session's token.
 
+**Automated on push (`.githooks/pre-push`):** on a machine whose `claude` CLI is
+design-logged-in, you don't run it by hand — the pre-push hook detects a kit change in
+the pushed range (a cheap `git diff` guard; normal pushes spawn nothing) and runs
+`sync-design.mjs <from> --no-record` automatically. It is **non-fatal** (a failed sync
+warns but never blocks the push — drift is still caught by `design_watch --check` and a
+manual sync) and skippable with `MEMOX_NO_DESIGN_SYNC=1`. This is the "don't ask again"
+mechanism; a true git-hook works here precisely BECAUSE the local CLI is authed (the
+not-CI-able caveat is about clean/CI machines without that login).
+
 ## Phase B — wire the pull into the pipeline (deterministic)
 
 After files land, one command:
