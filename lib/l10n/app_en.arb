@@ -792,5 +792,17 @@
   "languageErrorTitle": "Couldn't load language",
   "@languageErrorTitle": { "description": "Error-state title on the Language screen." },
   "languageErrorMessage": "Something went wrong loading your language setting.",
-  "@languageErrorMessage": { "description": "Error-state body on the Language screen." }
+  "@languageErrorMessage": { "description": "Error-state body on the Language screen." },
+  "accountTitle": "Account",
+  "@accountTitle": { "description": "App-bar title for the Account & Drive sync screen (21)." },
+  "accountSignInTitle": "Sign in to sync",
+  "@accountSignInTitle": { "description": "Sign-in hero title on the signed-out account screen." },
+  "accountSignInMessage": "Back up your decks to Google Drive and restore them on any device.",
+  "@accountSignInMessage": { "description": "Sign-in hero subtitle on the signed-out account screen." },
+  "accountContinueWithGoogle": "Continue with Google",
+  "@accountContinueWithGoogle": { "description": "Sign-in CTA (disabled in V1 — Google sign-in is Future)." },
+  "accountErrorTitle": "Couldn't load account",
+  "@accountErrorTitle": { "description": "Error-state title on the Account screen." },
+  "accountErrorMessage": "Something went wrong loading your account status.",
+  "@accountErrorMessage": { "description": "Error-state body on the Account screen." }
 }

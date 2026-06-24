@@ -1,13 +1,21 @@
 ---
-last_updated: 2026-05-31
+last_updated: 2026-06-25
 applies_to: Google account linking, Google Drive AppData sync, per-account database isolation
 ---
 
 # Account and Drive Sync
 
-> **Status: Specified — nothing implemented (verified 2026-06-11).** `/settings/account` renders
-> `RoutePlaceholder`; no account/sync entity, repository, service, store, or screen exists in
-> `lib/`. Every source path in this document is the planned target structure for WBS 8.5.x/8.6.x.
+> **Status: Display-only V1 shipped (WBS 8.5.1, 2026-06-25); interactive sign-in + Drive sync still
+> Specified (WBS 8.6.1/8.6.2).** `/settings/account` now renders `AccountSettingsScreen` — the
+> kit-21 signed-out sign-in hero — over a minimal read-only account BE: `AccountLinkStatus`
+> (`lib/domain/types/account_link_status.dart`), `CloudAccountStore`
+> (`lib/data/datasources/local/preferences/cloud_account_store.dart`, key `account.cloudAccountLink`),
+> `AccountRepository`(`Impl`, presence→status), `LoadAccountStatusUseCase`, `AccountController`. V1
+> always resolves `signedOut` and the "Continue with Google" CTA is **disabled** — interactive Google
+> sign-in (8.6.1), Drive AppData backup/restore (8.6.2), per-account DB isolation, and the full
+> `CloudAccountLink` entity remain Specified. The source paths in this document for those parts are
+> the planned target structure (only `lib/core/auth/google_auth.dart` + `google_oauth_config.dart`
+> exist for them).
 
 This document covers two tightly coupled features:
 

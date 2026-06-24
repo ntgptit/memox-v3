@@ -96,6 +96,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       spacing: pad:16/20/24/20
       position: layout_hint:scroll
       - node: card
+        id: 21-account-sync/signin-card
         mx: MxCard
         box:
           abs: [21,85 348x260]
@@ -136,6 +137,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           layout: flex:col gap:8
           spacing: margin:20/0/0/0
           - node: pill-btn
+            id: 21-account-sync/signin-button
             text: Continue with Google
             mx: MxPrimaryButton
             box:
@@ -163,6 +165,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   spacing: pad:16/20/24/20
   position: layout_hint:scroll
 - - node: card
+- id: 21-account-sync/signin-card
 - mx: MxCard
 - box:
 - abs: [21,85 348x260]
@@ -203,6 +206,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - layout: flex:col gap:8
 - spacing: margin:20/0/0/0
 - - node: pill-btn
+- id: 21-account-sync/signin-button
 - text: Continue with Google
 - mx: MxPrimaryButton
 - box:
@@ -280,6 +284,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + flex: grow:1 basis:0 layout_hint:expanded
 + style: font:14/600 color:danger
   - node: card
+  id: 21-account-sync/signin-card
   mx: MxCard
   box:
   abs: [21,145 348x260]
@@ -1990,6 +1995,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   spacing: pad:16/20/24/20
   position: layout_hint:scroll
 - - node: card
+- id: 21-account-sync/signin-card
 - mx: MxCard
 - box:
 - abs: [21,85 348x260]
@@ -2030,6 +2036,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - layout: flex:col gap:8
 - spacing: margin:20/0/0/0
 - - node: pill-btn
+- id: 21-account-sync/signin-button
 - text: Continue with Google
 - mx: MxPrimaryButton
 - box:

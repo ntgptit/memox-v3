@@ -1349,4 +1349,24 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get languageErrorMessage =>
       'Đã xảy ra lỗi khi tải cài đặt ngôn ngữ của bạn.';
+
+  @override
+  String get accountTitle => 'Tài khoản';
+
+  @override
+  String get accountSignInTitle => 'Đăng nhập để đồng bộ';
+
+  @override
+  String get accountSignInMessage =>
+      'Sao lưu bộ thẻ của bạn lên Google Drive và khôi phục trên mọi thiết bị.';
+
+  @override
+  String get accountContinueWithGoogle => 'Tiếp tục với Google';
+
+  @override
+  String get accountErrorTitle => 'Không tải được tài khoản';
+
+  @override
+  String get accountErrorMessage =>
+      'Đã xảy ra lỗi khi tải trạng thái tài khoản của bạn.';
 }

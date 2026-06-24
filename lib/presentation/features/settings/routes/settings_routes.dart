@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
+import 'package:memox/presentation/features/settings/screens/account_settings_screen.dart';
 import 'package:memox/presentation/features/settings/screens/appearance_settings_screen.dart';
 import 'package:memox/presentation/features/settings/screens/language_settings_screen.dart';
 import 'package:memox/presentation/features/settings/screens/learning_settings_screen.dart';
@@ -29,6 +30,11 @@ List<RouteBase> settingsRoutes() => <RouteBase>[
     path: RoutePaths.settingsLanguage,
     name: RouteNames.settingsLanguage,
     builder: (context, state) => const LanguageSettingsScreen(),
+  ),
+  GoRoute(
+    path: RoutePaths.settingsAccount,
+    name: RouteNames.settingsAccount,
+    builder: (context, state) => const AccountSettingsScreen(),
   ),
   GoRoute(
     path: RoutePaths.settingsLearningTags,

@@ -27,6 +27,11 @@ abstract final class RoutePaths {
   /// route (outside the bottom-nav shell → immersive, shell hidden). WBS 8.8.1.
   static const String settingsLanguage = '/settings/language';
 
+  /// Account & Drive sync (kit screen 21) — registered as a **top-level** route
+  /// (outside the bottom-nav shell → immersive, shell hidden). Display-only V1.
+  /// WBS 8.5.1.
+  static const String settingsAccount = '/settings/account';
+
   /// Tag management (kit screen 11) — registered as a **top-level** route
   /// (outside the bottom-nav shell → immersive, shell hidden). WBS 8.3.2.
   static const String settingsLearningTags = '/settings/learning/tags';

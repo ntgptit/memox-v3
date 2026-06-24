@@ -1375,4 +1375,24 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get languageErrorMessage =>
       'Something went wrong loading your language setting.';
+
+  @override
+  String get accountTitle => 'Account';
+
+  @override
+  String get accountSignInTitle => 'Sign in to sync';
+
+  @override
+  String get accountSignInMessage =>
+      'Back up your decks to Google Drive and restore them on any device.';
+
+  @override
+  String get accountContinueWithGoogle => 'Continue with Google';
+
+  @override
+  String get accountErrorTitle => 'Couldn\'t load account';
+
+  @override
+  String get accountErrorMessage =>
+      'Something went wrong loading your account status.';
 }
