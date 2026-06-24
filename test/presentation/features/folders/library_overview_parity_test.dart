@@ -63,6 +63,7 @@ void main() {
     await pump(tester);
     expectParityContract('03-library (loaded)', <String, Finder>{
       'new-folder FAB': node('03-library/new-folder-fab'),
+      'sort button': node('03-library/sort-btn'),
     });
 
     // Enter search via the app-bar icon → the dock mounts (and the FAB hides).

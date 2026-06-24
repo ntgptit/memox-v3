@@ -145,7 +145,10 @@ class FolderDetailBody extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: MxSpacing.space3),
       children: <Widget>[
-        FolderStatsCard(stats: _stats(l10n, view, decksMode)),
+        FolderStatsCard(
+          key: const ValueKey<String>('mx-node:04-folder-detail/stat-card'),
+          stats: _stats(l10n, view, decksMode),
+        ),
         const SizedBox(height: MxSpacing.gapSection),
         _Overline(
           label: decksMode

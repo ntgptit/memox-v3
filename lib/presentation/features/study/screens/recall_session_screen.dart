@@ -187,6 +187,7 @@ class RecallSessionScreen extends ConsumerWidget {
                   onGotIt: () => unawaited(controller.grade(gotIt: true)),
                 )
               : MxPrimaryButton(
+                  key: const ValueKey<String>('mx-node:study-session/action'),
                   label: l10n.studyRecallShowAnswer,
                   icon: Icons.visibility_outlined,
                   fullWidth: true,
@@ -244,6 +245,7 @@ class _PromptCard extends StatelessWidget {
     final MxColors colors = context.mxColors;
     final String? reading = item.pronunciation;
     return MxCard(
+      key: const ValueKey<String>('mx-node:study-session/content-card'),
       child: Padding(
         padding: const EdgeInsets.all(MxSpacing.space5),
         child: Column(

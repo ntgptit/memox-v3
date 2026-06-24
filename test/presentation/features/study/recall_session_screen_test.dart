@@ -154,6 +154,17 @@ void main() {
         find.byKey(const ValueKey<String>('mx-node:study-session/progress')),
         findsOneWidget,
       );
+      expect(
+        find.byKey(
+          const ValueKey<String>('mx-node:study-session/content-card'),
+        ),
+        findsOneWidget,
+      );
+      // The 'Show answer' CTA is the manual action in recall (pre-reveal).
+      expect(
+        find.byKey(const ValueKey<String>('mx-node:study-session/action')),
+        findsOneWidget,
+      );
     });
 
     testWidgets('Show answer reveals the back + the grade row', (tester) async {

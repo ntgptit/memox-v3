@@ -299,6 +299,7 @@ class _ReviewCard extends StatelessWidget {
       padding: const EdgeInsets.all(MxSpacing.space4),
       child: SizedBox.expand(
         child: MxCard(
+          key: const ValueKey<String>('mx-node:study-session/content-card'),
           child: Padding(
             padding: const EdgeInsets.all(MxSpacing.space6),
             child: Column(

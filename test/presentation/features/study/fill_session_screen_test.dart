@@ -147,6 +147,17 @@ void main() {
         find.byKey(const ValueKey<String>('mx-node:study-session/progress')),
         findsOneWidget,
       );
+      expect(
+        find.byKey(
+          const ValueKey<String>('mx-node:study-session/content-card'),
+        ),
+        findsOneWidget,
+      );
+      // The 'Check' button is the manual action in fill (typing state).
+      expect(
+        find.byKey(const ValueKey<String>('mx-node:study-session/action')),
+        findsOneWidget,
+      );
     });
 
     testWidgets('a correct answer → ✓ feedback + Next', (tester) async {

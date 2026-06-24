@@ -72,6 +72,9 @@ void main() {
     expectParityContract('08-flashcard-edit', <String, Finder>{
       'front field': node('flashcard-editor/front-field'),
       'back field': node('flashcard-editor/back-field'),
+      'back button': node('flashcard-editor/back-btn'),
+      'delete button': node('flashcard-editor/delete-btn'),
+      'save button': node('flashcard-editor/save-button'),
     });
   });
 }

@@ -208,7 +208,11 @@ class FillSessionScreen extends HookConsumerWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        FillHintCard(prompt: l10n.studyFillPrompt, hint: item.back),
+        FillHintCard(
+          key: const ValueKey<String>('mx-node:study-session/content-card'),
+          prompt: l10n.studyFillPrompt,
+          hint: item.back,
+        ),
         const SizedBox(height: MxSpacing.space4),
         Expanded(
           child: _answerArea(
@@ -289,6 +293,7 @@ class FillSessionScreen extends HookConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             MxPrimaryButton(
+              key: const ValueKey<String>('mx-node:study-session/action'),
               label: l10n.studyFillCheck,
               icon: Icons.check,
               fullWidth: true,

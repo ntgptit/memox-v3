@@ -146,6 +146,12 @@ void main() {
         find.byKey(const ValueKey<String>('mx-node:study-session/progress')),
         findsOneWidget,
       );
+      expect(
+        find.byKey(
+          const ValueKey<String>('mx-node:study-session/content-card'),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('no example → no example pill', (tester) async {
