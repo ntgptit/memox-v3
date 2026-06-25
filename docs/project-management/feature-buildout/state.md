@@ -62,6 +62,17 @@ with the verbatim `/loop` prompt.
 
 ## Parked questions (newest first)
 
+- **WP5 (confirm-default ledger) — done.** Recorded the kept-default decisions as documented parity
+  exceptions in `tool/parity/intent-ledger.json`: Q1 (18-stats generic deck glyph/tints — needs-schema),
+  Q9 (22-learning slider 5..60 vs contract 5..200 — behavior), Q11 (25-language static system-row
+  subtitle — future), Q7/Q8 (10-import: import-another-vs-review-skipped + csv-only/no-live-counter —
+  future), and the TTS-23 set (23-audio: contract speed/pitch ranges — behavior; static waveform / voice
+  metadata / skeleton loading / install-voices — future). Q12 (25-language relocalize-vs-restart) was
+  already in the ledger. **Q2 (Stats tab label) + Q3 (`/progress` route)** are naming/routing decisions,
+  not FE-vs-mock parity divergences → recorded in `docs/business/navigation/navigation-flow.md` +
+  `overview.md`, not the ledger. **Q6 (09-history entry affordance Future)** is covered by
+  `docs/business/history/card-history.md` §Future surfaces + the screen's `coverageExempt` entry.
+
 - **WP1 (TTS 8.4.3) — Match mode excluded from TTS.** The match board shows many front/back tiles at
   once with no single front prompt and no reveal step, and `MatchCell` carries neither the front nor a
   per-card `targetLanguage`; the match-board mock has no speaker affordance. **Default taken:** wire TTS

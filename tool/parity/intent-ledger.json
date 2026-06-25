@@ -90,6 +90,114 @@
       "exceptionKind": "rejected",
       "reason": "Mock vs doc conflict, resolved toward the doc (CLAUDE.md). The kit PNG shows a top-right close-x, but wireframe 18 specifies ONE exit — the body 'Done' button (mx-node:17-study-result/done-button) — with a deliberate nav contract: Done uses `go` to the SCOPE-AWARE origin (deck -> that deck's list, else Dashboard), the result screen is NOT kept in the back stack, and re-entry is forbidden. A second close-x would be redundant and would tempt an inconsistent exit that breaks that origin-routing/no-re-entry contract. Hence no FE key. Re-evaluate only if wireframe 18 adds a distinct dismiss affordance.",
       "source": "docs/wireframes/18-study-result.md:165 (Done MUST use go, not stacked) + §Agent rule (origin routing) + lib/presentation/features/study/screens/study_result_screen.dart:165 (_done)"
+    },
+    {
+      "screen": "18-stats",
+      "node": "deck-icon",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "needs-schema",
+      "reason": "The mock shows distinct per-deck glyphs/colours, but decks carry no stored icon/colour (only folders do). FE uses a generic deck glyph (Icons.style_outlined) + cycles the four SRS-status tints by row index. A real per-deck icon/colour needs a decks.icon/decks.color migration (Q1).",
+      "source": "lib/domain/entities/deck.dart (no icon/colour field) + kit 18-stats"
+    },
+    {
+      "screen": "18-stats",
+      "node": "deck-row",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "needs-schema",
+      "reason": "Per-deck mastery rows reuse the generic deck glyph + cycled tints (see deck-icon) — same schema gap (Q1).",
+      "source": "lib/domain/entities/deck.dart + kit 18-stats"
+    },
+    {
+      "screen": "22-learning-settings",
+      "node": "goal-slider",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "behavior",
+      "reason": "The mock goal slider exposes 5..60; the LearningSettings contract validates dailyNewLimit 5..200 (step 5). FE slider follows the mock's 5..60 (mock wins visual); validation is unchanged (docs win behavior) so a larger persisted value stays valid but unreachable from the slider (Q9).",
+      "source": "kit 22 slider min=5 max=60 + docs/contracts/usecase-contracts/learning-settings.md (5..200)"
+    },
+    {
+      "screen": "25-language",
+      "node": "system-row",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "future",
+      "reason": "The mock System row subtitle shows the resolved device locale ('English (United States)'); resolving + pretty-printing the live device locale is out of scope. FE shows a static localized 'Match device language'. Resolved-locale display name is Future (Q11).",
+      "source": "kit 25 system row; no device-locale display-name resolver in scope"
+    },
+    {
+      "screen": "10-deck-import",
+      "node": "partial-action",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "future",
+      "reason": "The kit partial-result primary action is 'Review skipped' (a dedicated skipped-rows review); no such surface exists. FE uses 'Import another file' (restart); skipped rows are already shown in the pre-commit preview. A post-commit skipped-review screen is Future (Q7).",
+      "source": "kit 10 partial mock; no review surface in scope"
+    },
+    {
+      "screen": "10-deck-import",
+      "node": "file-types",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "future",
+      "reason": "The mock mentions Anki .apkg + a live 'N of M imported' counter; neither is buildable. FE accepts csv/tsv/txt only (CSV parser can't read .apkg zip/sqlite) and the importing state uses a plain MxLoadingState (commitDeckImport is one atomic batch, no progress events). Both Future (Q8).",
+      "source": "lib/domain/usecases/flashcard/commit_deck_import_usecase.dart (atomic commit) + kit 10 mock copy"
+    },
+    {
+      "screen": "23-audio-speech",
+      "node": "speed-slider",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "behavior",
+      "reason": "TTS slider visual range follows the mock where it doesn't break validation, but the engine uses the CONTRACT range (rate 0.3..0.7) — a real engine constraint (locked TTS-23 decision).",
+      "source": "docs/contracts/usecase-contracts/tts.md (rate 0.3-0.7) + kit 23"
+    },
+    {
+      "screen": "23-audio-speech",
+      "node": "pitch-slider",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "behavior",
+      "reason": "TTS pitch slider uses the contract engine range (pitch 0.7..1.5) — a real engine constraint (locked TTS-23 decision).",
+      "source": "docs/contracts/usecase-contracts/tts.md (pitch 0.7-1.5) + kit 23"
+    },
+    {
+      "screen": "23-audio-speech",
+      "node": "waveform",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "future",
+      "reason": "The mock's preview waveform animates; FE renders a static accent waveform (no animation) — C4 polish, Future (locked TTS-23 decision).",
+      "source": "kit 23 preview waveform; C4 deferred"
+    },
+    {
+      "screen": "23-audio-speech",
+      "node": "voice-meta",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "future",
+      "reason": "The mock shows per-voice metadata; FE lists voices without extra metadata — C2 Future (locked TTS-23 decision).",
+      "source": "kit 23 voice list; C2 deferred"
+    },
+    {
+      "screen": "23-audio-speech",
+      "node": "loading",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "future",
+      "reason": "The mock shows a skeleton loading state; FE uses a generic MxLoadingState — C3 Future (locked TTS-23 decision).",
+      "source": "kit 23 loading; C3 deferred"
+    },
+    {
+      "screen": "23-audio-speech",
+      "node": "install-voices",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "future",
+      "reason": "The mock implies an install-voices action; FE treats it as a no-op/Future (no voice-download flow) (locked TTS-23 decision).",
+      "source": "kit 23 install-voices; deferred"
     }
   ],
   "$coverageExempt": "Coverage-side ledger, consumed by tool/parity/mxnode_coverage.mjs. Lists kit CANDIDATE nodes that are intentionally NOT given a data-mx-node id, so the coverage report does not count them as gaps and `--check --min` does not trip on them. DISTINCT from `exceptions` (which is FE-differs-from-mock, for the parity test). Each entry is still a documented deviation from the FIX/TAG-by-default rule. Kinds: 'deferred' (the kit layout is PRE-redesign / stale vs the FE — tag once the kit is regenerated to the redesign on Claude Design), 'future'/'rejected' (the element is not built in the FE by scope/owner ruling), 'covered' (a decorative child INSIDE an already-tagged container — tag the container, never its inner parts, same rule as list items). Match: screen == entry.screen AND candidate.node startsWith entry.node AND (entry.mx absent OR entry.mx == candidate.mx). `source` MUST cite a doc / owner ruling. Keep MINIMAL — when in doubt, tag the node instead of exempting it.",
