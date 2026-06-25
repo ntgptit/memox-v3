@@ -82,10 +82,9 @@ with the verbatim `/loop` prompt.
   (close-to-goal from engagement + most-due deck from `DueSummary`), and loading/empty/error +
   insufficient/partial (data-driven combos).
   **BE gaps + safe V1 defaults (park; revisit if owner wants full parity):**
-  1. **Time stat ("3.3h")** — sourceable from `study_attempts.duration_ms` (v7 card-history enabler) but
-     needs a new SUM-since aggregate + NULL/sparse handling. **Default V1:** add a small
-     `studyTimeMsSince` aggregate (week total) when building the screen; if duration is unpopulated the
-     stat reads `—` (documented data-gap, parity "missing data in read model").
+  1. **Time stat ("3.3h")** — ✅ **BE built** (`ProgressRepository.loadStudyTimeMs` + `LoadStudyTimeUseCase`,
+     `study_attempts.duration_ms` SUM-since; NULL/unlogged → 0). The screen passes the week-start window;
+     if duration is unpopulated the stat reads `—` (documented data-gap, parity "missing data in read model").
   2. **Month range toggle** — `StatsOverview` is week-only (7 buckets); month needs 28-day buckets.
      **Default V1:** render the toggle; Week is live, **Month** extends the activity read to 28 days in
      the same slice (cheap — mirror `_loadWeekActivity` with a 28-day window) OR park Month as Future if

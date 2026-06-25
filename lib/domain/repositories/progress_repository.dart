@@ -54,4 +54,10 @@ abstract interface class ProgressRepository {
   /// An empty database yields all-zero activity. A read error maps to a
   /// `StorageFailure`.
   Future<Result<StudyDayActivity>> loadStudyActivity({required int now});
+
+  /// Total on-card study time (ms) for attempts at or after [since] (epoch ms) —
+  /// the kit-19 Progress detail "Time" stat (WBS 7.5.x). `study_attempts.duration_ms`
+  /// is NULL when not logged, so unlogged attempts contribute 0; an empty range
+  /// yields 0. A read error maps to a `StorageFailure`.
+  Future<Result<int>> loadStudyTimeMs({required int since});
 }

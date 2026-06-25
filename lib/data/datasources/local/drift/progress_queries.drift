@@ -86,3 +86,11 @@ JOIN flashcards fc ON fc.deck_id = d.id
 JOIN flashcard_progress fp ON fp.flashcard_id = fc.id
 GROUP BY d.id, d.name
 ORDER BY d.name ASC, d.id ASC;
+
+-- Study time (kit-19 Progress detail "Time" stat, WBS 7.5.x): total on-card
+-- duration in ms for attempts from :start onward. `duration_ms` is NULL when not
+-- logged (older attempts / non-timed modes), so SUM skips NULLs; COALESCE makes
+-- an empty/all-NULL result 0. A single aggregate column → drift returns `int`.
+studyTimeSince(:start AS INT):
+SELECT COALESCE(SUM(duration_ms), 0) AS total_ms FROM study_attempts
+WHERE attempted_at >= :start;

@@ -67,6 +67,10 @@ class ProgressDao extends DatabaseAccessor<AppDatabase>
   /// chart; the repository buckets them into local days (Stats, screen 18).
   Future<List<int>> attemptTimesSince(int start) => attemptsSince(start).get();
 
+  /// Total on-card study time (ms) for attempts at or after [start] — the kit-19
+  /// Progress detail "Time" stat (NULL `duration_ms` skipped; empty → 0).
+  Future<int> studyTimeMsSince(int start) => studyTimeSince(start).getSingle();
+
   /// Per-deck average Leitner box (only decks with cards); the repository maps
   /// `avgBox` onto a 0..1 mastery fraction (Stats, screen 18).
   Future<List<DeckMasteryRow>> deckMasteryRows() async {

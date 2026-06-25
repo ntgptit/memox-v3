@@ -9,6 +9,7 @@ import 'package:memox/domain/usecases/progress/load_progress_engagement_usecase.
 import 'package:memox/domain/usecases/progress/load_progress_read_model_usecase.dart';
 import 'package:memox/domain/usecases/progress/load_stats_overview_usecase.dart';
 import 'package:memox/domain/usecases/progress/load_study_statistics_usecase.dart';
+import 'package:memox/domain/usecases/progress/load_study_time_usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'progress_providers.g.dart';
@@ -48,6 +49,12 @@ LoadProgressReadModelUseCase loadProgressReadModelUseCase(Ref ref) =>
 @riverpod
 LoadStatsOverviewUseCase loadStatsOverviewUseCase(Ref ref) =>
     LoadStatsOverviewUseCase(repository: ref.watch(progressRepositoryProvider));
+
+/// Kit-19 Progress detail "Time" stat (WBS 7.5.x): total on-card study time (ms)
+/// since a window start.
+@riverpod
+LoadStudyTimeUseCase loadStudyTimeUseCase(Ref ref) =>
+    LoadStudyTimeUseCase(repository: ref.watch(progressRepositoryProvider));
 
 /// Progress detail engagement read (kit 19, WBS 7.4.3 / Q5): composes the daily
 /// goal (async SharedPreferences-backed learning settings) with attempt-derived

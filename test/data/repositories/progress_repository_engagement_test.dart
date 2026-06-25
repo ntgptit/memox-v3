@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
@@ -158,6 +159,119 @@ void main() {
         final StudyDayActivity a = await load();
         expect(a.currentStreak, 2);
         expect(a.longestStreak, 3, reason: 'older 3-day run is the longest');
+      },
+    );
+  });
+
+  // The kit-19 "Time" stat: total on-card study time since a window start.
+  // Unlogged attempts contribute nothing; an empty range yields zero.
+  group('ProgressRepositoryImpl.loadStudyTimeMs', () {
+    late AppDatabase db;
+    late ProgressRepositoryImpl repository;
+    final int now = DateTime(2026, 6, 24, 10).millisecondsSinceEpoch;
+
+    setUp(() {
+      db = AppDatabase.forExecutor(NativeDatabase.memory());
+      repository = ProgressRepositoryImpl(dao: ProgressDao(db));
+    });
+    tearDown(() => db.close());
+
+    Future<void> seedChain() async {
+      await db
+          .into(db.folders)
+          .insert(
+            FoldersCompanion.insert(
+              id: 'f1',
+              name: 'f1',
+              contentMode: 'decks',
+              sortOrder: 0,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+      await db
+          .into(db.decks)
+          .insert(
+            DecksCompanion.insert(
+              id: 'd1',
+              folderId: 'f1',
+              name: 'd1',
+              sortOrder: 0,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+      await db
+          .into(db.flashcards)
+          .insert(
+            FlashcardsCompanion.insert(
+              id: 'c1',
+              deckId: 'd1',
+              front: 'c1',
+              back: 'c1',
+              sortOrder: 0,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+      await db
+          .into(db.studySessions)
+          .insert(
+            StudySessionsCompanion.insert(
+              id: 's1',
+              entryType: 'deck',
+              studyType: 'srs_review',
+              status: 'completed',
+              startedAt: now,
+              updatedAt: now,
+            ),
+          );
+      await db
+          .into(db.studySessionItems)
+          .insert(
+            StudySessionItemsCompanion.insert(
+              id: 'i1',
+              sessionId: 's1',
+              flashcardId: 'c1',
+              sortOrder: 0,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+    }
+
+    int aid = 0;
+    Future<void> attempt(int atMs, int? durationMs) => db
+        .into(db.studyAttempts)
+        .insert(
+          StudyAttemptsCompanion.insert(
+            id: 't${aid++}',
+            sessionItemId: 'i1',
+            result: 'perfect',
+            studyMode: 'review',
+            attemptedAt: atMs,
+            durationMs: Value<int?>(durationMs),
+          ),
+        );
+
+    test('empty database → 0 ms', () async {
+      final result = await repository.loadStudyTimeMs(since: 0);
+      expect(result.failure, isNull);
+      expect(result.data, 0);
+    });
+
+    test(
+      'sums duration_ms since the window; NULLs skipped; before excluded',
+      () async {
+        await seedChain();
+        await attempt(now, 5000);
+        await attempt(now + 1000, 3000);
+        await attempt(now + 2000, null); // unlogged → contributes 0
+        await attempt(now - 10000, 9999); // before the window → excluded
+
+        final result = await repository.loadStudyTimeMs(since: now);
+        expect(result.failure, isNull);
+        expect(result.data, 8000);
       },
     );
   });
