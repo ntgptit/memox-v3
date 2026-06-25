@@ -50,7 +50,7 @@ CardHistory _sample() {
 }
 
 void main() {
-  testWidgets('09-flashcard-history parity contract (loaded)', (tester) async {
+  Future<void> pump(WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -71,10 +71,23 @@ void main() {
       ),
     );
     await tester.pump(const Duration(milliseconds: 50));
+  }
 
+  testWidgets('09-flashcard-history parity contract (loaded)', (tester) async {
+    await pump(tester);
     expectParityContract('09-flashcard-history', <String, Finder>{
       'header card': _node('09-flashcard-history/header'),
       'activity feed card': _node('09-flashcard-history/activity'),
     });
   });
+
+  testWidgets(
+    '09-flashcard-history binding contract (keyed nodes realize kit components)',
+    (tester) async {
+      await pump(tester);
+      // header → MxCard (activity is a content container with no kit component →
+      // skipped by the helper).
+      expectGeneratedBindingContract('09-flashcard-history');
+    },
+  );
 }

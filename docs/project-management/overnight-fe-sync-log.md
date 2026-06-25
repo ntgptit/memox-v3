@@ -12,7 +12,8 @@ Each entry the owner should review before merging.
 | 2 | 04-folder-detail | 6ddb440 | binding-contract test | both content modes; FE already correct. |
 | 3 | 06-flashcard-list | 4bd8717 | binding-contract test | ⚠ see decision below (search-dock alias). |
 | 4 | 20-settings | 3a2c8e3 | binding-contract test | account-card → MxCard; FE already correct. |
-| 5 | 21-account-sync | (this commit) | binding-contract test | signin-card → MxCard, signin-button → MxPrimaryButton; FE already correct. |
+| 5 | 21-account-sync | adeec33 | binding-contract test | signin-card → MxCard, signin-button → MxPrimaryButton; FE already correct. |
+| 6 | 09-flashcard-history | (this commit) | binding-contract test | header → MxCard; FE already correct. |
 
 ## Decisions needing owner confirmation
 
