@@ -103,6 +103,35 @@ Future<StreakInfo> call();
     - Side effect: update SharedPreferences (reset currentStreak to 0). One-time banner shown by UI.
 - Else return current streak as-is.
 
+## LoadProgressEngagementUseCase (Current — Q5, read-only)
+
+```dart
+Future<Result<ProgressEngagement>> call();
+```
+
+**V1 implementation (Q5 / kit 19 Progress detail).** The realized, **read-only** engagement read for
+the Progress detail's goal ring + streak chip. `LoadProgressEngagementUseCase`
+(`lib/domain/usecases/progress/load_progress_engagement_usecase.dart`) owns the `now` clock and
+composes two sources:
+
+- the daily goal from `LearningSettings` (`LoadLearningSettingsUseCase`'s repository):
+  `dailyGoalTarget = dailyNewLimit`, `goalEnabled = goalDisabledSince == null`;
+- attempt-derived `StudyDayActivity` from `ProgressRepository.loadStudyActivity({now})`:
+  `todayAnsweredCount` + `currentStreak`/`longestStreak`, bucketed by **local** day in Dart over
+  `study_attempts` (decision rows P16/P18).
+
+Returns `ProgressEngagement` (`lib/domain/models/progress_engagement.dart`):
+`goalEnabled`, `dailyGoalTarget`, `todayAnsweredCount`, `currentStreak`, `longestStreak`, with
+`goalMetToday` / `goalProgress` (0..1) getters. Values are never fabricated — empty DB → zeros, a
+disabled goal → `goalEnabled = false` + `goalProgress = 0`. First failing read → `StorageFailure`.
+
+This is the **read-only** path the contract explicitly permits ("Read-only dashboard summaries may
+derive streak from persisted attempt history for display") — it does **not** persist or mutate the
+streak. The settings-backed `lastGoalMetDate` streak (`ComputeStreakUseCase` /
+`RecordGoalProgressUseCase` below) remains Future.
+
+**Errors:** `StorageFailure`.
+
 ## RecordGoalProgressUseCase
 
 ```dart
@@ -194,6 +223,8 @@ preferences live in SharedPreferences (not a Drift repository); see
 `docs/wireframes/18-study-result.md`
 **Decision table:** rows under "Dashboard engagement"
 **Code paths:** `lib/domain/usecases/engagement/**`,
+`lib/domain/usecases/progress/load_progress_engagement_usecase.dart` (Current, Q5 read-only),
+`lib/domain/models/progress_engagement.dart`,
 `lib/domain/usecases/progress/load_dashboard_progress_summary_usecase.dart`,
 `lib/data/datasources/local/preferences/engagement_preferences.dart`,
 `lib/core/notifications/reminder_scheduler.dart`

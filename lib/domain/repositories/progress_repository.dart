@@ -1,6 +1,7 @@
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/models/box_distribution.dart';
 import 'package:memox/domain/models/due_summary.dart';
+import 'package:memox/domain/models/progress_engagement.dart';
 import 'package:memox/domain/models/progress_read_model.dart';
 import 'package:memox/domain/models/stats_overview.dart';
 import 'package:memox/domain/models/study_statistics.dart';
@@ -46,4 +47,11 @@ abstract interface class ProgressRepository {
   /// zero-filled week and an empty deck list. A read error maps to a
   /// `StorageFailure`.
   Future<Result<StatsOverview>> loadStatsOverview({required int now});
+
+  /// Attempt-derived study-day activity as of [now] (epoch ms) for the Progress
+  /// detail engagement read (kit 19, WBS 7.4.3): today's answered count + the
+  /// current/longest study-day streak, bucketed by local day in Dart (never SQL).
+  /// An empty database yields all-zero activity. A read error maps to a
+  /// `StorageFailure`.
+  Future<Result<StudyDayActivity>> loadStudyActivity({required int now});
 }
