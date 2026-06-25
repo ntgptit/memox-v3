@@ -107,6 +107,19 @@ yields a zero-filled week and an empty deck list; a read error → `StorageFailu
 Use case `LoadStatsOverviewUseCase`. Local-day grouping is in Dart, never SQL
 `'localtime'`.
 
+**WBS 7.4.3 (engagement read, Q5)** adds
+`Future<Result<StudyDayActivity>> loadStudyActivity({required int now})`
+(`lib/domain/models/progress_engagement.dart`): attempt-derived study-day activity
+as of `now` (epoch ms) — today's answered count plus the current/longest
+consecutive **study-day** streak (any day with ≥1 attempt), bucketed by **local**
+day in Dart over `study_attempts` via the existing `attemptsSince(0)` query
+(decision rows P16/P18). The current streak counts back from yesterday when today
+has no attempt yet. An empty database yields all-zero activity; a read error →
+`StorageFailure`. No new schema, no migration. Composed with the daily goal
+(`LearningSettings`) by `LoadProgressEngagementUseCase` into `ProgressEngagement`
+for the kit-19 Progress detail (read-only; the settings-backed goal-met streak
+stays Future).
+
 ## Transaction requirements
 
 | Operation                        | Tables touched                                                                                                                                     |

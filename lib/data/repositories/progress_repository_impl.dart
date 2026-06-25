@@ -4,6 +4,7 @@ import 'package:memox/data/datasources/local/daos/progress_dao.dart';
 import 'package:memox/domain/models/box_distribution.dart';
 import 'package:memox/domain/models/deck_mastery.dart';
 import 'package:memox/domain/models/due_summary.dart';
+import 'package:memox/domain/models/progress_engagement.dart';
 import 'package:memox/domain/models/progress_read_model.dart';
 import 'package:memox/domain/models/stats_overview.dart';
 import 'package:memox/domain/models/study_statistics.dart';
@@ -165,6 +166,83 @@ class ProgressRepositoryImpl implements ProgressRepository {
         data: null,
       );
     }
+  }
+
+  @override
+  Future<Result<StudyDayActivity>> loadStudyActivity({required int now}) async {
+    try {
+      // All attempt timestamps (start = 0 → whole history); the streak + today
+      // count are computed by LOCAL day in Dart (never SQL — the test sqlite
+      // returns NULL for 'localtime'), mirroring the Stats week-bucketing.
+      final List<int> times = await _dao.attemptTimesSince(0);
+      return (failure: null, data: _studyDayActivity(times, now));
+    } catch (error) {
+      return (
+        failure: Failure.storage(
+          operation: StorageOp.read,
+          table: 'study_attempts',
+          cause: error.toString(),
+        ),
+        data: null,
+      );
+    }
+  }
+
+  /// Pure local-day reduction of attempt [times] (epoch ms) as of [now]: today's
+  /// answered count + the current/longest consecutive study-day streak. Days are
+  /// normalized to a UTC-midnight ordinal so DST never miscounts adjacency.
+  static StudyDayActivity _studyDayActivity(List<int> times, int now) {
+    int ordinalOf(int epochMs) {
+      final DateTime local = DateTime.fromMillisecondsSinceEpoch(
+        epochMs,
+      ).toLocal();
+      return DateTime.utc(
+        local.year,
+        local.month,
+        local.day,
+      ).difference(DateTime.utc(2000)).inDays;
+    }
+
+    final int todayOrdinal = ordinalOf(now);
+    final Set<int> days = <int>{};
+    int todayCount = 0;
+    for (final int t in times) {
+      final int ord = ordinalOf(t);
+      days.add(ord);
+      if (ord == todayOrdinal) todayCount++;
+    }
+
+    // Current streak: count back from today, or from yesterday when today has no
+    // attempt yet (an unfinished today must not break the run).
+    int current = 0;
+    int anchor = days.contains(todayOrdinal)
+        ? todayOrdinal
+        : (days.contains(todayOrdinal - 1) ? todayOrdinal - 1 : null) ??
+              todayOrdinal;
+    if (days.contains(anchor)) {
+      while (days.contains(anchor)) {
+        current++;
+        anchor--;
+      }
+    }
+
+    // Longest streak: longest run of consecutive ordinals across all study days.
+    int longest = 0;
+    if (days.isNotEmpty) {
+      final List<int> sorted = days.toList()..sort();
+      int run = 1;
+      longest = 1;
+      for (int i = 1; i < sorted.length; i++) {
+        run = sorted[i] == sorted[i - 1] + 1 ? run + 1 : 1;
+        if (run > longest) longest = run;
+      }
+    }
+
+    return StudyDayActivity(
+      todayAnsweredCount: todayCount,
+      currentStreak: current,
+      longestStreak: longest,
+    );
   }
 
   /// The current local week's daily review counts (Monday → Sunday), bucketed in
