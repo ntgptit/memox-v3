@@ -131,4 +131,18 @@ void main() {
       'new-subfolder FAB': node('04-folder-detail/new-subfolder-fab'),
     });
   });
+
+  testWidgets(
+    '04-folder-detail binding contract (keyed nodes realize kit components)',
+    (tester) async {
+      // Decks mode renders stat-card → MxCard and create-deck-fab → MxFab;
+      // subfolders mode renders new-subfolder-fab → MxFab. The helper skips nodes
+      // absent in the pumped state, so covering both modes asserts every keyed
+      // component (deck-list is a content container with no kit component → skipped).
+      await pump(tester, decksMode);
+      expectGeneratedBindingContract('04-folder-detail');
+      await pump(tester, subfoldersMode);
+      expectGeneratedBindingContract('04-folder-detail');
+    },
+  );
 }
