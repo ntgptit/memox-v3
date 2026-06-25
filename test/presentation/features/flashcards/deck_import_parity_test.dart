@@ -101,4 +101,27 @@ void main() {
       'result card': _node('10-deck-import/result-card'),
     });
   });
+
+  testWidgets(
+    '10-deck-import binding contract (keyed nodes realize kit components)',
+    (tester) async {
+      // The four concrete-component nodes live in different wizard states; pump each
+      // and assert — the helper skips nodes absent in the pumped state. empty-card /
+      // file-chip / result-card → MxCard, choose-file → MxPrimaryButton (preview-list
+      // is a content container with no kit component → skipped).
+      await _pump(tester, const DeckImportState.empty());
+      expectGeneratedBindingContract('10-deck-import');
+      await _pump(
+        tester,
+        const DeckImportState.fileSelected(
+          fileName: 'a.csv',
+          sizeBytes: 10,
+          rawText: '',
+        ),
+      );
+      expectGeneratedBindingContract('10-deck-import');
+      await _pump(tester, const DeckImportState.success(count: 1));
+      expectGeneratedBindingContract('10-deck-import');
+    },
+  );
 }
