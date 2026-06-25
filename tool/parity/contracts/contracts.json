@@ -1,6 +1,20 @@
 {
   "$generated": "tool/parity/gen_contract.mjs",
   "contracts": {
+    "02-dashboard": [
+      {
+        "key": "mx-node:02-dashboard/due-summary",
+        "node": "card"
+      },
+      {
+        "key": "mx-node:02-dashboard/shortcut-progress",
+        "node": "card"
+      },
+      {
+        "key": "mx-node:02-dashboard/shortcut-library",
+        "node": "card"
+      }
+    ],
     "03-library-overview": [
       {
         "key": "mx-node:03-library/sort-btn",

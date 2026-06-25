@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Spec-driven parity contract (identity-based, NOT geometry).
@@ -23,6 +27,53 @@ void expectParityContract(String screen, Map<String, Finder> required) {
     reason:
         'Parity contract "$screen": ${missing.length}/${required.length} required '
         'element(s) NOT rendered → FE incomplete vs the design: '
+        '${missing.join(', ')}',
+  );
+}
+
+/// The required `mx-node:<id>` keys for [screen] from the GENERATED parity
+/// contract (`tool/parity/contracts/contracts.json`, produced by
+/// `tool/parity/gen_contract.mjs` from the kit `data-mx-node` ids — the single
+/// contract source). Fails when the screen has no entry (its kit nodes carry no
+/// `data-mx-node`). Tests run from the repo root, so the file is read relative to
+/// the cwd (same as `test/flutter_test_config.dart` reading bundled fonts).
+List<String> generatedContractKeys(String screen) {
+  final File file = File('tool/parity/contracts/contracts.json');
+  final Map<String, dynamic> data =
+      jsonDecode(file.readAsStringSync()) as Map<String, dynamic>;
+  final Map<String, dynamic> contracts =
+      data['contracts'] as Map<String, dynamic>;
+  final Object? entry = contracts[screen];
+  if (entry is! List) {
+    fail(
+      'Generated parity contract has no "$screen" entry. Add data-mx-node to the '
+      'kit screen, re-export specs, then run `node tool/parity/gen_contract.mjs`.',
+    );
+  }
+  return <String>[for (final Object? e in entry) (e as Map)['key'] as String];
+}
+
+/// Asserts every required key for [screen] from the GENERATED contract is
+/// rendered (`find.byKey(ValueKey('mx-node:<id>'))`). The required list comes
+/// from `contracts.json` (no hand-coded list, no second format); if the FE drops
+/// a tagged node its key is absent → this fails listing it.
+void expectGeneratedParityContract(String screen) {
+  final List<String> keys = generatedContractKeys(screen);
+  expect(
+    keys,
+    isNotEmpty,
+    reason: 'Generated parity contract "$screen" has no required keys.',
+  );
+  final List<String> missing = <String>[
+    for (final String key in keys)
+      if (find.byKey(ValueKey<String>(key)).evaluate().isEmpty) key,
+  ];
+  expect(
+    missing,
+    isEmpty,
+    reason:
+        'Parity contract "$screen": ${missing.length}/${keys.length} required '
+        'key(s) NOT rendered → FE incomplete vs the generated contract: '
         '${missing.join(', ')}',
   );
 }

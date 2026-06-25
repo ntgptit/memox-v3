@@ -4,8 +4,11 @@
 > 03/04/05/06/07/08 + 17 via kit `data-mx-node` → spec `id:` → `gen_contract` (18
 > nodes / 12 screens) + a parity-contract test each; 12–16 study modes via the shared
 > `StudyShell` chrome (exit + progress) keyed per mode + golden assertions; 02-dashboard
-> via FE keys + a hand-written test (its kit-02 is pre-redesign — kit tagging deferred
-> to a Claude Design regen). Remaining screens (00/01/09/10/11/18–25) have NO FE → out
+> now flows through the generated contract too (2026-06-25: kit-02 regenerated to the
+> redesign — due-summary + Progress/Library shortcut rows — tagged with `data-mx-node`,
+> spec `id:` re-exported, `gen_contract` emits `02-dashboard`, and its parity test uses
+> `expectGeneratedParityContract` — no more hand-written special case). Remaining screens
+> (00/01/09/10/11/18–25) have NO FE → out
 > of scope. Gates green: gen_contract --check, design_watch --check, all parity tests.
 > Re-open by: (a) regenerating kit-02 to the redesign then tagging it; (b) deepening any
 > screen's contract with more nodes; (c) pushing the tagged kit to Claude Design "v3".
@@ -73,7 +76,7 @@ problems as they surface. One screen per iteration. Branch:
 
 | Screen | FE | mx-node tagged | nodes | status |
 | --- | --- | --- | --- | --- |
-| 02-dashboard | yes (redesigned) | FE✅ | due-summary, shortcut-progress, shortcut-library (hand-written test) | DONE (special) — kit-02 is pre-redesign so its data-mx-node tagging is DEFERRED until the kit is regenerated to the redesign (Claude Design); FE keyed + dashboard_parity_test passes. |
+| 02-dashboard | yes (redesigned) | kit✅ + FE✅ | due-summary, shortcut-progress, shortcut-library | DONE (generated) — kit-02 regenerated to the redesign (due-summary + Progress/Library shortcut rows), tagged `data-mx-node`, spec `id:` re-exported, `gen_contract` emits `02-dashboard` (3 keys); `dashboard_parity_test` uses `expectGeneratedParityContract` (no hand-written list). 2026-06-25. |
 | 03-library-overview | yes | ✅ | new-folder-fab, search-dock | DONE |
 | 04-folder-detail | yes | ✅ | create-deck-fab, new-subfolder-fab, search-dock | DONE |
 | 05-library-search | yes | ✅ | search-dock | DONE |

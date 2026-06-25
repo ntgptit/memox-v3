@@ -11,7 +11,7 @@ freshness check in `tool/verify/run.mjs` fails if `index.html` changed without r
 | # | Screen | Spec file | States |
 | --- | --- | --- | --- |
 | 01 | Onboarding | `01-onboarding.md` | 9 |
-| 02 | Dashboard | `02-dashboard.md` | 8 |
+| 02 | Dashboard | `02-dashboard.md` | 4 |
 | 03 | Library overview | `03-library-overview.md` | 6 |
 | 04 | Folder detail | `04-folder-detail.md` | 8 |
 | 05 | Library search | `05-library-search.md` | 5 |
@@ -36,4 +36,4 @@ freshness check in `tool/verify/run.mjs` fails if `index.html` changed without r
 | 24 | Appearance | `24-appearance.md` | 3 |
 | 25 | Language | `25-language.md` | 3 |
 
-Total: 25 screens · 139 states.
+Total: 25 screens · 135 states.

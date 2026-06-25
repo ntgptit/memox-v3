@@ -9,17 +9,15 @@ import 'package:memox/presentation/features/dashboard/viewmodels/dashboard_viewm
 
 import '../../../support/parity_contract.dart';
 
-/// Spec-driven parity contract for the dashboard, identity by STABLE KEY.
+/// Parity contract for the dashboard, identity by STABLE KEY, driven by the
+/// GENERATED contract (`tool/parity/contracts/contracts.json`).
 ///
-/// The required list is `mx-node:<screen>/<node>` key STRINGS derived from the
-/// design — strings, so this test compiles no matter what the FE has (or hasn't)
-/// built. The FE tags the matching widget with that key
-/// (`key: ValueKey('mx-node:...')`); if a required node isn't implemented, its key
-/// is absent → the contract fails listing it. That is how this catches "FE chưa
-/// implement đủ", which `find.byType` cannot (the type must already exist to
-/// compile) and a golden image cannot (FE-vs-FE regression only).
-Finder _node(String id) => find.byKey(ValueKey<String>('mx-node:$id'));
-
+/// The required `mx-node:<id>` keys come from the kit's `data-mx-node` ids via
+/// the spec → `gen_contract.mjs` pipeline — no hand-coded list here. The FE tags
+/// the matching widget with `key: ValueKey('mx-node:...')`; if a required node
+/// isn't rendered, its key is absent → `expectGeneratedParityContract` fails
+/// listing it (catches "FE chưa implement đủ", which `find.byType` and goldens
+/// cannot). Removing any of the three dashboard FE keys makes this test red.
 void main() {
   testWidgets('02-dashboard parity contract (loaded)', (tester) async {
     await tester.pumpWidget(
@@ -43,10 +41,6 @@ void main() {
     );
     await tester.pump(const Duration(milliseconds: 50));
 
-    expectParityContract('02-dashboard', <String, Finder>{
-      'due summary card': _node('02-dashboard/due-summary'),
-      'Progress shortcut row': _node('02-dashboard/shortcut-progress'),
-      'Library shortcut row': _node('02-dashboard/shortcut-library'),
-    });
+    expectGeneratedParityContract('02-dashboard');
   });
 }
