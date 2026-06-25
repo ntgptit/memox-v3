@@ -52,12 +52,10 @@ void main() {
       await pump(tester);
       // search-dock realizes the kit search-dock via the scoped sibling
       // MxScopedSearchDock (tag-scoped search; plain MxSearchDock can't host an
-      // external controller — same as 06), so alias it. tag-list is a content
-      // container with no kit component → skipped.
-      expectGeneratedBindingContract(
-        '11-tag-management',
-        aliases: const <String, String>{'MxSearchDock': 'MxScopedSearchDock'},
-      );
+      // external controller — same as 06) — accepted centrally in the helper's
+      // _bindingRealizations map. tag-list is a content container with no kit
+      // component → skipped.
+      expectGeneratedBindingContract('11-tag-management');
     },
   );
 }

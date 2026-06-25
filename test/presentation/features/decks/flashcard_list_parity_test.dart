@@ -86,13 +86,10 @@ void main() {
       await pump(tester);
       // add-card-fab → MxFab. search-dock realizes the kit's generic search-dock
       // via the deck-scoped sibling MxScopedSearchDock (plain MxSearchDock cannot
-      // host an external controller — see its doc), so alias it here (same
-      // mechanism as learning-settings' MxBottomNav alias). card-list is a content
-      // container with no kit component → skipped by the helper.
-      expectGeneratedBindingContract(
-        '06-flashcard-list',
-        aliases: const <String, String>{'MxSearchDock': 'MxScopedSearchDock'},
-      );
+      // host an external controller) — accepted centrally in the helper's
+      // _bindingRealizations map. card-list is a content container with no kit
+      // component → skipped by the helper.
+      expectGeneratedBindingContract('06-flashcard-list');
     },
   );
 }

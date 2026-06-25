@@ -78,6 +78,21 @@ void expectGeneratedParityContract(String screen) {
   );
 }
 
+/// Kit components the design intentionally allows to be realized by more than one
+/// Flutter class. The kit names a single visual ROLE; the FE may realize it with a
+/// sibling where the context requires it. Keyed by kit component → the set of
+/// accepted Flutter classes. A raw/other widget still fails (it is in neither set).
+const Map<String, Set<String>> _bindingRealizations = <String, Set<String>>{
+  // The kit has ONE visual "search dock" (mx:MxSearchDock). The FE realizes it with
+  // the global MxSearchDock, or — where the search is scoped (deck / tag) and must
+  // host an EXTERNAL controller that plain MxSearchDock cannot — with the sibling
+  // MxScopedSearchDock. Both are real docks, so either satisfies the kit's
+  // search-dock binding. 05-library-search uses the global one; 06-flashcard-list
+  // and 11-tag-management use the scoped one. Centralized here instead of a
+  // per-test alias so the accepted-variant decision lives in one reviewed place.
+  'MxSearchDock': <String>{'MxSearchDock', 'MxScopedSearchDock'},
+};
+
 /// Asserts that every keyed node in [screen]'s GENERATED binding contract
 /// (`tool/parity/contracts/bindings.json`, produced by `tool/parity/gen_bindings.mjs`)
 /// that names a concrete kit component actually renders that component in its
@@ -114,6 +129,8 @@ void expectGeneratedBindingContract(
       continue;
     }
     final String expected = aliases[comp] ?? comp as String;
+    final Set<String> accepted =
+        _bindingRealizations[expected] ?? <String>{expected};
     final Finder keyed = find.byKey(ValueKey<String>(key));
     if (keyed.evaluate().isEmpty) {
       continue; // presence is expectGeneratedParityContract's job, not this one.
@@ -122,7 +139,7 @@ void expectGeneratedBindingContract(
         .descendant(
           of: keyed,
           matching: find.byWidgetPredicate(
-            (Widget w) => w.runtimeType.toString() == expected,
+            (Widget w) => accepted.contains(w.runtimeType.toString()),
           ),
           matchRoot: true,
         )
@@ -130,7 +147,7 @@ void expectGeneratedBindingContract(
         .isNotEmpty;
     if (!realized) {
       problems.add(
-        '$key → expected kit component $expected, '
+        '$key → expected kit component ${accepted.length == 1 ? expected : accepted.join(' or ')}, '
         'keyed widget is ${keyed.evaluate().first.widget.runtimeType}',
       );
     }
