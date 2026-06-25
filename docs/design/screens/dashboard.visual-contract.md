@@ -80,7 +80,7 @@ This is the source of truth for mapping the approved Dashboard mock to Flutter i
 | Loading skeletons | loading | Current V1 | `MxRetainedAsyncState` + `MxSkeleton` | Async dashboard providers | None | Keep skeletons per section instead of a full-screen spinner. |
 | Onboarding hero card | onboarding | Current V1 | `MxCard` + `MxPrimaryButton` + `MxSecondaryButton` | Zero decks + zero flashcards | Open library | Keep the hero minimal until a source-backed onboarding action exists. |
 | Onboarding reassurance cards | onboarding | Current V1 | `MxCard` + `MxIconTile` + `MxText` | None | None | Calm copy only; no business behavior is attached to these cards. |
-| Bottom navigation | all | Current V1 | `MxBottomNavigationBar` | Shell route state | Home, Library, Progress, Settings | Home is shell-visible, but the app still boots into Library. |
+| Bottom navigation | all | Current V1 | `MxBottomNav` | Shell route state | Home, Library, Progress, Settings | Home is shell-visible, but the app still boots into Library. |
 
 ## State Mapping
 
@@ -123,7 +123,7 @@ For onboarding, render the zero-content hero only.
 | Section header | `MxSectionHeader` | Use for the Recent decks title. |
 | Icon tile | `MxIconTile` | Use for resume, deck, and onboarding cards. |
 | Text roles | `MxText` | Do not hand-roll typography roles in feature widgets. |
-| Bottom navigation | `MxBottomNavigationBar` | Home, Library, Progress, Settings remain shell routes. |
+| Bottom navigation | `MxBottomNav` | Home, Library, Progress, Settings remain shell routes. |
 | Confirm discard | `showMxConfirmDialog` | Use for discard-session confirmation in the later coding task. |
 | Bottom sheet entry | `showMxBottomSheet` | Use for paused sessions when that list flow exists. |
 

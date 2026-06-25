@@ -1,0 +1,1037 @@
+{
+  "$generated": "tool/parity/gen_bindings.mjs — DO NOT hand-edit; regenerate from the kit specs.",
+  "$doc": "Per keyed-node (data-mx-node) binding contract: the kit component (mx:) + token bindings, with colors/radius resolved to Flutter symbols. The FE must realize these (behaviour exceptions live in intent-ledger.json). --check gates freshness vs the specs.",
+  "bindings": {
+    "02-dashboard": [
+      {
+        "key": "mx-node:02-dashboard/settings",
+        "node": "icon-btn",
+        "component": "MxIconButton",
+        "tokens": {
+          "radius": 999
+        },
+        "flutter": {
+          "radius": "MxRadius.pill"
+        }
+      },
+      {
+        "key": "mx-node:02-dashboard/stat-summary",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:02-dashboard/continue-studying",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:02-dashboard/due-summary",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:02-dashboard/recent-decks",
+        "node": "list-card",
+        "component": null,
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:02-dashboard/shortcut-progress",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      }
+    ],
+    "03-library-overview": [
+      {
+        "key": "mx-node:03-library/sort-btn",
+        "node": "icon-btn",
+        "component": "MxIconButton",
+        "tokens": {
+          "radius": 999
+        },
+        "flutter": {
+          "radius": "MxRadius.pill"
+        }
+      },
+      {
+        "key": "mx-node:03-library/new-folder-fab",
+        "node": "fab",
+        "component": "MxFab",
+        "tokens": {
+          "bg": "accent",
+          "radius": 18
+        },
+        "flutter": {
+          "bg": "mxColors.accent",
+          "radius": "MxRadius.fab"
+        }
+      }
+    ],
+    "04-folder-detail": [
+      {
+        "key": "mx-node:04-folder-detail/stat-card",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:04-folder-detail/create-deck-fab",
+        "node": "fab",
+        "component": "MxFab",
+        "tokens": {
+          "bg": "accent",
+          "radius": 18
+        },
+        "flutter": {
+          "bg": "mxColors.accent",
+          "radius": "MxRadius.fab"
+        }
+      },
+      {
+        "key": "mx-node:04-folder-detail/new-subfolder-fab",
+        "node": "fab",
+        "component": "MxFab",
+        "tokens": {
+          "bg": "accent",
+          "radius": 18
+        },
+        "flutter": {
+          "bg": "mxColors.accent",
+          "radius": "MxRadius.fab"
+        }
+      }
+    ],
+    "05-library-search": [
+      {
+        "key": "mx-node:05-library-search/search-dock",
+        "node": "search-dock",
+        "component": "MxSearchDock",
+        "tokens": {
+          "bg": "color(srgb",
+          "border": "divider"
+        },
+        "flutter": {
+          "border": "mxColors.divider"
+        }
+      }
+    ],
+    "06-flashcard-list": [
+      {
+        "key": "mx-node:06-flashcard-list/add-card-fab",
+        "node": "fab",
+        "component": "MxFab",
+        "tokens": {
+          "bg": "accent",
+          "radius": 18
+        },
+        "flutter": {
+          "bg": "mxColors.accent",
+          "radius": "MxRadius.fab"
+        }
+      },
+      {
+        "key": "mx-node:06-flashcard-list/search-dock",
+        "node": "search-dock",
+        "component": "MxSearchDock",
+        "tokens": {
+          "bg": "color(srgb",
+          "border": "divider"
+        },
+        "flutter": {
+          "border": "mxColors.divider"
+        }
+      }
+    ],
+    "07-flashcard-create": [
+      {
+        "key": "mx-node:flashcard-editor/back-btn",
+        "node": "icon-btn",
+        "component": "MxIconButton",
+        "tokens": {
+          "radius": 999
+        },
+        "flutter": {
+          "radius": "MxRadius.pill"
+        }
+      },
+      {
+        "key": "mx-node:flashcard-editor/save-button",
+        "node": "pill-btn",
+        "component": "MxPrimaryButton",
+        "tokens": {
+          "bg": "accent",
+          "color": "accent-contrast",
+          "font": "12/700",
+          "radius": 999,
+          "border": "transparent"
+        },
+        "flutter": {
+          "bg": "mxColors.accent",
+          "color": "mxColors.accentContrast",
+          "font": {
+            "size": 12,
+            "weight": 700
+          },
+          "radius": "MxRadius.pill"
+        }
+      },
+      {
+        "key": "mx-node:flashcard-editor/front-field",
+        "node": "textarea",
+        "component": null,
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 14,
+          "border": "border"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.md",
+          "border": "mxColors.border"
+        }
+      },
+      {
+        "key": "mx-node:flashcard-editor/back-field",
+        "node": "textarea",
+        "component": null,
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 14,
+          "border": "border"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.md",
+          "border": "mxColors.border"
+        }
+      },
+      {
+        "key": "mx-node:flashcard-editor/details-toggle",
+        "node": "button",
+        "component": "?",
+        "tokens": {},
+        "flutter": {}
+      },
+      {
+        "key": "mx-node:flashcard-editor/deck-picker",
+        "node": "section-head-title",
+        "component": "MxCard",
+        "tokens": {
+          "color": "text",
+          "font": "16/700"
+        },
+        "flutter": {
+          "color": "mxColors.text",
+          "font": {
+            "size": 16,
+            "weight": 700
+          }
+        }
+      }
+    ],
+    "08-flashcard-edit": [
+      {
+        "key": "mx-node:flashcard-editor/back-btn",
+        "node": "icon-btn",
+        "component": "MxIconButton",
+        "tokens": {
+          "radius": 999
+        },
+        "flutter": {
+          "radius": "MxRadius.pill"
+        }
+      },
+      {
+        "key": "mx-node:flashcard-editor/delete-btn",
+        "node": "icon-btn",
+        "component": "MxIconButton",
+        "tokens": {
+          "radius": 999
+        },
+        "flutter": {
+          "radius": "MxRadius.pill"
+        }
+      },
+      {
+        "key": "mx-node:flashcard-editor/save-button",
+        "node": "pill-btn",
+        "component": "MxPrimaryButton",
+        "tokens": {
+          "bg": "accent",
+          "color": "accent-contrast",
+          "font": "12/700",
+          "radius": 999,
+          "border": "transparent"
+        },
+        "flutter": {
+          "bg": "mxColors.accent",
+          "color": "mxColors.accentContrast",
+          "font": {
+            "size": 12,
+            "weight": 700
+          },
+          "radius": "MxRadius.pill"
+        }
+      },
+      {
+        "key": "mx-node:flashcard-editor/front-field",
+        "node": "textarea",
+        "component": null,
+        "tokens": {
+          "bg": "accent-contrast",
+          "color": "text",
+          "font": "14/500/21",
+          "radius": 14,
+          "border": "border"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "color": "mxColors.text",
+          "font": {
+            "size": 14,
+            "weight": 500
+          },
+          "radius": "MxRadius.md",
+          "border": "mxColors.border"
+        }
+      },
+      {
+        "key": "mx-node:flashcard-editor/back-field",
+        "node": "textarea",
+        "component": null,
+        "tokens": {
+          "bg": "accent-contrast",
+          "color": "text",
+          "font": "14/500/21",
+          "radius": 14,
+          "border": "border"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "color": "mxColors.text",
+          "font": {
+            "size": 14,
+            "weight": 500
+          },
+          "radius": "MxRadius.md",
+          "border": "mxColors.border"
+        }
+      },
+      {
+        "key": "mx-node:flashcard-editor/deck-picker",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      }
+    ],
+    "09-flashcard-history": [
+      {
+        "key": "mx-node:09-flashcard-history/header",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:09-flashcard-history/activity",
+        "node": "list-card",
+        "component": null,
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      }
+    ],
+    "10-deck-import": [
+      {
+        "key": "mx-node:10-deck-import/empty-card",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:10-deck-import/choose-file",
+        "node": "pill-btn",
+        "component": "MxPrimaryButton",
+        "tokens": {
+          "bg": "accent",
+          "color": "accent-contrast",
+          "font": "14/700",
+          "radius": 999,
+          "border": "transparent"
+        },
+        "flutter": {
+          "bg": "mxColors.accent",
+          "color": "mxColors.accentContrast",
+          "font": {
+            "size": 14,
+            "weight": 700
+          },
+          "radius": "MxRadius.pill"
+        }
+      },
+      {
+        "key": "mx-node:10-deck-import/file-chip",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:10-deck-import/preview-list",
+        "node": "list-card",
+        "component": null,
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:10-deck-import/result-card",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      }
+    ],
+    "11-tag-management": [
+      {
+        "key": "mx-node:11-tag-management/tag-list",
+        "node": "list-card",
+        "component": null,
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:11-tag-management/search-dock",
+        "node": "search-dock",
+        "component": "MxSearchDock",
+        "tokens": {
+          "bg": "color(srgb",
+          "border": "divider"
+        },
+        "flutter": {
+          "border": "mxColors.divider"
+        }
+      }
+    ],
+    "12-study-review": [
+      {
+        "key": "mx-node:study-session/exit",
+        "node": "icon-btn",
+        "component": "MxIconButton",
+        "tokens": {
+          "radius": 999
+        },
+        "flutter": {
+          "radius": "MxRadius.pill"
+        }
+      },
+      {
+        "key": "mx-node:study-session/content-card",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      }
+    ],
+    "13-study-match": [
+      {
+        "key": "mx-node:study-session/exit",
+        "node": "icon-btn",
+        "component": "MxIconButton",
+        "tokens": {
+          "radius": 999
+        },
+        "flutter": {
+          "radius": "MxRadius.pill"
+        }
+      }
+    ],
+    "14-study-guess": [
+      {
+        "key": "mx-node:study-session/exit",
+        "node": "icon-btn",
+        "component": "MxIconButton",
+        "tokens": {
+          "radius": 999
+        },
+        "flutter": {
+          "radius": "MxRadius.pill"
+        }
+      },
+      {
+        "key": "mx-node:study-session/content-card",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:study-session/action",
+        "node": "pill-btn",
+        "component": "MxPrimaryButton",
+        "tokens": {
+          "bg": "accent",
+          "color": "accent-contrast",
+          "font": "14/700",
+          "radius": 999,
+          "border": "transparent"
+        },
+        "flutter": {
+          "bg": "mxColors.accent",
+          "color": "mxColors.accentContrast",
+          "font": {
+            "size": 14,
+            "weight": 700
+          },
+          "radius": "MxRadius.pill"
+        }
+      }
+    ],
+    "15-study-recall": [
+      {
+        "key": "mx-node:study-session/exit",
+        "node": "icon-btn",
+        "component": "MxIconButton",
+        "tokens": {
+          "radius": 999
+        },
+        "flutter": {
+          "radius": "MxRadius.pill"
+        }
+      },
+      {
+        "key": "mx-node:study-session/content-card",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:study-session/action",
+        "node": "pill-btn",
+        "component": "MxPrimaryButton",
+        "tokens": {
+          "bg": "accent",
+          "color": "accent-contrast",
+          "font": "14/700",
+          "radius": 999,
+          "border": "transparent"
+        },
+        "flutter": {
+          "bg": "mxColors.accent",
+          "color": "mxColors.accentContrast",
+          "font": {
+            "size": 14,
+            "weight": 700
+          },
+          "radius": "MxRadius.pill"
+        }
+      }
+    ],
+    "16-study-fill": [
+      {
+        "key": "mx-node:study-session/exit",
+        "node": "icon-btn",
+        "component": "MxIconButton",
+        "tokens": {
+          "radius": 999
+        },
+        "flutter": {
+          "radius": "MxRadius.pill"
+        }
+      },
+      {
+        "key": "mx-node:study-session/content-card",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:study-session/action",
+        "node": "pill-btn",
+        "component": "MxPrimaryButton",
+        "tokens": {
+          "bg": "accent",
+          "color": "accent-contrast",
+          "font": "14/700",
+          "radius": 999,
+          "border": "transparent"
+        },
+        "flutter": {
+          "bg": "mxColors.accent",
+          "color": "mxColors.accentContrast",
+          "font": {
+            "size": 14,
+            "weight": 700
+          },
+          "radius": "MxRadius.pill"
+        }
+      }
+    ],
+    "17-study-result": [
+      {
+        "key": "mx-node:17-study-result/close-btn",
+        "node": "icon-btn",
+        "component": "MxIconButton",
+        "tokens": {
+          "radius": 999
+        },
+        "flutter": {
+          "radius": "MxRadius.pill"
+        }
+      },
+      {
+        "key": "mx-node:17-study-result/done-button",
+        "node": "pill-btn",
+        "component": "MxPrimaryButton",
+        "tokens": {
+          "bg": "accent",
+          "color": "accent-contrast",
+          "font": "14/700",
+          "radius": 999,
+          "border": "transparent"
+        },
+        "flutter": {
+          "bg": "mxColors.accent",
+          "color": "mxColors.accentContrast",
+          "font": {
+            "size": 14,
+            "weight": 700
+          },
+          "radius": "MxRadius.pill"
+        }
+      }
+    ],
+    "18-stats": [
+      {
+        "key": "mx-node:18-stats/week-card",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:18-stats/week-chart",
+        "node": "div",
+        "component": null,
+        "tokens": {},
+        "flutter": {}
+      },
+      {
+        "key": "mx-node:18-stats/mastery-section",
+        "node": "section-head",
+        "component": "MxSectionHeader",
+        "tokens": {},
+        "flutter": {}
+      },
+      {
+        "key": "mx-node:18-stats/mastery-list",
+        "node": "list-card",
+        "component": null,
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      }
+    ],
+    "20-settings": [
+      {
+        "key": "mx-node:20-settings/account-card",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:20-settings/settings-group",
+        "node": "list-card",
+        "component": null,
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      }
+    ],
+    "21-account-sync": [
+      {
+        "key": "mx-node:21-account-sync/signin-card",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:21-account-sync/signin-button",
+        "node": "pill-btn",
+        "component": "MxPrimaryButton",
+        "tokens": {
+          "bg": "accent",
+          "color": "accent-contrast",
+          "font": "14/700",
+          "radius": 999,
+          "border": "transparent"
+        },
+        "flutter": {
+          "bg": "mxColors.accent",
+          "color": "mxColors.accentContrast",
+          "font": {
+            "size": 14,
+            "weight": 700
+          },
+          "radius": "MxRadius.pill"
+        }
+      }
+    ],
+    "22-learning-settings": [
+      {
+        "key": "mx-node:22-learning-settings/goal-card",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:22-learning-settings/goal-toggle",
+        "node": "switch",
+        "component": "?",
+        "tokens": {
+          "bg": "accent",
+          "radius": 999
+        },
+        "flutter": {
+          "bg": "mxColors.accent",
+          "radius": "MxRadius.pill"
+        }
+      },
+      {
+        "key": "mx-node:22-learning-settings/goal-slider",
+        "node": "slider",
+        "component": null,
+        "tokens": {},
+        "flutter": {}
+      },
+      {
+        "key": "mx-node:22-learning-settings/goal-presets",
+        "node": "div",
+        "component": null,
+        "tokens": {},
+        "flutter": {}
+      },
+      {
+        "key": "mx-node:22-learning-settings/reminder-card",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      }
+    ],
+    "23-audio-speech": [
+      {
+        "key": "mx-node:23-audio-speech/language-row",
+        "node": "list-card",
+        "component": null,
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:23-audio-speech/voice-list",
+        "node": "list-card",
+        "component": null,
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:23-audio-speech/preview-card",
+        "node": "card",
+        "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:23-audio-speech/preview-button",
+        "node": "pill-btn",
+        "component": "MxSecondaryButton",
+        "tokens": {
+          "bg": "color(srgb",
+          "color": "accent",
+          "font": "14/700",
+          "radius": 999,
+          "border": "transparent"
+        },
+        "flutter": {
+          "color": "mxColors.accent",
+          "font": {
+            "size": 14,
+            "weight": 700
+          },
+          "radius": "MxRadius.pill"
+        }
+      }
+    ],
+    "24-appearance": [
+      {
+        "key": "mx-node:24-appearance/theme-list",
+        "node": "list-card",
+        "component": null,
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      }
+    ],
+    "25-language": [
+      {
+        "key": "mx-node:25-language/language-list",
+        "node": "list-card",
+        "component": null,
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      }
+    ]
+  }
+}

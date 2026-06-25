@@ -1,105 +1,121 @@
 ---
-last_updated: 2026-06-07
+last_updated: 2026-06-25
 status: contract
 applies_to: UI mock-to-code implementation
 ---
 
 # Design Token Mapping
 
-Agents must map mock visual intent to existing Flutter theme roles and tokens.
-Do not copy raw CSS values from the mock HTML into feature widgets.
+Maps mock visual intent (kit specs/PNGs) to the **real** Flutter theme tokens and
+shared components. Do not copy raw CSS values from the mock HTML into feature widgets.
 
-## Source Priority
+> **2026-06-25 — corrected.** This doc previously referenced a token API that no
+> longer exists (`SpacingTokens.*`, `RadiusTokens.*`, `SizeTokens.*`,
+> `TypographyTokens`, `OpacityTokens`, `BorderTokens`, `MxTextRole`, and a
+> `lib/core/theme/tokens/**` + `theme_context.dart` layout). That drift is the
+> exact reason mock→code mapping went wrong (agents coded against phantom
+> symbols, then improvised). The names below are the **actual** API in
+> `lib/core/theme/*.dart` + `lib/presentation/shared/**`, and they are now
+> machine-enforced — see "Enforcement" at the bottom.
+
+## Source priority
 
 | Concern | Source |
 | --- | --- |
-| Product behavior and route scope | `docs/business/**`, `docs/wireframes/**` |
-| Visual token intent | `docs/system-design/MemoX Design System/README.md`, `docs/system-design/MemoX Design System/colors_and_type.css` |
-| Flutter token names | `lib/core/theme/tokens/**`, `lib/core/theme/extensions/theme_context.dart` |
+| Product behavior & route scope | `docs/business/**`, `docs/wireframes/**` |
+| Visual token VALUES (source of truth) | `docs/system-design/MemoX Design System/colors_and_type.css` (kit) |
+| Flutter token symbols | `lib/core/theme/*.dart` (flat: `mx_colors.dart`, `mx_spacing.dart`, …) |
+| Kit-symbol → Flutter-symbol map (generated, authoritative) | `tool/parity/symbol-map.json` |
 | Feature implementation | `lib/presentation/features/**` |
 | Shared widgets | `lib/presentation/shared/**` |
 
-## Spacing
-
-| Mock usage | Required token |
-| --- | --- |
-| Tiny icon/text gap | `SpacingTokens.xxs` or `SpacingTokens.xs` |
-| Compact row gap | `SpacingTokens.sm` |
-| Icon tile to text gap | `SpacingTokens.md` |
-| Card inner padding | `SpacingTokens.cardPadding` or `SpacingTokens.lg` |
-| Screen horizontal padding | `SpacingTokens.screenPadding` or the owning scaffold/content shell |
-| Section gap | `SpacingTokens.lg`, `SpacingTokens.xl`, or `SpacingTokens.sectionGap` |
-| List row separator | `SpacingTokens.sm` |
-
-## Radius
-
-| Mock usage | Required token |
-| --- | --- |
-| Card, dialog, sheet surface | `RadiusTokens.brLg` |
-| Button, input, icon tile | `RadiusTokens.brMd` |
-| Larger navigation container | `RadiusTokens.brXl` |
-| FAB role | Shared `MxFab` / themed FAB radius |
-| Pill chip, badge, search affordance | `RadiusTokens.brFull` |
-
-## Size
-
-| Mock usage | Required token/component |
-| --- | --- |
-| Small inline icon | `SizeTokens.iconXs` or `SizeTokens.iconSm` |
-| Regular icon | `SizeTokens.iconMd` |
-| Large empty-state icon | `SizeTokens.iconXl` |
-| Micro status dot | `SizeTokens.dot` |
-| Minimum touch target | `SizeTokens.touch` |
-| Search field | `SizeTokens.input` via `MxSearchField` |
-| Bottom navigation | `SizeTokens.bottomNav` via `MxBottomNavigationBar` |
-| App bar | `SizeTokens.appbar` / `SizeTokens.appbarLg` via `MxAppBar` |
-| FAB | `SizeTokens.fab` via `MxFab` |
-
-## Typography
-
-| Mock usage | Required rule |
-| --- | --- |
-| Screen title | `MxAppBar` or `MxText` using theme typography |
-| Card title | `MxTextRole.titleSmall` / `MxTextRole.titleMedium` as density requires |
-| Body and helper text | `MxTextRole.bodyMedium` / `MxTextRole.labelMedium` |
-| Section overline | `MxSectionHeader`; do not hand-roll all-caps text |
-| Count labels | Use l10n pluralization and tabular-number-friendly text roles when available |
-
-Use `TypographyTokens` for weights and special letter spacing only inside shared
-widgets or feature widgets that already use an approved `MxText` role.
-
 ## Color
 
-Use `context.colorScheme` and theme extensions. Typical mappings:
+Read MemoX colors via the `MxColors` theme extension — `context.mxColors.<member>`
+(the dominant pattern in the codebase). Never hardcode a hex; never read a MemoX
+tone off Material's `ColorScheme`.
 
-| Mock intent | Required role |
+| Kit token (`color:`/`bg:`/`border:`) | Flutter |
 | --- | --- |
-| Page background | `context.colorScheme.surface` |
-| Card surface | `context.colorScheme.surfaceContainerLowest` through `MxCard` |
-| Raised/tonal surface | `context.colorScheme.surfaceContainer` or shared component theme |
-| Primary action/accent | `context.colorScheme.primary` |
-| Primary tint | `context.colorScheme.primaryContainer` or an approved opacity token |
-| Main text | `context.colorScheme.onSurface` |
-| Secondary text/icon | `context.colorScheme.onSurfaceVariant` |
-| Border | shared ghost border via component theme or `BorderTokens` |
-| Error | `context.colorScheme.error` and shared error components |
+| `bg` | `context.mxColors.bg` |
+| `surface` / `surface-2` | `context.mxColors.surface` / `.surfaceMuted` |
+| `text` / `text-2` / `text-3` | `context.mxColors.text` / `.textSecondary` / `.textTertiary` |
+| `accent` / `accent-soft` / `accent-contrast` | `context.mxColors.accent` / `.accentSoft` / `.accentContrast` |
+| `border` / `border-strong` / `divider` | `context.mxColors.border` / `.borderStrong` / `.divider` |
+| `success` / `warn` / `danger` / `info` (+ `*-soft`) | `context.mxColors.success` / `.warn` / `.danger` / `.info` (+ `*Soft`) |
+| `note-*`, `status-*`, `mastery-*`, `rating-*`, `self-*` | matching `context.mxColors.note*/status*/mastery*/rating*/self*` member |
+| `transparent` | `Colors.transparent` (sanctioned keyword) |
 
-## Opacity, Elevation, And Borders
+The full, generated suffix → `MxColors` member list lives in
+`tool/parity/symbol-map.json` (`colorTokens`). A bare `#rrggbb` in a spec means no
+token matched — treat as a gap, not a license to hardcode.
 
-- Use `OpacityTokens` for intentional state layers, disabled content, fades, and focus tints.
-- Use shared component themes for elevation; do not add one-off shadows in feature widgets.
-- Cards use the design-system ghost border through `MxCard`; do not hand-roll card borders.
-- Inputs use shared focus/outline behavior through `MxSearchField` or other shared inputs.
+## Spacing — `MxSpacing` (px → symbol)
+
+`4 → space1`, `8 → space2`, `12 → space3`, `16 → space4`, `20 → space5`,
+`24 → space6`, `32 → space8`, `40 → space10`, `48 → space12`. Roles:
+`screen` (20, screen horizontal padding), `card` (16, card inner padding),
+`gapSection` (16, between stacked sections), `minTouchTarget` (48, a11y floor).
+
+## Radius — `MxRadius` (px → symbol)
+
+`6 → xs`, `10 → sm`, `14 → md`, `20 → lg`, `28 → xl`, `999 → pill`, `18 → fab`.
+Roles: `card` (= lg), `button` (= pill). Prefer the ready-made `BorderRadius`
+values `MxRadius.mdAll` / `.lgAll` / `.cardAll` / `.pillAll` / `.fabAll` /
+`.topSheet` over constructing `BorderRadius.circular(...)`.
+
+## Icon size — `MxIconSize`
+
+`16 → MxIconSize.sm`, `20 → MxIconSize.md`, `24 → MxIconSize.lg`.
+
+## Typography — `MxTypography` / Material `TextTheme`
+
+`MxTypography` builds the Material `TextTheme`; read a role via
+`Theme.of(context).textTheme.<role>` or the `MxText` widget — never a raw
+`TextStyle`. Map the kit's `font:<size>/<weight>` to the role whose size/weight
+match in `lib/core/theme/mx_typography.dart` (e.g. `34/800 → displayLarge`,
+`24/700 → headlineLarge`, `18/600 → titleLarge`, `16/600 → titleMedium`,
+`14/600 → titleSmall`/`labelLarge`, `16/400 → bodyLarge`, `14/400 → bodyMedium`,
+`13/400 → bodySmall`). Weights: `MxTypography.regular/medium/semibold/bold/extrabold`;
+line-heights: `MxTypography.leadingTight/leadingSnug/leadingNormal`. There is no
+`MxTextRole` and no `MxSectionHeader` — a section overline is an `MxText` with a
+label/title role, not a dedicated widget.
+
+## Opacity / stroke / elevation
+
+- State layers / disabled / tints → `MxOpacity.hover/selected/disabled`.
+- Hairline vs emphasis borders → `MxStroke.hairline/emphasis`.
+- Elevation → `MxShadows.light/dark` (via shared component themes); do not add
+  one-off shadows in feature widgets.
+
+## Components (kit `mx:` → real class)
+
+Resolve every `mx:<Component>` suggestion against `tool/parity/symbol-map.json`.
+Real shared components include: `MxScaffold`, `MxAppBar`, `MxContentShell`,
+`MxCard`, `MxIconTile`, `MxPrimaryButton` / `MxSecondaryButton` / `MxActionButton`
+/ `MxIconButton` / `MxFab`, `MxBottomNav` (+`MxBottomNavItem`), `MxSearchField` /
+`MxSearchDock`, `MxText`. The kit emits these real class names directly (the
+`mx:` hints come from `tool/ui_kit_shots/component-map.json`, whose values are
+verified to exist by `symbol_lint`). Known gap: `mx:MxSectionHeader` is a design
+directive with no real class yet — build it or treat it as an `MxText` overline.
 
 ## Forbidden
 
-- Raw hex colors in feature widgets.
-- Raw `Colors.*` values for production UI, except transparent when explicitly sanctioned by a shared component.
-- Random `SizedBox` values instead of spacing tokens.
-- One-off `BorderRadius.circular(...)` where a radius token exists.
-- Raw `TextStyle(...)` where `MxText` or theme typography applies.
-- Raw durations or curves instead of motion tokens.
-- Copying mock CSS gradients, shadows, demo data, or inline styles into Flutter.
+- Raw hex / `Colors.*` (except sanctioned `transparent`) in feature widgets.
+- Random `SizedBox`/`EdgeInsets` numbers instead of `MxSpacing`.
+- One-off `BorderRadius.circular(...)` where an `MxRadius` token exists.
+- Raw `TextStyle(...)` where `MxText` or a theme `textTheme` role applies.
+- Copying mock CSS gradients/shadows/demo data into Flutter.
+
+## Enforcement (this contract is machine-checked)
+
+- `node tool/parity/gen_tokens.mjs --check` — token VALUES in `lib/core/theme/*.dart`
+  must equal the kit CSS (colors, spacing, radius, type).
+- `node tool/parity/symbol_lint.mjs --check` — every kit `mx:<Component>` resolves
+  to a real class in `lib/` and every kit color token is a real `--memox-*` token;
+  regenerates the authoritative `tool/parity/symbol-map.json`. Documented
+  exceptions live in `tool/parity/symbol-aliases.json`.
+- Both run inside `node tool/verify/run.mjs` (docs + code chains).
 
 ## Related
 
@@ -107,7 +123,4 @@ Use `context.colorScheme` and theme extensions. Typical mappings:
 - `docs/design/visual-parity-checklist.md`
 - `docs/ui-ux/ui-ux-contract.md`
 - `docs/system-design/MemoX Design System/README.md`
-- `lib/core/theme/tokens/spacing_tokens.dart`
-- `lib/core/theme/tokens/radius_tokens.dart`
-- `lib/core/theme/tokens/size_tokens.dart`
-- `lib/core/theme/tokens/typography_tokens.dart`
+- `tool/parity/symbol-map.json` (generated), `tool/parity/symbol-aliases.json` (curated)

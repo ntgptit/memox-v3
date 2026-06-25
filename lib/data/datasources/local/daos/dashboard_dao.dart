@@ -22,4 +22,12 @@ class DashboardDao extends DatabaseAccessor<AppDatabase>
   /// (WBS 5.1.1).
   Future<DashboardResumeSessionResult?> resumeSession(int cutoff) =>
       dashboardResumeSession(cutoff).getSingleOrNull();
+
+  /// Total number of decks (engagement stat strip).
+  Future<int> deckCount() => dashboardDeckCount().getSingle();
+
+  /// Recently studied decks (most-recently-studied first), capped at [limit],
+  /// as of [now] (epoch ms) for the due count (engagement "Recent decks").
+  Future<List<DashboardRecentDecksResult>> recentDecks(int now, int limit) =>
+      dashboardRecentDecks(now, limit).get();
 }

@@ -61,8 +61,7 @@ const opt = (name, def) => {
 const asJson = flag('--json');
 const check = flag('--check');
 const maxPct = opt('--max', null) ? Number(opt('--max', null)) : null;
-const minSsim = opt('--min-ssim', null) != null ? Number(opt('--min-ssim', null)) : null;
-const wantSsim = flag('--ssim') || minSsim != null;
+const minSsimArg = opt('--min-ssim', null) != null ? Number(opt('--min-ssim', null)) : null;
 const onlyScreen = opt('--screen', null);
 const themes = ['light', 'dark'];
 
@@ -82,6 +81,19 @@ try {
 }
 
 const shotsDir = join(REPO, map.shotsDir);
+
+// SSIM honesty floor. pixel-diff% is BLIND to missing near-background surfaces
+// (a white card on a #F2F5F9 page differs <16/channel → counted "same"), so a
+// screen missing 70% of its content can still read ~8% diff. SSIM is the headline
+// verdict instead: a `current` state whose golden↔shot SSIM (either theme) falls
+// below this floor is DIVERGED, not "OK". Configurable in parity-map.json
+// (`minSsim`); `--min-ssim <v>` overrides. NOTE: SSIM is still whole-frame (diluted
+// by large shared backgrounds) so it is a COARSE fidelity gate — element-level
+// "missing/extra" is owned by the data-mx-node identity gate (mxnode_coverage +
+// fe_node_usage), which is renderer/position/background-immune.
+const DEFAULT_MIN_SSIM = 0.8;
+const ssimFloor = minSsimArg != null ? minSsimArg : (typeof map.minSsim === 'number' ? map.minSsim : DEFAULT_MIN_SSIM);
+const wantSsim = flag('--ssim') || ssimFloor != null;
 const pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
 
 /**
@@ -144,14 +156,20 @@ for (const screen of map.screens) {
       perTheme[theme] = res == null ? 'diff-err' : res.pct;
       ssimTheme[theme] = res?.ssim ?? null;
       if (maxPct != null && typeof res?.pct === 'number' && res.pct > maxPct) overMax++;
-      if (minSsim != null && typeof res?.ssim === 'number' && res.ssim < minSsim) belowMin++;
     }
     if (stateMissing) missing++;
+    // DIVERGED = golden exists but SSIM (either theme) is below the floor → the FE
+    // does NOT visually match the design. This replaces the old "golden exists ⇒ OK".
+    const diverged =
+      !stateMissing &&
+      ssimFloor != null &&
+      [ssimTheme.light, ssimTheme.dark].some((s) => typeof s === 'number' && s < ssimFloor);
+    if (diverged) belowMin++;
     rows.push({
       screen: screen.id,
       state: st.kit,
       scope: 'current',
-      status: stateMissing ? 'MISSING' : 'OK',
+      status: stateMissing ? 'MISSING' : diverged ? 'DIVERGED' : 'OK',
       light: perTheme.light,
       dark: perTheme.dark,
       lightSsim: ssimTheme.light,
@@ -188,14 +206,16 @@ if (asJson) {
   const current = rows.filter((r) => r.scope === 'current');
   const ok = current.filter((r) => r.status === 'OK').length;
   console.log(
-    `\nSummary: ${ok}/${current.length} current states have goldens` +
-      `${missing ? ` · ${missing} MISSING` : ''}` +
+    `\nSummary: ${ok}/${current.length} current states MATCH (SSIM ≥ ${ssimFloor})` +
+      `${missing ? ` · ${missing} MISSING golden` : ''}` +
+      `${ssimFloor != null ? ` · ${belowMin} DIVERGED (SSIM < ${ssimFloor})` : ''}` +
       `${maxPct != null ? ` · ${overMax} over ${maxPct}%` : ''}` +
-      `${minSsim != null ? ` · ${belowMin} under SSIM ${minSsim}` : ''}` +
       ` · ${rows.length - current.length} deferred/behavior/shared · ${noFe.length} no-FE-yet.`,
   );
   console.log(
-    '\nReminder: goldens use the real app font — diff% is a strong signal; let ui-parity-checker judge borderline %.',
+    '\nVerdict = SSIM floor (whole-frame, COARSE — diluted by shared background). pixel-diff% is a' +
+      ' secondary signal and is BLIND to missing near-bg surfaces. Element-level missing/extra is the' +
+      ' data-mx-node identity gate (mxnode_coverage + fe_node_usage); borderline visual call → ui-parity-checker.',
   );
 }
 
@@ -203,12 +223,12 @@ if (
   check &&
   (missing > 0 ||
     (maxPct != null && overMax > 0) ||
-    (minSsim != null && belowMin > 0))
+    (ssimFloor != null && belowMin > 0))
 ) {
   console.error(
     `\nparity/report: FAIL — ${missing} missing golden(s)` +
-      `${maxPct != null ? `, ${overMax} state(s) over ${maxPct}%` : ''}` +
-      `${minSsim != null ? `, ${belowMin} state(s) under SSIM ${minSsim}` : ''}.`,
+      `${ssimFloor != null ? `, ${belowMin} DIVERGED state(s) (SSIM < ${ssimFloor})` : ''}` +
+      `${maxPct != null ? `, ${overMax} state(s) over ${maxPct}%` : ''}.`,
   );
   process.exit(1);
 }

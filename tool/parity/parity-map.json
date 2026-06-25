@@ -1,6 +1,8 @@
 {
   "$comment": "Machine-readable parity contract for tool/parity/report.mjs. Encode the per-screen/per-state decision ONCE here so the report stays deterministic (no AI per run). golden = repo-root path WITHOUT the `__<theme>.png` suffix (the tool appends __light.png / __dark.png). shot = <shotsDir>/<screen.id>--<state.kit>--<theme>.png. scope: current (diff it; missing golden = FAIL) | deferred | behavior | needs-schema | needs-token | shared (reported, not diffed — owned elsewhere; see docs/project-management/parity-loop/parity-deferred.md). Keep in sync when a screen/state changes.",
   "shotsDir": "docs/system-design/MemoX Design System/ui_kits/mobile/shots",
+  "minSsim": 0.8,
+  "$minSsimNote": "Visual-fidelity floor for report.mjs: a `current` state whose golden↔shot SSIM (either theme) is below this is DIVERGED, not OK. pixel-diff% is blind to missing near-bg surfaces (white card on #F2F5F9 differs <16/channel), so SSIM is the headline verdict. COARSE (whole-frame, diluted by shared background) — element-level missing/extra is the data-mx-node identity gate. Lower to stage rollout (e.g. 0.65 = catch only the worst), raise as screens are built up to the design; `--min-ssim <v>` overrides per-run.",
   "tokenLintAllow": [
     "24-appearance"
   ],

@@ -192,7 +192,7 @@ is regenerated.
 | Search no results | Large search-empty card with Clear CTA                     | `LibrarySearchNoResultsSection`        | Custom `MxCard` composition                     | Only when search active and total folders > 0.  |
 | Error             | Large error card with Retry                                | `LibraryErrorSection`                  | Custom `MxCard` composition                     | Localized message; no raw failure text.         |
 | FAB               | Minimal icon FAB with `New folder` tooltip                 | `MxFab`                                | Themed FAB                                       | Opens create-folder dialog.                     |
-| Bottom nav        | Rounded shared nav with selected state                     | `AppShell`, `MxBottomNavigationBar`    | Shared navigation component                      | Preserve tab behavior.                          |
+| Bottom nav        | Rounded shared nav with selected state                     | `AppShell`, `MxBottomNav`    | Shared navigation component                      | Preserve tab behavior.                          |
 
 ## State Matrix
 

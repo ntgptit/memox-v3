@@ -407,7 +407,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
                 position: clip
     - node: fab
       id: 03-library/new-folder-fab
-      mx: ?
+      mx: MxFab
       box:
         abs: [313,633 56x56]
         rel: [312,620 56x56]
@@ -421,7 +421,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           rel: [16,16 24x24]
         position: clip
     - node: bottom-nav
-      mx: MxBottomNavigationBar
+      mx: MxBottomNav
       box:
         abs: [1,705 388x64]
         rel: [0,692 388x64]
@@ -711,7 +711,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
                 rel: [0,22 100x11]
               style: bg:surface-2 r:10
     - node: bottom-nav
-      mx: MxBottomNavigationBar
+      mx: MxBottomNav
       box:
         abs: [1,705 388x64]
         rel: [0,692 388x64]
@@ -1155,7 +1155,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: clip
 - - node: fab
 - id: 03-library/new-folder-fab
-- mx: ?
+- mx: MxFab
 - box:
 - abs: [313,633 56x56]
 - rel: [312,620 56x56]
@@ -1223,7 +1223,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + rel: [93,14 16x16]
 + position: clip
   - node: bottom-nav
-  mx: MxBottomNavigationBar
+  mx: MxBottomNav
   box:
   abs: [1,705 388x64]
   rel: [0,692 388x64]
@@ -1491,7 +1491,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: clip
 - - node: fab
 - id: 03-library/new-folder-fab
-- mx: ?
+- mx: MxFab
 - box:
 - abs: [313,633 56x56]
 - rel: [312,620 56x56]
@@ -1506,6 +1506,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: clip
 + - node: search-dock
 + id: 03-library/search-dock
++ mx: MxSearchDock
 + box:
 + abs: [1,636 388x69]
 + rel: [0,623 388x69]
@@ -1550,7 +1551,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + rel: [0,0 20x20]
 + position: clip
   - node: bottom-nav
-  mx: MxBottomNavigationBar
+  mx: MxBottomNav
   box:
   abs: [1,705 388x64]
   rel: [0,692 388x64]
@@ -2072,7 +2073,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: clip
 - - node: fab
 - id: 03-library/new-folder-fab
-- mx: ?
+- mx: MxFab
 - box:
 - abs: [313,633 56x56]
 - rel: [312,620 56x56]
@@ -2140,7 +2141,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + rel: [119,14 16x16]
 + position: clip
   - node: bottom-nav
-  mx: MxBottomNavigationBar
+  mx: MxBottomNav
   box:
   abs: [1,705 388x64]
   rel: [0,692 388x64]

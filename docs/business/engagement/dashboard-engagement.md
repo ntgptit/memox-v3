@@ -12,14 +12,34 @@ daily goal, computed streaks, reminders, engagement settings, streak history,
 daily-goal sheets, notification permissions, and engagement persistence remain
 Future/Target unless explicitly called out below.
 
-Current V1 Dashboard (design redesign, 2026-06-21) renders only a quiet **due
-snapshot** (`MxDueSummary` — cards due + decks with due, or a caught-up state)
-from `LoadDashboardSummaryUseCase`, plus shortcut rows to Progress and the
-Library. It does **not** render a streak chip, daily-goal ring, or any study CTA
-— the redesign relocates goal/streak surfaces (`GoalRing`/`Insight`) to the
-**Progress** screen, and all engagement persistence (goal, computed streak,
-reminders, settings, history) remains Future/Target pending the engagement BE
-(schema/migration/approval).
+Current V1 Dashboard (engagement, restored 2026-06-25 by owner ruling — this
+REVERSES the 2026-06-21 quiet redesign that had moved the stat strip / recent
+decks to Progress). It renders the kit-02 engagement overview, assembled by
+`LoadDashboardEngagementUseCase` into one `DashboardEngagement` snapshot that
+REUSES existing read models (no new SRS maths):
+
+- **Stat strip** (`mx-node:02-dashboard/stat-summary`) — Due (`DashboardSummary.cardsDue`),
+  Decks (total deck count), Accuracy (`StudyStatistics.correctCount / totalAttempts`,
+  shown as `—` until there is graded activity — no fabricated 0%), Streak
+  (`ProgressEngagement.currentStreak`).
+- **Continue studying** (`mx-node:02-dashboard/continue-studying`, shown only when a
+  resumable session exists) — `DashboardResumeSessionSummary` progress + a Resume action.
+- **Due snapshot** (`mx-node:02-dashboard/due-summary`) — `MxDueSummary` + a Review action.
+- **Recent decks** (`mx-node:02-dashboard/recent-decks`) — `DashboardRecentDeck` list
+  (name, card count, due badge, relative last-studied) from `dashboardRecentDecks`
+  (decks with `card_events` activity, most-recent first; due count reuses the canonical
+  due predicate).
+- **Stats shortcut** (`mx-node:02-dashboard/shortcut-progress`) + **Settings**
+  (`mx-node:02-dashboard/settings`) in a greeting app bar.
+
+Each enrichment (accuracy / streak / resume / recent decks) DEGRADES to a safe default
+on read failure — only the core due summary's failure surfaces the error state.
+
+REFINEMENTS still Future (no fabrication, tracked here): the continue-studying card's
+deck/scope NAME (needs scope→name resolution) and a Discard action (needs an
+abandon-session use case); the kit's daily-goal ring / Insight surfaces stay on
+**Progress**, and goal/reminder/streak-history persistence remains Future/Target
+pending the engagement BE (schema/migration/approval).
 
 ## Purpose
 

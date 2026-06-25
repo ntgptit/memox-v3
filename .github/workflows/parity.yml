@@ -17,6 +17,9 @@ on:
       - "docs/system-design/MemoX Design System/ui_kits/mobile/**"
       - "tool/parity/**"
       - "tool/golden_diff/**"
+      # fe_node_usage.mjs cross-checks the kit contract against ValueKey('mx-node:…')
+      # in lib/**, so an FE key add/remove/rename must trigger the parity gate.
+      - "lib/**"
   push:
     branches: [main]
 
@@ -38,12 +41,20 @@ jobs:
         run: node tool/parity/report.mjs --check
       - name: Token lint (bare-hex gaps)
         run: node tool/parity/token_lint.mjs --check
+      - name: Token codegen parity (kit CSS == Flutter theme)
+        run: node tool/parity/gen_tokens.mjs --check
+      - name: Symbol resolve (kit mx:/token → real Flutter symbol)
+        run: node tool/parity/symbol_lint.mjs --check
+      - name: Binding contract fresh (per keyed-node bindings == specs)
+        run: node tool/parity/gen_bindings.mjs --check
       - name: Design-drift gate (spec/shots ⇄ code/docs acknowledged)
         run: node tool/parity/design_watch.mjs --check
       - name: Parity contract generated from specs
         run: node tool/parity/gen_contract.mjs --check
       - name: data-mx-node coverage gate (every candidate tagged or ledger-exempt)
         run: node tool/parity/mxnode_coverage.mjs --check --min 100
+      - name: data-mx-node FE-usage gate (every contract id consumed in lib/**, no orphans)
+        run: node tool/parity/fe_node_usage.mjs --check
       - name: Full parity report with SSIM (artifact log)
         if: always()
         run: node tool/parity/report.mjs --ssim

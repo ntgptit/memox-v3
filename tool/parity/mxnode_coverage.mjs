@@ -59,7 +59,7 @@ const EXCLUDE = new Set([
   'MxScaffold',
   'MxAppBar',
   'MxContentShell',
-  'MxBottomNavigationBar',
+  'MxBottomNav',
 ]);
 
 /**

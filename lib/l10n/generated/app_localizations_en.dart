@@ -1521,4 +1521,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studySpeakStop => 'Stop audio';
+
+  @override
+  String get dashboardGreetingMorning => 'Good morning';
+
+  @override
+  String get dashboardGreetingAfternoon => 'Good afternoon';
+
+  @override
+  String get dashboardGreetingEvening => 'Good evening';
+
+  @override
+  String get dashboardStatDue => 'Due';
+
+  @override
+  String get dashboardStatDecks => 'Decks';
+
+  @override
+  String get dashboardStatAccuracy => 'Accuracy';
+
+  @override
+  String get dashboardStatStreak => 'Streak';
+
+  @override
+  String get dashboardStatEmpty => '—';
+
+  @override
+  String get dashboardContinueTitle => 'Continue studying';
+
+  @override
+  String get dashboardResumeAction => 'Resume';
+
+  @override
+  String get dashboardDiscardAction => 'Discard';
+
+  @override
+  String dashboardResumeProgress(int answered, int total) {
+    return '$answered/$total cards';
+  }
+
+  @override
+  String get dashboardRecentDecksTitle => 'Recent decks';
+
+  @override
+  String get dashboardSeeStatsLabel => 'See learning stats';
+
+  @override
+  String get dashboardReviewAction => 'Review';
 }

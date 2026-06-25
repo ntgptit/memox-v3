@@ -2653,6 +2653,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Stop audio'**
   String get studySpeakStop;
+
+  /// Dashboard app-bar greeting shown in the morning.
+  ///
+  /// In en, this message translates to:
+  /// **'Good morning'**
+  String get dashboardGreetingMorning;
+
+  /// Dashboard app-bar greeting shown in the afternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Good afternoon'**
+  String get dashboardGreetingAfternoon;
+
+  /// Dashboard app-bar greeting shown in the evening/night.
+  ///
+  /// In en, this message translates to:
+  /// **'Good evening'**
+  String get dashboardGreetingEvening;
+
+  /// Dashboard stat-strip label: cards due now.
+  ///
+  /// In en, this message translates to:
+  /// **'Due'**
+  String get dashboardStatDue;
+
+  /// Dashboard stat-strip label: total number of decks.
+  ///
+  /// In en, this message translates to:
+  /// **'Decks'**
+  String get dashboardStatDecks;
+
+  /// Dashboard stat-strip label: review accuracy.
+  ///
+  /// In en, this message translates to:
+  /// **'Accuracy'**
+  String get dashboardStatAccuracy;
+
+  /// Dashboard stat-strip label: current daily study streak.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak'**
+  String get dashboardStatStreak;
+
+  /// Dashboard stat-strip value placeholder when there is no data yet (e.g. accuracy before any graded activity).
+  ///
+  /// In en, this message translates to:
+  /// **'—'**
+  String get dashboardStatEmpty;
+
+  /// Dashboard section overline above the resume-session card.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue studying'**
+  String get dashboardContinueTitle;
+
+  /// Dashboard continue-studying button that resumes the paused session.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get dashboardResumeAction;
+
+  /// Dashboard continue-studying button that discards the paused session.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get dashboardDiscardAction;
+
+  /// Dashboard continue-studying progress (answered of total).
+  ///
+  /// In en, this message translates to:
+  /// **'{answered}/{total} cards'**
+  String dashboardResumeProgress(int answered, int total);
+
+  /// Dashboard section title above the recently-studied decks list.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent decks'**
+  String get dashboardRecentDecksTitle;
+
+  /// Dashboard shortcut row label linking to the Progress/Stats screen.
+  ///
+  /// In en, this message translates to:
+  /// **'See learning stats'**
+  String get dashboardSeeStatsLabel;
+
+  /// Dashboard due-summary action that starts reviewing due cards.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get dashboardReviewAction;
 }
 
 class _AppLocalizationsDelegate

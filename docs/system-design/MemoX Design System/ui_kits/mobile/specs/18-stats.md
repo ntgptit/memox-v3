@@ -599,7 +599,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
                 size: minw:44
                 style: font:14/800 color:text text:right
     - node: bottom-nav
-      mx: MxBottomNavigationBar
+      mx: MxBottomNav
       box:
         abs: [1,705 388x64]
         rel: [0,692 388x64]

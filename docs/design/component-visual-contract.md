@@ -29,7 +29,7 @@ theme tokens, l10n, and route contracts.
 | Loading list state | `MxSkeleton`, `MxRetainedAsyncState`, or approved async shared component | Full-screen spinner for list first load |
 | Snackbar/toast | `showMxSnackbar` | Raw `SnackBar` / `ScaffoldMessenger` |
 | Dialog | Shared `Mx*` dialog such as `showMxNameDialog` | One-off dialog layout |
-| Bottom navigation | `MxBottomNavigationBar` | Raw `NavigationBar` when visual parity is required |
+| Bottom navigation | `MxBottomNav` | Raw `NavigationBar` when visual parity is required |
 | Bottom sheet | Existing shared sheet from `docs/wireframes/25-shared-bottom-sheets.md` when available | One-off sheet for a documented shared pattern |
 
 ## Promotion Rule

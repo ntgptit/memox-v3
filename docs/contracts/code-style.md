@@ -288,7 +288,7 @@ Forbidden:
 - Shared design-system widgets stay controlled and mostly
   `StatelessWidget`; do not convert `MxTextField`, `MxSearchField`,
   `MxSliderField`, `MxFlashcard`, `MxRatingBar`, `MxSelfAssessment`,
-  `MxButton`, `MxCard`, `MxScaffold`, `MxAppBar`, or `MxBottomNavigationBar`
+  `MxButton`, `MxCard`, `MxScaffold`, `MxAppBar`, or `MxBottomNav`
   to hooks unless a documented exception is approved.
 - Custom hooks must start with `use`.
 - Custom shared hooks must not call repositories, use cases, DAOs, or

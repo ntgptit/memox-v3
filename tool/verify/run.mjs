@@ -153,6 +153,13 @@ if (mode === 'quick') {
   else results.push({ name: 'flutter test', status: 'skipped', note: 'pass --test <paths> for tests in quick mode' });
 } else if (mode === 'docs') {
   step('doc_guard', 'node tool/doc_guard/run.mjs check');
+  step('token parity', 'node tool/parity/gen_tokens.mjs --check');
+  step('symbol parity', 'node tool/parity/symbol_lint.mjs --check');
+  step('binding contract', 'node tool/parity/gen_bindings.mjs --check');
+  // Completeness (thiếu/thừa): kit fully tagged + every tag keyed in FE + no foreign FE key.
+  step('contract fresh', 'node tool/parity/gen_contract.mjs --check');
+  step('kit coverage', 'node tool/parity/mxnode_coverage.mjs --check --min 100');
+  step('fe coverage', 'node tool/parity/fe_node_usage.mjs --check');
   step('guard', 'python code-verification-guard/guard/run.py check --project . --ruleset memox', {
     skip: guardPresent ? undefined : 'tool not present',
   });
@@ -165,6 +172,13 @@ if (mode === 'quick') {
     skip: guardPresent ? undefined : 'tool not present',
   });
   step('doc_guard', 'node tool/doc_guard/run.mjs check');
+  step('token parity', 'node tool/parity/gen_tokens.mjs --check');
+  step('symbol parity', 'node tool/parity/symbol_lint.mjs --check');
+  step('binding contract', 'node tool/parity/gen_bindings.mjs --check');
+  // Completeness (thiếu/thừa): kit fully tagged + every tag keyed in FE + no foreign FE key.
+  step('contract fresh', 'node tool/parity/gen_contract.mjs --check');
+  step('kit coverage', 'node tool/parity/mxnode_coverage.mjs --check --min 100');
+  step('fe coverage', 'node tool/parity/fe_node_usage.mjs --check');
   step('dart fix', 'dart fix --apply');
   step('dart format', 'dart format .');
   step('flutter analyze', 'flutter analyze');

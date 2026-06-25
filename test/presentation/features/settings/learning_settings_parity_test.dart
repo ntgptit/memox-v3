@@ -55,4 +55,21 @@ void main() {
       'reminder card': _node('22-learning-settings/reminder-card'),
     });
   });
+
+  // Bridge 3 pilot: the keyed nodes the kit tags as a concrete component must
+  // realize that component (goal-card / reminder-card → MxCard). Driven entirely
+  // by the generated tool/parity/contracts/bindings.json — a raw Container in
+  // place of MxCard would fail here even though the presence contract passes.
+  testWidgets('22-learning-settings: binding contract (kit component)', (
+    tester,
+  ) async {
+    await _pump(
+      tester,
+      const LearningSettingsView(settings: LearningSettings(dailyNewLimit: 20)),
+    );
+    expectGeneratedBindingContract(
+      '22-learning-settings',
+      aliases: const <String, String>{'MxBottomNavigationBar': 'MxBottomNav'},
+    );
+  });
 }

@@ -24,8 +24,8 @@ Claude Design project ──(A) /design-sync · DesignSync pull──► ui_kits
                               ├─ tool/parity/design_watch.mjs  (screens drifted?)
                               └─ checklist: FE + mx-node keys + goldens + docs
                                                                     │
-                          gates (verify/CI): design_watch --check,
-                          parity-contract tests, gen_contract --check
+                          gates (verify/CI): design_watch --check, gen_contract --check,
+                          mxnode_coverage (kit) ↔ fe_node_usage (FE), parity-contract tests
 ```
 
 ## Phase A — pull from Claude Design (occasional, when design changes)
@@ -112,16 +112,21 @@ for an unbuilt class). Stages and what's automated:
 | 2. `export_specs` emits `id:<value>` for those nodes | carry into spec | ✅ deterministic (exporter change) |
 | 3. `gen_contract.mjs` → `contracts/contracts.json` | required-key list/screen | ✅ deterministic |
 | 4. FE `key: ValueKey('mx-node:<id>')` on the widget | identity in Flutter | judgment 1×/node; **gate** is automatic |
-| 5. parity-contract test (`find.byKey`) | red when FE missing the node | ✅ generated/asserted |
+| 5. parity-contract test (`find.byKey`) | red when FE missing the node, per screen/state | ✅ asserted (`flutter test`) |
+| 6. `fe_node_usage.mjs` static cross-check (no Flutter) | contract ids ↔ `ValueKey` in `lib/**`: **missing** / **orphan** / **spec-lag** | ✅ deterministic gate |
 
-Helper `test/support/parity_contract.dart`; prototype (hand-written until stage 1-2
-land) `test/presentation/features/dashboard/dashboard_parity_test.dart` +
-`mx-node` keys in `lib/presentation/features/dashboard/widgets/dashboard_body.dart`.
+Helper `test/support/parity_contract.dart`; pattern
+`test/presentation/features/dashboard/dashboard_parity_test.dart` + `mx-node` keys
+in `lib/presentation/features/dashboard/widgets/dashboard_body.dart`.
 
-**Current status:** the deterministic side (stages 2-pending, 3, 5) is built; ids
-(stages 1, 4) are not yet placed in the kit/specs, so `gen_contract` reports zero
-and the dashboard contract is hand-written as the pattern. To go fully automatic:
-add `data-mx-node` in Claude Design, teach `export_specs` to emit `id:`, re-export.
+**Current status:** fully wired. `data-mx-node` ids are placed in the kit and carried
+into specs, so `gen_contract` emits **contracts/contracts.json** (67 required ids
+across 23 screens) and ~18 per-screen parity-contract tests assert them. Two
+deterministic gates close the loop without Flutter: `mxnode_coverage.mjs` (kit tagged
+enough?) and `fe_node_usage.mjs` (FE consumed enough? — and no orphan/typo keys). The
+static gate also surfaces **spec-lag** (an id tagged in the kit JSX but dropped by the
+spec export — e.g. `study-session/progress` in `_shared.jsx`), whose fix is to
+re-export specs.
 
 ## Gates (deterministic, in CI `.github/workflows/parity.yml` + `tool/verify`)
 
@@ -129,7 +134,9 @@ add `data-mx-node` in Claude Design, teach `export_specs` to emit `id:`, re-expo
 - `node tool/parity/token_lint.mjs --check` — no un-tokenized bare hex.
 - `node tool/parity/design_watch.mjs --check` — design changed ⇒ red until code/docs caught up + re-baselined.
 - `node tool/parity/gen_contract.mjs --check` — contracts.json regenerated when specs change.
-- parity-contract tests (`flutter test`) — FE missing a required `mx-node` ⇒ red.
+- `node tool/parity/mxnode_coverage.mjs --check --min 100` — every kit candidate node tagged or ledger-exempt (kit side).
+- `node tool/parity/fe_node_usage.mjs --check` — every contract id consumed by a `ValueKey('mx-node:..')` in `lib/**`, no orphan keys (FE side; `lib/**` is a `parity.yml` trigger).
+- parity-contract tests (`flutter test`) — FE missing a required `mx-node` ⇒ red (per screen/state).
 
 ## Who does what
 

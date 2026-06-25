@@ -3,8 +3,16 @@ import 'package:flutter/material.dart';
 /// MemoX semantic color palette, exposed as a [ThemeExtension] so it flips with
 /// the active [Brightness].
 ///
-/// These mirror the base palette + contract layer in
-/// `docs/system-design/MemoX Design System/colors_and_type.css`. Material's
+/// The light/dark token VALUES (the `light` / `dark` const blocks below) are
+/// generated from the design kit's
+/// `docs/system-design/MemoX Design System/colors_and_type.css` — the single
+/// source of truth — by `tool/parity/gen_tokens.mjs`. Do NOT hand-edit the hex
+/// literals: change the CSS in the kit, then run
+/// `node tool/parity/gen_tokens.mjs --write`. The `--check` gate inside
+/// `tool/verify/run.mjs` fails any commit where the two disagree. The class
+/// shape, contract-alias getters, and lerp/copyWith are hand-written.
+///
+/// Material's
 /// [ColorScheme] covers the core roles (primary/surface/error/outline); this
 /// extension carries the MemoX-specific tokens Material cannot express — soft
 /// tints, secondary semantics, divider/focus, and the note/status/mastery

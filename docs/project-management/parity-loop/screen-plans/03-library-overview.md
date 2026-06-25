@@ -53,7 +53,7 @@ Audit: 2026-06-23.
 | list-row-trail chevron-right | 302,22 20x20 | — | — | trailing chevron | size 20, glyph chevron-right | Current |
 | hr (inter-row) | margin-left 52 | bg divider 1px | — | `MxDivider indent: space10+space3=52` | inset 52 ✓ | Current |
 | fab | 312,620 56x56 | bg accent, r18, shadow 2/8, icon folder-plus 24 | — | `MxFab create_new_folder_outlined` | verify 56x56, r18, shadow `md`, icon 24 | Current |
-| bottom-nav | 0,692 388x64 | MxBottomNavigationBar, h64, border-t 1px divider, bg white@88% | 11/600 (active 700 accent) | shell-owned `MxBottomNavigationBar` | NOT in screen golden (shell scope); verify in shell | Current |
+| bottom-nav | 0,692 388x64 | MxBottomNav, h64, border-t 1px divider, bg white@88% | 11/600 (active 700 accent) | shell-owned `MxBottomNav` | NOT in screen golden (shell scope); verify in shell | Current |
 
 ## Non-base state deltas
 

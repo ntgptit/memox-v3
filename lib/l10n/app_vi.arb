@@ -427,5 +427,20 @@
   "audioSampleKorean": "안녕하세요, 오늘도 공부해요.",
   "audioSampleEnglish": "The quick brown fox jumps over the lazy dog.",
   "studySpeakPlay": "Phát âm thanh",
-  "studySpeakStop": "Dừng âm thanh"
+  "studySpeakStop": "Dừng âm thanh",
+  "dashboardGreetingMorning": "Chào buổi sáng",
+  "dashboardGreetingAfternoon": "Chào buổi chiều",
+  "dashboardGreetingEvening": "Chào buổi tối",
+  "dashboardStatDue": "Đến hạn",
+  "dashboardStatDecks": "Bộ thẻ",
+  "dashboardStatAccuracy": "Độ chính xác",
+  "dashboardStatStreak": "Chuỗi ngày",
+  "dashboardStatEmpty": "—",
+  "dashboardContinueTitle": "Tiếp tục học",
+  "dashboardResumeAction": "Tiếp tục",
+  "dashboardDiscardAction": "Bỏ qua",
+  "dashboardResumeProgress": "{answered}/{total} thẻ",
+  "dashboardRecentDecksTitle": "Bộ thẻ gần đây",
+  "dashboardSeeStatsLabel": "Xem thống kê học tập",
+  "dashboardReviewAction": "Ôn tập"
 }

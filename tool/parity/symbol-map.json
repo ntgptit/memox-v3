@@ -1,0 +1,367 @@
+{
+  "$generated": "by tool/parity/symbol_lint.mjs --write — DO NOT hand-edit. Curated aliases/gaps live in tool/parity/symbol-aliases.json. This is the authoritative kit-symbol → Flutter-symbol map; read it instead of the prose in docs/design/design-token-mapping.md.",
+  "components": {
+    "MxActionButton": {
+      "status": "ok",
+      "class": "MxActionButton",
+      "count": 22,
+      "specs": [
+        "04-folder-detail.md",
+        "06-flashcard-list.md",
+        "07-flashcard-create.md",
+        "08-flashcard-edit.md",
+        "09-flashcard-history.md",
+        "11-tag-management.md",
+        "19-progress.md"
+      ],
+      "file": "lib/presentation/shared/widgets/buttons/mx_action_button.dart"
+    },
+    "MxAppBar": {
+      "status": "ok",
+      "class": "MxAppBar",
+      "count": 67,
+      "specs": [
+        "01-onboarding.md",
+        "02-dashboard.md",
+        "03-library-overview.md",
+        "04-folder-detail.md",
+        "05-library-search.md",
+        "06-flashcard-list.md",
+        "07-flashcard-create.md",
+        "08-flashcard-edit.md",
+        "09-flashcard-history.md",
+        "10-deck-import.md",
+        "11-tag-management.md",
+        "12-study-review.md",
+        "13-study-match.md",
+        "14-study-guess.md",
+        "15-study-recall.md",
+        "16-study-fill.md",
+        "17-study-result.md",
+        "18-stats.md",
+        "19-progress.md",
+        "20-settings.md",
+        "21-account-sync.md",
+        "22-learning-settings.md",
+        "23-audio-speech.md",
+        "24-appearance.md",
+        "25-language.md"
+      ],
+      "file": "lib/presentation/shared/widgets/navigation/mx_app_bar.dart"
+    },
+    "MxBottomNav": {
+      "status": "ok",
+      "class": "MxBottomNav",
+      "count": 21,
+      "specs": [
+        "02-dashboard.md",
+        "03-library-overview.md",
+        "04-folder-detail.md",
+        "05-library-search.md",
+        "18-stats.md",
+        "20-settings.md"
+      ],
+      "file": "lib/presentation/shared/widgets/navigation/mx_bottom_nav.dart"
+    },
+    "MxCard": {
+      "status": "ok",
+      "class": "MxCard",
+      "count": 135,
+      "specs": [
+        "01-onboarding.md",
+        "02-dashboard.md",
+        "03-library-overview.md",
+        "04-folder-detail.md",
+        "05-library-search.md",
+        "06-flashcard-list.md",
+        "07-flashcard-create.md",
+        "08-flashcard-edit.md",
+        "09-flashcard-history.md",
+        "10-deck-import.md",
+        "11-tag-management.md",
+        "12-study-review.md",
+        "14-study-guess.md",
+        "15-study-recall.md",
+        "16-study-fill.md",
+        "17-study-result.md",
+        "18-stats.md",
+        "19-progress.md",
+        "20-settings.md",
+        "21-account-sync.md",
+        "22-learning-settings.md",
+        "23-audio-speech.md"
+      ],
+      "file": "lib/presentation/shared/widgets/surfaces/mx_card.dart"
+    },
+    "MxFab": {
+      "status": "ok",
+      "class": "MxFab",
+      "count": 14,
+      "specs": [
+        "03-library-overview.md",
+        "04-folder-detail.md",
+        "06-flashcard-list.md"
+      ],
+      "file": "lib/presentation/shared/widgets/buttons/mx_fab.dart"
+    },
+    "MxIconButton": {
+      "status": "ok",
+      "class": "MxIconButton",
+      "count": 71,
+      "specs": [
+        "02-dashboard.md",
+        "03-library-overview.md",
+        "04-folder-detail.md",
+        "06-flashcard-list.md",
+        "07-flashcard-create.md",
+        "08-flashcard-edit.md",
+        "09-flashcard-history.md",
+        "10-deck-import.md",
+        "11-tag-management.md",
+        "12-study-review.md",
+        "13-study-match.md",
+        "14-study-guess.md",
+        "15-study-recall.md",
+        "16-study-fill.md",
+        "17-study-result.md",
+        "19-progress.md",
+        "21-account-sync.md",
+        "22-learning-settings.md",
+        "23-audio-speech.md",
+        "24-appearance.md",
+        "25-language.md"
+      ],
+      "file": "lib/presentation/shared/widgets/buttons/mx_icon_button.dart"
+    },
+    "MxIconTile": {
+      "status": "ok",
+      "class": "MxIconTile",
+      "count": 197,
+      "specs": [
+        "01-onboarding.md",
+        "02-dashboard.md",
+        "03-library-overview.md",
+        "04-folder-detail.md",
+        "05-library-search.md",
+        "06-flashcard-list.md",
+        "07-flashcard-create.md",
+        "08-flashcard-edit.md",
+        "09-flashcard-history.md",
+        "10-deck-import.md",
+        "11-tag-management.md",
+        "17-study-result.md",
+        "18-stats.md",
+        "19-progress.md",
+        "20-settings.md",
+        "21-account-sync.md",
+        "22-learning-settings.md",
+        "23-audio-speech.md",
+        "25-language.md"
+      ],
+      "file": "lib/presentation/shared/widgets/surfaces/mx_icon_tile.dart"
+    },
+    "MxPrimaryButton": {
+      "status": "ok",
+      "class": "MxPrimaryButton",
+      "count": 71,
+      "specs": [
+        "01-onboarding.md",
+        "02-dashboard.md",
+        "03-library-overview.md",
+        "04-folder-detail.md",
+        "05-library-search.md",
+        "06-flashcard-list.md",
+        "07-flashcard-create.md",
+        "08-flashcard-edit.md",
+        "09-flashcard-history.md",
+        "10-deck-import.md",
+        "11-tag-management.md",
+        "12-study-review.md",
+        "13-study-match.md",
+        "14-study-guess.md",
+        "15-study-recall.md",
+        "16-study-fill.md",
+        "17-study-result.md",
+        "19-progress.md",
+        "20-settings.md",
+        "21-account-sync.md",
+        "23-audio-speech.md"
+      ],
+      "file": "lib/presentation/shared/widgets/buttons/mx_primary_button.dart"
+    },
+    "MxScaffold": {
+      "status": "ok",
+      "class": "MxScaffold",
+      "count": 77,
+      "specs": [
+        "01-onboarding.md",
+        "02-dashboard.md",
+        "03-library-overview.md",
+        "04-folder-detail.md",
+        "05-library-search.md",
+        "06-flashcard-list.md",
+        "07-flashcard-create.md",
+        "08-flashcard-edit.md",
+        "09-flashcard-history.md",
+        "10-deck-import.md",
+        "11-tag-management.md",
+        "12-study-review.md",
+        "13-study-match.md",
+        "14-study-guess.md",
+        "15-study-recall.md",
+        "16-study-fill.md",
+        "17-study-result.md",
+        "18-stats.md",
+        "19-progress.md",
+        "20-settings.md",
+        "21-account-sync.md",
+        "22-learning-settings.md",
+        "23-audio-speech.md",
+        "24-appearance.md",
+        "25-language.md"
+      ],
+      "file": "lib/presentation/shared/layouts/mx_scaffold.dart"
+    },
+    "MxSearchDock": {
+      "status": "ok",
+      "class": "MxSearchDock",
+      "count": 13,
+      "specs": [
+        "03-library-overview.md",
+        "04-folder-detail.md",
+        "05-library-search.md",
+        "06-flashcard-list.md",
+        "11-tag-management.md"
+      ],
+      "file": "lib/presentation/shared/widgets/inputs/mx_search_dock.dart"
+    },
+    "MxSecondaryButton": {
+      "status": "ok",
+      "class": "MxSecondaryButton",
+      "count": 45,
+      "specs": [
+        "01-onboarding.md",
+        "02-dashboard.md",
+        "04-folder-detail.md",
+        "06-flashcard-list.md",
+        "08-flashcard-edit.md",
+        "10-deck-import.md",
+        "11-tag-management.md",
+        "12-study-review.md",
+        "13-study-match.md",
+        "16-study-fill.md",
+        "17-study-result.md",
+        "20-settings.md",
+        "21-account-sync.md",
+        "22-learning-settings.md",
+        "23-audio-speech.md"
+      ],
+      "file": "lib/presentation/shared/widgets/buttons/mx_secondary_button.dart"
+    },
+    "MxSectionHeader": {
+      "status": "gap",
+      "reason": "No shared section-header widget exists; the kit suggests mx:MxSectionHeader across 7 specs (04,05,11,13,18,19,23). DECIDE: build MxSectionHeader, or retag the kit to the real pattern (MxText with a titleSmall/overline role, or an MxContentShell section). Tracked as design-ahead-of-code, not a silent skip.",
+      "count": 20,
+      "specs": [
+        "04-folder-detail.md",
+        "05-library-search.md",
+        "11-tag-management.md",
+        "13-study-match.md",
+        "18-stats.md",
+        "19-progress.md",
+        "23-audio-speech.md"
+      ]
+    }
+  },
+  "colorTokens": {
+    "accent": {
+      "status": "ok",
+      "member": "accent",
+      "count": 251
+    },
+    "accent-contrast": {
+      "status": "ok",
+      "member": "accentContrast",
+      "count": 376
+    },
+    "bg": {
+      "status": "ok",
+      "member": "bg",
+      "count": 245
+    },
+    "border": {
+      "status": "ok",
+      "member": "border",
+      "count": 157
+    },
+    "border-strong": {
+      "status": "ok",
+      "member": "borderStrong",
+      "count": 18
+    },
+    "color": {
+      "status": "keyword",
+      "count": 9
+    },
+    "danger": {
+      "status": "ok",
+      "member": "danger",
+      "count": 36
+    },
+    "divider": {
+      "status": "ok",
+      "member": "divider",
+      "count": 352
+    },
+    "info": {
+      "status": "ok",
+      "member": "info",
+      "count": 11
+    },
+    "note-teal": {
+      "status": "ok",
+      "member": "noteTeal",
+      "count": 7
+    },
+    "overlay": {
+      "status": "ok",
+      "member": "overlay",
+      "count": 17
+    },
+    "success": {
+      "status": "ok",
+      "member": "success",
+      "count": 22
+    },
+    "surface-2": {
+      "status": "ok",
+      "member": "surfaceMuted",
+      "count": 182
+    },
+    "text": {
+      "status": "ok",
+      "member": "text",
+      "count": 544
+    },
+    "text-2": {
+      "status": "ok",
+      "member": "textSecondary",
+      "count": 608
+    },
+    "text-3": {
+      "status": "ok",
+      "member": "textTertiary",
+      "count": 29
+    },
+    "transparent": {
+      "status": "keyword",
+      "count": 101
+    },
+    "warn": {
+      "status": "ok",
+      "member": "warn",
+      "count": 15
+    }
+  },
+  "unmappedMxCount": 175
+}

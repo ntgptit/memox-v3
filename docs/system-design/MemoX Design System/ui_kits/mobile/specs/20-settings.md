@@ -532,7 +532,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
                   rel: [53,0 20x20]
                 position: clip
     - node: bottom-nav
-      mx: MxBottomNavigationBar
+      mx: MxBottomNav
       box:
         abs: [1,705 388x64]
         rel: [0,692 388x64]
@@ -1200,7 +1200,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
                 rel: [0,22 162x11]
               style: bg:surface-2 r:10
     - node: bottom-nav
-      mx: MxBottomNavigationBar
+      mx: MxBottomNav
       box:
         abs: [1,705 388x64]
         rel: [0,692 388x64]

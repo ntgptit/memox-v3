@@ -2,6 +2,7 @@ import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/data/datasources/local/daos/dashboard_dao.dart';
 import 'package:memox/data/mappers/study_session_mapper.dart';
+import 'package:memox/domain/models/dashboard_recent_deck.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
 import 'package:memox/domain/models/dashboard_summary.dart';
 import 'package:memox/domain/repositories/dashboard_repository.dart';
@@ -79,6 +80,57 @@ class DashboardRepositoryImpl implements DashboardRepository {
         failure: Failure.storage(
           operation: StorageOp.read,
           table: 'study_sessions',
+          cause: error.toString(),
+        ),
+        data: null,
+      );
+    }
+  }
+
+  @override
+  Future<Result<int>> countDecks() async {
+    try {
+      return (failure: null, data: await _dao.deckCount());
+    } catch (error) {
+      return (
+        failure: Failure.storage(
+          operation: StorageOp.read,
+          table: 'decks',
+          cause: error.toString(),
+        ),
+        data: null,
+      );
+    }
+  }
+
+  @override
+  Future<Result<List<DashboardRecentDeck>>> loadRecentDecks({
+    required int now,
+    required int limit,
+  }) async {
+    try {
+      final rows = await _dao.recentDecks(now, limit);
+      return (
+        failure: null,
+        data: <DashboardRecentDeck>[
+          for (final row in rows)
+            DashboardRecentDeck(
+              deckId: row.id,
+              name: row.name,
+              cardCount: row.cardCount,
+              dueCount: row.dueCount,
+              lastStudiedAt: DateTime.fromMillisecondsSinceEpoch(
+                row.lastStudiedAt ?? 0,
+                isUtc: true,
+              ),
+            ),
+        ],
+      );
+    } catch (error) {
+      return (
+        failure: Failure.storage(
+          operation: StorageOp.read,
+          table: 'card_events',
           cause: error.toString(),
         ),
         data: null,

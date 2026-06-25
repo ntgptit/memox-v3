@@ -448,7 +448,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
                   position: clip
     - node: fab
       id: 04-folder-detail/create-deck-fab
-      mx: ?
+      mx: MxFab
       box:
         abs: [313,633 56x56]
         rel: [312,620 56x56]
@@ -462,7 +462,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           rel: [16,16 24x24]
         position: clip
     - node: bottom-nav
-      mx: MxBottomNavigationBar
+      mx: MxBottomNav
       box:
         abs: [1,705 388x64]
         rel: [0,692 388x64]
@@ -903,7 +903,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   ...
   - node: fab
   id: 04-folder-detail/new-subfolder-fab
-  mx: ?
+  mx: MxFab
   box:
   abs: [313,633 56x56]
   rel: [312,620 56x56]
@@ -922,7 +922,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + rel: [16,16 24x24]
 + position: clip
   - node: bottom-nav
-  mx: MxBottomNavigationBar
+  mx: MxBottomNav
   box:
   abs: [1,705 388x64]
   rel: [0,692 388x64]
@@ -1233,7 +1233,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: clip
 - - node: fab
 - id: 04-folder-detail/create-deck-fab
-- mx: ?
+- mx: MxFab
 - box:
 - abs: [313,633 56x56]
 - rel: [312,620 56x56]
@@ -1315,7 +1315,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + rel: [80,14 16x16]
 + position: clip
   - node: bottom-nav
-  mx: MxBottomNavigationBar
+  mx: MxBottomNav
   box:
   abs: [1,705 388x64]
   rel: [0,692 388x64]
@@ -1626,7 +1626,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: clip
 - - node: fab
 - id: 04-folder-detail/create-deck-fab
-- mx: ?
+- mx: MxFab
 - box:
 - abs: [313,633 56x56]
 - rel: [312,620 56x56]
@@ -1679,6 +1679,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + style: font:14/400 color:text-2 text:center
 + - node: search-dock
 + id: 04-folder-detail/search-dock
++ mx: MxSearchDock
 + box:
 + abs: [1,636 388x69]
 + rel: [0,623 388x69]
@@ -1723,7 +1724,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + rel: [0,0 20x20]
 + position: clip
   - node: bottom-nav
-  mx: MxBottomNavigationBar
+  mx: MxBottomNav
   box:
   abs: [1,705 388x64]
   rel: [0,692 388x64]
@@ -2034,7 +2035,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: clip
 - - node: fab
 - id: 04-folder-detail/create-deck-fab
-- mx: ?
+- mx: MxFab
 - box:
 - abs: [313,633 56x56]
 - rel: [312,620 56x56]
@@ -2139,7 +2140,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + rel: [0,22 105x11]
 + style: bg:surface-2 r:10
   - node: bottom-nav
-  mx: MxBottomNavigationBar
+  mx: MxBottomNav
   box:
   abs: [1,705 388x64]
   rel: [0,692 388x64]
@@ -2511,7 +2512,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: clip
 - - node: fab
 - id: 04-folder-detail/create-deck-fab
-- mx: ?
+- mx: MxFab
 - box:
 - abs: [313,633 56x56]
 - rel: [312,620 56x56]
@@ -2579,7 +2580,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + rel: [89,14 16x16]
 + position: clip
   - node: bottom-nav
-  mx: MxBottomNavigationBar
+  mx: MxBottomNav
   box:
   abs: [1,705 388x64]
   rel: [0,692 388x64]

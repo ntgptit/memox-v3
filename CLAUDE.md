@@ -413,11 +413,39 @@ marker when staged changes include code. Rules that survive the automation:
   (bare-hex gap + token inventory). Hợp đồng máy-đọc ở `tool/parity/parity-map.json` — khi thêm/đổi
   screen/state phải cập nhật map trong CÙNG commit. Phần phán đoán "đúng chưa" khi % nhiễu vẫn để agent
   `ui-parity-checker`. Chi tiết: `tool/parity/README.md`.
+- **Kit-as-compiled-contract (3 bridge generated + compiler-checked; kit là nguồn, đã wired vào
+  `tool/verify/run.mjs` docs+code chain). Chi tiết: `tool/parity/README.md`:**
+  - **Bridge 1 — Token codegen**: `node tool/parity/gen_tokens.mjs --check` assert VALUE token trong
+    `lib/core/theme/*.dart` == `docs/system-design/MemoX Design System/colors_and_type.css` (colors +
+    spacing + radius + type; 86 token). Đổi token trên kit → `--write` regen Dart (colors/spacing/radius;
+    type check-only).
+  - **Bridge 2 — Symbol resolve**: `node tool/parity/symbol_lint.mjs --check` — mọi kit `mx:<Component>`
+    trong specs resolve tới `class` thật trong `lib/`, mọi color token là `--memox-*` thật. Ngoại lệ
+    có-docs: `tool/parity/symbol-aliases.json`. Inventory máy-đọc (đọc thay cho prose):
+    `tool/parity/symbol-map.json`. Đây là fix RC2 (prose `docs/design/design-token-mapping.md` từng trỏ
+    phantom symbol).
+  - **Bridge 3 — Binding contract**: `node tool/parity/gen_bindings.mjs --check` — per keyed-node
+    (`data-mx-node`) ghi kit component + token bindings resolve sang Flutter symbol →
+    `tool/parity/contracts/bindings.json` (freshness gate; FE-conformance vẫn ở tầng test/ui-parity).
+  - **Bridge 4 — Completeness (THIẾU/THỪA), giờ gate LOCAL trong verify (trước chỉ CI):**
+    `gen_contract.mjs --check` (contract fresh) + `mxnode_coverage.mjs --check --min 100` (KIT tag đủ
+    mọi node có-nghĩa → contract THIẾU toàn diện) + `fe_node_usage.mjs --check` (THIẾU: kit id chưa key
+    trong FE; THỪA-keyed: FE key không khớp kit/ORPHAN). Lỗ **THỪA-không-key** (element FE không key mà
+    kit không có → ORPHAN không thấy): `node tool/parity/fe_node_coverage.mjs` phơi bày structural
+    component (MxCard/MxFab/MxSearchDock) không có mx-node key; đánh dấu `// mx-node:none` cho dùng-hợp-lệ
+    (list-item/skeleton/nested) rồi `--check` mới gate. Ngoại lệ coverage: `intent-ledger.coverageExempt`.
 - Phát hiện **FE thiếu element** so design (spec-driven): parity-contract test — FE gắn `key:
   ValueKey('mx-node:<screen>/<node>')`, test assert `find.byKey` (key là string nên test compile dù FE
   chưa dựng → thiếu = đỏ). Helper `test/support/parity_contract.dart`; prototype
   `test/presentation/features/dashboard/dashboard_parity_test.dart`. KHÔNG dùng `find.byType` (class phải
   tồn tại mới compile) hay geometry (FE toạ-độ ≠ kit). Ngoại lệ có-docs → `tool/parity/intent-ledger.json`.
+- Coverage `data-mx-node` **2 chiều** (tất định, KHÔNG AI, không-Flutter — gate tĩnh bổ trợ cho
+  parity-contract test ở trên): `node tool/parity/mxnode_coverage.mjs --check --min 100` (KIT đã tag đủ
+  candidate nodes chưa) ↔ `node tool/parity/fe_node_usage.mjs --check` (FE đã DÙNG đủ chưa: **missing** =
+  contract id chưa có `ValueKey('mx-node:..')` trong `lib/**`; **orphan** = FE key không khớp contract;
+  **spec-lag** = id có literal trong kit JSX nhưng spec export rớt `id:` → re-export). Ngoại lệ dùng chung
+  `tool/parity/intent-ledger.json` (`coverageExempt` cho kit-side, `exceptions` cho FE-side — KHÔNG mảng
+  song song). CI `parity.yml` chạy cả hai; trigger đã gồm `lib/**`.
 - **Sync design ⇄ Claude Design v3** (design sống ở claude.ai, không phải repo). Project pin trong
   `.design-sync/config.json` (`c83bf9df…`, off-script bundle).
   - **PULL** (Claude Design → repo): `/design-sync` + tool `DesignSync` (agent, cần auth claude.ai)

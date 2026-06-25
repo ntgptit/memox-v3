@@ -629,7 +629,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
                 position: clip
     - node: fab
       id: 06-flashcard-list/add-card-fab
-      mx: ?
+      mx: MxFab
       box:
         abs: [313,633 56x56]
         rel: [312,620 56x56]
@@ -644,6 +644,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         position: clip
     - node: search-dock
       id: 06-flashcard-list/search-dock
+      mx: MxSearchDock
       box:
         abs: [1,700 388x69]
         rel: [0,687 388x69]
@@ -1088,6 +1089,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             style: font:14/400 color:text-2 text:center
     - node: search-dock
       id: 06-flashcard-list/search-dock
+      mx: MxSearchDock
       box:
         abs: [1,700 388x69]
         rel: [0,687 388x69]
@@ -1664,7 +1666,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   position: clip
 - - node: fab
 - id: 06-flashcard-list/add-card-fab
-- mx: ?
+- mx: MxFab
 - box:
 - abs: [313,633 56x56]
 - rel: [312,620 56x56]
@@ -1679,6 +1681,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: clip
   - node: search-dock
   id: 06-flashcard-list/search-dock
+  mx: MxSearchDock
   box:
   abs: [1,700 388x69]
   rel: [0,687 388x69]
@@ -1788,7 +1791,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   position: clip
 - - node: fab
 - id: 06-flashcard-list/add-card-fab
-- mx: ?
+- mx: MxFab
 - box:
 - abs: [313,633 56x56]
 - rel: [312,620 56x56]
@@ -1803,6 +1806,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: clip
   - node: search-dock
   id: 06-flashcard-list/search-dock
+  mx: MxSearchDock
   box:
   abs: [1,700 388x69]
   rel: [0,687 388x69]
@@ -2346,7 +2350,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: clip
 - - node: fab
 - id: 06-flashcard-list/add-card-fab
-- mx: ?
+- mx: MxFab
 - box:
 - abs: [313,633 56x56]
 - rel: [312,620 56x56]
@@ -2361,6 +2365,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - position: clip
 - - node: search-dock
 - id: 06-flashcard-list/search-dock
+- mx: MxSearchDock
 - box:
 - abs: [1,700 388x69]
 - rel: [0,687 388x69]

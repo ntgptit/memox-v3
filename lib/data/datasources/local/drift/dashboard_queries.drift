@@ -1,5 +1,7 @@
 import 'flashcards.drift';
 import 'study_tables.drift';
+import 'decks.drift';
+import 'card_events.drift';
 
 -- Dashboard "Continue studying" read model (WBS 5.1.1). The single most recently
 -- active resumable session across ALL scopes (status draft/in_progress,
@@ -41,3 +43,37 @@ JOIN flashcards f ON f.id = fp.flashcard_id
 WHERE COALESCE(fp.is_suspended, 0) = 0
   AND (fp.buried_until IS NULL OR fp.buried_until <= :now)
   AND fp.due_at IS NOT NULL AND fp.due_at <= :now;
+
+-- Dashboard engagement stat strip (WBS 5.x): total number of decks (the "Decks"
+-- metric in the overview stat strip, distinct from `decks_with_due`). See
+-- docs/business/engagement/dashboard-engagement.md.
+dashboardDeckCount:
+SELECT COUNT(*) AS total FROM decks;
+
+-- Dashboard engagement "Recent decks" list (WBS 5.x): decks the user has studied,
+-- most-recently-studied first, with card count, current due count, and the last
+-- study timestamp. "Studied" = has at least one `card_events` row (a review/study
+-- event); never-studied decks are excluded. `due_count` reuses the canonical due
+-- predicate from `dashboardDueSummary` (excludes suspended/buried, NEW cards are
+-- not due). Capped by :limit. See docs/business/engagement/dashboard-engagement.md.
+dashboardRecentDecks(:now AS INT, :limit AS INT):
+SELECT
+  d.id AS id,
+  d.name AS name,
+  (SELECT COUNT(*) FROM flashcards fc WHERE fc.deck_id = d.id) AS card_count,
+  MAX(ce.occurred_at) AS last_studied_at,
+  (
+    SELECT COUNT(*)
+    FROM flashcard_progress fp
+    JOIN flashcards f2 ON f2.id = fp.flashcard_id
+    WHERE f2.deck_id = d.id
+      AND COALESCE(fp.is_suspended, 0) = 0
+      AND (fp.buried_until IS NULL OR fp.buried_until <= :now)
+      AND fp.due_at IS NOT NULL AND fp.due_at <= :now
+  ) AS due_count
+FROM decks d
+JOIN flashcards f ON f.deck_id = d.id
+JOIN card_events ce ON ce.flashcard_id = f.id
+GROUP BY d.id
+ORDER BY last_studied_at DESC
+LIMIT :limit;

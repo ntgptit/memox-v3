@@ -1494,4 +1494,51 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studySpeakStop => 'Dừng âm thanh';
+
+  @override
+  String get dashboardGreetingMorning => 'Chào buổi sáng';
+
+  @override
+  String get dashboardGreetingAfternoon => 'Chào buổi chiều';
+
+  @override
+  String get dashboardGreetingEvening => 'Chào buổi tối';
+
+  @override
+  String get dashboardStatDue => 'Đến hạn';
+
+  @override
+  String get dashboardStatDecks => 'Bộ thẻ';
+
+  @override
+  String get dashboardStatAccuracy => 'Độ chính xác';
+
+  @override
+  String get dashboardStatStreak => 'Chuỗi ngày';
+
+  @override
+  String get dashboardStatEmpty => '—';
+
+  @override
+  String get dashboardContinueTitle => 'Tiếp tục học';
+
+  @override
+  String get dashboardResumeAction => 'Tiếp tục';
+
+  @override
+  String get dashboardDiscardAction => 'Bỏ qua';
+
+  @override
+  String dashboardResumeProgress(int answered, int total) {
+    return '$answered/$total thẻ';
+  }
+
+  @override
+  String get dashboardRecentDecksTitle => 'Bộ thẻ gần đây';
+
+  @override
+  String get dashboardSeeStatsLabel => 'Xem thống kê học tập';
+
+  @override
+  String get dashboardReviewAction => 'Ôn tập';
 }

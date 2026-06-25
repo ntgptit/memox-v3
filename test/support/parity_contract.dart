@@ -77,3 +77,69 @@ void expectGeneratedParityContract(String screen) {
         '${missing.join(', ')}',
   );
 }
+
+/// Asserts that every keyed node in [screen]'s GENERATED binding contract
+/// (`tool/parity/contracts/bindings.json`, produced by `tool/parity/gen_bindings.mjs`)
+/// that names a concrete kit component actually renders that component in its
+/// keyed subtree — i.e. the FE realized the kit's component choice. This catches
+/// a design-system bypass the presence contract cannot (e.g. a raw `Container`
+/// where the kit said `MxCard`: the key is present, but the component is wrong).
+///
+/// Nodes whose `component` is `?`/absent are skipped (the kit had no suggestion).
+/// [aliases] maps a kit component name to the real class when the kit name drifts
+/// (e.g. `MxBottomNavigationBar` → `MxBottomNav`). Documented FE↔mock divergences
+/// (intent-ledger) are passed via [exempt] as `mx-node:<id>` keys. Pump the screen
+/// first, then call this (same harness as [expectGeneratedParityContract]).
+void expectGeneratedBindingContract(
+  String screen, {
+  Map<String, String> aliases = const <String, String>{},
+  Set<String> exempt = const <String>{},
+}) {
+  final File file = File('tool/parity/contracts/bindings.json');
+  final Map<String, dynamic> data =
+      jsonDecode(file.readAsStringSync()) as Map<String, dynamic>;
+  final Object? entry = (data['bindings'] as Map<String, dynamic>)[screen];
+  if (entry is! List) {
+    fail(
+      'Generated binding contract has no "$screen" entry. '
+      'Run `node tool/parity/gen_bindings.mjs`.',
+    );
+  }
+  final List<String> problems = <String>[];
+  for (final Object? raw in entry) {
+    final Map<String, dynamic> node = raw as Map<String, dynamic>;
+    final String key = node['key'] as String;
+    final Object? comp = node['component'];
+    if (comp == null || comp == '?' || exempt.contains(key)) {
+      continue;
+    }
+    final String expected = aliases[comp] ?? comp as String;
+    final Finder keyed = find.byKey(ValueKey<String>(key));
+    if (keyed.evaluate().isEmpty) {
+      continue; // presence is expectGeneratedParityContract's job, not this one.
+    }
+    final bool realized = find
+        .descendant(
+          of: keyed,
+          matching: find.byWidgetPredicate(
+            (Widget w) => w.runtimeType.toString() == expected,
+          ),
+          matchRoot: true,
+        )
+        .evaluate()
+        .isNotEmpty;
+    if (!realized) {
+      problems.add(
+        '$key → expected kit component $expected, '
+        'keyed widget is ${keyed.evaluate().first.widget.runtimeType}',
+      );
+    }
+  }
+  expect(
+    problems,
+    isEmpty,
+    reason:
+        'Binding contract "$screen": ${problems.length} node(s) did not realize '
+        'the kit component → design-system bypass: ${problems.join('; ')}',
+  );
+}

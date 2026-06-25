@@ -3,15 +3,27 @@
   "contracts": {
     "02-dashboard": [
       {
+        "key": "mx-node:02-dashboard/settings",
+        "node": "icon-btn"
+      },
+      {
+        "key": "mx-node:02-dashboard/stat-summary",
+        "node": "card"
+      },
+      {
+        "key": "mx-node:02-dashboard/continue-studying",
+        "node": "card"
+      },
+      {
         "key": "mx-node:02-dashboard/due-summary",
         "node": "card"
       },
       {
-        "key": "mx-node:02-dashboard/shortcut-progress",
-        "node": "card"
+        "key": "mx-node:02-dashboard/recent-decks",
+        "node": "list-card"
       },
       {
-        "key": "mx-node:02-dashboard/shortcut-library",
+        "key": "mx-node:02-dashboard/shortcut-progress",
         "node": "card"
       }
     ],

@@ -1,0 +1,8 @@
+{
+  "$comment": "Curated exceptions for tool/parity/symbol_lint.mjs (Bridge 2 — component/token symbol resolution). DEFAULT for any kit `mx:<Name>` that does not resolve to a real `class <Name>` in lib/ = FAIL. This file holds the only two kinds of documented escape: (1) componentAliases — the kit suggests a differently-named real class (retag the kit JSX when convenient so the alias can be dropped); (2) componentGaps — the kit suggests a component that has NO real class yet (design ahead of code), acknowledged here so --check passes while the gap is tracked. Keep MINIMAL — when in doubt, fix the kit or build the component instead of adding an entry.",
+  "componentAliases": {},
+  "$componentAliasesNote": "Empty: the former MxBottomNavigationBar→MxBottomNav alias was eliminated at SOURCE by fixing tool/ui_kit_shots/component-map.json (bottom-nav→MxBottomNav) and re-exporting specs — the kit now emits the real class name directly. Prefer fixing component-map over adding an alias here.",
+  "componentGaps": {
+    "MxSectionHeader": "No shared section-header widget exists; the kit suggests mx:MxSectionHeader across 7 specs (04,05,11,13,18,19,23). DECIDE: build MxSectionHeader, or retag the kit to the real pattern (MxText with a titleSmall/overline role, or an MxContentShell section). Tracked as design-ahead-of-code, not a silent skip."
+  }
+}

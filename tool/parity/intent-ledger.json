@@ -203,6 +203,14 @@
   "$coverageExempt": "Coverage-side ledger, consumed by tool/parity/mxnode_coverage.mjs. Lists kit CANDIDATE nodes that are intentionally NOT given a data-mx-node id, so the coverage report does not count them as gaps and `--check --min` does not trip on them. DISTINCT from `exceptions` (which is FE-differs-from-mock, for the parity test). Each entry is still a documented deviation from the FIX/TAG-by-default rule. Kinds: 'deferred' (the kit layout is PRE-redesign / stale vs the FE — tag once the kit is regenerated to the redesign on Claude Design), 'future'/'rejected' (the element is not built in the FE by scope/owner ruling), 'covered' (a decorative child INSIDE an already-tagged container — tag the container, never its inner parts, same rule as list items). Match: screen == entry.screen AND candidate.node startsWith entry.node AND (entry.mx absent OR entry.mx == candidate.mx). `source` MUST cite a doc / owner ruling. Keep MINIMAL — when in doubt, tag the node instead of exempting it.",
   "coverageExempt": [
     {
+      "screen": "02-dashboard",
+      "node": "section-head",
+      "mx": "MxSectionHeader",
+      "exceptionKind": "covered",
+      "reason": "The 'Recent decks' section header (overline + Library link) is part of the tagged `02-dashboard/recent-decks` section, rendered inside DashboardRecentDecks. Tag the section (the list card), not its header — same rule as 'tag the list, not each item'. MxSectionHeader has no dedicated FE component yet (componentGap).",
+      "source": "docs/system-design/MemoX Design System/CLAUDE.md (tag meaningful required nodes, not every div) + lib/presentation/features/dashboard/widgets/dashboard_recent_decks.dart"
+    },
+    {
       "screen": "13-study-match",
       "node": "pill-btn",
       "mx": "MxSecondaryButton",

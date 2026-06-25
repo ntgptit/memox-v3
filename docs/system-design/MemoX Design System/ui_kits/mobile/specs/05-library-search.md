@@ -525,6 +525,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
                   position: clip
     - node: search-dock
       id: 05-library-search/search-dock
+      mx: MxSearchDock
       box:
         abs: [1,685 388x69]
         rel: [0,672 388x69]
@@ -569,7 +570,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
               rel: [0,0 20x20]
             position: clip
     - node: bottom-nav
-      mx: MxBottomNavigationBar
+      mx: MxBottomNav
       box:
         abs: [1,754 388x64]
         rel: [0,741 388x64]
@@ -1300,7 +1301,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + spacing: pad:0/16/0/40
 + style: bg:accent-contrast r:14 border:1px border
   - node: bottom-nav
-  mx: MxBottomNavigationBar
+  mx: MxBottomNav
   box:
   abs: [1,705 388x64]
   rel: [0,692 388x64]
@@ -1493,6 +1494,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
                 style: bg:surface-2 r:10
     - node: search-dock
       id: 05-library-search/search-dock
+      mx: MxSearchDock
       box:
         abs: [1,636 388x69]
         rel: [0,623 388x69]
@@ -1537,7 +1539,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
               rel: [0,0 20x20]
             position: clip
     - node: bottom-nav
-      mx: MxBottomNavigationBar
+      mx: MxBottomNav
       box:
         abs: [1,705 388x64]
         rel: [0,692 388x64]
@@ -2177,6 +2179,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + style: font:14/400 color:text-2 text:center
   - node: search-dock
   id: 05-library-search/search-dock
+  mx: MxSearchDock
   box:
   abs: [1,636 388x69]
   rel: [0,623 388x69]
@@ -2290,6 +2293,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
                 position: clip
     - node: search-dock
       id: 05-library-search/search-dock
+      mx: MxSearchDock
       box:
         abs: [1,636 388x69]
         rel: [0,623 388x69]
@@ -2334,7 +2338,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
               rel: [0,0 20x20]
             position: clip
     - node: bottom-nav
-      mx: MxBottomNavigationBar
+      mx: MxBottomNav
       box:
         abs: [1,705 388x64]
         rel: [0,692 388x64]
