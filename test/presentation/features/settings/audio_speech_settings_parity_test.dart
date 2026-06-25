@@ -22,7 +22,7 @@ class _FakeController extends TtsAudioController {
 Finder _node(String id) => find.byKey(ValueKey<String>('mx-node:$id'));
 
 void main() {
-  testWidgets('23-audio-speech: loaded nodes', (tester) async {
+  Future<void> pump(WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -45,6 +45,10 @@ void main() {
       ),
     );
     await tester.pump(const Duration(milliseconds: 50));
+  }
+
+  testWidgets('23-audio-speech: loaded nodes', (tester) async {
+    await pump(tester);
     expectParityContract('23-audio-speech', <String, Finder>{
       'language row': _node('23-audio-speech/language-row'),
       'voice list': _node('23-audio-speech/voice-list'),
@@ -52,4 +56,14 @@ void main() {
       'preview button': _node('23-audio-speech/preview-button'),
     });
   });
+
+  testWidgets(
+    '23-audio-speech binding contract (keyed nodes realize kit components)',
+    (tester) async {
+      await pump(tester);
+      // preview-card → MxCard, preview-button → MxSecondaryButton (language-row /
+      // voice-list are content nodes with no kit component → skipped).
+      expectGeneratedBindingContract('23-audio-speech');
+    },
+  );
 }
