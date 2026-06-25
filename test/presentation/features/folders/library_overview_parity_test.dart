@@ -73,4 +73,16 @@ void main() {
       'search dock': node('03-library/search-dock'),
     });
   });
+
+  testWidgets(
+    '03-library binding contract (keyed nodes realize kit components)',
+    (tester) async {
+      await pump(tester);
+      // Loaded state: sort-btn → MxIconButton, new-folder-fab → MxFab realize the
+      // kit's component choice (folder-list is a content container with no kit
+      // component → skipped by the helper). Catches a design-system bypass the
+      // presence contract cannot (right key, wrong widget).
+      expectGeneratedBindingContract('03-library-overview');
+    },
+  );
 }
