@@ -4,5 +4,5 @@
   "shape": "off-script",
   "localDir": "docs/system-design/MemoX Design System",
   "note": "Hand-maintained format-3 bundle (namespace DesignSystem_48ad9c) pushed as-is. No _ds_sync.json anchor; future syncs re-verify all. See .design-sync/NOTES.md.",
-  "lastSyncedCommit": "cfe51b2a88dceb29a5d5b12cfd7867707c82dfc7"
+  "lastSyncedCommit": "c71b2e03bb347272458edd9a7488dd5caf16a74d"
 }
