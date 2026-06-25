@@ -405,7 +405,6 @@
   "settingsRowAboutMeta": "Phiên bản, giấy phép",
   "settingsGoalValue": "{count}/ngày",
   "settingsValueOff": "Tắt",
-  "settingsValueSoon": "Sắp có",
   "settingsErrorTitle": "Không tải được cài đặt",
   "settingsErrorMessage": "Đã xảy ra lỗi khi tải cài đặt của bạn.",
   "audioSpeechTitle": "Âm thanh & giọng nói",

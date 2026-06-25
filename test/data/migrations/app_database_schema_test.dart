@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 
 void main() {
-  group('AppDatabase schema (v7)', () {
+  group('AppDatabase schema (v9)', () {
     late AppDatabase db;
 
     setUp(() => db = AppDatabase.forExecutor(NativeDatabase.memory()));
@@ -29,8 +29,8 @@ void main() {
     }
 
     test('reports the current schema version', () {
-      expect(AppDatabase.currentSchemaVersion, 8);
-      expect(db.schemaVersion, 8);
+      expect(AppDatabase.currentSchemaVersion, 9);
+      expect(db.schemaVersion, 9);
     });
 
     Future<void> insertDeckRow(String id, String folderId) async {

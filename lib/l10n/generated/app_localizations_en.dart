@@ -1450,9 +1450,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsValueOff => 'Off';
 
   @override
-  String get settingsValueSoon => 'Soon';
-
-  @override
   String get settingsErrorTitle => 'Couldn\'t load settings';
 
   @override

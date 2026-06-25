@@ -77,3 +77,21 @@ with the verbatim `/loop` prompt.
 
 ## Automation fixes made during the loop
 _(append findings so the next iteration doesn't relearn them.)_
+
+- **WP3 (2026-06-25): full-suite (`--full`) was never the gate in earlier rounds** (WP1/WP2 used
+  targeted/`--docs` verify), so two **pre-existing** migration-test failures on `main` only surfaced
+  when C1 forced a `--full --update-goldens` run:
+  1. `test/data/migrations/app_database_schema_test.dart` asserted `currentSchemaVersion == 8` but
+     schema is **v9** (since #41). **Fixed** in WP3 (8 → 9; group label `(v7)` → `(v9)`).
+  2. `test/data/migrations/v6_add_study_tables_migration_test.dart` — `migrateV5ToV6` creates
+     `study_sessions` (insert works) but the subsequent `study_session_items` insert fails
+     `no such table` — a genuine pre-existing migration breakage, **NOT** caused by WP3 (C5/C1 touch
+     only ARB + fonts + theme fallback). **Parked** (spawned a separate task); WP3 verified via
+     targeted `--test` over the golden-bearing + schema tests (v6 excluded). Fix the v6 test/migration
+     in its own change before relying on a green `--full`.
+- **C1 mechanism note:** loading a CJK font as a *second font under the same family* does NOT make
+  Flutter fall back for missing glyphs — fallback only crosses *families* in `fontFamilyFallback`. So
+  C1 needed (a) a theme `fontFamilyFallback: ['Noto Sans KR']` (`MxTypography`) + (b) the subset
+  registered under that family in `test/flutter_test_config.dart`. The family is unbundled (device
+  uses platform CJK); only the golden subset (~77 KB, golden chars only) lives in the repo — extend it
+  via `pyftsubset` when a new golden adds CJK characters.
