@@ -34,7 +34,7 @@ name/path.
 | `/library`  | Library                  | Yes           |
 | `/search`   | Global search (folders/decks/flashcards), bottom search dock | Yes |
 | `/progress` | Stats tab — `StatsScreen` (weekly activity + per-deck mastery; `docs/wireframes/18-stats.md`). The deeper Progress analytics detail (screen 19) is pending. | Yes |
-| `/settings` | Settings hub — Current V1 (`SettingsScreen`, the shell branch; kit screen 20): account card (signed-out) + category rows → the immersive sub-screens. Audio & speech row disabled (TTS Future). | Yes           |
+| `/settings` | Settings hub — Current V1 (`SettingsScreen`, the shell branch; kit screen 20): account card (signed-out) + category rows → the immersive sub-screens. Audio & speech row → `/settings/audio-speech` (Current, kit 23, WBS 8.4.2). | Yes           |
 
 Current V1 app boot redirects `/` to `RouteDefaults.initialLocation = RoutePaths.library`. This is
 the existing app entry and must not be replaced by an onboarding wizard in V1. Dashboard remains a

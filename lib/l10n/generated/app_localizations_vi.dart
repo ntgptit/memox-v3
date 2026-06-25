@@ -1424,9 +1424,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsValueOff => 'Tắt';
 
   @override
-  String get settingsValueSoon => 'Sắp có';
-
-  @override
   String get settingsErrorTitle => 'Không tải được cài đặt';
 
   @override

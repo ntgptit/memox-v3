@@ -2516,12 +2516,6 @@ abstract class AppLocalizations {
   /// **'Off'**
   String get settingsValueOff;
 
-  /// Settings-hub trailing value for a Future row (Audio & speech).
-  ///
-  /// In en, this message translates to:
-  /// **'Soon'**
-  String get settingsValueSoon;
-
   /// Error-state title on the Settings hub.
   ///
   /// In en, this message translates to:

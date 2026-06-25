@@ -839,8 +839,6 @@
   "@settingsGoalValue": { "description": "Settings-hub Learning row trailing value (daily new-card goal).", "placeholders": { "count": { "type": "int" } } },
   "settingsValueOff": "Off",
   "@settingsValueOff": { "description": "Settings-hub trailing value when a setting is off (e.g. daily goal)." },
-  "settingsValueSoon": "Soon",
-  "@settingsValueSoon": { "description": "Settings-hub trailing value for a Future row (Audio & speech)." },
   "settingsErrorTitle": "Couldn't load settings",
   "@settingsErrorTitle": { "description": "Error-state title on the Settings hub." },
   "settingsErrorMessage": "Something went wrong loading your settings.",

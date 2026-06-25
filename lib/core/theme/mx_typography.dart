@@ -23,6 +23,19 @@ abstract final class MxTypography {
   /// platform monospace until the asset is added.
   static const String fontFamilyMono = 'JetBrains Mono';
 
+  /// CJK fallback family for the sans typeface (Plus Jakarta Sans carries no
+  /// CJK glyphs). Applied via [ThemeData.fontFamilyFallback] so Korean/kanji
+  /// content (deck `target_language` = korean, kit-23 sample) renders real
+  /// glyphs instead of tofu. NOT bundled in `pubspec.yaml`: on device the engine
+  /// falls back to the platform CJK font, while golden tests register a Noto Sans
+  /// KR subset under this family (`test/flutter_test_config.dart`).
+  static const String fontFamilyCjkFallback = 'Noto Sans KR';
+
+  /// The sans family's fallback chain (CJK only for now).
+  static const List<String> fontFamilyFallback = <String>[
+    fontFamilyCjkFallback,
+  ];
+
   // ---- Weights (--memox-weight-*) ----
   static const FontWeight regular = FontWeight.w400;
   static const FontWeight medium = FontWeight.w500;

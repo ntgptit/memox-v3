@@ -148,7 +148,12 @@ Roomy, calm, unhurried — the opposite of a dense productivity dashboard.
 - **Type.** Two families. **Plus Jakarta Sans** for all UI (geometric, friendly,
   weights 400–800; display/titles at 800 with `-0.02em` tracking). **Lora**
   (serif) for the *note body* only — it makes writing feel page-like. **JetBrains
-  Mono** for times, counts, tags, and code-ish metadata.
+  Mono** for times, counts, tags, and code-ish metadata. The CSS sans stack ends in
+  `system-ui … sans-serif`, so CJK (Korean/kanji) content falls back to the platform
+  CJK font in the browser. The Flutter app mirrors this with a
+  `fontFamilyFallback: ['Noto Sans KR']` on the theme (`MxTypography`), since Flutter
+  does not auto-fall-back like a browser; the family is unbundled (device uses its CJK
+  font) and golden tests register a Noto Sans KR subset under it.
 - **Spacing.** 4px base scale (`--memox-space-1..12`). Screen gutters ~20px,
   card padding 16–18px, 12px between stacked cards.
 - **Radii.** Generous and soft: cards `lg` (20px), inputs/sheets `md` (14px),

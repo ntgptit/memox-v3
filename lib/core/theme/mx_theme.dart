@@ -48,6 +48,10 @@ abstract final class MxTheme {
       canvasColor: c.surface,
       dividerColor: c.divider,
       fontFamily: MxTypography.fontFamilySans,
+      // CJK fallback so Korean/kanji content renders glyphs, not tofu (the
+      // primary sans has no CJK). Unbundled → device uses the platform CJK font;
+      // golden tests register a Noto Sans KR subset under this family.
+      fontFamilyFallback: MxTypography.fontFamilyFallback,
       textTheme: MxTypography.textTheme.apply(
         bodyColor: c.text,
         displayColor: c.text,
