@@ -271,4 +271,4 @@ are the canonical visual mock reference for UI tasks — read the PNG, not the
 | English | `25-language--english--light.png` | `25-language--english--dark.png` |
 | Vietnamese | `25-language--vietnamese--light.png` | `25-language--vietnamese--dark.png` |
 
-Total: 26 screens · 140 states · 280 PNGs.
+Total: 25 screens · 139 states · 278 PNGs.
