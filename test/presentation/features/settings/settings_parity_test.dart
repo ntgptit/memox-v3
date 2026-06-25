@@ -40,7 +40,7 @@ class _FakeLanguage extends LanguageController {
 Finder _node(String id) => find.byKey(ValueKey<String>('mx-node:$id'));
 
 void main() {
-  testWidgets('20-settings: hub nodes', (tester) async {
+  Future<void> pump(WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -59,9 +59,23 @@ void main() {
       ),
     );
     await tester.pump(const Duration(milliseconds: 50));
+  }
+
+  testWidgets('20-settings: hub nodes', (tester) async {
+    await pump(tester);
     expectParityContract('20-settings', <String, Finder>{
       'account card': _node('20-settings/account-card'),
       'settings group': _node('20-settings/settings-group'),
     });
   });
+
+  testWidgets(
+    '20-settings binding contract (keyed nodes realize kit components)',
+    (tester) async {
+      await pump(tester);
+      // account-card → MxCard (settings-group is a content container with no kit
+      // component → skipped by the helper).
+      expectGeneratedBindingContract('20-settings');
+    },
+  );
 }

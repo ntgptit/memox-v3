@@ -10,7 +10,8 @@ Each entry the owner should review before merging.
 | --- | --- | --- | --- | --- |
 | 1 | 03-library-overview | 8756363 | binding-contract test | FE already realized kit components (lock-in). |
 | 2 | 04-folder-detail | 6ddb440 | binding-contract test | both content modes; FE already correct. |
-| 3 | 06-flashcard-list | (this commit) | binding-contract test | ⚠ see decision below. |
+| 3 | 06-flashcard-list | 4bd8717 | binding-contract test | ⚠ see decision below (search-dock alias). |
+| 4 | 20-settings | (this commit) | binding-contract test | account-card → MxCard; FE already correct. |
 
 ## Decisions needing owner confirmation
 
