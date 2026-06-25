@@ -243,13 +243,13 @@
   // rounded card (iOS-style section grouping), with inset hairlines between rows,
   // so a floating list card reads as a labelled group, not a stray web container.
   const ListGroup = ({ heading, items, kind, node }) => (
-    <div data-mx-node={node} style={{ display: 'flex', flexDirection: 'column', gap: S(2) }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: S(2) }}>
       {heading && (
         <div className="ov" style={{ paddingLeft: S(1) }}>
           {heading}<span style={{ marginLeft: S(1), color: 'var(--memox-text-3)' }}>{items.length}</span>
         </div>
       )}
-      <div className="list-card">
+      <div className="list-card" data-mx-node={node}>
         {items.map((it, i) => (
           <div key={it.name}>
             {i > 0 && <div className="hr inset"></div>}

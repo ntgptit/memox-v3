@@ -33,6 +33,10 @@
         "node": "icon-btn"
       },
       {
+        "key": "mx-node:03-library/folder-list",
+        "node": "list-card"
+      },
+      {
         "key": "mx-node:03-library/new-folder-fab",
         "node": "fab"
       },
@@ -45,6 +49,10 @@
       {
         "key": "mx-node:04-folder-detail/stat-card",
         "node": "card"
+      },
+      {
+        "key": "mx-node:04-folder-detail/deck-list",
+        "node": "list-card"
       },
       {
         "key": "mx-node:04-folder-detail/create-deck-fab",
@@ -66,6 +74,10 @@
       }
     ],
     "06-flashcard-list": [
+      {
+        "key": "mx-node:06-flashcard-list/card-list",
+        "node": "list-card"
+      },
       {
         "key": "mx-node:06-flashcard-list/add-card-fab",
         "node": "fab"
@@ -183,6 +195,10 @@
       {
         "key": "mx-node:study-session/exit",
         "node": "icon-btn"
+      },
+      {
+        "key": "mx-node:13-study-match/board",
+        "node": "match-grid"
       }
     ],
     "14-study-guess": [

@@ -131,6 +131,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           spacing: margin:4/0/0/0
           style: font:14/400 color:text-2 text:center
       - node: match-grid
+        id: 13-study-match/board
         box:
           abs: [21,184 348x428]
           rel: [20,115 348x428]
@@ -518,6 +519,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           spacing: margin:4/0/0/0
           style: font:14/400 color:text-2 text:center
       - node: match-grid
+        id: 13-study-match/board
         box:
           abs: [21,236 348x324]
           rel: [20,167 348x324]
@@ -792,6 +794,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           spacing: margin:4/0/0/0
           style: font:14/400 color:text-2 text:center
       - node: match-grid
+        id: 13-study-match/board
         box:
           abs: [21,236 348x324]
           rel: [20,167 348x324]

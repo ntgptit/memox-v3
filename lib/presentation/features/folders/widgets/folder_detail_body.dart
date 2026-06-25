@@ -225,6 +225,7 @@ class FolderDetailBody extends ConsumerWidget {
       );
     }
     return MxCard(
+      key: const ValueKey<String>('mx-node:04-folder-detail/deck-list'),
       padding: const EdgeInsets.symmetric(
         horizontal: MxSpacing.card,
         vertical: MxSpacing.space2,

@@ -147,7 +147,7 @@
           <ReorderBar title="Japanese · N5" />
           <Body pad={S(3)}>
             <div className="muted" style={{ fontSize: 'var(--memox-fs-body-small)', padding: `0 ${S(1)}` }}>Drag the handles to reorder cards.</div>
-            <div className="list-card">
+            <div className="list-card" data-mx-node="06-flashcard-list/card-list">
               {CARDS.slice(0, 5).map((c, i) => (
                 <div key={i}>
                   {i > 0 && <div className="hr inset"></div>}
@@ -200,7 +200,7 @@
         <Bar title="Japanese · N5" />
         <Body>
           <CountStrip total="142" due="23" />
-          <div className="list-card">
+          <div className="list-card" data-mx-node="06-flashcard-list/card-list">
             {CARDS.map((c, i) => (
               <div key={i}>
                 {i > 0 && <div className="hr inset"></div>}

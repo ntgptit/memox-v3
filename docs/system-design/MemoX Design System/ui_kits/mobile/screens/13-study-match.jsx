@@ -45,7 +45,7 @@
   ];
 
   const StdGrid = () => (
-    <div className="match-grid">
+    <div className="match-grid" data-mx-node="13-study-match/board">
       {STD_LEFT.map((l, i) => (
         <React.Fragment key={i}>
           <StudyOption clamp state={l.state} mark={l.mark} dim={l.state === 'correct'}>{l.t}</StudyOption>
@@ -56,7 +56,7 @@
   );
 
   const LongGrid = () => (
-    <div className="match-grid long-text">
+    <div className="match-grid long-text" data-mx-node="13-study-match/board">
       {LONG_LEFT.map((l, i) => (
         <React.Fragment key={i}>
           <StudyOption clamp state={l.state} mark={l.mark}>{l.t}</StudyOption>

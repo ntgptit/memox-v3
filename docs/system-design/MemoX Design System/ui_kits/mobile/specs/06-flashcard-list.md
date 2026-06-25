@@ -206,6 +206,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           spacing: pad:0/12
           style: bg:accent font:11/700 color:accent-contrast tracking:0.1 r:999
       - node: list-card
+        id: 06-flashcard-list/card-list
         box:
           abs: [21,143 348x407]
           rel: [20,48 348x407]
@@ -2079,6 +2080,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - spacing: pad:0/12
 - style: bg:accent font:11/700 color:accent-contrast tracking:0.1 r:999
 - - node: list-card
+- id: 06-flashcard-list/card-list
 - box:
 - abs: [21,143 348x407]
 - rel: [20,48 348x407]
@@ -2093,6 +2095,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + spacing: pad:0/4
 + style: font:13/400 color:text-2
 + - node: list-card
++ id: 06-flashcard-list/card-list
 + box:
 + abs: [21,109 348x342]
 + rel: [20,40 348x342]

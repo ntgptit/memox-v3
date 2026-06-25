@@ -191,6 +191,7 @@ class MatchSessionScreen extends ConsumerWidget {
           Expanded(
             child: SingleChildScrollView(
               child: Column(
+                key: const ValueKey<String>('mx-node:13-study-match/board'),
                 children: <Widget>[
                   // Boards are 10 cells (always even); the right column is the
                   // odd-index cell, or an empty filler defensively.

@@ -95,6 +95,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       spacing: pad:12/20/40/20
       position: layout_hint:scroll
       - node: list-card
+        id: 03-library/folder-list
         box:
           abs: [21,81 348x342]
           rel: [20,12 348x342]
@@ -843,6 +844,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   spacing: pad:12/20/40/20
   position: layout_hint:scroll
 - - node: list-card
+- id: 03-library/folder-list
 - box:
 - abs: [21,81 348x342]
 - rel: [20,12 348x342]
@@ -1246,6 +1248,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   spacing: pad:12/20/40/20
   position: layout_hint:scroll
 - - node: list-card
+- id: 03-library/folder-list
 - box:
 - abs: [21,81 348x342]
 - rel: [20,12 348x342]
@@ -1260,6 +1263,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + layout: flex:row gap:8 align:center
 + style: font:12/700 color:text-2 tracking:1
 + - node: list-card
++ id: 03-library/folder-list
 + box:
 + abs: [21,112 348x147]
 + rel: [20,43 348x147]
@@ -1761,6 +1765,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   spacing: pad:12/20/40/20
   position: layout_hint:scroll
 - - node: list-card
+- id: 03-library/folder-list
 - box:
 - abs: [21,81 348x342]
 - rel: [20,12 348x342]

@@ -103,6 +103,21 @@
         }
       },
       {
+        "key": "mx-node:03-library/folder-list",
+        "node": "list-card",
+        "component": null,
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
         "key": "mx-node:03-library/new-folder-fab",
         "node": "fab",
         "component": "MxFab",
@@ -121,6 +136,21 @@
         "key": "mx-node:04-folder-detail/stat-card",
         "node": "card",
         "component": "MxCard",
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
+      {
+        "key": "mx-node:04-folder-detail/deck-list",
+        "node": "list-card",
+        "component": null,
         "tokens": {
           "bg": "accent-contrast",
           "radius": 20,
@@ -174,6 +204,21 @@
       }
     ],
     "06-flashcard-list": [
+      {
+        "key": "mx-node:06-flashcard-list/card-list",
+        "node": "list-card",
+        "component": null,
+        "tokens": {
+          "bg": "accent-contrast",
+          "radius": 20,
+          "border": "divider"
+        },
+        "flutter": {
+          "bg": "mxColors.accentContrast",
+          "radius": "MxRadius.lg",
+          "border": "mxColors.divider"
+        }
+      },
       {
         "key": "mx-node:06-flashcard-list/add-card-fab",
         "node": "fab",
@@ -574,6 +619,13 @@
         "flutter": {
           "radius": "MxRadius.pill"
         }
+      },
+      {
+        "key": "mx-node:13-study-match/board",
+        "node": "match-grid",
+        "component": null,
+        "tokens": {},
+        "flutter": {}
       }
     ],
     "14-study-guess": [

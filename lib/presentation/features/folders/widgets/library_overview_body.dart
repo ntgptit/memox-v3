@@ -274,6 +274,7 @@ class LibraryOverviewBody extends ConsumerWidget {
       );
     }
     return MxCard(
+      key: const ValueKey<String>('mx-node:03-library/folder-list'),
       padding: const EdgeInsets.symmetric(
         horizontal: MxSpacing.card,
         vertical: MxSpacing.space2,

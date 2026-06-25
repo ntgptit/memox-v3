@@ -29,7 +29,7 @@
 
   // ---- List card -----------------------------------------------------------
   const FolderCard = ({ items }) => (
-    <div className="list-card">
+    <div className="list-card" data-mx-node="03-library/folder-list">
       {items.map((f, i) => (
         <div key={f.name}>
           {i > 0 && <div className="hr inset"></div>}

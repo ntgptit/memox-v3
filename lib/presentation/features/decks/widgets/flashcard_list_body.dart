@@ -236,6 +236,7 @@ class FlashcardListBody extends ConsumerWidget {
       );
     }
     return MxCard(
+      key: const ValueKey<String>('mx-node:06-flashcard-list/card-list'),
       padding: const EdgeInsets.symmetric(
         horizontal: MxSpacing.card,
         vertical: MxSpacing.space2,

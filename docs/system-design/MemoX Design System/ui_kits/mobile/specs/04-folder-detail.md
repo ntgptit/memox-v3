@@ -249,6 +249,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             spacing: margin:0/0/0/4
             style: font:12/700 color:text-3 tracking:1
         - node: list-card
+          id: 04-folder-detail/deck-list
           box:
             abs: [21,226 348x212]
             rel: [0,23 348x212]
@@ -1034,6 +1035,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - spacing: margin:0/0/0/4
 - style: font:12/700 color:text-3 tracking:1
 - - node: list-card
+- id: 04-folder-detail/deck-list
 - box:
 - abs: [21,226 348x212]
 - rel: [0,23 348x212]
@@ -1427,6 +1429,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - spacing: margin:0/0/0/4
 - style: font:12/700 color:text-3 tracking:1
 - - node: list-card
+- id: 04-folder-detail/deck-list
 - box:
 - abs: [21,226 348x212]
 - rel: [0,23 348x212]
@@ -1836,6 +1839,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - spacing: margin:0/0/0/4
 - style: font:12/700 color:text-3 tracking:1
 - - node: list-card
+- id: 04-folder-detail/deck-list
 - box:
 - abs: [21,226 348x212]
 - rel: [0,23 348x212]
@@ -2313,6 +2317,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - spacing: margin:0/0/0/4
 - style: font:12/700 color:text-3 tracking:1
 - - node: list-card
+- id: 04-folder-detail/deck-list
 - box:
 - abs: [21,226 348x212]
 - rel: [0,23 348x212]

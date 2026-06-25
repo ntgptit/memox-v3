@@ -184,7 +184,7 @@
           <Bar title="Languages" />
           <Body>
             <StatSummary stats={[['3', 'Decks'], ['312', 'Cards'], ['31', 'Due', true]]} node="04-folder-detail/stat-card" />
-            <ListGroup heading="Decks" items={DECKS} kind="deck" />
+            <ListGroup heading="Decks" items={DECKS} kind="deck" node="04-folder-detail/deck-list" />
           </Body>
           <FabSlot icon="layers" />
           <BottomNav active="Library" />
@@ -199,7 +199,7 @@
         <Bar title="Languages" />
         <Body>
           <StatSummary stats={[['3', 'Decks'], ['312', 'Cards'], ['31', 'Due', true]]} node="04-folder-detail/stat-card" />
-          <ListGroup heading="Decks" items={DECKS} kind="deck" />
+          <ListGroup heading="Decks" items={DECKS} kind="deck" node="04-folder-detail/deck-list" />
         </Body>
         <FabSlot icon="layers" node="04-folder-detail/create-deck-fab" />
         <BottomNav active="Library" />

@@ -62,6 +62,16 @@ const EXCLUDE = new Set([
   'MxBottomNav',
 ]);
 
+// Main content containers — significant, screen-specific, single-instance surfaces
+// that hold the screen's primary data (the list/grid/section). They carry the
+// screen's identity even without an `mx:` component hint, so they are ALWAYS
+// tag-required candidates: without this a screen could read "100% tagged" while its
+// primary list/section is NOT in the identity contract, and the FE could drop the
+// whole list with the gate staying green (the dashboard `recent-decks` lesson,
+// generalised). This is a hard gate — `--check --min 100` fails until they carry a
+// `data-mx-node`; the agent fixes by tagging them, not by skipping.
+const CONTENT_CONTAINERS = new Set(['list-card', 'list-group', 'match-grid']);
+
 /**
  * The spec is "## Base state: …" followed by per-state sections (some FULL
  * re-renders). Counting across all of them makes a per-state singleton (the FAB,
@@ -102,7 +112,8 @@ function parseNodes(md) {
   return out;
 }
 
-const isCandidate = (nd) => nd.mx != null && !EXCLUDE.has(nd.mx);
+const isCandidate = (nd) =>
+  (nd.mx != null && !EXCLUDE.has(nd.mx)) || CONTENT_CONTAINERS.has(nd.name);
 
 if (!existsSync(SPECS)) { console.error(`mxnode_coverage: missing ${SPECS}`); process.exit(2); }
 
