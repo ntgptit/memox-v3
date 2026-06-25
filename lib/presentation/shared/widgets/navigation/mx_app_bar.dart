@@ -77,7 +77,7 @@ class MxAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: colors.bg,
       surfaceTintColor: colors.bg,
       foregroundColor: colors.text,
-      titleTextStyle: theme.textTheme.headlineMedium?.copyWith(
+      titleTextStyle: theme.textTheme.headlineLarge?.copyWith(
         color: colors.text,
       ),
     );

@@ -75,3 +75,41 @@ this run found **zero raw bypasses** and surfaced **two intentional scoped-dock
 variants** (06, 11) for confirmation. Remaining screens are all-null (nothing to
 assert) or owner-decision (MxSectionHeader gap). The binding contract is wired into
 `tool/verify/run.mjs`, so these stay enforced on every future change.
+
+## Visual parity — the honest layer (2026-06-26)
+
+The binding-contract rollout above proves component **TYPE** (right `Mx*` widget at
+each node). It does **NOT** prove the screens **look** like the mock. Separate work:
+
+**Step 1 — golden harness fixed (commit 10daa06).** Goldens rendered every `Icon`
+as the missing-glyph box (MaterialIcons wasn't loaded). Fixed: the harness now loads
+the full MaterialIcons font; all 220 goldens regenerated with real icons. The
+goldens are now *honest* — a fair basis for golden-vs-shot review.
+
+**Key finding — whole-frame SSIM is NOT the matching verdict.** Re-reading SSIM
+after the icon fix (and again after real visual fixes) barely moved the numbers.
+Two reasons: (a) SSIM is whole-frame/coarse — small but important details (icons,
+button fills, title size) are a tiny pixel fraction; (b) it conflates **test-seed
+data** (the golden's minimal fixture) with **the mock's designed sample content** —
+they differ by CONTENT, so a perfect FE still won't SSIM-match. SSIM is a coarse
+smoke signal only. The real verdict is an **expert visual review**
+(`ui-parity-checker`) that ignores data differences and judges layout/styling/
+treatment fidelity.
+
+**Step 3 — per-screen ui-parity-checker (in progress).** First screen reviewed:
+**23-audio-speech**. Real gaps found + FIXED so far:
+- **MxAppBar title 22px/600 → 24px/700** (was `headlineMedium`, spec says `font:24/700`
+  on every screen → `headlineLarge`). SYSTEMIC — improves the app-bar on **every**
+  screen (shared-layer fix).
+- **23 "Play sample" button outlined → tonal** (spec preview-button = `accentSoft`
+  fill, no border).
+- Correctly classified as NON-gaps (not FE bugs): voice subtitle `ko-KR` vs designed
+  `Female · Neural` (read-model has no gender/quality), the `System default` row,
+  speed/pitch fixture values — all test-seed/read-model differences.
+
+**Remaining (real, not yet done):** 23-audio-speech still has gaps (hero card not
+vertically centered on no-voices/engine-error; hero icon-tile 40→56px; hero title
+role; busy-overlay spinner 20→24px; overline tracking/caps; missing loading golden).
+And ~18 other screens have not had a ui-parity-checker pass yet. This is the real
+"match the mock" backlog — to be worked per-screen with honest goldens, fixing
+category-1 gaps and locking each with golden-per-state tests.

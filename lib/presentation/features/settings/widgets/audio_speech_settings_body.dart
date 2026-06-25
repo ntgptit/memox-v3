@@ -268,7 +268,9 @@ class _PreviewCard extends StatelessWidget {
                   ),
                   label: l10n.audioPlaySample,
                   icon: Icons.play_arrow_rounded,
-                  variant: MxSecondaryVariant.outlined,
+                  // kit preview-button: tonal fill (accentSoft bg, no border),
+                  // not the outlined variant (spec 23-audio-speech/preview-button).
+                  variant: MxSecondaryVariant.tonal,
                   fullWidth: true,
                   onPressed: onPlay,
                 ),
