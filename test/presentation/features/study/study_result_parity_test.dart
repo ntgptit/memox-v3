@@ -46,7 +46,7 @@ void main() {
 
   Finder node(String i) => find.byKey(ValueKey<String>('mx-node:$i'));
 
-  testWidgets('17-study-result parity contract (loaded)', (tester) async {
+  Future<void> pump(WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -62,9 +62,22 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
+  }
 
+  testWidgets('17-study-result parity contract (loaded)', (tester) async {
+    await pump(tester);
     expectParityContract('17-study-result', <String, Finder>{
       'Done button': node('17-study-result/done-button'),
     });
   });
+
+  testWidgets(
+    '17-study-result binding contract (keyed nodes realize kit components)',
+    (tester) async {
+      await pump(tester);
+      // done-button → MxPrimaryButton, close-btn → MxIconButton (the helper skips
+      // a node absent in the pumped state).
+      expectGeneratedBindingContract('17-study-result');
+    },
+  );
 }

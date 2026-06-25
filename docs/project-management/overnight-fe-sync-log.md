@@ -14,7 +14,8 @@ Each entry the owner should review before merging.
 | 4 | 20-settings | 3a2c8e3 | binding-contract test | account-card → MxCard; FE already correct. |
 | 5 | 21-account-sync | adeec33 | binding-contract test | signin-card → MxCard, signin-button → MxPrimaryButton; FE already correct. |
 | 6 | 09-flashcard-history | 3ed00ea | binding-contract test | header → MxCard; FE already correct. |
-| 7 | 23-audio-speech | (this commit) | binding-contract test | preview-card → MxCard, preview-button → MxSecondaryButton; FE already correct. |
+| 7 | 23-audio-speech | 5f4a844 | binding-contract test | preview-card → MxCard, preview-button → MxSecondaryButton; FE already correct. |
+| 8 | 17-study-result | (this commit) | binding-contract test | done-button → MxPrimaryButton, close-btn → MxIconButton; FE already correct. |
 
 ## Decisions needing owner confirmation
 
