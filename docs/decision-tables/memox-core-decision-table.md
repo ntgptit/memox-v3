@@ -19,7 +19,7 @@ Behavior branches are split into per-feature files. Read only the file(s) your t
 | `docs/decision-tables/search.md` | Global + scope-local search | SR1–SR10, SR-rank, SR-cap, SR-empty, SR-err |
 | `docs/decision-tables/progress-history.md` | Progress, Stats, Card history, Engagement | P1–P21, H1–H9, EN1–EN18 |
 | `docs/decision-tables/navigation-ui.md` | Navigation, UI state | N1–N13, U1–U5 |
-| `docs/decision-tables/tts.md` | TTS / Audio playback | T1–T15 |
+| `docs/decision-tables/tts.md` | TTS / Audio playback | T1–T18 |
 | `docs/decision-tables/account-sync.md` | Google account, Drive sync | AC1–AC12, SY1–SY24 |
 
 ## Convention

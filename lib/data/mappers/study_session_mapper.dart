@@ -1,4 +1,5 @@
 import 'package:memox/data/datasources/local/app_database.dart';
+import 'package:memox/data/mappers/deck_mapper.dart';
 import 'package:memox/domain/entities/match_evaluation.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
@@ -9,6 +10,7 @@ import 'package:memox/domain/types/session_status.dart';
 import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
+import 'package:memox/domain/types/target_language.dart';
 
 /// Storage codec between the study-session enums/entity and their `study_sessions`
 /// row representation (snake_case TEXT tokens; `docs/contracts/types-catalog.md`
@@ -102,10 +104,13 @@ class StudySessionMapper {
   );
 
   /// Maps a joined `study_session_items` + `flashcards` row pair to a review
-  /// item (WBS 4.3.1).
+  /// item (WBS 4.3.1). [targetLanguage] is the owning deck's resolved front
+  /// language (the per-card TTS gate, WBS 8.4.3) — the repository resolves it
+  /// from the card's `deck_id` so playback never re-queries the deck.
   StudySessionReviewItem toReviewItem(
     StudySessionItemRow item,
     FlashcardRow card,
+    TargetLanguage targetLanguage,
   ) => StudySessionReviewItem(
     sessionItemId: item.id,
     flashcardId: card.id,
@@ -118,7 +123,32 @@ class StudySessionMapper {
     answeredAt: item.answeredAt == null
         ? null
         : DateTime.fromMillisecondsSinceEpoch(item.answeredAt!, isUtc: true),
+    targetLanguage: targetLanguage,
   );
+
+  /// Builds the ordered review items for a session, resolving each card's deck
+  /// `target_language` (the per-card TTS gate, WBS 8.4.3). [cardById] maps a
+  /// flashcard id → its row; [decks] are the cards' owning decks. A card whose
+  /// deck is missing falls back to the storage default `korean`.
+  List<StudySessionReviewItem> toReviewItems(
+    List<StudySessionItemRow> items,
+    Map<String, FlashcardRow> cardById,
+    List<DeckRow> decks,
+  ) {
+    final Map<String, TargetLanguage> langByDeck = <String, TargetLanguage>{
+      for (final DeckRow deck in decks)
+        deck.id: DeckMapper.targetLanguageFromStorage(deck.targetLanguage),
+    };
+    return <StudySessionReviewItem>[
+      for (final StudySessionItemRow item in items)
+        toReviewItem(
+          item,
+          cardById[item.flashcardId]!,
+          langByDeck[cardById[item.flashcardId]!.deckId] ??
+              TargetLanguage.korean,
+        ),
+    ];
+  }
 
   /// Maps a joined `study_session_items` + `flashcards` row pair plus its
   /// derived [terminalResult] (or `null` when unanswered) to a result item

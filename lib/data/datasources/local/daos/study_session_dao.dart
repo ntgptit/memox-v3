@@ -86,6 +86,12 @@ class StudySessionDao {
   Future<List<FlashcardRow>> flashcardsByIds(Iterable<String> ids) =>
       (_db.select(_db.flashcards)..where((t) => t.id.isIn(ids.toList()))).get();
 
+  /// The decks whose ids are in [ids] (single-table read; the repository maps
+  /// each review card to its deck's `target_language` for the TTS gate,
+  /// WBS 8.4.3 — `docs/business/tts/tts-settings.md` §Deck-level language gate).
+  Future<List<DeckRow>> decksByIds(Iterable<String> ids) =>
+      (_db.select(_db.decks)..where((t) => t.id.isIn(ids.toList()))).get();
+
   /// The items of [sessionId] in queue order.
   Future<List<StudySessionItemRow>> itemsForSession(String sessionId) =>
       (_db.select(_db.studySessionItems)

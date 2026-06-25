@@ -37,7 +37,7 @@ feature autonomously.
 
 | # | WP | Status | PR | Done-bar notes |
 | --- | --- | --- | --- | --- |
-| 1 | **TTS 8.4.3 — study playback** | ⬜ todo | — | `TtsPlaybackPolicy` (TargetLanguage→TtsLanguageCode?, unsupported→skip) + `SpeakFlashcardUseCase` (front-only; load+apply global settings then `speak`; blank/unsupported → silent success; engine fail → `StorageFailure`, log + no popup) + `StopSpeechUseCase` + DI. Wire **auto-play on card reveal** (gated by `TtsSettings.autoPlay` + deck language) **and a manual speaker button** into the 5 study modes (review/match/guess/recall/fill) — needs the deck `target_language` reachable from the study read model (extend `LoadStudySessionReviewUseCase`/query/entity + test if absent). Stop playback on advance/leave. Unit tests (policy + use case via fake `TtsService`+settings) + widget test for the speaker button + auto-play trigger. Update `tts.md` (flip policy/use cases → Current, refine `speakFlashcardSide` signature to the realized one with rationale), `tts-settings.md` (lift the 8.4.3 Future banner for what's now built), `study-flow.md`, decision table, WBS 8.4.3 + §10. NEVER speak `back`. |
+| 1 | **TTS 8.4.3 — study playback** | 🟡 in-progress | — | `TtsPlaybackPolicy` (TargetLanguage→TtsLanguageCode?, unsupported→skip) + `SpeakFlashcardUseCase` (front-only; load+apply global settings then `speak`; blank/unsupported → silent success; engine fail → `StorageFailure`, log + no popup) + `StopSpeechUseCase` + DI. Wire **auto-play on card reveal** (gated by `TtsSettings.autoPlay` + deck language) **and a manual speaker button** into the 5 study modes (review/match/guess/recall/fill) — needs the deck `target_language` reachable from the study read model (extend `LoadStudySessionReviewUseCase`/query/entity + test if absent). Stop playback on advance/leave. Unit tests (policy + use case via fake `TtsService`+settings) + widget test for the speaker button + auto-play trigger. Update `tts.md` (flip policy/use cases → Current, refine `speakFlashcardSide` signature to the realized one with rationale), `tts-settings.md` (lift the 8.4.3 Future banner for what's now built), `study-flow.md`, decision table, WBS 8.4.3 + §10. NEVER speak `back`. |
 | 2 | **Q4 — fix `03-progress.md` drift** | ⬜ todo | — | The wireframe claims `ProgressScreen`/`LoadProgressOverviewUseCase`/goldens P1–P18 are implemented, but none exist. Rewrite its status to Future (Progress **detail** = kit 19, unbuilt) so docs stop mis-describing code. Docs-only; `--docs` verify. |
 | 3 | **C5 + C1 — debt** | ⬜ todo | — | C5: remove orphaned `settingsValueSoon` from both ARB files + `flutter gen-l10n`. C1: load a CJK + serif font in `test/flutter_test_config.dart` so the kit-23 Korean/serif sample renders in goldens (not tofu), then regen ALL goldens (`node tool/verify/run.mjs --full --update-goldens`) and re-check `tool/parity/report.mjs --ssim`. |
 | 4 | **Q5 — Engagement BE → 19-progress** | ⬜ todo | — | Build the engagement BE (SharedPreferences daily-goal target + study-day streak per `docs/contracts/usecase-contracts/engagement.md`; NO fabricated values; no Drift migration) → flip the `overview.md` engagement row from "pending approval" to Implemented (owner approved, Q5) + WBS → then build **19-progress** (kit 19): goal ring + streak chip + accuracy/time/cards + insights, all states from `shots/INDEX.md`. Resolve **Q3** (route: 18-stats stays the `/progress` tab root; 19 is a pushed detail → own route) and the **kit-19 ↔ `03-progress.md` mock-vs-wireframe conflict** toward the mock (mock-authoritative). Full screen done-bar incl. `ui-parity-checker` + goldens + parity-map. |
@@ -62,7 +62,18 @@ with the verbatim `/loop` prompt.
 
 ## Parked questions (newest first)
 
-_(none yet)_
+- **WP1 (TTS 8.4.3) — Match mode excluded from TTS.** The match board shows many front/back tiles at
+  once with no single front prompt and no reveal step, and `MatchCell` carries neither the front nor a
+  per-card `targetLanguage`; the match-board mock has no speaker affordance. **Default taken:** wire TTS
+  into the 4 prompt-based modes (review/guess/recall/fill) and exclude match. Recorded in
+  `tts.md`/`tts-settings.md`/`study-flow.md`.
+- **WP1 — Fill speaks the revealed answer only (no auto-play).** Fill's front is the hidden answer the
+  learner types; auto-playing or a front-prompt speaker would leak the answer. **Default taken:** no
+  auto-play in fill; the speaker button appears only on the revealed correct/wrong answer card.
+- **WP1 — `ListVoicesUseCase` + `TtsService.state` (`Stream<TtsState>`) NOT built.** The contract listed
+  both as 8.4.3 targets, but the settings screen already calls `TtsService.availableVoices` directly and
+  the study UI only needs a binary speaking/idle marker. **Default taken:** `StudyTtsController` holds the
+  speaking-card id directly (no stream); both remain Future. Recorded in `tts.md`/`tts-settings.md`.
 
 ## Automation fixes made during the loop
 _(append findings so the next iteration doesn't relearn them.)_

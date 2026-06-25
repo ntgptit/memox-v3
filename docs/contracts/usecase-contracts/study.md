@@ -148,11 +148,16 @@ reads: `StudySessionDao.sessionById` (missing → `NotFoundFailure`),
 `StudySessionDao.itemsForSession` (ordered by `sort_order`), and
 `StudySessionDao.flashcardsByIds` (one `IN` query); the repository pairs the
 ordered items with their flashcards via a `cardById` map (avoiding the
-loosely-typed drift builder join). An empty item list →
+loosely-typed drift builder join). It also reads `StudySessionDao.decksByIds`
+(one `IN` query over the distinct card deck ids) and resolves each card's deck
+`target_language` so the read item carries it — this is the per-card TTS gate
+(WBS 8.4.3); a session that spans decks of different languages keeps each card's
+own language. The deck-language resolution + item assembly live in
+`StudySessionMapper.toReviewItems`. An empty item list →
 `ValidationFailure(insufficientContent)`; a read error → `StorageFailure(read)`.
 Returns `StudySessionReview` (`lib/domain/entities/study_session_review.dart`):
 the `StudySession` header + ordered `StudySessionReviewItem`s (flashcard content +
-`answeredAt`), with `total` / `answeredCount` / `isComplete` /
+`answeredAt` + `targetLanguage`), with `total` / `answeredCount` / `isComplete` /
 `firstUnansweredIndex` convenience getters the review controller (WBS 4.3.2) uses
 to resume at the first unanswered item.
 

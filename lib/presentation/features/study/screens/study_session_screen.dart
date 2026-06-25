@@ -15,6 +15,7 @@ import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/controllers/study_session_controller.dart';
 import 'package:memox/presentation/features/study/controllers/study_session_review_provider.dart';
 import 'package:memox/presentation/features/study/widgets/study_card_actions_sheet.dart';
+import 'package:memox/presentation/features/study/widgets/study_speak_button.dart';
 import 'package:memox/presentation/shared/async/app_async_builder.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
@@ -184,46 +185,49 @@ class StudySessionScreen extends ConsumerWidget {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final StudySessionReviewItem? item = view.currentItem;
     if (item == null) return const SizedBox.shrink();
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: Dismissible(
-            key: ValueKey<String>('study-card-${item.sessionItemId}'),
-            onDismissed: (DismissDirection direction) {
-              final AttemptResult result =
-                  direction == DismissDirection.startToEnd
-                  ? AttemptResult.perfect
-                  : AttemptResult.forgot;
-              // Fire-and-forget: grade advances the card + persists in the
-              // background (the gesture has already moved on).
-              unawaited(
-                ref
-                    .read(studySessionControllerProvider(sessionId).notifier)
-                    .grade(result),
-              );
-            },
-            // a11y: announce the swipe-grade gesture on the card region
-            // (wireframe `13` §Accessibility).
-            child: Semantics(
-              hint: l10n.studyReviewSwipeHint,
-              // Long-press opens the card-actions sheet (Bury / Suspend).
-              child: GestureDetector(
-                onLongPress: () => _openCardActions(context, ref),
-                child: _ReviewCard(item: item),
+    return StudyTtsAutoPlay(
+      item: item,
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: Dismissible(
+              key: ValueKey<String>('study-card-${item.sessionItemId}'),
+              onDismissed: (DismissDirection direction) {
+                final AttemptResult result =
+                    direction == DismissDirection.startToEnd
+                    ? AttemptResult.perfect
+                    : AttemptResult.forgot;
+                // Fire-and-forget: grade advances the card + persists in the
+                // background (the gesture has already moved on).
+                unawaited(
+                  ref
+                      .read(studySessionControllerProvider(sessionId).notifier)
+                      .grade(result),
+                );
+              },
+              // a11y: announce the swipe-grade gesture on the card region
+              // (wireframe `13` §Accessibility).
+              child: Semantics(
+                hint: l10n.studyReviewSwipeHint,
+                // Long-press opens the card-actions sheet (Bury / Suspend).
+                child: GestureDetector(
+                  onLongPress: () => _openCardActions(context, ref),
+                  child: _ReviewCard(item: item),
+                ),
               ),
             ),
           ),
-        ),
-        if (view.currentIndex < _swipeHintCards)
-          Padding(
-            padding: const EdgeInsets.only(bottom: MxSpacing.space4),
-            child: MxText(
-              l10n.studyReviewSwipeHint,
-              role: MxTextRole.bodySmall,
-              color: context.mxColors.textTertiary,
+          if (view.currentIndex < _swipeHintCards)
+            Padding(
+              padding: const EdgeInsets.only(bottom: MxSpacing.space4),
+              child: MxText(
+                l10n.studyReviewSwipeHint,
+                role: MxTextRole.bodySmall,
+                color: context.mxColors.textTertiary,
+              ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -306,7 +310,14 @@ class _ReviewCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                _SideLabel(text: l10n.studyReviewFrontLabel),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: _SideLabel(text: l10n.studyReviewFrontLabel),
+                    ),
+                    StudySpeakButton(item: item),
+                  ],
+                ),
                 const SizedBox(height: MxSpacing.space4),
                 MxText(
                   item.front,

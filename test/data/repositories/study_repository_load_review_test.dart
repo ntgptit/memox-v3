@@ -7,6 +7,7 @@ import 'package:memox/data/datasources/local/daos/study_session_dao.dart';
 import 'package:memox/data/repositories/study_repository_impl.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
 import 'package:memox/domain/types/session_status.dart';
+import 'package:memox/domain/types/target_language.dart';
 
 void main() {
   // StudyRepositoryImpl.loadStudySessionReview (WBS 4.3.1): load the session
@@ -124,6 +125,24 @@ void main() {
       expect(review.answeredCount, 1);
       expect(review.firstUnansweredIndex, 1);
       expect(review.isComplete, isFalse);
+      // Each item carries its deck's target_language (the per-card TTS gate,
+      // WBS 8.4.3); deck d1 keeps the storage default `korean`.
+      expect(review.items.first.targetLanguage, TargetLanguage.korean);
+    });
+
+    test("each item carries its deck's target_language (TTS gate)", () async {
+      await seedSession();
+      // Flip the owning deck to an english target language.
+      await (db.update(db.decks)..where((t) => t.id.equals('d1'))).write(
+        const DecksCompanion(targetLanguage: Value<String>('english')),
+      );
+      await insertCard('c1', 0);
+      await insertItem('i1', 'c1', 0);
+
+      final result = await repository.loadStudySessionReview(id: 's1');
+
+      expect(result.failure, isNull);
+      expect(result.data!.items.single.targetLanguage, TargetLanguage.english);
     });
 
     test('a missing session is a NotFoundFailure', () async {

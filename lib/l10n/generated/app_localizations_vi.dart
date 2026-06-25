@@ -1491,4 +1491,10 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get audioSampleEnglish =>
       'The quick brown fox jumps over the lazy dog.';
+
+  @override
+  String get studySpeakPlay => 'Phát âm thanh';
+
+  @override
+  String get studySpeakStop => 'Dừng âm thanh';
 }

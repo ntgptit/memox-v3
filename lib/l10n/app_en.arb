@@ -882,5 +882,9 @@
   "audioSampleKorean": "안녕하세요, 오늘도 공부해요.",
   "@audioSampleKorean": { "description": "Korean TTS preview sample sentence (not translated)." },
   "audioSampleEnglish": "The quick brown fox jumps over the lazy dog.",
-  "@audioSampleEnglish": { "description": "English TTS preview sample sentence (not translated)." }
+  "@audioSampleEnglish": { "description": "English TTS preview sample sentence (not translated)." },
+  "studySpeakPlay": "Play audio",
+  "@studySpeakPlay": { "description": "Tooltip/label for the study speaker button that speaks the card front." },
+  "studySpeakStop": "Stop audio",
+  "@studySpeakStop": { "description": "Tooltip/label for the study speaker button while it is speaking (tap to stop)." }
 }

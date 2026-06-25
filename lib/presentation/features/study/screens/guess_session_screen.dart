@@ -18,6 +18,7 @@ import 'package:memox/domain/entities/study_session_review.dart';
 import 'package:memox/domain/models/guess_option.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/controllers/guess_session_controller.dart';
+import 'package:memox/presentation/features/study/widgets/study_speak_button.dart';
 import 'package:memox/presentation/shared/async/app_async_builder.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
@@ -163,42 +164,45 @@ class GuessSessionScreen extends ConsumerWidget {
     final GuessSessionController controller = ref.read(
       guessSessionControllerProvider(sessionId).notifier,
     );
-    return Padding(
-      padding: const EdgeInsets.all(MxSpacing.space5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          _PromptCard(prompt: l10n.studyGuessPrompt, item: item),
-          const SizedBox(height: MxSpacing.space5),
-          Expanded(
-            child: ListView.separated(
-              itemCount: view.options.length,
-              separatorBuilder: (_, _) =>
-                  const SizedBox(height: MxSpacing.space3),
-              itemBuilder: (BuildContext context, int index) => _OptionRow(
-                letter: String.fromCharCode(65 + index), // A, B, C…
-                option: view.options[index],
-                revealed: view.revealed,
-                isPicked: view.selectedBack == view.options[index].back,
-                onTap: view.revealed
-                    ? null
-                    : () => unawaited(controller.grade(view.options[index])),
+    return StudyTtsAutoPlay(
+      item: item,
+      child: Padding(
+        padding: const EdgeInsets.all(MxSpacing.space5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            _PromptCard(prompt: l10n.studyGuessPrompt, item: item),
+            const SizedBox(height: MxSpacing.space5),
+            Expanded(
+              child: ListView.separated(
+                itemCount: view.options.length,
+                separatorBuilder: (_, _) =>
+                    const SizedBox(height: MxSpacing.space3),
+                itemBuilder: (BuildContext context, int index) => _OptionRow(
+                  letter: String.fromCharCode(65 + index), // A, B, C…
+                  option: view.options[index],
+                  revealed: view.revealed,
+                  isPicked: view.selectedBack == view.options[index].back,
+                  onTap: view.revealed
+                      ? null
+                      : () => unawaited(controller.grade(view.options[index])),
+                ),
               ),
             ),
-          ),
-          if (view.revealed) ...<Widget>[
-            const SizedBox(height: MxSpacing.space3),
-            _CountdownFooter(
-              // Correct picks advance faster than wrong ones (the learner needs
-              // longer to read the right answer) — wireframe `15` §States.
-              delay: _pickedCorrect(view)
-                  ? AppMotion.guessRevealCorrect
-                  : AppMotion.guessRevealWrong,
-              label: l10n.studyGuessTapToContinue,
-              onSkip: controller.next,
-            ),
+            if (view.revealed) ...<Widget>[
+              const SizedBox(height: MxSpacing.space3),
+              _CountdownFooter(
+                // Correct picks advance faster than wrong ones (the learner needs
+                // longer to read the right answer) — wireframe `15` §States.
+                delay: _pickedCorrect(view)
+                    ? AppMotion.guessRevealCorrect
+                    : AppMotion.guessRevealWrong,
+                label: l10n.studyGuessTapToContinue,
+                onSkip: controller.next,
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
@@ -267,7 +271,15 @@ class _PromptCard extends StatelessWidget {
               color: colors.textTertiary,
             ),
             const SizedBox(height: MxSpacing.space2),
-            MxText(item.front, role: MxTextRole.displayLarge),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  child: MxText(item.front, role: MxTextRole.displayLarge),
+                ),
+                StudySpeakButton(item: item),
+              ],
+            ),
             if (reading != null && reading.isNotEmpty) ...<Widget>[
               const SizedBox(height: MxSpacing.space1),
               MxText(

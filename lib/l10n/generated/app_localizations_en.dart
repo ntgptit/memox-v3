@@ -1518,4 +1518,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get audioSampleEnglish =>
       'The quick brown fox jumps over the lazy dog.';
+
+  @override
+  String get studySpeakPlay => 'Play audio';
+
+  @override
+  String get studySpeakStop => 'Stop audio';
 }

@@ -215,14 +215,18 @@ class StudyRepositoryImpl implements StudyRepository {
         for (final FlashcardRow card in cards) card.id: card,
       };
 
+      // Resolve each card's deck `target_language` (the per-card TTS gate, WBS
+      // 8.4.3) in one IN query over the distinct deck ids. FK cascade guarantees
+      // every card's deck still exists.
+      final List<DeckRow> decks = await _dao.decksByIds(
+        cards.map((FlashcardRow c) => c.deckId).toSet(),
+      );
+
       return (
         failure: null,
         data: StudySessionReview(
           session: _mapper.toEntity(sessionRow),
-          items: <StudySessionReviewItem>[
-            for (final StudySessionItemRow item in items)
-              _mapper.toReviewItem(item, cardById[item.flashcardId]!),
-          ],
+          items: _mapper.toReviewItems(items, cardById, decks),
         ),
       );
     } catch (error) {

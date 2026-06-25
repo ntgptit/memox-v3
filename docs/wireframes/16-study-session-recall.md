@@ -15,9 +15,11 @@ source_specs:
 > `lib/presentation/features/study/controllers/recall_session_controller.dart`, reached via the session
 > route `?mode=recall` dispatch (`study_routes.dart`). Show front → **Show answer** reveals the back (green
 > ANSWER card) → binary **Missed** (`forgot`) / **Got it** (`perfect`) self-grade (decision S66) → record +
-> advance → the last card finalizes (`FinalizeStudySessionUseCase`) → the result. **Deferred:** the
+> advance → the last card finalizes (`FinalizeStudySessionUseCase`) → the result. The **TTS 🔊**
+> affordance is now built (WBS 8.4.3 — `StudySpeakButton` on the front prompt + auto-play on reveal;
+> placed top-right inline with the front text rather than the bottom-right shown below). **Deferred:** the
 > Show-answer countdown + auto-reveal-on-timeout (WP-RC2, S63/S64, needs a `recallAnswerTimeout` constant)
-> and the Edit ✎ / TTS 🔊 affordances + edit-pause (WP-RC3, S65). The earlier
+> and the Edit ✎ affordance + edit-pause (WP-RC3, S65). The earlier
 > `study_session_recall_mode_view.dart` / `study_session_recall_viewmodel.dart` paths were target structure
 > that never existed. The layout below remains the contract.
 >

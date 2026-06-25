@@ -11,6 +11,42 @@
   },
   "exceptions": [
     {
+      "screen": "12-study-review",
+      "node": "speak",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "behavior",
+      "reason": "FE adds a front-side TTS speaker button (mx-node:study-session/speak) authorized by WBS 8.4.3; the kit shots carry no speaker affordance. Hidden when the deck target_language is unsupported, so its absence-from-design is intentional.",
+      "source": "docs/business/tts/tts-settings.md (§Playback policy) + docs/business/study/study-flow.md (§TTS playback) + docs/project-management/wbs.md (8.4.3)"
+    },
+    {
+      "screen": "14-study-guess",
+      "node": "speak",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "behavior",
+      "reason": "Front-side TTS speaker (WBS 8.4.3) added to the prompt card; not in the kit shots. Hidden for unsupported-language decks.",
+      "source": "docs/business/tts/tts-settings.md (§Playback policy) + docs/business/study/study-flow.md (§TTS playback)"
+    },
+    {
+      "screen": "15-study-recall",
+      "node": "speak",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "behavior",
+      "reason": "Front-side TTS speaker (WBS 8.4.3) added to the prompt card (realizes the wireframe S65 TTS affordance); not in the kit shots. Hidden for unsupported-language decks.",
+      "source": "docs/business/tts/tts-settings.md (§Playback policy) + docs/wireframes/16-study-session-recall.md (S65)"
+    },
+    {
+      "screen": "16-study-fill",
+      "node": "speak",
+      "kind": "*",
+      "verdict": "exception",
+      "exceptionKind": "behavior",
+      "reason": "Front-side TTS speaker (WBS 8.4.3) added only on the REVEALED correct/wrong answer card (Fill never speaks the front while it is the hidden answer, and does not auto-play); not in the kit shots.",
+      "source": "docs/business/tts/tts-settings.md (§Playback policy) + docs/business/study/study-flow.md (§TTS playback)"
+    },
+    {
       "screen": "07-flashcard-create",
       "node": "deck-picker",
       "kind": "*",
