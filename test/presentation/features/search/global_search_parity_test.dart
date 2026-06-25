@@ -14,7 +14,7 @@ import '../../../support/parity_contract.dart';
 void main() {
   Finder node(String i) => find.byKey(ValueKey<String>('mx-node:$i'));
 
-  testWidgets('05-library-search parity contract (idle)', (tester) async {
+  Future<void> pump(WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [globalSearchResultsProvider.overrideWith((ref) => null)],
@@ -28,9 +28,22 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
+  }
 
+  testWidgets('05-library-search parity contract (idle)', (tester) async {
+    await pump(tester);
     expectParityContract('05-library-search', <String, Finder>{
       'search dock': node('05-library-search/search-dock'),
     });
   });
+
+  testWidgets(
+    '05-library-search binding contract (keyed nodes realize kit components)',
+    (tester) async {
+      await pump(tester);
+      // search-dock → MxSearchDock (the global dock used directly — no scoped
+      // variant here, unlike 06/11).
+      expectGeneratedBindingContract('05-library-search');
+    },
+  );
 }
