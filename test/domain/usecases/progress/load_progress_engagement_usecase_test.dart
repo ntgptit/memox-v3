@@ -38,6 +38,9 @@ class _FakeProgressRepo implements ProgressRepository {
   @override
   Future<Result<StatsOverview>> loadStatsOverview({required int now}) =>
       throw UnimplementedError();
+  @override
+  Future<Result<int>> loadStudyTimeMs({required int since}) =>
+      throw UnimplementedError();
 }
 
 class _FakeLearningRepo implements LearningSettingsRepository {

@@ -188,6 +188,22 @@ class ProgressRepositoryImpl implements ProgressRepository {
     }
   }
 
+  @override
+  Future<Result<int>> loadStudyTimeMs({required int since}) async {
+    try {
+      return (failure: null, data: await _dao.studyTimeMsSince(since));
+    } catch (error) {
+      return (
+        failure: Failure.storage(
+          operation: StorageOp.read,
+          table: 'study_attempts',
+          cause: error.toString(),
+        ),
+        data: null,
+      );
+    }
+  }
+
   /// Pure local-day reduction of attempt [times] (epoch ms) as of [now]: today's
   /// answered count + the current/longest consecutive study-day streak. Days are
   /// normalized to a UTC-midnight ordinal so DST never miscounts adjacency.

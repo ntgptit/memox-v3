@@ -118,7 +118,10 @@ has no attempt yet. An empty database yields all-zero activity; a read error →
 `StorageFailure`. No new schema, no migration. Composed with the daily goal
 (`LearningSettings`) by `LoadProgressEngagementUseCase` into `ProgressEngagement`
 for the kit-19 Progress detail (read-only; the settings-backed goal-met streak
-stays Future).
+stays Future). Also adds `Future<Result<int>> loadStudyTimeMs({required int since})`:
+total on-card study time (ms) for attempts at or after `since`, summed from
+`study_attempts.duration_ms` (NULL when unlogged → contributes 0; empty range →
+0) — the detail's "Time" stat. No new schema. Use case `LoadStudyTimeUseCase`.
 
 ## Transaction requirements
 
