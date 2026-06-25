@@ -144,7 +144,7 @@ If any step is skipped, report it explicitly.
 (`onCreate`/`onUpgrade`/`beforeOpen` in `AppDatabase.migration`) and the
 platform-isolated connection. Each schema bump adds a `migrations/v<N>_*.dart`
 step file plus an `onUpgrade` step (guarded by `from`). Current code is at
-**schema v8**.
+**schema v9** (v9 added the `tts_settings` table, #41).
 
 | Version | File | What changed |
 |---------|------|--------------|

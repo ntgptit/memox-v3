@@ -19,6 +19,12 @@ void main() {
         theme.textTheme.bodyMedium?.fontFamily,
         MxTypography.fontFamilySans,
       );
+      // CJK fallback chain is applied app-wide so Korean/kanji renders glyphs
+      // (ThemeData folds fontFamilyFallback into the textTheme styles).
+      expect(
+        theme.textTheme.bodyMedium?.fontFamilyFallback,
+        MxTypography.fontFamilyFallback,
+      );
     });
 
     test('dark theme uses dark brightness and dark bg scaffold', () {
