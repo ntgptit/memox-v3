@@ -1,7 +1,7 @@
 {
   "_source": "Grounded in docs/design/component-visual-contract.md (UI need -> Mx component). Keys are UI-kit CSS class names found inside the rendered .phone; values are the suggested MemoX shared component. Values MUST be a real `class Mx*` in lib/presentation/shared/** (verified by tool/parity/symbol_lint.mjs) — a mapping to a non-existent class makes every spec emit a phantom mx: hint, the RC2 drift. ONLY unambiguous mappings live here; ambiguous classes (ov, title, status-dot, muted, field) are deliberately left out so the exporter does not guess. The pill-btn button family is disambiguated in code by the primary/secondary/outline modifier class, so it is intentionally NOT listed here.",
   "_note": "Adding/changing a key changes generated specs; re-run `npm run export:specs` after editing. Then `node tool/parity/symbol_lint.mjs --check` must stay green.",
-  "_sectionHeadNote": "section-head -> MxSectionHeader is a DESIGN DIRECTIVE: no such Flutter class exists yet, but the kit uses section overlines consistently and design is canonical, so the spec asks the FE to build MxSectionHeader. Tracked as a gap in tool/parity/symbol-aliases.json until built.",
+  "_sectionHeadNote": "section-head -> MxSectionHeader. The kit uses section overlines consistently and design is canonical; MxSectionHeader is now BUILT (lib/presentation/shared/widgets/mx_section_header.dart) and resolves via symbol_lint (no longer a gap). 18-stats/mastery-section uses it (the only keyed section-head node); other screens' (unkeyed) section headers can migrate incrementally.",
   "map": {
     "app": "MxScaffold",
     "appbar": "MxAppBar",

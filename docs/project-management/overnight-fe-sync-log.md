@@ -19,20 +19,29 @@ Each entry the owner should review before merging.
 | 9 | 11-tag-management | 51b30f0 | binding-contract test | search-dock → MxScopedSearchDock (scoped variant, aliased — same as 06). |
 | 10 | 05-library-search | 006110c | binding-contract test | search-dock → MxSearchDock (global dock, no alias); FE already correct. |
 | 11 | 10-deck-import | bdf46d3 | binding-contract test | empty-card/file-chip/result-card → MxCard, choose-file → MxPrimaryButton (per-state); FE already correct. |
+| 12 | search-dock (D1) | 669b33c | centralize scoped-dock realization | resolved decision 1 — see below. |
+| 13 | 18-stats (D2) | (this commit) | build MxSectionHeader + binding test | resolved decision 2 — see below. |
 
-## Decisions needing owner confirmation
+## Decisions — RESOLVED (2026-06-26)
 
-- **06-flashcard-list & 11-tag-management / search-dock — component alias (NOT a raw
-  bypass).** The kit's generic `search-dock` maps to `MxSearchDock`, but both FEs
-  realize it with the scoped sibling **`MxScopedSearchDock`** (deck-scoped /
-  tag-scoped search). This is deliberate and required: `MxScopedSearchDock`'s own
-  doc states plain `MxSearchDock` *"cannot host an external controller"*, which the
-  scoped searches need. Resolved by aliasing `MxSearchDock → MxScopedSearchDock` in
-  each screen's binding test (same mechanism as learning-settings' `MxBottomNav`
-  alias) — the assertion stays strong (must be the scoped dock, not a raw widget).
-  05-library-search, by contrast, uses the plain global `MxSearchDock` directly (no
-  alias). **Owner: OK to accept the scoped variant on 06/11, or reconcile the kit's
-  `search-dock` mapping (e.g. a distinct scoped class in the kit)?**
+- **D1 · scoped search-dock (06 + 11) — RESOLVED (commit 669b33c).** Investigation
+  confirmed the kit correctly has ONE `SearchDock` primitive (05/06/11 all use it) —
+  scoped-ness is an FE concern, not a visual one — so adding a kit "scoped class"
+  would wrongly push an FE detail into the visual kit. Instead the accepted variant
+  is centralized in the binding helper's `_bindingRealizations` map (`MxSearchDock →
+  {MxSearchDock, MxScopedSearchDock}`); the per-test aliases on 06/11 were removed.
+  The assertion stays strong (a raw widget still fails); 05 keeps the global dock.
+  One reviewed place instead of scattered aliases.
+
+- **D2 · MxSectionHeader gap — RESOLVED (this commit).** Only one keyed node needed
+  it (`18-stats/mastery-section`). Built `MxSectionHeader`
+  (`lib/presentation/shared/widgets/mx_section_header.dart`): a row with the title in
+  `MxTextRole.titleMedium` (the kit's 16px section role) + an optional trailing slot
+  (kit `flex:row justify:between`). 18-stats renders the mastery header through it
+  (zero visual change — same MxText inside), gained its binding test, and
+  `MxSectionHeader` was dropped from `symbol-aliases.json` componentGaps (now
+  resolves to a real class for all 7 referencing specs). Other screens' (unkeyed)
+  section headers can migrate to it incrementally.
 
 ## Skipped — no binding test (intentional, not a defect)
 
@@ -48,11 +57,8 @@ Per the loop's rule, no empty test was added:
   entry; covered by its own parity test (PR #-engagement). Revisit if its binding
   contract gains concrete components.
 
-18-stats was NOT done: its `mastery-section` binds **MxSectionHeader**, a KNOWN gap
-(no Flutter class yet — `tool/parity/symbol-aliases.json` componentGaps). It needs
-an owner decision (build `MxSectionHeader`, or retag the kit) before a binding test
-can assert that node. **Owner: decide MxSectionHeader (affects 04,05,11,13,18,19,23
-specs).**
+18-stats is now DONE (D2 above) — `MxSectionHeader` was built, so its
+`mastery-section` node has a binding test.
 
 ## Final summary (loop ended)
 

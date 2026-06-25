@@ -14,6 +14,7 @@ import 'package:memox/presentation/shared/async/app_async_builder.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_primary_button.dart';
 import 'package:memox/presentation/shared/widgets/feedback/mx_bar_chart.dart';
 import 'package:memox/presentation/shared/widgets/mx_divider.dart';
+import 'package:memox/presentation/shared/widgets/mx_section_header.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
@@ -144,10 +145,9 @@ class StatsBody extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        MxText(
-          l10n.statsPerDeckMasteryTitle,
-          role: MxTextRole.titleMedium,
+        MxSectionHeader(
           key: const ValueKey<String>('mx-node:18-stats/mastery-section'),
+          title: l10n.statsPerDeckMasteryTitle,
         ),
         const SizedBox(height: MxSpacing.space2),
         MxCard(

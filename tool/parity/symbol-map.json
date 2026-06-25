@@ -4,8 +4,9 @@
     "MxActionButton": {
       "status": "ok",
       "class": "MxActionButton",
-      "count": 22,
+      "count": 23,
       "specs": [
+        "02-dashboard.md",
         "04-folder-detail.md",
         "06-flashcard-list.md",
         "07-flashcard-create.md",
@@ -19,7 +20,7 @@
     "MxAppBar": {
       "status": "ok",
       "class": "MxAppBar",
-      "count": 67,
+      "count": 70,
       "specs": [
         "01-onboarding.md",
         "02-dashboard.md",
@@ -52,7 +53,7 @@
     "MxBottomNav": {
       "status": "ok",
       "class": "MxBottomNav",
-      "count": 21,
+      "count": 22,
       "specs": [
         "02-dashboard.md",
         "03-library-overview.md",
@@ -66,7 +67,7 @@
     "MxCard": {
       "status": "ok",
       "class": "MxCard",
-      "count": 135,
+      "count": 147,
       "specs": [
         "01-onboarding.md",
         "02-dashboard.md",
@@ -107,7 +108,7 @@
     "MxIconButton": {
       "status": "ok",
       "class": "MxIconButton",
-      "count": 71,
+      "count": 74,
       "specs": [
         "02-dashboard.md",
         "03-library-overview.md",
@@ -136,7 +137,7 @@
     "MxIconTile": {
       "status": "ok",
       "class": "MxIconTile",
-      "count": 197,
+      "count": 195,
       "specs": [
         "01-onboarding.md",
         "02-dashboard.md",
@@ -163,7 +164,7 @@
     "MxPrimaryButton": {
       "status": "ok",
       "class": "MxPrimaryButton",
-      "count": 71,
+      "count": 72,
       "specs": [
         "01-onboarding.md",
         "02-dashboard.md",
@@ -192,7 +193,7 @@
     "MxScaffold": {
       "status": "ok",
       "class": "MxScaffold",
-      "count": 77,
+      "count": 84,
       "specs": [
         "01-onboarding.md",
         "02-dashboard.md",
@@ -238,7 +239,7 @@
     "MxSecondaryButton": {
       "status": "ok",
       "class": "MxSecondaryButton",
-      "count": 45,
+      "count": 53,
       "specs": [
         "01-onboarding.md",
         "02-dashboard.md",
@@ -259,10 +260,11 @@
       "file": "lib/presentation/shared/widgets/buttons/mx_secondary_button.dart"
     },
     "MxSectionHeader": {
-      "status": "gap",
-      "reason": "No shared section-header widget exists; the kit suggests mx:MxSectionHeader across 7 specs (04,05,11,13,18,19,23). DECIDE: build MxSectionHeader, or retag the kit to the real pattern (MxText with a titleSmall/overline role, or an MxContentShell section). Tracked as design-ahead-of-code, not a silent skip.",
-      "count": 20,
+      "status": "ok",
+      "class": "MxSectionHeader",
+      "count": 21,
       "specs": [
+        "02-dashboard.md",
         "04-folder-detail.md",
         "05-library-search.md",
         "11-tag-management.md",
@@ -270,29 +272,30 @@
         "18-stats.md",
         "19-progress.md",
         "23-audio-speech.md"
-      ]
+      ],
+      "file": "lib/presentation/shared/widgets/mx_section_header.dart"
     }
   },
   "colorTokens": {
     "accent": {
       "status": "ok",
       "member": "accent",
-      "count": 251
+      "count": 278
     },
     "accent-contrast": {
       "status": "ok",
       "member": "accentContrast",
-      "count": 376
+      "count": 391
     },
     "bg": {
       "status": "ok",
       "member": "bg",
-      "count": 245
+      "count": 266
     },
     "border": {
       "status": "ok",
       "member": "border",
-      "count": 157
+      "count": 163
     },
     "border-strong": {
       "status": "ok",
@@ -311,12 +314,12 @@
     "divider": {
       "status": "ok",
       "member": "divider",
-      "count": 352
+      "count": 368
     },
     "info": {
       "status": "ok",
       "member": "info",
-      "count": 11
+      "count": 12
     },
     "note-teal": {
       "status": "ok",
@@ -336,17 +339,17 @@
     "surface-2": {
       "status": "ok",
       "member": "surfaceMuted",
-      "count": 182
+      "count": 196
     },
     "text": {
       "status": "ok",
       "member": "text",
-      "count": 544
+      "count": 557
     },
     "text-2": {
       "status": "ok",
       "member": "textSecondary",
-      "count": 608
+      "count": 634
     },
     "text-3": {
       "status": "ok",
@@ -355,7 +358,7 @@
     },
     "transparent": {
       "status": "keyword",
-      "count": 101
+      "count": 105
     },
     "warn": {
       "status": "ok",
@@ -363,5 +366,5 @@
       "count": 15
     }
   },
-  "unmappedMxCount": 175
+  "unmappedMxCount": 190
 }

@@ -30,7 +30,7 @@ StatsOverview _sample() => StatsOverview(
 );
 
 void main() {
-  testWidgets('18-stats parity contract (default)', (tester) async {
+  Future<void> pump(WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -48,7 +48,10 @@ void main() {
       ),
     );
     await tester.pump(const Duration(milliseconds: 50));
+  }
 
+  testWidgets('18-stats parity contract (default)', (tester) async {
+    await pump(tester);
     expectParityContract('18-stats', <String, Finder>{
       'cards-this-week card': _node('18-stats/week-card'),
       'weekly activity chart': _node('18-stats/week-chart'),
@@ -56,4 +59,14 @@ void main() {
       'per-deck mastery list card': _node('18-stats/mastery-list'),
     });
   });
+
+  testWidgets(
+    '18-stats binding contract (keyed nodes realize kit components)',
+    (tester) async {
+      await pump(tester);
+      // week-card → MxCard, mastery-section → MxSectionHeader (week-chart,
+      // mastery-list are content containers with no kit component → skipped).
+      expectGeneratedBindingContract('18-stats');
+    },
+  );
 }
