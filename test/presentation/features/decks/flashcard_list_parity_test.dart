@@ -49,7 +49,7 @@ void main() {
 
   Finder node(String i) => find.byKey(ValueKey<String>('mx-node:$i'));
 
-  testWidgets('06-flashcard-list parity contract (loaded)', (tester) async {
+  Future<void> pump(WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -70,10 +70,29 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
+  }
 
+  testWidgets('06-flashcard-list parity contract (loaded)', (tester) async {
+    await pump(tester);
     expectParityContract('06-flashcard-list', <String, Finder>{
       'add-card FAB': node('06-flashcard-list/add-card-fab'),
       'search dock': node('06-flashcard-list/search-dock'),
     });
   });
+
+  testWidgets(
+    '06-flashcard-list binding contract (keyed nodes realize kit components)',
+    (tester) async {
+      await pump(tester);
+      // add-card-fab → MxFab. search-dock realizes the kit's generic search-dock
+      // via the deck-scoped sibling MxScopedSearchDock (plain MxSearchDock cannot
+      // host an external controller — see its doc), so alias it here (same
+      // mechanism as learning-settings' MxBottomNav alias). card-list is a content
+      // container with no kit component → skipped by the helper.
+      expectGeneratedBindingContract(
+        '06-flashcard-list',
+        aliases: const <String, String>{'MxSearchDock': 'MxScopedSearchDock'},
+      );
+    },
+  );
 }
