@@ -70,6 +70,35 @@ with the verbatim `/loop` prompt.
 - **WP1 — Fill speaks the revealed answer only (no auto-play).** Fill's front is the hidden answer the
   learner types; auto-playing or a front-prompt speaker would leak the answer. **Default taken:** no
   auto-play in fill; the speaker button appears only on the revealed correct/wrong answer card.
+- **WP4 slice 2 (kit-19 `19-progress` screen) — scope + BE gaps (discovered 2026-06-25).** The kit-19
+  mock (`shots/INDEX.md`: week/month/goal-met/streak-lost/loading/empty/insufficient/partial/error) is
+  the range-analytics detail: **Progress** app-bar + back + **Week/Month** segmented toggle; a **goal-ring
+  card** (`12/20` ring + "Today's goal" + "N cards to go" + 🔥 "N-day streak" chip); a **THIS WEEK** card
+  (total + 7-bar M–S chart); a **stats row** (Accuracy · **Time** · Cards); and an **Insights** list
+  ("close to goal → Review N", "deck X has the most due → Open deck"). Reaches via a **pushed detail
+  route** (Q3 locked: 18-stats keeps `/progress` tab; 19 is its own pushed route).
+  **Buildable from existing BE:** goal ring + streak chip (slice-1 `LoadProgressEngagementUseCase`, #48),
+  THIS WEEK chart (`StatsOverview.weekActivity`, 18-stats), Accuracy + Cards (`StudyStatistics`), insights
+  (close-to-goal from engagement + most-due deck from `DueSummary`), and loading/empty/error +
+  insufficient/partial (data-driven combos).
+  **BE gaps + safe V1 defaults (park; revisit if owner wants full parity):**
+  1. **Time stat ("3.3h")** — sourceable from `study_attempts.duration_ms` (v7 card-history enabler) but
+     needs a new SUM-since aggregate + NULL/sparse handling. **Default V1:** add a small
+     `studyTimeMsSince` aggregate (week total) when building the screen; if duration is unpopulated the
+     stat reads `—` (documented data-gap, parity "missing data in read model").
+  2. **Month range toggle** — `StatsOverview` is week-only (7 buckets); month needs 28-day buckets.
+     **Default V1:** render the toggle; Week is live, **Month** extends the activity read to 28 days in
+     the same slice (cheap — mirror `_loadWeekActivity` with a 28-day window) OR park Month as Future if
+     budget-bound (toggle present, Month shows the insufficient/Future hint).
+  3. **`streak-lost` state** — needs persisted broken-streak (previousStreak/brokenDate), i.e. the
+     settings-backed `ComputeStreakUseCase`/`RecordGoalProgressUseCase` which are **Future** per
+     `engagement.md`. **Default V1:** omit the streak-lost one-time banner; the read-only streak shows the
+     current value (0 after a gap). Documented Future — do NOT build broken-streak persistence in this loop.
+  **Done-bar for the screen:** composed controller (watches engagement + statsOverview + studyStatistics
+  + dueSummary) → screen with the buildable states → `data-mx-node` → re-export specs → gen_contract →
+  ValueKey + parity-contract test → parity-map → goldens per buildable state (light+dark) →
+  `ui-parity-checker`. WBS 7.5.x FE + nav doc + decision rows + §10.
+
 - **WP1 — `ListVoicesUseCase` + `TtsService.state` (`Stream<TtsState>`) NOT built.** The contract listed
   both as 8.4.3 targets, but the settings screen already calls `TtsService.availableVoices` directly and
   the study UI only needs a binary speaking/idle marker. **Default taken:** `StudyTtsController` holds the
