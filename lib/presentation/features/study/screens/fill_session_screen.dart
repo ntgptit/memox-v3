@@ -37,8 +37,10 @@ import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
 /// wrong → the CORRECT ANSWER card + Retry / Next → record + advance → the last
 /// card finalizes → the result. **Mark correct (WP-FI2a) + Hint (WP-FI2b) →
 /// `recovered`, and a correct answer auto-advances after a 0.8s countdown
-/// (WP-FI2c) are built**; the last-card Finish callout, finalize-fail surface,
-/// and edit / TTS affordances remain deferred (WP-FI2).
+/// (WP-FI2c) are built**. The answer's TTS speaker is built on the revealed
+/// correct/wrong cards only (WBS 8.4.3 — Fill never speaks the front while it is
+/// the hidden answer, and does not auto-play). The last-card Finish callout,
+/// finalize-fail surface, and edit affordance remain deferred (WP-FI2).
 class FillSessionScreen extends HookConsumerWidget {
   const FillSessionScreen({required this.sessionId, super.key});
 
@@ -256,13 +258,14 @@ class FillSessionScreen extends HookConsumerWidget {
               : null,
         );
       case FillPhase.correct:
-        return FillCorrectArea(answer: submitted);
+        return FillCorrectArea(answer: submitted, item: item);
       case FillPhase.wrong:
         return FillWrongArea(
           submitted: submitted,
           message: l10n.studyFillWrongMessage,
           correctLabel: l10n.studyFillCorrectLabel,
           correct: item.front,
+          item: item,
         );
     }
   }

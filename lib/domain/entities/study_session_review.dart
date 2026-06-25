@@ -1,12 +1,20 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/types/ids.dart';
+import 'package:memox/domain/types/target_language.dart';
 
 part 'study_session_review.freezed.dart';
 
 /// One queued card in a study session, joined with its flashcard content, as
 /// loaded for the review screen (WBS 4.3.1). [answeredAt] is `null` until the
 /// item receives a terminal attempt.
+///
+/// [targetLanguage] is the owning deck's declared front language (WBS 8.4.3 —
+/// the per-card TTS gate, `docs/business/tts/tts-settings.md` §Deck-level
+/// language gate). It rides on the read model so study playback never re-queries
+/// the deck; a session that spans decks of different languages keeps each card's
+/// own language. Defaults to [TargetLanguage.korean] (the `decks.target_language`
+/// storage default) when a fixture omits it.
 @freezed
 sealed class StudySessionReviewItem with _$StudySessionReviewItem {
   const factory StudySessionReviewItem({
@@ -19,6 +27,7 @@ sealed class StudySessionReviewItem with _$StudySessionReviewItem {
     String? hint,
     required int sortOrder,
     required DateTime? answeredAt,
+    @Default(TargetLanguage.korean) TargetLanguage targetLanguage,
   }) = _StudySessionReviewItem;
   const StudySessionReviewItem._();
 

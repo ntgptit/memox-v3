@@ -5,15 +5,18 @@ applies_to: TTS settings, speech playback, audio settings screen
 
 # TTS Settings
 
-> **Status (2026-06-25): settings + engine + screen shipped (WBS 8.4.1 + 8.4.2, schema v9).** The
-> Drift `tts_settings` table (v9), the `TtsSettings` model (defaults + slider normalization),
-> `TtsFrontLanguage`/`TtsLanguageCode`/`TtsVoice`, `TtsSettingsDao`/`Repository`, `Get`/`Update`
-> use cases, the `TtsService`/`FlutterTtsService` (`flutter_tts`) engine adapter (voice listing +
-> `speak`/`stop`), and `AudioSpeechSettingsScreen` (`/settings/audio-speech`, kit 23 — voice/language
-> picker + sample preview + speed/pitch tuning; 7 states) all exist. Still **Future:** auto-play on
-> study reveal + the playback policy (`SpeakFlashcardUseCase`/`TtsPlaybackPolicy`, WBS 8.4.3) and
-> independent per-language setting sets. Per-deck TTS gating uses `decks.target_language` (already in
-> the schema).
+> **Status (2026-06-25): settings + engine + screen + study playback shipped (WBS 8.4.1 + 8.4.2 +
+> 8.4.3, schema v9).** The Drift `tts_settings` table (v9), the `TtsSettings` model (defaults + slider
+> normalization), `TtsFrontLanguage`/`TtsLanguageCode`/`TtsVoice`, `TtsSettingsDao`/`Repository`,
+> `Get`/`Update` use cases, the `TtsService`/`FlutterTtsService` (`flutter_tts`) engine adapter (voice
+> listing + `speak`/`stop`), and `AudioSpeechSettingsScreen` (`/settings/audio-speech`, kit 23 —
+> voice/language picker + sample preview + speed/pitch tuning; 7 states) all exist. **Study playback
+> (8.4.3) now shipped:** `TtsPlaybackPolicy` (front-only) + `SpeakFlashcardUseCase`/`StopSpeechUseCase`
+> + the study `StudyTtsController` + `StudySpeakButton`/`StudyTtsAutoPlay` wired into
+> review/guess/recall/fill, gated per card by the deck `target_language` (carried on
+> `StudySessionReviewItem.targetLanguage`) + the global `autoPlay` flag. Match mode is excluded (board
+> layout has no single front prompt / reveal). Still **Future:** independent per-language setting sets,
+> `ListVoicesUseCase`, and `TtsService.state` (`Stream<TtsState>`).
 
 ## Source files to inspect
 
@@ -27,11 +30,19 @@ Current (shipped — WBS 8.4.1 BE + 8.4.2 screen):
 - `lib/app/di/tts_providers.dart` (DAO/repo/usecases + the `ttsService` engine)
 - `lib/presentation/features/settings/screens/audio_speech_settings_screen.dart` + `widgets/audio_speech_settings_body.dart` + `controllers/{tts_audio_controller,tts_audio_view}.dart`
 
-Future (WBS 8.4.3 — playback in study, none of these exist yet):
+Current (shipped — WBS 8.4.3, study playback):
 
-- `lib/domain/services/tts_playback_policy.dart` (`TtsPlaybackPolicy`)
-- `lib/domain/usecases/...` (`SpeakFlashcardUseCase`, `StopSpeechUseCase`, `ListVoicesUseCase`)
-- a `TtsService.state` `Stream<TtsState>` for study-session playback state
+- `lib/domain/services/tts_playback_policy.dart` (`TtsPlaybackPolicy`) + `lib/domain/types/tts_card_side.dart`
+- `lib/domain/usecases/tts_playback_usecases.dart` (`SpeakFlashcardUseCase`, `StopSpeechUseCase`)
+- `lib/domain/types/tts_language_code.dart` (`TargetLanguageTtsCodeX` — deck `target_language` → engine code)
+- `lib/presentation/features/study/controllers/study_tts_controller.dart` (`StudyTtsController`)
+- `lib/presentation/features/study/widgets/study_speak_button.dart` (`StudySpeakButton`, `StudyTtsAutoPlay`)
+- `StudySessionReviewItem.targetLanguage` (per-card gate, resolved in `LoadStudySessionReviewUseCase`)
+
+Future (WBS 8.4.3+ — not built):
+
+- `ListVoicesUseCase` (the settings screen calls `TtsService.availableVoices` directly)
+- a `TtsService.state` `Stream<TtsState>` (`StudyTtsController` tracks the speaking-card id directly)
 
 ## Data
 
@@ -119,12 +130,9 @@ Source of truth: constants in `TtsSettings` (`minRate`, `maxRate`, `defaultRate`
 
 ## Playback policy
 
-> **Future (WBS 8.4.3) — not yet enforced.** `TtsPlaybackPolicy`, `SpeakFlashcardUseCase`,
-> `StopSpeechUseCase`, and `TtsService.state` (`Stream<TtsState>`) do **not** exist yet. The
-> shipped surface (8.4.1 + 8.4.2) is settings persistence + the engine adapter
-> (`TtsService.speak`/`stop`) + the Audio & speech screen's sample preview. This section, the "TTS
-> state" section, and the study-playback rules below describe the **target** study-session playback
-> behavior to build in 8.4.3 — they are not a description of current code.
+> **Current (WBS 8.4.3).** `TtsPlaybackPolicy`, `SpeakFlashcardUseCase`, and `StopSpeechUseCase`
+> are shipped and wired into the study modes. (`TtsService.state` as a `Stream<TtsState>` remains
+> Future — `StudyTtsController` tracks the speaking-card id directly instead.)
 
 TTS playback is restricted by `TtsPlaybackPolicy`:
 
@@ -137,12 +145,26 @@ TTS playback is restricted by `TtsPlaybackPolicy`:
 Rationale: TTS today is for prompts (front of card). Back/note are user-revealed content and not
 spoken.
 
-This restriction is enforced in `SpeakFlashcardUseCase.speakFlashcardSide` via
-`_playbackPolicy.canSpeakFlashcardSide(side)`. Do not bypass.
+This restriction is enforced in `SpeakFlashcardUseCase.speakFront` via
+`TtsPlaybackPolicy.canSpeak(TtsCardSide.front)` (input is `TtsCardSide` from
+`lib/domain/types/tts_card_side.dart`). Do not bypass.
+
+**Per-mode placement (WBS 8.4.3):** review/guess/recall show the front as the visible prompt → a
+speaker button sits on the prompt + auto-play fires on card reveal. **Fill** hides the front (it is
+the answer the learner types), so the speaker appears only on the **revealed** correct/wrong answer
+card and Fill does **not** auto-play (auto-playing the front would leak the answer). **Match** is
+excluded — the board shows many front/back tiles at once with no single prompt or reveal step, and
+the match mock has no speaker affordance.
 
 ## TTS state
 
-`TtsService.state` is a `Stream<TtsState>`:
+> **Future.** `TtsService.state` as a `Stream<TtsState>` is **not** built. The realized 8.4.3
+> playback tracks state more simply: `StudyTtsController` holds the `sessionItemId` currently being
+> spoken (or `null` when idle), and `StudySpeakButton` watches that to toggle its play/stop glyph.
+> The engine `awaitSpeakCompletion(true)`, so `speakFront` resolves when playback ends and the
+> controller clears the marker. The stream table below is the target shape if richer state is needed.
+
+`TtsService.state` (target) would be a `Stream<TtsState>`:
 
 | State      | Meaning                                                              |
 |------------|----------------------------------------------------------------------|
@@ -151,15 +173,15 @@ This restriction is enforced in `SpeakFlashcardUseCase.speakFlashcardSide` via
 | `paused`   | Reserved — no `PauseUseCase`/`ResumeUseCase` exists in first slice; platform may emit this internally but UI treats it as `idle` |
 | `error`    | Last operation failed                                                |
 
-UI components (e.g., `MxSpeakButton`) react to this stream for play/stop state. Until a pause/resume use case is added, UI MUST NOT expose a pause action.
+Until a pause/resume use case is added, UI MUST NOT expose a pause action.
 
 ## Rules
 
 - TTS settings is a single global/front-language setting set (no independent Korean/English settings
   and no per-deck override yet).
 - All settings changes persist immediately on user interaction (no save button).
-- Blank text (whitespace-only) MUST NOT trigger speech (`StringUtils.isBlank` guard in
-  `SpeakFlashcardUseCase.speakText`).
+- Blank text (whitespace-only) MUST NOT trigger speech (`StringUtils.trimmed(...).isEmpty` guard in
+  `SpeakFlashcardUseCase.speakText`/`speakFront`).
 - Text is trimmed before passing to platform TTS.
 - Voice name is trimmed to null on load (empty string → null).
 - TTS service is platform-specific (Flutter TTS plugin). Domain layer interacts only via

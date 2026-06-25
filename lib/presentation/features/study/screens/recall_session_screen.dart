@@ -15,6 +15,7 @@ import 'package:memox/core/util/string_utils.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/controllers/recall_session_controller.dart';
+import 'package:memox/presentation/features/study/widgets/study_speak_button.dart';
 import 'package:memox/presentation/shared/async/app_async_builder.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
@@ -37,8 +38,9 @@ import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 /// prompt card (front + reading), a hidden "say it in your head" placeholder, the
 /// **Show answer** CTA that reveals the back (green ANSWER card), then the binary
 /// **Missed / Got it** grade row → record + advance → the last card finalizes →
-/// the result. The Show-answer countdown + auto-reveal-on-timeout (S63/S64) and
-/// the edit / TTS affordances (S65) are deferred (WP-RC2/RC3).
+/// the result. The front-prompt TTS speaker + auto-play on reveal are built (WBS
+/// 8.4.3). The Show-answer countdown + auto-reveal-on-timeout (S63/S64) and the
+/// edit affordance are deferred (WP-RC2/RC3).
 class RecallSessionScreen extends ConsumerWidget {
   const RecallSessionScreen({required this.sessionId, super.key});
 
@@ -162,38 +164,41 @@ class RecallSessionScreen extends ConsumerWidget {
     final RecallSessionController controller = ref.read(
       recallSessionControllerProvider(sessionId).notifier,
     );
-    return Padding(
-      padding: const EdgeInsets.all(MxSpacing.space5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          _PromptCard(prompt: l10n.studyRecallPrompt, item: item),
-          const SizedBox(height: MxSpacing.space4),
-          Expanded(
-            child: view.revealed
-                ? _AnswerCard(
-                    label: l10n.studyRecallAnswerLabel,
-                    back: item.back,
+    return StudyTtsAutoPlay(
+      item: item,
+      child: Padding(
+        padding: const EdgeInsets.all(MxSpacing.space5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            _PromptCard(prompt: l10n.studyRecallPrompt, item: item),
+            const SizedBox(height: MxSpacing.space4),
+            Expanded(
+              child: view.revealed
+                  ? _AnswerCard(
+                      label: l10n.studyRecallAnswerLabel,
+                      back: item.back,
+                    )
+                  : _HiddenHint(message: l10n.studyRecallHint),
+            ),
+            const SizedBox(height: MxSpacing.space3),
+            view.revealed
+                ? _GradeRow(
+                    caption: l10n.studyRecallGradePrompt,
+                    missedLabel: l10n.studyRecallMissed,
+                    gotItLabel: l10n.studyRecallGotIt,
+                    onMissed: () => unawaited(controller.grade(gotIt: false)),
+                    onGotIt: () => unawaited(controller.grade(gotIt: true)),
                   )
-                : _HiddenHint(message: l10n.studyRecallHint),
-          ),
-          const SizedBox(height: MxSpacing.space3),
-          view.revealed
-              ? _GradeRow(
-                  caption: l10n.studyRecallGradePrompt,
-                  missedLabel: l10n.studyRecallMissed,
-                  gotItLabel: l10n.studyRecallGotIt,
-                  onMissed: () => unawaited(controller.grade(gotIt: false)),
-                  onGotIt: () => unawaited(controller.grade(gotIt: true)),
-                )
-              : MxPrimaryButton(
-                  key: const ValueKey<String>('mx-node:study-session/action'),
-                  label: l10n.studyRecallShowAnswer,
-                  icon: Icons.visibility_outlined,
-                  fullWidth: true,
-                  onPressed: controller.reveal,
-                ),
-        ],
+                : MxPrimaryButton(
+                    key: const ValueKey<String>('mx-node:study-session/action'),
+                    label: l10n.studyRecallShowAnswer,
+                    icon: Icons.visibility_outlined,
+                    fullWidth: true,
+                    onPressed: controller.reveal,
+                  ),
+          ],
+        ),
       ),
     );
   }
@@ -257,7 +262,15 @@ class _PromptCard extends StatelessWidget {
               color: colors.textTertiary,
             ),
             const SizedBox(height: MxSpacing.space2),
-            MxText(item.front, role: MxTextRole.displayLarge),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  child: MxText(item.front, role: MxTextRole.displayLarge),
+                ),
+                StudySpeakButton(item: item),
+              ],
+            ),
             if (reading != null && reading.isNotEmpty) ...<Widget>[
               const SizedBox(height: MxSpacing.space1),
               MxText(

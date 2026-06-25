@@ -7,22 +7,26 @@ status: contract
 
 > Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
 
-> **Status (2026-06-25): settings + engine + Audio & speech screen shipped (WBS 8.4.1 + 8.4.2);
-> study-session playback pending (8.4.3).** Implemented: the `tts_settings` Drift table (schema v9) +
+> **Status (2026-06-25): settings + engine + Audio & speech screen + study playback shipped (WBS
+> 8.4.1 + 8.4.2 + 8.4.3).** Implemented: the `tts_settings` Drift table (schema v9) +
 > `TtsSettings`/`TtsVoice` models + `TtsFrontLanguage`/`TtsLanguageCode` + `TtsSettingsDao` +
 > `TtsSettingsRepository` + `GetTtsSettingsUseCase`/`UpdateTtsSettingsUseCase` (per-field
 > `updateAutoPlay`/`updateRate`/`updatePitch`/`updateVolume`/`updateVoice`/`updateLanguage`; see
 > `docs/contracts/repository-contracts/tts-settings-repository.md`) + the **engine adapter**
 > `TtsService`/`FlutterTtsService` (`init`/`availableVoices`/`applySettings`/`speak`/`stop`) + the
 > **Audio & speech screen** (`AudioSpeechSettingsScreen` over `TtsAudioController`: voice/language
-> picker + sample preview + speed/pitch sliders, kit 23). Still **target/unbuilt (WBS 8.4.3 — study
-> playback)**: `SpeakFlashcardUseCase`, `StopSpeechUseCase`, `ListVoicesUseCase`, `TtsPlaybackPolicy`,
-> a study-session `TtsController`, and `TtsService.state` (`Stream<TtsState>`). The screen's preview
-> calls `TtsService.speak`/`stop` directly (no policy layer yet). The `SpeakFlashcardUseCase` /
-> `TtsPlaybackPolicy` / `TtsState` sections below remain the **target** structure for 8.4.3. The
-> first study slice is global/front-language settings with front-only playback **and** deck
-> `target_language` gating (the `decks.target_language` column already exists). Per-language
-> independent settings/voices are a further Target/Future step.
+> picker + sample preview + speed/pitch sliders, kit 23) + **study playback (8.4.3)**:
+> `TtsPlaybackPolicy` (`canSpeak(TtsCardSide)` — front only) + `SpeakFlashcardUseCase`
+> (`speakFront`/`speakText`) + `StopSpeechUseCase` + the study `StudyTtsController` notifier +
+> `StudySpeakButton`/`StudyTtsAutoPlay` widgets wired into review/guess/recall/fill. Each
+> `StudySessionReviewItem` now carries its deck's `targetLanguage` (resolved in
+> `LoadStudySessionReviewUseCase` via `StudySessionDao.decksByIds`), so playback is gated per card
+> without re-querying the deck. **Still target/unbuilt:** `ListVoicesUseCase` (the screen calls
+> `TtsService.availableVoices` directly) and `TtsService.state` (`Stream<TtsState>`) — `StudyTtsController`
+> holds the speaking-card id directly instead of a stream. Match mode is excluded (board layout has no
+> single front prompt / reveal step); Fill speaks the front only on the revealed answer (never while it
+> is the hidden answer the learner produces) and does not auto-play. Per-language independent
+> settings/voices remain a further Target/Future step.
 
 ## Runtime Owners
 
@@ -32,43 +36,54 @@ status: contract
 | Engine adapter (apply settings, voice listing, speak/stop) | `TtsService`/`FlutterTtsService` (`flutter_tts`) | Current (8.4.1) |
 | Audio & speech screen (preview + pickers + sliders) | `TtsAudioController` → `TtsService` + `Update`/`GetTtsSettingsUseCase` | Current (8.4.2) |
 | Voice listing | `TtsService.availableVoices(TtsLanguageCode)` (called by `TtsAudioController`) | Current (8.4.1) |
-| Manual preview / explicit text speech (study) | `SpeakFlashcardUseCase.speakText` → `TtsService.speak` | Target (8.4.3) |
-| Auto-play front text (study reveal) | study `TtsController.autoPlayTextSide` gated by `TtsSettings.autoPlay` + `TtsPlaybackPolicy` | Target (8.4.3) |
-| Front-only playback policy | `TtsPlaybackPolicy` + `SpeakFlashcardUseCase.speakFlashcardSide` | Target (8.4.3) |
+| Manual speaker (study) | `StudySpeakButton` → `StudyTtsController.toggle` → `SpeakFlashcardUseCase.speakFront` | Current (8.4.3) |
+| Auto-play front (study reveal) | `StudyTtsAutoPlay` → `StudyTtsController.autoPlayOnReveal` gated by `TtsSettings.autoPlay` + deck language | Current (8.4.3) |
+| Front-only playback policy | `TtsPlaybackPolicy.canSpeak(TtsCardSide)` + `SpeakFlashcardUseCase.speakFront` | Current (8.4.3) |
+| Stop on advance/leave | `StopSpeechUseCase` (advance) + `StudyTtsController` `onDispose` (leave) | Current (8.4.3) |
+| Per-card deck-language gate | `StudySessionReviewItem.targetLanguage` (resolved in `LoadStudySessionReviewUseCase`) | Current (8.4.3) |
 | Storage | Drift table `tts_settings` (single-row, schema v9) | Current (8.4.1) |
 
-## Target Use Cases
+## SpeakFlashcardUseCase (Current — 8.4.3)
 
-The sections below describe the target use-case contract. Do not mark them Current until the API exists with matching tests.
-
-## SpeakFlashcardUseCase (Target — first slice)
+Realized signature note: the original sketch took `{Flashcard card, Deck deck}`, but study already
+loads a `StudySessionReviewItem` carrying the front text **and** the owning deck's resolved
+`targetLanguage` (the per-card gate). Speaking from the review item avoids re-querying the flashcard
++ deck mid-session, so the realized API takes the item. Results use the repo `Result<T>` (record
+`({Failure? failure, T? data})`), not `Either` (fpdart not adopted).
 
 ```dart
-/// Speaks the front side of a flashcard, gated by deck language and playback policy.
-Future<Either<Failure, Unit>> speakFlashcardSide({required Flashcard card, required Deck deck});
+/// Speaks the front of a study card, gated by the deck language + front-only policy.
+Future<Result<void>> speakFront({required StudySessionReviewItem item});
 
-/// Speaks arbitrary trimmed text in the current global TTS language.
-Future<Either<Failure, Unit>> speakText(String text);
+/// Speaks arbitrary trimmed text in the current global TTS language (e.g. a preview).
+Future<Result<void>> speakText(String text);
 ```
 
 **Rules:**
 
-- `speakFlashcardSide`: If `deck.target_language == TargetLanguage.unsupported` → silently return `Right(unit)`. No error.
-- Map `target_language` to `TtsLanguageCode`. Delegate language selection to deck; ignore app-level `frontLanguage` for study playback.
-- Apply global settings (voice, rate, pitch, volume) — per-language settings storage is Target/Future.
-- Speak `card.front`. NEVER speak `card.back` (enforced by `TtsPlaybackPolicy`).
-- `speakText`: reject blank/whitespace-only text silently (`Right(unit)`).
-- If TTS engine fails to initialize or speak → return `StorageFailure` (general kind, no user error popup needed; just log). Note: `StorageFailure` is a pragmatic mapping because TTS engine failures are not storage errors; a dedicated `PlaybackFailure` type may replace this in a future Failure taxonomy revision — do not add it now without approval per `docs/contracts/error-contract.md` §Agent rule.
+- `speakFront`: If `item.targetLanguage == TargetLanguage.unsupported` (→ `ttsLanguageCode == null`)
+  → silently return success. No error, no toast.
+- Map `targetLanguage` → `TtsLanguageCode` via `TargetLanguageTtsCodeX.ttsLanguageCode`. The deck's
+  language wins for study playback; the app-level `frontLanguage` is ignored.
+- Apply global settings (voice, rate, pitch, volume), then `stop()` any in-flight speech before
+  `speak` (no queueing). The explicit `speak(text, language:)` overrides the settings language.
+- Speak `item.front`. NEVER speak `back`/`note` (enforced by `TtsPlaybackPolicy.canSpeak`).
+- `speakText`: reject blank/whitespace-only text silently (success).
+- If the TTS engine throws → return `StorageFailure` (general kind, no user error popup; just log).
+  Note: `StorageFailure` is a pragmatic mapping because TTS engine failures are not storage errors;
+  a dedicated `PlaybackFailure` type may replace this in a future Failure taxonomy revision — do not
+  add it now without approval per `docs/contracts/error-contract.md` §Agent rule.
 
 **Errors:** `StorageFailure` (engine).
 
-## StopSpeechUseCase (Target/Future)
+## StopSpeechUseCase (Current — 8.4.3)
 
 ```dart
-Future<Either<Failure, Unit>> call();
+Future<Result<void>> call();
 ```
 
-Stops in-flight playback.
+Stops in-flight playback. Called on card advance (`StudyTtsAutoPlay`) and on leaving the session
+(`StudyTtsController` `onDispose`). Engine failure → `StorageFailure` (logged).
 
 ## ListVoicesUseCase (Target/Future)
 
@@ -132,4 +147,11 @@ Future<Either<Failure, Unit>> updateLanguageSettings(TtsLanguageCode lang, TtsLa
 **Business spec:** `docs/business/tts/tts-settings.md`
 **Wireframes:** `docs/wireframes/21-settings-audio-speech.md`, `docs/wireframes/13-study-session-review.md` through `docs/wireframes/17-study-session-fill.md`
 **Decision table:** rows under "TTS"
-**Code paths (target — none exist yet):** `lib/domain/usecases/tts_usecases.dart`, `lib/domain/services/tts_service.dart`, `lib/domain/services/tts_playback_policy.dart`, `lib/presentation/features/tts/providers/tts_controller_notifier.dart`, `lib/presentation/features/tts/providers/tts_settings_notifier.dart`
+**Code paths (Current — 8.4.3):** `lib/domain/usecases/tts_playback_usecases.dart`
+(`SpeakFlashcardUseCase`, `StopSpeechUseCase`), `lib/domain/services/tts_playback_policy.dart`
+(`TtsPlaybackPolicy`), `lib/domain/types/tts_card_side.dart` (`TtsCardSide`),
+`lib/domain/types/tts_language_code.dart` (`TargetLanguageTtsCodeX`),
+`lib/presentation/features/study/controllers/study_tts_controller.dart` (`StudyTtsController`),
+`lib/presentation/features/study/widgets/study_speak_button.dart`
+(`StudySpeakButton`/`StudyTtsAutoPlay`), `lib/app/di/tts_providers.dart` (DI). Settings engine:
+`lib/domain/services/tts_service.dart`. `ListVoicesUseCase` + `TtsService.state` remain target.

@@ -2647,6 +2647,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The quick brown fox jumps over the lazy dog.'**
   String get audioSampleEnglish;
+
+  /// Tooltip/label for the study speaker button that speaks the card front.
+  ///
+  /// In en, this message translates to:
+  /// **'Play audio'**
+  String get studySpeakPlay;
+
+  /// Tooltip/label for the study speaker button while it is speaking (tap to stop).
+  ///
+  /// In en, this message translates to:
+  /// **'Stop audio'**
+  String get studySpeakStop;
 }
 
 class _AppLocalizationsDelegate

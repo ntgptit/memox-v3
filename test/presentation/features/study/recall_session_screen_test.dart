@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:memox/app/di/study_providers.dart';
+import 'package:memox/app/di/tts_providers.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/mx_theme.dart';
@@ -25,6 +26,7 @@ import 'package:memox/presentation/features/study/controllers/study_session_revi
 import 'package:memox/presentation/features/study/screens/recall_session_screen.dart';
 
 import '../../../support/golden_harness.dart';
+import '../../../support/tts_overrides.dart';
 
 /// Records each graded result without touching the DB.
 class _FakeRecordAnswer implements RecordStudySessionAnswerUseCase {
@@ -113,6 +115,10 @@ Future<void> _pump(
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
+        ttsServiceProvider.overrideWithValue(FakeStudyTtsService()),
+        ttsSettingsRepositoryProvider.overrideWithValue(
+          FakeStudyTtsSettingsRepo(),
+        ),
         studySessionReviewProvider(_sid).overrideWith((ref) => review()),
         if (record != null)
           recordStudySessionAnswerUseCaseProvider.overrideWithValue(record),
@@ -233,6 +239,10 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
+            ttsServiceProvider.overrideWithValue(FakeStudyTtsService()),
+            ttsSettingsRepositoryProvider.overrideWithValue(
+              FakeStudyTtsSettingsRepo(),
+            ),
             studySessionReviewProvider(_sid).overrideWith(
               (ref) => Future<StudySessionReview>.value(
                 _review(<StudySessionReviewItem>[

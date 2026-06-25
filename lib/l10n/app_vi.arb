@@ -426,5 +426,7 @@
   "audioLangKorean": "Tiếng Hàn",
   "audioLangEnglish": "Tiếng Anh",
   "audioSampleKorean": "안녕하세요, 오늘도 공부해요.",
-  "audioSampleEnglish": "The quick brown fox jumps over the lazy dog."
+  "audioSampleEnglish": "The quick brown fox jumps over the lazy dog.",
+  "studySpeakPlay": "Phát âm thanh",
+  "studySpeakStop": "Dừng âm thanh"
 }

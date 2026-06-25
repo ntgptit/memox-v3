@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:memox/app/di/tts_providers.dart';
 import 'package:memox/core/theme/mx_theme.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
@@ -19,6 +20,7 @@ import 'package:memox/presentation/features/study/controllers/study_session_revi
 import 'package:memox/presentation/features/study/screens/study_session_screen.dart';
 
 import '../../../support/golden_harness.dart';
+import '../../../support/tts_overrides.dart';
 
 const String _sid = 's1';
 final DateTime _t = DateTime.utc(2026);
@@ -102,6 +104,10 @@ Future<void> _pump(
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
+        ttsServiceProvider.overrideWithValue(FakeStudyTtsService()),
+        ttsSettingsRepositoryProvider.overrideWithValue(
+          FakeStudyTtsSettingsRepo(),
+        ),
         if (review != null)
           studySessionReviewProvider(_sid).overrideWith((ref) => review()),
         if (controller != null)
@@ -392,6 +398,10 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
+            ttsServiceProvider.overrideWithValue(FakeStudyTtsService()),
+            ttsSettingsRepositoryProvider.overrideWithValue(
+              FakeStudyTtsSettingsRepo(),
+            ),
             studySessionControllerProvider(
               _sid,
             ).overrideWith(() => _FakeSessionController(view)),

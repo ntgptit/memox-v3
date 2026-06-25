@@ -302,6 +302,23 @@ For "no due cards" cases, the empty state displays "Next due in {relativeTime}":
 - Retry state must be persisted through session items or domain-supported queue.
 - UI must not be the only source of retry state.
 
+## TTS playback (WBS 8.4.3)
+
+Front-side speech is wired into the prompt-based modes via `StudyTtsController` +
+`StudySpeakButton`/`StudyTtsAutoPlay` (see `docs/business/tts/tts-settings.md` §Playback policy):
+
+- **Review / Guess / Recall** — the front is the visible prompt: a manual speaker button sits on the
+  prompt, and `StudyTtsAutoPlay` auto-plays the front on card reveal when the global `autoPlay` flag
+  is on. Advancing stops in-flight speech; leaving the session stops the engine.
+- **Fill** — the front is the hidden answer the learner types, so there is **no** auto-play and the
+  speaker button appears only on the **revealed** correct/wrong answer card (hearing the answer after
+  responding, never before).
+- **Match** — excluded: the board shows many tiles at once with no single prompt or reveal step.
+
+Playback is gated per card by the deck `target_language` (carried on
+`StudySessionReviewItem.targetLanguage`): `unsupported` decks hide the speaker and skip auto-play
+silently. Only the front is ever spoken (`TtsPlaybackPolicy`).
+
 ## Performance
 
 - Session item queue >100 cards: paginate item loading.
