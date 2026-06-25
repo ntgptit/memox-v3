@@ -15,7 +15,7 @@ import '../../../support/parity_contract.dart';
 Finder _node(String id) => find.byKey(ValueKey<String>('mx-node:$id'));
 
 void main() {
-  testWidgets('11-tag-management parity contract (loaded)', (tester) async {
+  Future<void> pump(WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -36,10 +36,28 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
+  }
 
+  testWidgets('11-tag-management parity contract (loaded)', (tester) async {
+    await pump(tester);
     expectParityContract('11-tag-management', <String, Finder>{
       'tag list card': _node('11-tag-management/tag-list'),
       'bottom search dock': _node('11-tag-management/search-dock'),
     });
   });
+
+  testWidgets(
+    '11-tag-management binding contract (keyed nodes realize kit components)',
+    (tester) async {
+      await pump(tester);
+      // search-dock realizes the kit search-dock via the scoped sibling
+      // MxScopedSearchDock (tag-scoped search; plain MxSearchDock can't host an
+      // external controller — same as 06), so alias it. tag-list is a content
+      // container with no kit component → skipped.
+      expectGeneratedBindingContract(
+        '11-tag-management',
+        aliases: const <String, String>{'MxSearchDock': 'MxScopedSearchDock'},
+      );
+    },
+  );
 }
