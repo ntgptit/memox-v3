@@ -49,6 +49,15 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
   );
   // Serif accent (MxTypography.fontFamilySerif = 'Lora').
   await loadFamily('Lora', 'assets/fonts/lora/Lora.ttf');
+  // Material icon glyphs (Icons.*). Without this, every `Icon` renders as the
+  // missing-glyph box in goldens — inflating golden↔kit-shot diffs with icon
+  // noise that masks (and is mistaken for) real visual divergence. Loaded under
+  // the exact family IconData uses ('MaterialIcons'); the full font is bundled
+  // (maintenance-free vs the Noto subset — icons change more often than CJK text).
+  await loadFamily(
+    'MaterialIcons',
+    'assets/fonts/material_icons/MaterialIcons-Regular.otf',
+  );
 
   await testMain();
 }
