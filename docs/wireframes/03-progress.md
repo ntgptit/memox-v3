@@ -26,40 +26,52 @@ Long-form analytics surface. Dashboard shows "today"; Progress shows trends and 
 > this detail is built it will need its own route (pushed detail or a `/progress` rename), since
 > `/progress` is taken by the Stats tab (see `state.md` Parked Q3).
 
-## V1 verification status
+## Section status (target detail — NOT built)
 
-| Section / behavior                       | Status  | Current owner                                                                                                | Notes |
+> Every row below is **Future / unbuilt**. The Progress **detail** screen (kit 19) does not exist in
+> code: there is no `lib/presentation/features/progress/**`, no `ProgressScreen` /
+> `ProgressRangeController` / progress widgets, no `LoadProgressOverviewUseCase` / `ProgressOverview`
+> read model, and no progress screen/golden tests. `/progress` is served by `StatsScreen` (kit 18,
+> `lib/presentation/features/stats/**`). The "Target owner" column names the **planned** symbol, not
+> existing code. WBS 7.4.2 (`ProgressOverview` read model) + 7.5.1/7.5.2 (this detail) are Specified.
+
+| Section / behavior                       | Status  | Target owner (planned — not built)                                                                           | Notes |
 |------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------|-------|
-| `/progress` route                        | Current | `RouteNames.progress` / `RoutePaths.progress`; `progressRoutes()` in `lib/presentation/features/progress/routes/progress_routes.dart` | Shell branch renders `ProgressScreen`; placeholder removed. |
-| Bottom/app navigation to Progress        | Current | Shell branch + bottom nav                                                                                    | Shell navigation stays visible on `/progress`. |
-| Read-only screen                         | Current | `ProgressScreen`                                                                                             | No edit actions, no Flashcard History, no Global Search entry, no Settings mutation. |
-| Range tabs (Week / Month / All time)     | Current | `ProgressRangeTabs` + `ProgressRangeController`                                                              | Default Week. Week = last 7 local days; Month = last 28 local days (4 full weeks, matches the 28-bar mock chart); All time = whole history, no day buckets. |
-| Cards-studied section                    | Current | `ProgressCardsStudiedCard` + `ProgressBarChart`                                                              | Total + per-day bar chart. Today's bar full primary, past bars softened, zero days show a thin stub. Chart hidden for All time. |
-| Accuracy section                         | Current | `ProgressAccuracyCard` + `ProgressSparkline`                                                                 | Range accuracy %, delta vs previous range (needs previous-range attempts; hidden for All time), per-day sparkline (needs ≥ 2 distinct study days). |
-| Box distribution                         | Current | `ProgressBoxDistributionCard`                                                                                | Total + B1..B8 horizontal bars; B1–B5 primary, B6–B8 mastery green, opacity ramps toward B8. Snapshot, not range-filtered. |
-| Streak section                           | Current | `ProgressStreakCard`; computed in `ProgressRepositoryImpl._computeStreak` from `study_attempts`              | Study-day streak (any attempt counts), NOT the engagement daily-goal streak. An unfinished today does not break the current streak. |
-| Suspended / buried counts                | Current | `ProgressCardStatesCard`                                                                                     | Read-only counts. Navigation chevrons to filtered lists are Future (WBS 2.17.x). |
-| Per-section empty/insufficient states    | Current | `ProgressHintBox`, `ProgressInfoBanner`                                                                      | Data-driven: each section shows its own dashed hint box when its slice is empty; chart needs ≥ 3 distinct study days (`kProgressTrendMinDays`). |
-| Loading state                            | Current | `MxRetainedAsyncState` skeleton builder                                                                      | Tabs stay visible above three skeleton section cards. |
-| Error / retry                            | Current | `MxErrorState` via `MxRetainedAsyncState`                                                                    | Failure maps to the shared retryable error state; raw exception text is never shown. |
+| Detail route (own path or `/progress` rename) | Future  | new `progressRoutes()` (Parked Q3 — `/progress` is taken by the Stats tab → needs a pushed-detail route or rename) | Today `/progress` → `StatsScreen` (kit 18); the detail has no route yet. |
+| Read-only screen                         | Future  | `ProgressScreen` (planned)                                                                                    | No edit actions, no Flashcard History, no Global Search entry, no Settings mutation. |
+| Range tabs (Week / Month / All time)     | Future  | `ProgressRangeTabs` + `ProgressRangeController` (planned)                                                     | Default Week. Week = last 7 local days; Month = last 28 local days (4 full weeks, matches the 28-bar mock chart); All time = whole history, no day buckets. |
+| Cards-studied section                    | Future  | `ProgressCardsStudiedCard` + `ProgressBarChart` (planned)                                                    | Total + per-day bar chart. Today's bar full primary, past bars softened, zero days show a thin stub. Chart hidden for All time. |
+| Accuracy section                         | Future  | `ProgressAccuracyCard` + `ProgressSparkline` (planned)                                                        | Range accuracy %, delta vs previous range (needs previous-range attempts; hidden for All time), per-day sparkline (needs ≥ 2 distinct study days). |
+| Box distribution                         | Future  | `ProgressBoxDistributionCard` (planned)                                                                       | Total + B1..B8 horizontal bars; B1–B5 primary, B6–B8 mastery green, opacity ramps toward B8. Snapshot, not range-filtered. |
+| Streak section                           | Future  | `ProgressStreakCard` (planned); computed from `study_attempts`                                               | Study-day streak (any attempt counts), NOT the engagement daily-goal streak. An unfinished today does not break the current streak. |
+| Suspended / buried counts                | Future  | `ProgressCardStatesCard` (planned)                                                                            | Read-only counts. Navigation chevrons to filtered lists are also Future (WBS 2.17.x). |
+| Per-section empty/insufficient states    | Future  | `ProgressHintBox`, `ProgressInfoBanner` (planned)                                                             | Data-driven: each section shows its own dashed hint box when its slice is empty; chart needs ≥ 3 distinct study days (`kProgressTrendMinDays`). |
+| Loading state                            | Future  | `MxRetainedAsyncState` skeleton builder (planned)                                                             | Tabs stay visible above three skeleton section cards. |
+| Error / retry                            | Future  | `MxErrorState` via `MxRetainedAsyncState` (planned)                                                           | Failure maps to the shared retryable error state; raw exception text is never shown. |
 | Help (?) app-bar action                  | Future  | Not implemented                                                                                              | Visible in the kit mock; no help content exists yet. |
 | Suspended/buried navigation links        | Future  | Not implemented                                                                                              | Mock shows chevrons; filtered flashcard-list navigation is WBS 2.17.x. |
 | Daily goal / engagement widgets          | Future  | Not implemented                                                                                              | Engagement goal streak stays on Dashboard scope. |
 | Flashcard History / study history list   | Future  | Not implemented                                                                                              | Flashcard History remains a Future Proposal and must not be exposed from Progress. |
-| Tap chart bar/point interactions         | Future  | Not implemented                                                                                              | Read-only charts in V1. |
+| Tap chart bar/point interactions         | Future  | Not implemented                                                                                              | Read-only charts. |
 
-## V1 metric semantics
+## Target metric semantics
 
-| Metric                | Empty value | Calculation / source                                                                                            | Test coverage |
+> **Target — none of this is implemented for the detail screen.** The `ProgressOverview` read model
+> + `LoadProgressOverviewUseCase` and the test files named below do **not** exist yet. (The shipped
+> Stats screen, kit 18, has its own separate read models — `LoadStatsOverviewUseCase` /
+> `LoadStudyStatisticsUseCase` / `LoadBoxDistributionUseCase` — in `lib/domain/usecases/progress/`.)
+> The table is the planned contract for the detail when WBS 7.4.2/7.5.x are built.
+
+| Metric                | Empty value | Calculation / source (target)                                                                                   | Planned test |
 |-----------------------|-------------|------------------------------------------------------------------------------------------------------------------|----------------|
-| Cards studied (range) | `0` + hint  | Attempt count bucketed per local day from `study_attempts` (`progressAttemptsBetween`); All time uses whole-history totals | `test/data/repositories/progress_repository_overview_test.dart` |
-| Accuracy (range)      | hint box    | correct / total within range; correct = result IN (`perfect`, `initial_passed`, `recovered`)                     | Same + `test/presentation/features/progress/progress_screen_test.dart` |
-| Accuracy delta        | hidden      | Range accuracy minus previous-range accuracy (same length window immediately before); hidden when previous range has no attempts or range is All time | Same |
-| Box distribution      | `0` + hint  | `flashcard_progress` GROUP BY `box_number`, zero-filled 1..8; integrity failure on out-of-range boxes             | `test/data/repositories/progress_repository_impl_test.dart` |
-| Current streak        | `0` + hint  | Consecutive local study days ending today (or yesterday when today has no attempt yet), from raw `study_attempts` timestamps grouped in Dart | `test/data/repositories/progress_repository_overview_test.dart` |
-| Longest streak        | `0` + hint  | Longest consecutive local-day run across whole history                                                            | Same |
-| Suspended count       | `0`         | `flashcard_progress WHERE is_suspended = TRUE`                                                                     | Same |
-| Buried today count    | `0`         | `flashcard_progress WHERE buried_until > now`                                                                      | Same |
+| Cards studied (range) | `0` + hint  | Attempt count bucketed per local day from `study_attempts`; All time uses whole-history totals | TBD (unbuilt) |
+| Accuracy (range)      | hint box    | correct / total within range; correct = result IN (`perfect`, `initial_passed`, `recovered`)                     | TBD (unbuilt) |
+| Accuracy delta        | hidden      | Range accuracy minus previous-range accuracy (same length window immediately before); hidden when previous range has no attempts or range is All time | TBD (unbuilt) |
+| Box distribution      | `0` + hint  | `flashcard_progress` GROUP BY `box_number`, zero-filled 1..8; integrity failure on out-of-range boxes             | TBD (unbuilt) |
+| Current streak        | `0` + hint  | Consecutive local study days ending today (or yesterday when today has no attempt yet), from raw `study_attempts` timestamps grouped in Dart | TBD (unbuilt) |
+| Longest streak        | `0` + hint  | Longest consecutive local-day run across whole history                                                            | TBD (unbuilt) |
+| Suspended count       | `0`         | `flashcard_progress WHERE is_suspended = TRUE`                                                                     | TBD (unbuilt) |
+| Buried today count    | `0`         | `flashcard_progress WHERE buried_until > now`                                                                      | TBD (unbuilt) |
 
 Local-day grouping happens in Dart (`toLocal()`), not SQL: the sqlite3 build used by Flutter
 tests on Windows returns NULL for the `'localtime'` modifier
@@ -119,10 +131,11 @@ Canonical visual reference: `docs/system-design/MemoX Design System/ui_kits/mobi
 
 ## Data loading
 
-One `LoadProgressOverviewUseCase.call(now, range)` per range selection composes everything the
-screen renders (`ProgressOverview`): activity (day buckets + previous-range totals), box
-distribution, streak, and card-state counts. The repository runs the DAO queries in parallel.
-Data reloads on screen entry, range switch, and Retry; V1 does not live-refresh on new attempts.
+**Target (unbuilt).** One planned `LoadProgressOverviewUseCase.call(now, range)` per range selection
+would compose everything the screen renders (a planned `ProgressOverview` read model, WBS 7.4.2):
+activity (day buckets + previous-range totals), box distribution, streak, and card-state counts,
+with the repository running the DAO queries in parallel. Data would reload on screen entry, range
+switch, and Retry; no live-refresh on new attempts. None of this exists yet.
 
 | Data                                | Source                                                                  |
 |-------------------------------------|--------------------------------------------------------------------------|
@@ -177,9 +190,9 @@ per-section states above, not separate screen modes.
 
 | Action                  | Trigger | Result                                                              |
 |-------------------------|---------|----------------------------------------------------------------------|
-| Tap range tab           | Tap     | Current: reload overview for the selected range.                    |
-| Tap Retry on error      | Tap     | Current: invalidate the overview query and reload.                  |
-| Tap suspended/buried row| Tap     | Future: navigate to filtered flashcard list (WBS 2.17.x). V1 rows are not tappable. |
+| Tap range tab           | Tap     | Target: reload overview for the selected range.                     |
+| Tap Retry on error      | Tap     | Target: invalidate the overview query and reload.                   |
+| Tap suspended/buried row| Tap     | Future: navigate to filtered flashcard list (WBS 2.17.x). Target rows are not tappable. |
 | Tap chart bar/point     | Tap     | Future/optional. Not rendered in V1.                                |
 
 ## Dialogs and bottom-sheets used
@@ -235,19 +248,21 @@ None in V1.
 - `study_attempts` (range aggregates, streak), `flashcard_progress` (box distribution snapshot,
   `is_suspended`, `buried_until`). Queries: `lib/data/datasources/local/drift/progress_queries.drift`.
 
-**Code paths:**
+**Target code paths (planned — none of the presentation/overview paths exist yet):**
 
-- `lib/presentation/features/progress/routes/progress_routes.dart` → `/progress`
+- `lib/presentation/features/progress/routes/progress_routes.dart` (own detail route — Parked Q3)
 - `lib/presentation/features/progress/screens/progress_screen.dart`
 - `lib/presentation/features/progress/viewmodels/progress_viewmodel.dart`
 - `lib/presentation/features/progress/widgets/progress_range_tabs.dart`
 - `lib/presentation/features/progress/widgets/progress_activity_sections.dart`
 - `lib/presentation/features/progress/widgets/progress_summary_sections.dart`
-- `lib/domain/usecases/progress/load_progress_overview_usecase.dart`
-- `lib/data/repositories/progress_repository_impl.dart`
-- `lib/data/datasources/local/daos/progress_dao.dart`
+- `lib/domain/usecases/progress/load_progress_overview_usecase.dart` (+ a `ProgressOverview` read model, WBS 7.4.2)
 
-**Tests:**
+Existing-but-unrelated (these back the Stats screen, kit 18 — not this detail):
+`lib/data/repositories/progress_repository_impl.dart`, `lib/data/datasources/local/daos/progress_dao.dart`,
+`lib/data/datasources/local/drift/progress_queries.drift`.
+
+**Target tests (planned — none exist yet):**
 
 - `test/data/repositories/progress_repository_overview_test.dart` (BE: buckets, streak, card states)
 - `test/presentation/features/progress/progress_screen_test.dart` (all screen states + routing)
