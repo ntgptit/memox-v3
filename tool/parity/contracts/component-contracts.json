@@ -1,0 +1,361 @@
+{
+  "$generated": "by tool/parity/gen_component_contract.mjs --write — DO NOT hand-edit. One source for the kit spec NUMBERS the spec-gate tests assert (see docs/design/visual-parity-plan.md §4). Today: text typography only.",
+  "components": {
+    "MxActionButton": {
+      "status": "needs-variant",
+      "observed": [
+        {
+          "fontSize": 12,
+          "fontWeight": 700,
+          "count": 18
+        },
+        {
+          "fontSize": 14,
+          "fontWeight": 700,
+          "count": 5
+        }
+      ],
+      "sources": [
+        "02-dashboard.md",
+        "04-folder-detail.md",
+        "06-flashcard-list.md",
+        "07-flashcard-create.md",
+        "08-flashcard-edit.md",
+        "09-flashcard-history.md",
+        "11-tag-management.md",
+        "19-progress.md"
+      ]
+    },
+    "MxAppBar": {
+      "status": "no-font",
+      "sources": [
+        "01-onboarding.md",
+        "02-dashboard.md",
+        "03-library-overview.md",
+        "04-folder-detail.md",
+        "05-library-search.md",
+        "06-flashcard-list.md",
+        "07-flashcard-create.md",
+        "08-flashcard-edit.md",
+        "09-flashcard-history.md",
+        "10-deck-import.md",
+        "11-tag-management.md",
+        "12-study-review.md",
+        "13-study-match.md",
+        "14-study-guess.md",
+        "15-study-recall.md",
+        "16-study-fill.md",
+        "17-study-result.md",
+        "18-stats.md",
+        "19-progress.md",
+        "20-settings.md",
+        "21-account-sync.md",
+        "22-learning-settings.md",
+        "23-audio-speech.md",
+        "24-appearance.md",
+        "25-language.md"
+      ]
+    },
+    "MxBottomNav": {
+      "status": "no-font",
+      "sources": [
+        "02-dashboard.md",
+        "03-library-overview.md",
+        "04-folder-detail.md",
+        "05-library-search.md",
+        "18-stats.md",
+        "20-settings.md"
+      ]
+    },
+    "MxCard": {
+      "status": "needs-variant",
+      "observed": [
+        {
+          "fontSize": 22,
+          "fontWeight": 800,
+          "count": 8
+        },
+        {
+          "fontSize": 26,
+          "fontWeight": 800,
+          "count": 6
+        },
+        {
+          "fontSize": 14,
+          "fontWeight": 700,
+          "count": 6
+        },
+        {
+          "fontSize": 18,
+          "fontWeight": 700,
+          "count": 3
+        },
+        {
+          "fontSize": 12,
+          "fontWeight": 700,
+          "count": 2
+        },
+        {
+          "fontSize": 14,
+          "fontWeight": 600,
+          "count": 1
+        },
+        {
+          "fontSize": 16,
+          "fontWeight": 700,
+          "count": 1
+        }
+      ],
+      "sources": [
+        "01-onboarding.md",
+        "02-dashboard.md",
+        "03-library-overview.md",
+        "04-folder-detail.md",
+        "05-library-search.md",
+        "06-flashcard-list.md",
+        "07-flashcard-create.md",
+        "08-flashcard-edit.md",
+        "09-flashcard-history.md",
+        "10-deck-import.md",
+        "11-tag-management.md",
+        "12-study-review.md",
+        "14-study-guess.md",
+        "15-study-recall.md",
+        "16-study-fill.md",
+        "17-study-result.md",
+        "18-stats.md",
+        "19-progress.md",
+        "20-settings.md",
+        "21-account-sync.md",
+        "22-learning-settings.md",
+        "23-audio-speech.md"
+      ]
+    },
+    "MxFab": {
+      "status": "needs-variant",
+      "observed": [
+        {
+          "fontSize": 22,
+          "fontWeight": 800,
+          "count": 4
+        },
+        {
+          "fontSize": 16,
+          "fontWeight": 700,
+          "count": 1
+        }
+      ],
+      "sources": [
+        "03-library-overview.md",
+        "04-folder-detail.md",
+        "06-flashcard-list.md"
+      ]
+    },
+    "MxIconButton": {
+      "status": "needs-variant",
+      "observed": [
+        {
+          "fontSize": 12,
+          "fontWeight": 700,
+          "count": 2
+        },
+        {
+          "fontSize": 14,
+          "fontWeight": 600,
+          "count": 1
+        }
+      ],
+      "sources": [
+        "02-dashboard.md",
+        "03-library-overview.md",
+        "04-folder-detail.md",
+        "06-flashcard-list.md",
+        "07-flashcard-create.md",
+        "08-flashcard-edit.md",
+        "09-flashcard-history.md",
+        "10-deck-import.md",
+        "11-tag-management.md",
+        "12-study-review.md",
+        "13-study-match.md",
+        "14-study-guess.md",
+        "15-study-recall.md",
+        "16-study-fill.md",
+        "17-study-result.md",
+        "19-progress.md",
+        "21-account-sync.md",
+        "22-learning-settings.md",
+        "23-audio-speech.md",
+        "24-appearance.md",
+        "25-language.md"
+      ]
+    },
+    "MxIconTile": {
+      "status": "needs-variant",
+      "observed": [
+        {
+          "fontSize": 16,
+          "fontWeight": 600,
+          "count": 53
+        },
+        {
+          "fontSize": 16,
+          "fontWeight": 700,
+          "count": 13
+        },
+        {
+          "fontSize": 14,
+          "fontWeight": 700,
+          "count": 8
+        }
+      ],
+      "sources": [
+        "01-onboarding.md",
+        "02-dashboard.md",
+        "03-library-overview.md",
+        "04-folder-detail.md",
+        "05-library-search.md",
+        "06-flashcard-list.md",
+        "07-flashcard-create.md",
+        "08-flashcard-edit.md",
+        "09-flashcard-history.md",
+        "10-deck-import.md",
+        "11-tag-management.md",
+        "17-study-result.md",
+        "18-stats.md",
+        "19-progress.md",
+        "20-settings.md",
+        "21-account-sync.md",
+        "22-learning-settings.md",
+        "23-audio-speech.md",
+        "25-language.md"
+      ]
+    },
+    "MxPrimaryButton": {
+      "status": "needs-variant",
+      "observed": [
+        {
+          "fontSize": 14,
+          "fontWeight": 700,
+          "count": 56
+        },
+        {
+          "fontSize": 12,
+          "fontWeight": 700,
+          "count": 14
+        }
+      ],
+      "sources": [
+        "01-onboarding.md",
+        "02-dashboard.md",
+        "03-library-overview.md",
+        "04-folder-detail.md",
+        "05-library-search.md",
+        "06-flashcard-list.md",
+        "07-flashcard-create.md",
+        "08-flashcard-edit.md",
+        "09-flashcard-history.md",
+        "10-deck-import.md",
+        "11-tag-management.md",
+        "12-study-review.md",
+        "13-study-match.md",
+        "14-study-guess.md",
+        "15-study-recall.md",
+        "16-study-fill.md",
+        "17-study-result.md",
+        "19-progress.md",
+        "20-settings.md",
+        "21-account-sync.md",
+        "23-audio-speech.md"
+      ]
+    },
+    "MxScaffold": {
+      "status": "no-font",
+      "sources": [
+        "01-onboarding.md",
+        "02-dashboard.md",
+        "03-library-overview.md",
+        "04-folder-detail.md",
+        "05-library-search.md",
+        "06-flashcard-list.md",
+        "07-flashcard-create.md",
+        "08-flashcard-edit.md",
+        "09-flashcard-history.md",
+        "10-deck-import.md",
+        "11-tag-management.md",
+        "12-study-review.md",
+        "13-study-match.md",
+        "14-study-guess.md",
+        "15-study-recall.md",
+        "16-study-fill.md",
+        "17-study-result.md",
+        "18-stats.md",
+        "19-progress.md",
+        "20-settings.md",
+        "21-account-sync.md",
+        "22-learning-settings.md",
+        "23-audio-speech.md",
+        "24-appearance.md",
+        "25-language.md"
+      ]
+    },
+    "MxSearchDock": {
+      "status": "no-font",
+      "sources": [
+        "03-library-overview.md",
+        "04-folder-detail.md",
+        "05-library-search.md",
+        "06-flashcard-list.md",
+        "11-tag-management.md"
+      ]
+    },
+    "MxSecondaryButton": {
+      "status": "needs-variant",
+      "observed": [
+        {
+          "fontSize": 14,
+          "fontWeight": 700,
+          "count": 44
+        },
+        {
+          "fontSize": 12,
+          "fontWeight": 700,
+          "count": 9
+        }
+      ],
+      "sources": [
+        "01-onboarding.md",
+        "02-dashboard.md",
+        "04-folder-detail.md",
+        "06-flashcard-list.md",
+        "08-flashcard-edit.md",
+        "10-deck-import.md",
+        "11-tag-management.md",
+        "12-study-review.md",
+        "13-study-match.md",
+        "16-study-fill.md",
+        "17-study-result.md",
+        "20-settings.md",
+        "21-account-sync.md",
+        "22-learning-settings.md",
+        "23-audio-speech.md"
+      ]
+    },
+    "MxSectionHeader": {
+      "status": "ok",
+      "text": {
+        "fontSize": 16,
+        "fontWeight": 700
+      },
+      "sources": [
+        "02-dashboard.md",
+        "04-folder-detail.md",
+        "05-library-search.md",
+        "11-tag-management.md",
+        "13-study-match.md",
+        "18-stats.md",
+        "19-progress.md",
+        "23-audio-speech.md"
+      ]
+    }
+  }
+}

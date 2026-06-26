@@ -151,3 +151,34 @@ button-label treatment may be the right fix.)
   for this use, or the screen should pass a non-default size, or the kit size is
   bespoke. Resolve under Phase-0 box-model calibration (the gate currently omits the
   height assertion for exactly this reason).
+
+### Centralization (plan step 7) — `gen_component_contract.mjs`
+
+Built `tool/parity/gen_component_contract.mjs` → `tool/parity/contracts/component-contracts.json`
+(wired into `tool/verify` as a freshness gate). It extracts each `mx:<Component>`
+node's OWN text font (size/weight) from the specs — the ONE documented source for the
+spec font numbers. It does NOT descend into children (a child's font belongs to that
+child), and it NEVER averages: a component showing multiple distinct fonts is
+`needs-variant` with every observed pair listed; a component whose own style has no
+font (the title lives on a descendant) is `no-font`.
+
+What it found (honest, and the reason the 3 existing gates were NOT yet refactored to
+read from it):
+- **`MxSectionHeader` = ok `16/700`** — the only cleanly single-font component.
+- **`MxAppBar` / `MxSearchDock` / `MxBottomNav` / `MxScaffold` = no-font** — their text
+  lives on a descendant (e.g. the app-bar title). Descendant-font extraction needs
+  per-node title/label disambiguation — a deliberate follow-up (plan §3.1 gotcha).
+- **Buttons / cards = needs-variant** — and this is CORRECT, not noise:
+  `MxPrimaryButton` shows `14/700` (×56, the medium/default) AND `12/700` (×14, the
+  compact size); `MxSecondaryButton` likewise. So the label font is a real
+  **size-variant**, not a single number.
+
+**Why the gates stay hardcoded-with-citation for now**: all 3 gated components are
+variant (buttons) or descendant-font (app bar). Reading a single number from the
+contract would be UNSOUND — e.g. a medium button that wrongly rendered the 12px
+compact size would still be a "valid spec value" and false-green. Centralizing the
+gates therefore needs a small **curated variant-resolution layer** (label
+`MxPrimaryButton.medium → 14`, `.compact → 12`) on top of the generated `observed`
+pairs — the next step, now that the variant structure is known + documented. The
+contract already removes the "is 14 even a real spec number?" question (it is — and
+12 is the compact variant).

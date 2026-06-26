@@ -10,6 +10,7 @@ không gọi model**:
 | **Token codegen** kit CSS → Flutter theme: assert/regen color+spacing+radius+type tokens `lib/core/theme/*.dart` == `colors_and_type.css` (kit là nguồn) | `gen_tokens.mjs` |
 | **Symbol resolve** kit `mx:<Component>` + color token trong specs → có class/token thật trong code/CSS (diệt phantom-API RC2) | `symbol_lint.mjs` (+ `symbol-aliases.json`, `symbol-map.json`) |
 | **Binding contract** per keyed-node: kit component + token bindings (bg/color/font/radius) resolve sang Flutter symbol | `gen_bindings.mjs` → `contracts/bindings.json` |
+| **Component spec contract** per `mx:<Component>`: extract own-font (fontSize/fontWeight) từ specs cho spec-number gate tests; variant-split (no average → `needs-variant`), `no-font` nếu font ở descendant; freshness gate trong verify (`--check`). Regen: `--write` sau khi spec đổi | `gen_component_contract.mjs` → `contracts/component-contracts.json` |
 | Chạy per-node log (`diff.py --spec`) cho TOÀN APP → tổng hợp MISSING?/COLOR?/SHIFT? | `node_audit.mjs` |
 | Phát hiện **FE thiếu element** so design (spec-driven, identity by KEY — FE thiếu → test đỏ) | parity-contract test + `test/support/parity_contract.dart` |
 | Phân loại **FIX (mặc định) vs ngoại lệ có-docs** (behavior/future/rejected/needs-schema) | `intent-ledger.json` |

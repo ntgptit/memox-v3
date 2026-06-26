@@ -156,6 +156,7 @@ if (mode === 'quick') {
   step('token parity', 'node tool/parity/gen_tokens.mjs --check');
   step('symbol parity', 'node tool/parity/symbol_lint.mjs --check');
   step('binding contract', 'node tool/parity/gen_bindings.mjs --check');
+  step('component fonts fresh', 'node tool/parity/gen_component_contract.mjs --check');
   // Completeness (thiếu/thừa): kit fully tagged + every tag keyed in FE + no foreign FE key.
   step('contract fresh', 'node tool/parity/gen_contract.mjs --check');
   step('kit coverage', 'node tool/parity/mxnode_coverage.mjs --check --min 100');
@@ -175,6 +176,7 @@ if (mode === 'quick') {
   step('token parity', 'node tool/parity/gen_tokens.mjs --check');
   step('symbol parity', 'node tool/parity/symbol_lint.mjs --check');
   step('binding contract', 'node tool/parity/gen_bindings.mjs --check');
+  step('component fonts fresh', 'node tool/parity/gen_component_contract.mjs --check');
   // Completeness (thiếu/thừa): kit fully tagged + every tag keyed in FE + no foreign FE key.
   step('contract fresh', 'node tool/parity/gen_contract.mjs --check');
   step('kit coverage', 'node tool/parity/mxnode_coverage.mjs --check --min 100');
