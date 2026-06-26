@@ -34,6 +34,7 @@ DashboardEngagement _loaded() => DashboardEngagement(
       entryRefId: 'deck-1',
       studyType: StudyType.srsReview,
     ),
+    scopeName: 'Japanese · N5',
     answeredCount: 7,
     totalCount: 20,
     lastActiveAt: DateTime.utc(2026, 6, 19, 12),
@@ -53,6 +54,11 @@ Future<void> _pump(
   WidgetTester tester,
   Result<DashboardEngagement> result,
 ) async {
+  // Scrollable ListView body — pump a tall phone surface so every keyed section
+  // (incl. the trailing shortcut) materializes for the by-key assertions.
+  tester.view.physicalSize = const Size(390, 1600);
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(tester.view.reset);
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
@@ -81,6 +87,36 @@ void main() {
     expect(_node('02-dashboard/due-summary'), findsOneWidget);
     expect(_node('02-dashboard/recent-decks'), findsOneWidget);
     expect(_node('02-dashboard/shortcut-progress'), findsOneWidget);
+    // The resume card renders the session scope's resolved deck name.
+    expect(find.text('Japanese · N5'), findsWidgets);
+  });
+
+  testWidgets('resume with a global today scope shows the today label', (
+    tester,
+  ) async {
+    await _pump(tester, (
+      failure: null,
+      data: DashboardEngagement(
+        cardsDue: 23,
+        decksWithDue: 3,
+        totalDecks: 9,
+        resume: DashboardResumeSessionSummary(
+          sessionId: 'sess-today',
+          scope: const StudyScope(
+            entryType: EntryType.today,
+            entryRefId: null,
+            studyType: StudyType.srsReview,
+          ),
+          // No deck/folder name for the global scope → localized fallback.
+          answeredCount: 4,
+          totalCount: 12,
+          lastActiveAt: DateTime.utc(2026, 6, 19, 12),
+        ),
+      ),
+    ));
+
+    expect(_node('02-dashboard/continue-studying'), findsOneWidget);
+    expect(find.text("Today's review"), findsOneWidget);
   });
 
   testWidgets('caught-up + no session: hides resume and recent-decks', (

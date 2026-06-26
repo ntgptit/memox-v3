@@ -23,7 +23,10 @@ REUSES existing read models (no new SRS maths):
   shown as `—` until there is graded activity — no fabricated 0%), Streak
   (`ProgressEngagement.currentStreak`).
 - **Continue studying** (`mx-node:02-dashboard/continue-studying`, shown only when a
-  resumable session exists) — `DashboardResumeSessionSummary` progress + a Resume action.
+  resumable session exists) — `DashboardResumeSessionSummary` scope name (the deck name
+  for a `deck` scope, the folder name for a `folder` scope, resolved read-only at query
+  time; a localized "Today's review" label for the global `today` scope) over its
+  answered/total progress + a Resume action.
 - **Due snapshot** (`mx-node:02-dashboard/due-summary`) — `MxDueSummary` + a Review action.
 - **Recent decks** (`mx-node:02-dashboard/recent-decks`) — `DashboardRecentDeck` list
   (name, card count, due badge, relative last-studied) from `dashboardRecentDecks`
@@ -36,10 +39,11 @@ Each enrichment (accuracy / streak / resume / recent decks) DEGRADES to a safe d
 on read failure — only the core due summary's failure surfaces the error state.
 
 REFINEMENTS still Future (no fabrication, tracked here): the continue-studying card's
-deck/scope NAME (needs scope→name resolution) and a Discard action (needs an
-abandon-session use case); the kit's daily-goal ring / Insight surfaces stay on
-**Progress**, and goal/reminder/streak-history persistence remains Future/Target
-pending the engagement BE (schema/migration/approval).
+study MODE label (the `current_mode` column lands with the mode-chain rows, WBS 4.5.12+)
+and a Discard action (needs an abandon-session use case); the kit's daily-goal ring /
+Insight surfaces stay on **Progress**, and goal/reminder/streak-history persistence
+remains Future/Target pending the engagement BE (schema/migration/approval). The card's
+scope NAME is now resolved read-only (see Continue studying above).
 
 ## Purpose
 

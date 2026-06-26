@@ -185,6 +185,13 @@ All queries fire in parallel via separate providers; UI shows skeletons per card
   `dashboardProgressSummaryQueryProvider`. Streak chip hidden when streak `< 1`; goal ring hidden
   when the goal is disabled/unknown. Reminders, streak-history, daily-goal slider, and the
   streak-broken banner remain `Target`/Future.
+- **Redesign update (2026-06-26, WBS 5.1.2):** the current engagement dashboard ships a quieter
+  resume card — `DashboardResumeCard` now renders the session scope's **resolved name** (deck or
+  folder name from `dashboardResumeSession`; localized `dashboardResumeTodayScope` "Today's review"
+  for the global scope) over answered/total progress + a Resume CTA, hidden when none. The study
+  MODE label (needs `current_mode`, WBS 4.5.12+) and Discard (needs an abandon-session use case)
+  stay Future. The canonical current spec is
+  `docs/business/engagement/dashboard-engagement.md`.
 - **Stats row density:** the two stat cards use a **compact tile** (`headlineMedium` value +
   overline caption + 32dp leading glyph/ring, 12dp padding), NOT the 48dp `MxStatDisplay` hero
   number — that hero size reads as too heavy on a phone, especially when only one stat is present

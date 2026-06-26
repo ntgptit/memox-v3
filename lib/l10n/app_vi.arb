@@ -440,6 +440,7 @@
   "dashboardResumeAction": "Tiếp tục",
   "dashboardDiscardAction": "Bỏ qua",
   "dashboardResumeProgress": "{answered}/{total} thẻ",
+  "dashboardResumeTodayScope": "Ôn tập hôm nay",
   "dashboardRecentDecksTitle": "Bộ thẻ gần đây",
   "dashboardSeeStatsLabel": "Xem thống kê học tập",
   "dashboardReviewAction": "Ôn tập"

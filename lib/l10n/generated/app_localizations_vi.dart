@@ -1534,6 +1534,9 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String get dashboardResumeTodayScope => 'Ôn tập hôm nay';
+
+  @override
   String get dashboardRecentDecksTitle => 'Bộ thẻ gần đây';
 
   @override

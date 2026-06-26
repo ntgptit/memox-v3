@@ -5,11 +5,15 @@ import 'package:memox/domain/types/study_scope.dart';
 part 'dashboard_resume_session_summary.freezed.dart';
 
 /// The Dashboard "Continue studying" read model (WBS 5.1.1): the user's single
-/// most recently active resumable session, with its scope and progress.
+/// most recently active resumable session, with its scope, resolved scope name,
+/// and progress.
 ///
-/// The FE resolves the scope's display name and renders a Continue CTA; the card
-/// is hidden when there is no resumable session (the repository returns `null`).
-/// See `docs/business/engagement/dashboard-engagement.md` +
+/// [scopeName] is the session scope's display name, resolved read-only at query
+/// time: the deck name for a `deck` scope, the folder name for a `folder` scope,
+/// and `null` for the global `today` scope (the FE renders a localized label).
+/// The card renders a Continue CTA and is hidden when there is no resumable
+/// session (the repository returns `null`). See
+/// `docs/business/engagement/dashboard-engagement.md` +
 /// `docs/business/resume/resume-session.md`.
 @freezed
 sealed class DashboardResumeSessionSummary
@@ -20,6 +24,7 @@ sealed class DashboardResumeSessionSummary
     required int answeredCount,
     required int totalCount,
     required DateTime lastActiveAt,
+    String? scopeName,
   }) = _DashboardResumeSessionSummary;
   const DashboardResumeSessionSummary._();
 

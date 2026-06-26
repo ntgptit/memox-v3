@@ -73,6 +73,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
             row.updatedAt,
             isUtc: true,
           ),
+          scopeName: row.scopeName,
         ),
       );
     } catch (error) {

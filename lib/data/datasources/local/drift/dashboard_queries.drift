@@ -1,14 +1,19 @@
 import 'flashcards.drift';
 import 'study_tables.drift';
 import 'decks.drift';
+import 'folders.drift';
 import 'card_events.drift';
 
 -- Dashboard "Continue studying" read model (WBS 5.1.1). The single most recently
 -- active resumable session across ALL scopes (status draft/in_progress,
 -- `updated_at` within the 30-day window passed as :cutoff), with its answered /
--- total item progress. `answered_items` counts non-NULL `answered_at`. Returns
--- no row when there is no resumable session. See
--- docs/business/resume/resume-session.md + docs/business/engagement/dashboard-engagement.md.
+-- total item progress and the scope's display name. `answered_items` counts
+-- non-NULL `answered_at`. `scope_name` resolves read-only: the deck name for a
+-- `deck` scope, the folder name for a `folder` scope, NULL for the global
+-- `today` scope (entry_ref_id IS NULL → the FE renders a localized label). The
+-- name joins are 1:1 on the scope's `entry_ref_id`, so they do not fan out the
+-- per-session item COUNTs. Returns no row when there is no resumable session.
+-- See docs/business/resume/resume-session.md + docs/business/engagement/dashboard-engagement.md.
 dashboardResumeSession(:cutoff AS INT):
 SELECT
   s.id AS id,
@@ -17,9 +22,12 @@ SELECT
   s.study_type AS study_type,
   s.updated_at AS updated_at,
   COUNT(i.id) AS total_items,
-  COUNT(i.answered_at) AS answered_items
+  COUNT(i.answered_at) AS answered_items,
+  COALESCE(d.name, f.name) AS scope_name
 FROM study_sessions s
 LEFT JOIN study_session_items i ON i.session_id = s.id
+LEFT JOIN decks d ON s.entry_type = 'deck' AND d.id = s.entry_ref_id
+LEFT JOIN folders f ON s.entry_type = 'folder' AND f.id = s.entry_ref_id
 WHERE s.status IN ('draft', 'in_progress') AND s.updated_at > :cutoff
 GROUP BY s.id
 ORDER BY s.updated_at DESC

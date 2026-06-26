@@ -2726,6 +2726,12 @@ abstract class AppLocalizations {
   /// **'{answered}/{total} cards'**
   String dashboardResumeProgress(int answered, int total);
 
+  /// Dashboard continue-studying card title for the global today/all-due scope (no deck or folder name to show).
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s review'**
+  String get dashboardResumeTodayScope;
+
   /// Dashboard section title above the recently-studied decks list.
   ///
   /// In en, this message translates to:

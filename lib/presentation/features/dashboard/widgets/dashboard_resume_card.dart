@@ -9,13 +9,14 @@ import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 
 /// The Dashboard "Continue studying" card (kit `02 · continue-studying`): shown
-/// only when a resumable session exists. A progress bar + answered/total + a
-/// Resume action. Keyed `mx-node:02-dashboard/continue-studying`.
+/// only when a resumable session exists. The scope's display name over its
+/// answered/total progress + a Resume action. Keyed
+/// `mx-node:02-dashboard/continue-studying`.
 ///
-/// REFINEMENTS (kit elements not yet wired, no fabrication): the session's
-/// deck/scope NAME needs scope→name resolution, and a Discard action needs an
-/// abandon-session use case — both tracked in
-/// `docs/business/engagement/dashboard-engagement.md`.
+/// REFINEMENTS (kit elements still Future, no fabrication): the session's study
+/// MODE label (the `current_mode` column lands with the mode-chain rows, WBS
+/// 4.5.12+) and a Discard action (needs an abandon-session use case) — both
+/// tracked in `docs/business/engagement/dashboard-engagement.md`.
 class DashboardResumeCard extends StatelessWidget {
   const DashboardResumeCard({
     required this.summary,
@@ -45,8 +46,13 @@ class DashboardResumeCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              MxLinearProgress(value: summary.progress),
-              const SizedBox(height: MxSpacing.space3),
+              MxText(
+                summary.scopeName ?? l10n.dashboardResumeTodayScope,
+                role: MxTextRole.titleMedium,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: MxSpacing.space2),
               MxText(
                 l10n.dashboardResumeProgress(
                   summary.answeredCount,
@@ -55,6 +61,8 @@ class DashboardResumeCard extends StatelessWidget {
                 role: MxTextRole.bodySmall,
                 color: colors.textSecondary,
               ),
+              const SizedBox(height: MxSpacing.space3),
+              MxLinearProgress(value: summary.progress),
               const SizedBox(height: MxSpacing.space4),
               SizedBox(
                 width: double.infinity,

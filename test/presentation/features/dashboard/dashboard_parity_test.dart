@@ -35,6 +35,7 @@ final DashboardEngagement _fullEngagement = DashboardEngagement(
       entryRefId: 'deck-1',
       studyType: StudyType.srsReview,
     ),
+    scopeName: 'Japanese · N5',
     answeredCount: 7,
     totalCount: 20,
     lastActiveAt: DateTime.utc(2026, 6, 19, 12),
@@ -51,6 +52,12 @@ final DashboardEngagement _fullEngagement = DashboardEngagement(
 );
 
 Future<void> _pump(WidgetTester tester, DashboardEngagement data) async {
+  // The dashboard body is a scrollable ListView; pump a tall phone surface so
+  // every keyed section builds (off-screen slivers past the cache extent would
+  // otherwise not materialize, failing the identity-by-key parity assertion).
+  tester.view.physicalSize = const Size(390, 1600);
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(tester.view.reset);
   await tester.pumpWidget(
     ProviderScope(
       overrides: [

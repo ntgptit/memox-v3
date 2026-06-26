@@ -28,7 +28,7 @@ void main() {
           .insert(
             FoldersCompanion.insert(
               id: 'f1',
-              name: 'f1',
+              name: 'Folder One',
               contentMode: 'decks',
               sortOrder: 0,
               createdAt: now,
@@ -41,7 +41,7 @@ void main() {
             DecksCompanion.insert(
               id: 'd1',
               folderId: 'f1',
-              name: 'd1',
+              name: 'Deck One',
               sortOrder: 0,
               createdAt: now,
               updatedAt: now,
@@ -131,8 +131,41 @@ void main() {
         expect(summary.answeredCount, 1);
         expect(summary.progress, closeTo(1 / 3, 1e-9));
         expect(summary.lastActiveAt.millisecondsSinceEpoch, now - 1000);
+        // The global `today` scope has no deck/folder name to resolve.
+        expect(summary.scopeName, isNull);
       },
     );
+
+    test('resolves the deck name for a deck-scoped session', () async {
+      await insertSession(id: 'deck-sess', entryRefId: 'd1', updatedAt: now);
+      final result = await repository.loadResumeSessionSummary(now: now);
+      expect(result.failure, isNull);
+      expect(result.data!.scope.entryType, EntryType.deck);
+      expect(result.data!.scopeName, 'Deck One');
+    });
+
+    test('resolves the folder name for a folder-scoped session', () async {
+      await insertSession(
+        id: 'folder-sess',
+        entryType: 'folder',
+        entryRefId: 'f1',
+        updatedAt: now,
+      );
+      final result = await repository.loadResumeSessionSummary(now: now);
+      expect(result.failure, isNull);
+      expect(result.data!.scope.entryType, EntryType.folder);
+      expect(result.data!.scopeName, 'Folder One');
+    });
+
+    test('does not mutate the session on a read-only load', () async {
+      await insertSession(id: 'deck-sess', entryRefId: 'd1', updatedAt: now);
+      await repository.loadResumeSessionSummary(now: now);
+      final session = await (db.select(
+        db.studySessions,
+      )..where((s) => s.id.equals('deck-sess'))).getSingle();
+      // The summary load is a pure read — it must not touch `updated_at`.
+      expect(session.updatedAt, now);
+    });
 
     test('returns null when there is no resumable session', () async {
       final result = await repository.loadResumeSessionSummary(now: now);
@@ -178,7 +211,7 @@ void main() {
           .insert(
             FoldersCompanion.insert(
               id: 'f1',
-              name: 'f1',
+              name: 'Folder One',
               contentMode: 'decks',
               sortOrder: 0,
               createdAt: now,
@@ -191,7 +224,7 @@ void main() {
             DecksCompanion.insert(
               id: 'd1',
               folderId: 'f1',
-              name: 'd1',
+              name: 'Deck One',
               sortOrder: 0,
               createdAt: now,
               updatedAt: now,

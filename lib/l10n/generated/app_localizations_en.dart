@@ -1561,6 +1561,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get dashboardResumeTodayScope => 'Today\'s review';
+
+  @override
   String get dashboardRecentDecksTitle => 'Recent decks';
 
   @override

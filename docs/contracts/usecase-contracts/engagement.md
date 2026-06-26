@@ -25,11 +25,15 @@ the `now` clock and delegates to `DashboardRepository.loadResumeSessionSummary`
 (`DashboardDao.resumeSession` over the `dashboardResumeSession` `.drift` query):
 the single most recently active resumable session across **all** scopes (status
 `draft`/`in_progress`, `updated_at` within the 30-day resume window), with its
-`answered`/`total` item progress. Returns `null` when there is no resumable
-session (the FE hides the Continue card, WBS 5.1.2). Maps to
-`DashboardResumeSessionSummary` (`lib/domain/models/dashboard_resume_session_summary.dart`):
-`sessionId`, `scope`, `answeredCount`, `totalCount`, `lastActiveAt`, with a
-`progress` (0..1) getter. A read error → `StorageFailure(read)`.
+`answered`/`total` item progress and the scope's resolved display name. Returns
+`null` when there is no resumable session (the FE hides the Continue card, WBS
+5.1.2). Maps to `DashboardResumeSessionSummary`
+(`lib/domain/models/dashboard_resume_session_summary.dart`): `sessionId`, `scope`,
+`answeredCount`, `totalCount`, `lastActiveAt`, `scopeName` (`String?` — the deck
+name for a `deck` scope, the folder name for a `folder` scope, resolved read-only
+in the `.drift` query; `null` for the global `today` scope, for which the FE
+renders a localized label), with a `progress` (0..1) getter. A read error →
+`StorageFailure(read)`.
 
 ## LoadDashboardProgressSummaryUseCase
 

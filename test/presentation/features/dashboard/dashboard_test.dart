@@ -47,6 +47,7 @@ DashboardEngagement _loaded() => DashboardEngagement(
       entryRefId: 'deck-1',
       studyType: StudyType.srsReview,
     ),
+    scopeName: 'Japanese · N5',
     answeredCount: 7,
     totalCount: 20,
     lastActiveAt: DateTime.utc(2026, 6, 19, 18),
