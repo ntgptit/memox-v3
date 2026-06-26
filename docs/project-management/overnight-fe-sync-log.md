@@ -212,3 +212,46 @@ variant instead of an inline constant; re-proven red→green (the refactor did n
 weaken the gate). Three distinct, honest centralization paths now exist: MxAppBar
 inline-cited (no-font / descendant), MxSectionHeader reads the generated contract
 directly (clean `ok`), the buttons read the curated variant overlay (variant).
+
+## M1 spec-number gate phase — COMPLETE (loop milestone, 2026-06-26)
+
+The visual-parity loop reached a natural phase boundary and STOPPED here (not paused):
+every shared component with a clean OWN text font now has a deterministic,
+measurement-based spec-number gate, and the supporting infrastructure is in place.
+What remains is a different phase (geometry, needs Phase-0 box-model) or owner
+decisions — both better directed by a human.
+
+**Shipped (all proven red→green + each commit recursive-reviewed by code-reviewer):**
+- 4 component spec-gates: `mx_app_bar_spec_gate_test.dart` (title 24/700),
+  `mx_primary_button_spec_gate_test.dart` + `mx_secondary_button_spec_gate_test.dart`
+  (label 14, via the curated variant layer), `mx_section_header_spec_gate_test.dart`
+  (title 16, read straight from the generated contract).
+- Generator `tool/parity/gen_component_contract.mjs` → `contracts/component-contracts.json`
+  (own-font extraction, variant-split, `no-font`/`needs-variant`/`ok` tri-state),
+  wired into `tool/verify` as a freshness gate.
+- Curated `tool/parity/component-variants.json` + `componentVariantTextSpec` (every
+  curated number cross-checked against the generator's observed pairs — no fabrication).
+- Helper `test/support/component_spec.dart` — fail-loud on non-`ok`/unknown/malformed.
+- Three honest centralization paths: inline-cited (no-font/descendant) · generated
+  contract (clean `ok`) · curated overlay (variant).
+
+**Why it stops here (no clean spec-number unit remains):** the contract shows only
+`MxSectionHeader` as `ok`; every other component is `needs-variant` (font is a real
+size variant), `no-font` (text lives on a descendant — MxAppBar/MxSearchDock/…), or a
+composition (MxActionButton delegates to the already-gated MxPrimary/SecondaryButton).
+The remaining measurables are GEOMETRY (icon size, radius, height) which hit the
+box-model gotcha (tap-target box ≠ visual box) and belong to **Phase 0 calibration** —
+a separate effort the plan flags with the noise-floor-circularity + box-model
+reconciliation gotchas (best done with human input, not autonomously).
+
+**Owner decisions awaiting you (logged above):**
+1. Systemic semibold-vs-bold weight drift — `titleMedium`/`labelLarge` render w600 but
+   the kit specs want w700 on buttons + section headers. Fix at the typography-role
+   layer (audit other `labelLarge` consumers first), regen button/section goldens, then
+   add the `fontWeight` assertions to the gates.
+2. Button compact-height: spec `h:44` vs FE `MxButtonSize.compact = 40` / `medium = 48`.
+
+**Recommended next phase:** Phase 0 (calibration + box-model) so geometry gates become
+sound, then geometry gates for the icon/card/dock components; OR resolve the two owner
+decisions and add the `fontWeight` assertions. Re-invoke `/loop` pointed at whichever
+you choose.
