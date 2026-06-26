@@ -7,13 +7,14 @@
 // (fontSize / fontWeight) of each `mx:<Component>` node; geometry (height/radius/
 // padding) follows once Phase-0 box-model calibration lands.
 //
-// HOW it finds the font (the spec puts it in different places):
-//   - on the node's OWN `style:` line (buttons: `mx:MxSecondaryButton … style:… font:14/700`)
-//   - or on a DESCENDANT title/label node (app bar: the `mx:MxAppBar` node's own
-//     style is `bg:bg`; the title child carries `font:24/700`).
-// So per `mx:<Component>` node we take the FIRST `font:N/W` inside that node's block
-// (the block = lines until the next `- node:` at a shallower indent). The node's own
-// style comes first; otherwise the title descendant's font is the first one seen.
+// HOW it finds the font: from the node's OWN `style:` line ONLY — the lines from the
+// `mx:` line up to its FIRST descendant `- node:` (it does NOT descend into children).
+// Buttons carry their font on the node itself
+// (`mx:MxSecondaryButton … style:… font:14/700`). A component whose own style has no
+// font — e.g. the app bar, whose `mx:MxAppBar` node is `style: bg:bg` and whose title
+// font lives on a DESCENDANT — is reported `no-font`. Descendant/title-font extraction
+// is NOT implemented: it is a deliberate follow-up (plan §3.1, the spec-number-
+// derivation gotcha — it needs per-node title/label disambiguation).
 //
 // VARIANT-SPLIT (plan §1/§3): we collect the DISTINCT (size,weight) pairs a component
 // shows across all its spec nodes. One distinct pair → a clean contract. More than

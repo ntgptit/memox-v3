@@ -213,13 +213,22 @@ weaken the gate). Three distinct, honest centralization paths now exist: MxAppBa
 inline-cited (no-font / descendant), MxSectionHeader reads the generated contract
 directly (clean `ok`), the buttons read the curated variant overlay (variant).
 
-## M1 spec-number gate phase — COMPLETE (loop milestone, 2026-06-26)
+## M1 — font-size spec-number gate complete; font-weight drift pending owner decision (loop milestone, 2026-06-26)
 
 The visual-parity loop reached a natural phase boundary and STOPPED here (not paused):
 every shared component with a clean OWN text font now has a deterministic,
-measurement-based spec-number gate, and the supporting infrastructure is in place.
-What remains is a different phase (geometry, needs Phase-0 box-model) or owner
-decisions — both better directed by a human.
+measurement-based spec-number gate for its **font SIZE**, and the supporting
+infrastructure is in place. The **font WEIGHT is NOT gated yet** — every gate asserts
+SIZE only. The FE renders w600 where the kit specs want w700 (a real systemic drift,
+owner decision #1 below), so `fontWeight == 700` is deliberately not asserted on the
+buttons or the section header until that decision lands. What remains is a different
+phase (geometry, needs Phase-0 box-model) or owner decisions — both better directed by
+a human.
+
+**NOTE on goldens:** the broad 220-PNG golden regeneration earlier on this branch came
+from the MaterialIcons golden-harness fix (commit 10daa06), NOT from the M1 font-size
+gates — the spec-gates are measurement tests (`RenderParagraph`/`getRect`) and
+regenerate no goldens.
 
 **Shipped (all proven red→green + each commit recursive-reviewed by code-reviewer):**
 - 4 component spec-gates: `mx_app_bar_spec_gate_test.dart` (title 24/700),
@@ -234,6 +243,26 @@ decisions — both better directed by a human.
 - Helper `test/support/component_spec.dart` — fail-loud on non-`ok`/unknown/malformed.
 - Three honest centralization paths: inline-cited (no-font/descendant) · generated
   contract (clean `ok`) · curated overlay (variant).
+
+**Component inventory (status):**
+
+| Component | Status | Note |
+| --- | --- | --- |
+| MxAppBar | `gated-size` | title size 24 (inline-cited; own-font is `no-font`, title on a descendant) |
+| MxPrimaryButton | `gated-size` | label size 14 via curated `medium` variant |
+| MxSecondaryButton | `gated-size` | label size 14 via curated `medium` variant |
+| MxSectionHeader | `gated-size` | title size 16 read from the generated contract (`ok`) |
+| MxActionButton | `composition-covered-by-child-size` | composition-covered-by-child-size; no separate gate; intent→child mapping gate is deferred unless owner asks |
+| MxCard | `needs-variant` | own-font is a real size variant; no single gated number |
+| MxFab | `needs-variant` | own-font is a real size variant |
+| MxSearchDock | `no-font-descendant` | text lives on a descendant; descendant-font extraction deferred |
+| MxBottomNav | `no-font-descendant` | text on a descendant |
+| MxScaffold | `no-font-descendant` | no own text |
+| MxIconButton | `geometry-phase` | measurable is icon size, not font → Phase-0 box-model |
+| MxIconTile | `geometry-phase` | measurable is icon-tile size, not font → Phase-0 box-model |
+
+`fontWeight == 700` is NOT gated on ANY component yet (size only) — see the owner
+decision below.
 
 **Why it stops here (no clean spec-number unit remains):** the contract shows only
 `MxSectionHeader` as `ok`; every other component is `needs-variant` (font is a real
