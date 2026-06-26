@@ -113,3 +113,36 @@ role; busy-overlay spinner 20→24px; overline tracking/caps; missing loading go
 And ~18 other screens have not had a ui-parity-checker pass yet. This is the real
 "match the mock" backlog — to be worked per-screen with honest goldens, fixing
 category-1 gaps and locking each with golden-per-state tests.
+
+## Spec-number gates — M1 progress (visual-parity-plan.md)
+
+Per-shared-component spec-number gates (measure RENDERED value via RenderParagraph/
+getRect vs the kit spec NUMBER — engine-independent, the precise backbone). Each
+PROVEN red→green by drifting the source.
+
+| Component | Gate | Asserts | Proven |
+| --- | --- | --- | --- |
+| MxAppBar | `mx_app_bar_spec_gate_test.dart` | title font 24/700 | red on headlineMedium(22) |
+| MxSecondaryButton | `mx_secondary_button_spec_gate_test.dart` | tonal→FilledButton + label 14px | red on label drift (18) |
+
+**LOGGED DRIFT FINDING (not yet fixed) — MxSecondaryButton label weight.** Spec
+`23-audio-speech/preview-button` = `font:14/700` (bold), but the FE renders the label
+via `labelLarge` = **w600** (semibold). Real drift, same class as the app-bar 22→24.
+NOT auto-fixed in the loop because it needs (a) a variant-consistency decision —
+tonal-only vs all three variants (`tonal`/`text`/`outlined`) vs changing the shared
+`labelLarge` token, and (b) a golden regen across every secondary button. **Owner /
+deliberate change**: decide the scope, then add the `fontWeight == 700` assertion to
+the gate. (Check MxPrimaryButton's spec too — likely the same 14/700 → a shared
+button-label treatment may be the right fix.)
+
+- **Owner action, concretely**: check whether `w600 → w700` should apply to all three
+  `MxSecondaryButton` variants (`tonal`/`text`/`outlined`) and to `MxPrimaryButton`.
+  If uniform → change `labelLarge.fontWeight` in `MxTypography` and regen all button
+  goldens; if per-variant → override `textStyle` per variant. Then add the weight
+  assertion to `mx_secondary_button_spec_gate_test.dart`.
+- **Second potential drift (height)**, surfaced by the recursive review: the spec
+  preview-button box is `h:44`, but `MxButtonSize.compact` (the FE default) is `40`
+  and `medium` is `48` — the spec matches neither. Either `compact` should be `44`
+  for this use, or the screen should pass a non-default size, or the kit size is
+  bespoke. Resolve under Phase-0 box-model calibration (the gate currently omits the
+  height assertion for exactly this reason).
