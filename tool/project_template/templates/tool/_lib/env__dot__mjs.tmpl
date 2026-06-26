@@ -1,0 +1,80 @@
+// env — shared, zero-dependency helpers for the tool/ scripts.
+//
+// The point of this file is portability: the tools must run when `tool/` is
+// copied into ANY folder — even one that is not yet a git repo and has no
+// scaffold.config.json. Nothing here throws on a missing repo/config; callers
+// get safe fallbacks and a clear note instead of a stack trace.
+
+import { existsSync, readFileSync } from 'node:fs';
+import { join, resolve, dirname } from 'node:path';
+import { execSync } from 'node:child_process';
+
+// Built-in defaults used when scaffold.config.json is absent.
+export const DEFAULT_CONFIG = {
+  project: { name: '<project>', slug: 'project', repo: 'owner/repo' },
+  stack: { preset: 'generic', language: '<language>', framework: '<framework>', architecture: 'clean' },
+  layers: { sourceDir: 'src', testDir: 'test', manifest: '' },
+  verify: { docs: ['node tool/doc_guard/run.mjs check'], code: [] },
+};
+
+// Walk up from a script's directory to find the project root. A directory is the
+// root if it contains scaffold.config.json, a .git, or a docs/ dir. Falls back to
+// two levels up (the conventional `<root>/tool/<name>/run.mjs` layout) so the
+// tools still work before any of those markers exist.
+export function findRepoRoot(startDir) {
+  let dir = resolve(startDir);
+  const conventional = resolve(startDir, '..', '..');
+  for (let i = 0; i < 12; i++) {
+    if (
+      existsSync(join(dir, 'scaffold.config.json')) ||
+      existsSync(join(dir, '.git')) ||
+      existsSync(join(dir, 'docs'))
+    ) return dir;
+    const parent = dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return conventional;
+}
+
+// Load scaffold.config.json from repoRoot, deep-merged over DEFAULT_CONFIG.
+// Returns { config, missing } — `missing` is true when no file was found.
+export function loadConfig(repoRoot) {
+  const p = join(repoRoot, 'scaffold.config.json');
+  if (!existsSync(p)) return { config: DEFAULT_CONFIG, missing: true };
+  try {
+    const raw = JSON.parse(readFileSync(p, 'utf8'));
+    return {
+      config: {
+        project: { ...DEFAULT_CONFIG.project, ...raw.project },
+        stack: { ...DEFAULT_CONFIG.stack, ...raw.stack },
+        layers: { ...DEFAULT_CONFIG.layers, ...raw.layers },
+        verify: { ...DEFAULT_CONFIG.verify, ...raw.verify },
+      },
+      missing: false,
+    };
+  } catch (e) {
+    console.error(`env: scaffold.config.json is invalid JSON (${e.message}); using defaults.`);
+    return { config: DEFAULT_CONFIG, missing: true };
+  }
+}
+
+// Is `cwd` inside a git work tree? Never throws.
+export function isGitRepo(cwd) {
+  try {
+    return execSync('git rev-parse --is-inside-work-tree', {
+      cwd, stdio: ['ignore', 'pipe', 'ignore'],
+    }).toString().trim() === 'true';
+  } catch {
+    return false;
+  }
+}
+
+// Run a git command, returning trimmed stdout or null on any failure.
+export function git(argsStr, cwd) {
+  try {
+    return execSync(`git ${argsStr}`, { cwd, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
+  } catch {
+    return null;
+  }
+}

@@ -9,6 +9,17 @@ command chains), not hardcoded — fill the config, not the scripts.
 | verify | `node tool/verify/run.mjs` | THE single verification entry. Runs the docs/code chains from `scaffold.config.json`, writes a pass-marker bound to the tree state. The pre-commit hook refuses commits without a matching marker. |
 | doc_guard | `node tool/doc_guard/run.mjs check` | Doc/process linter: backtick `path` refs resolve, WBS traceability log present. `generate` rebuilds `docs/_generated/repo-map.md`; `terms <old>` finds leftover refs after a rename. |
 | prompt_gen | `node tool/prompt_gen/run.mjs <WBS_ID>` | Turns a WBS row into a ready-to-paste Claude Code task prompt. `--list` / `--ready` to browse. |
+| _lib/env.mjs | (imported) | Shared helpers: repo-root discovery (walk-up), config loading with defaults, git-safe wrappers. Keeps the tools portable. |
+
+## Portability
+
+The tools are copy-anywhere safe. `tool/_lib/env.mjs` finds the project root by
+walking up from each script (looking for `scaffold.config.json`, `.git`, or `docs/`),
+loads config with built-in defaults when the file is absent, and wraps every git call
+so it never throws. Copy `tool/` into a folder that is not yet a git repo and the tools
+still run — verify just skips the pass-marker (the commit gate needs git; run
+`git init` to enable it). Keep `tool/` intact when copying: the three scripts import
+`tool/_lib/env.mjs`.
 
 ## The single-entry rule
 

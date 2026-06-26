@@ -19,15 +19,16 @@
 // preceding heading — docs are allowed to describe things not built yet.
 
 import { existsSync, readFileSync, writeFileSync, readdirSync, statSync, mkdirSync } from 'node:fs';
-import { join, resolve, dirname, sep } from 'node:path';
+import { join, dirname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { findRepoRoot, loadConfig } from '../_lib/env.mjs';
 
-const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
+const repoRoot = findRepoRoot(dirname(fileURLToPath(import.meta.url)));
 const rel = (p) => p.slice(repoRoot.length + 1).replaceAll(sep, '/');
-const configPath = join(repoRoot, 'scaffold.config.json');
-const cfg = existsSync(configPath) ? JSON.parse(readFileSync(configPath, 'utf8')) : {};
-const sourceDir = cfg.layers?.sourceDir ?? 'src';
-const testDir = cfg.layers?.testDir ?? 'test';
+const { config: cfg } = loadConfig(repoRoot);
+const sourceDir = cfg.layers.sourceDir;
+const testDir = cfg.layers.testDir;
+const hasDocs = existsSync(join(repoRoot, 'docs'));
 
 const IGNORE = ['node_modules', '.git', '.dart_tool', 'build', 'dist', 'generated', '__pycache__', '.venv'];
 
@@ -164,6 +165,10 @@ if (cmd === 'generate') process.exit(generate());
 if (cmd === 'terms') { findTerm(arg); process.exit(0); }
 if (cmd === 'check' || !cmd) {
   console.log('doc_guard check:');
+  if (!hasDocs) {
+    console.log('  (no docs/ directory here — nothing to check)');
+    process.exit(0);
+  }
   let errors = 0;
   for (const fn of [checkPathRefs, checkWbs]) errors += (fn().errors ?? 0);
   console.log(errors ? `\ndoc_guard: ${errors} error(s).` : '\ndoc_guard: clean.');

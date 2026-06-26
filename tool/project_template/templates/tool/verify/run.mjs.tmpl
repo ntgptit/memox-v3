@@ -4,14 +4,15 @@
 // be run ad hoc — every step goes through this tool, including the inner dev
 // loop (`--quick`). Enforcement: a successful docs/code run writes a pass-marker
 // bound to the exact content state of the working tree, and .githooks/pre-commit
-// rejects commits whose state has no matching marker. Piecemeal runs produce no
-// marker, so they cannot be committed.
+// rejects commits whose state has no matching marker.
 //
-// The command chains live in scaffold.config.json (verify.docs / verify.code),
-// so this file is stack-agnostic — fill the commands there, not here.
+// Portable by design: command chains live in scaffold.config.json (and this file
+// finds it by walking up), and every git interaction degrades gracefully — when
+// `tool/` is copied into a folder that is not yet a git repo, verify still runs
+// the chains; it just skips the marker (the commit gate needs git anyway).
 //
 // Usage:
-//   node tool/verify/run.mjs                  # auto-detect scope from git status
+//   node tool/verify/run.mjs                  # auto-detect scope
 //   node tool/verify/run.mjs --docs           # docs-only chain
 //   node tool/verify/run.mjs --code           # full code chain
 //   node tool/verify/run.mjs --quick          # inner loop: first code cmd only, NO marker
@@ -21,31 +22,29 @@
 
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { join, resolve, dirname } from 'node:path';
+import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { execSync, spawnSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
+import { findRepoRoot, loadConfig, isGitRepo, git } from '../_lib/env.mjs';
 
-const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
+const scriptDir = dirname(fileURLToPath(import.meta.url));
+const repoRoot = findRepoRoot(scriptDir);
 const markerPath = join(repoRoot, 'tool', 'verify', '.last-pass.json');
-const configPath = join(repoRoot, 'scaffold.config.json');
 const args = process.argv.slice(2);
 const has = (f) => args.includes(f);
 
-function loadConfig() {
-  if (!existsSync(configPath)) {
-    console.error('verify: scaffold.config.json not found at repo root.');
-    process.exit(1);
-  }
-  return JSON.parse(readFileSync(configPath, 'utf8'));
-}
-const cfg = loadConfig();
-const sourceDir = cfg.layers?.sourceDir ?? 'src';
-const testDir = cfg.layers?.testDir ?? 'test';
-const manifest = cfg.layers?.manifest ?? '';
+const { config: cfg, missing: cfgMissing } = loadConfig(repoRoot);
+if (cfgMissing) console.error('verify: scaffold.config.json not found; using built-in defaults (fill it for real verify commands).');
+const sourceDir = cfg.layers.sourceDir;
+const testDir = cfg.layers.testDir;
+const manifest = cfg.layers.manifest;
+const gitAvailable = isGitRepo(repoRoot);
 
-// ── content-state hash (independent of staged/unstaged) ──────────────────────
+// ── content-state hash (null when there is no git repo) ──────────────────────
 function stateHash() {
-  const out = execSync('git status --porcelain -uall', { cwd: repoRoot }).toString();
+  if (!gitAvailable) return null;
+  const out = git('status --porcelain -uall', repoRoot);
+  if (out === null) return null;
   const entries = [];
   for (const line of out.split('\n').filter(Boolean)) {
     let path = line.slice(3).trim().replace(/^"|"$/g, '');
@@ -56,8 +55,7 @@ function stateHash() {
     entries.push(`${path}:${createHash('sha1').update(content).digest('hex')}`);
   }
   entries.sort();
-  let head = 'NO_HEAD'; // fresh repo with no commits yet
-  try { head = execSync('git rev-parse HEAD', { cwd: repoRoot, stdio: ['pipe', 'pipe', 'ignore'] }).toString().trim(); } catch { /* no commits */ }
+  const head = git('rev-parse HEAD', repoRoot) ?? 'NO_HEAD';
   return createHash('sha1').update(head + '\n' + entries.join('\n')).digest('hex');
 }
 
@@ -68,6 +66,7 @@ function isCodePath(f) {
 
 // ── --check-marker (pre-commit hook) ─────────────────────────────────────────
 if (has('--check-marker')) {
+  if (!gitAvailable) process.exit(0); // no git → no commit gate to enforce
   if (!existsSync(markerPath)) {
     console.error('pre-commit: no verify pass-marker. Run `node tool/verify/run.mjs` before committing.');
     process.exit(1);
@@ -79,8 +78,7 @@ if (has('--check-marker')) {
     console.error('pre-commit: tree changed since the last verify PASS. Re-run `node tool/verify/run.mjs`.');
     process.exit(1);
   }
-  const staged = execSync('git diff --cached --name-only', { cwd: repoRoot })
-    .toString().split('\n').filter(Boolean);
+  const staged = (git('diff --cached --name-only', repoRoot) ?? '').split('\n').filter(Boolean);
   if (staged.some(isCodePath) && marker.mode !== 'code') {
     console.error('pre-commit: staged changes include code but the marker is from the docs chain. Run `node tool/verify/run.mjs --code`.');
     process.exit(1);
@@ -89,18 +87,22 @@ if (has('--check-marker')) {
 }
 
 // ── scope detection ──────────────────────────────────────────────────────────
-function changedFiles() {
-  return execSync('git status --porcelain -uall', { cwd: repoRoot })
-    .toString().split('\n').filter(Boolean)
-    .map((l) => l.slice(3).trim().replace(/^"|"$/g, ''));
-}
+const placeholder = (c) => /[<>]/.test(c); // unfilled "<lint command>" etc.
+const codeChain = cfg.verify.code ?? [];
+const docsChain = cfg.verify.docs ?? [];
+const hasRunnableCode = codeChain.some((c) => !placeholder(c));
 
 let mode;
 if (has('--quick')) mode = 'quick';
 else if (has('--docs')) mode = 'docs';
 else if (has('--code')) mode = 'code';
-else {
-  const files = changedFiles();
+else if (!gitAvailable) {
+  // Can't diff without git — run the most complete chain available.
+  mode = hasRunnableCode ? 'code' : 'docs';
+  console.log(`auto-detected scope: ${mode} (no git repo — running full chain)`);
+} else {
+  const files = (git('status --porcelain -uall', repoRoot) ?? '')
+    .split('\n').filter(Boolean).map((l) => l.slice(3).trim().replace(/^"|"$/g, ''));
   mode = files.some(isCodePath) ? 'code' : 'docs';
   console.log(`auto-detected scope: ${mode} (${files.length} changed file(s))`);
 }
@@ -114,10 +116,6 @@ function run(label, cmd) {
   return ok;
 }
 
-const docsChain = cfg.verify?.docs ?? [];
-const codeChain = cfg.verify?.code ?? [];
-const placeholder = (c) => /[<>]/.test(c); // unfilled "<lint command>" etc.
-
 let allOk = true;
 let ran = 0;
 
@@ -130,7 +128,6 @@ function execChain(chain) {
 }
 
 if (mode === 'quick') {
-  // inner loop: first non-placeholder code command only, fast feedback, no marker
   const first = codeChain.find((c) => !placeholder(c));
   if (first) { ran++; allOk = run('quick', first); }
   else console.log('quick: no runnable code command in scaffold.config.json (still placeholders).');
@@ -146,9 +143,17 @@ console.log('\n─────────────────────�
 console.log(`verify ${mode}: ${allOk ? 'PASS' : 'FAIL'} (${ran} step(s) run)`);
 
 if (allOk && mode !== 'quick' && ran > 0) {
-  const marker = { mode, stateHash: stateHash(), at: new Date().toISOString() };
-  writeFileSync(markerPath, JSON.stringify(marker, null, 2));
-  console.log(`marker: wrote ${mode}-chain pass-marker.`);
+  if (!gitAvailable) {
+    console.log('marker: skipped (not a git repo — the commit gate needs git; run `git init` to enable it).');
+  } else {
+    const sh = stateHash();
+    if (sh) {
+      writeFileSync(markerPath, JSON.stringify({ mode, stateHash: sh, at: new Date().toISOString() }, null, 2));
+      console.log(`marker: wrote ${mode}-chain pass-marker.`);
+    } else {
+      console.log('marker: skipped (could not read git state).');
+    }
+  }
 } else if (mode === 'quick') {
   console.log('marker: none (quick mode never writes a marker).');
 }

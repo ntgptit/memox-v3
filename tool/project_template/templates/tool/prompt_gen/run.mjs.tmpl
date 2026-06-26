@@ -16,13 +16,18 @@
 // Exit: 0 = ok, 1 = unknown WBS ID / usage error.
 
 import { readFileSync, existsSync } from 'node:fs';
-import { join, resolve, dirname } from 'node:path';
+import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { findRepoRoot } from '../_lib/env.mjs';
 
-const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
+const repoRoot = findRepoRoot(dirname(fileURLToPath(import.meta.url)));
 const wbsPath = join(repoRoot, 'docs', 'project-management', 'wbs.md');
 
-if (!existsSync(wbsPath)) { console.error('prompt_gen: docs/project-management/wbs.md not found.'); process.exit(1); }
+if (!existsSync(wbsPath)) {
+  console.error('prompt_gen: docs/project-management/wbs.md not found at ' + repoRoot + '.');
+  console.error('Run this inside a scaffolded project (it reads the WBS as its task source).');
+  process.exit(1);
+}
 
 // ── parse WBS table rows ─────────────────────────────────────────────────────
 function parseRows() {

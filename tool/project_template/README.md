@@ -42,6 +42,7 @@ docs/                     # source of truth (skeletons full of <!-- FILL: ... --
   project-management/     # wbs.md (task source of truth + §10 commit traceability log)
   checklist/ agent/
 tool/
+  _lib/env.mjs            # shared: repo-root discovery + config defaults + git-safe wrappers
   verify/run.mjs          # THE single verification entry, marker-gated
   doc_guard/run.mjs       # path-ref guard + repo-map generator + term search
   prompt_gen/run.mjs      # WBS row → ready-to-paste task prompt
