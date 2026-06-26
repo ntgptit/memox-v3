@@ -8,7 +8,28 @@ It is the generalized, stack-agnostic distillation of this repo's own working se
 `docs/` as source of truth + the Doc-code parity engine + a single-entry marker-gated
 `verify` + `doc_guard` + `prompt_gen` + custom review agents + git hooks.
 
-## Usage
+## Zero-dependency, single-file distribution (no clone needed)
+
+If you want a brand-new project to depend on **nothing** from this repo, use the
+bundled single file `dist/create-project.mjs` — it embeds the whole template tree
+(base64) and the generator in one ~100 KB `.mjs`. Copy that one file anywhere, or
+download just it, and run:
+
+```bash
+# download the one file (no clone), then scaffold the current dir
+curl -fsSL https://raw.githubusercontent.com/ntgptit/memox-v3/claude/project-template-generator-lpkoil/tool/project_template/dist/create-project.mjs -o create-project.mjs
+node create-project.mjs init . --name "My New App" --stack flutter
+# delete create-project.mjs afterwards — the scaffolded project is fully standalone
+```
+
+The scaffolded project's own `tool/` (verify / doc_guard / prompt_gen / _lib) has
+**no dependency on this repo**. Rebuild the bundle after editing any template:
+
+```bash
+node tool/project_template/bundle.mjs   # regenerates dist/create-project.mjs
+```
+
+## Usage (from a checkout of this repo)
 
 ```bash
 # Preview the file list
