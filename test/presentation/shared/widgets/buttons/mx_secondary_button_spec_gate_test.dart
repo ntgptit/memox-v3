@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/core/theme/mx_theme.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
 
+import '../../../../support/component_spec.dart';
+
 /// Phase-1 spec-number gate for MxSecondaryButton — `docs/design/visual-parity-plan.md`
 /// §4. Template: `test/presentation/shared/widgets/navigation/mx_app_bar_spec_gate_test.dart`.
 ///
@@ -36,8 +38,6 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.da
 /// `MaterialTapTargetSize.padded` makes the widget bounds ≥ 48 — `getSize` would
 /// read the tap-target box, not the 44 visual box. Deferred to Phase-0 calibration.
 void main() {
-  const double kSpecLabelFontSize = 14; // spec `font:14/700` (size component)
-
   testWidgets('MxSecondaryButton tonal realizes a FilledButton + 14px label', (
     WidgetTester tester,
   ) async {
@@ -70,7 +70,12 @@ void main() {
       reason: 'kit preview-button is a tonal fill → FilledButton, not outlined',
     );
 
-    // Label typography (size) — measured from the rendered paragraph.
+    // Label typography (size) — measured from the rendered paragraph, asserted
+    // against the curated default ('medium') variant from the contract (one source).
+    final ComponentTextSpec spec = componentVariantTextSpec(
+      'MxSecondaryButton',
+      'medium',
+    );
     final RenderParagraph paragraph = tester.renderObject<RenderParagraph>(
       find.descendant(
         of: find.byType(MxSecondaryButton),
@@ -79,8 +84,9 @@ void main() {
     );
     expect(
       paragraph.text.style?.fontSize,
-      kSpecLabelFontSize,
-      reason: 'kit spec: secondary-button label font-size = 14',
+      spec.fontSize,
+      reason:
+          'secondary-button label font-size must equal the contract (medium)',
     );
   });
 }

@@ -123,8 +123,8 @@ PROVEN red→green by drifting the source.
 | Component | Gate | Asserts | Proven |
 | --- | --- | --- | --- |
 | MxAppBar | `mx_app_bar_spec_gate_test.dart` | title font 24/700 | red on headlineMedium(22) |
-| MxSecondaryButton | `mx_secondary_button_spec_gate_test.dart` | tonal→FilledButton + label 14px | red on label drift (18) |
-| MxPrimaryButton | `mx_primary_button_spec_gate_test.dart` | FilledButton + label 14px | red on label drift (18) |
+| MxSecondaryButton | `mx_secondary_button_spec_gate_test.dart` | tonal→FilledButton + label 14 **from curated contract** | red on label drift (18) |
+| MxPrimaryButton | `mx_primary_button_spec_gate_test.dart` | FilledButton + label 14 **from curated contract** | red on label drift (18) |
 | MxSectionHeader | `mx_section_header_spec_gate_test.dart` | title 16 **read FROM contract** | red on role drift (18) |
 
 **LOGGED DRIFT FINDING (not yet fixed) — MxSecondaryButton label weight.** Spec
@@ -200,3 +200,15 @@ points the owner fix at the **typography role layer** (the `titleMedium`/`labelL
 emphasis roles render w600 where the kit specs want w700 for these emphasis
 elements), not per-component overrides. Decide + regen the affected goldens, then add
 the `fontWeight` assertions across these gates.
+
+**Curated variant layer — button gates now centralize too.** Added the hand-curated
+`tool/parity/component-variants.json` (separate from the generated JSON so `--write`
+can't clobber it) labelling `MxPrimaryButton.medium → 14/700`, `.compact → 12/700`
+(+ MxSecondaryButton), and extended the helper with `componentVariantTextSpec(comp,
+variant)`, which CROSS-CHECKS each curated number against the generator's `observed`
+pairs — a curated value that isn't a real spec value fails loud (no fabrication). The
+2 button gates now read their default-size label number from the curated `medium`
+variant instead of an inline constant; re-proven red→green (the refactor did not
+weaken the gate). Three distinct, honest centralization paths now exist: MxAppBar
+inline-cited (no-font / descendant), MxSectionHeader reads the generated contract
+directly (clean `ok`), the buttons read the curated variant overlay (variant).

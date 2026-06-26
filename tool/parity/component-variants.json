@@ -1,0 +1,27 @@
+{
+  "$comment": "Curated variant-resolution layer for the GENERATED tool/parity/contracts/component-contracts.json. The generator records the DISTINCT fonts a component shows (its `observed` pairs) but cannot label which font is which size variant; this hand-curated file does. EVERY value here is cross-checked by test/support/component_spec.dart against the generator's `observed`/`text` pairs — a curated number that is NOT a real spec value fails loud (no fabrication). Kept SEPARATE from the generated JSON so `gen_component_contract.mjs --write` never clobbers it (cf. symbol-aliases.json vs symbol-map.json).",
+  "MxPrimaryButton": {
+    "medium": {
+      "fontSize": 14,
+      "fontWeight": 700,
+      "$evidence": "standard-height button nodes, e.g. specs/21-account-sync.md 21-account-sync/signin-button = font:14/700"
+    },
+    "compact": {
+      "fontSize": 12,
+      "fontWeight": 700,
+      "$evidence": "78x24 compact button nodes in specs/07-flashcard-create.md / 08-flashcard-edit.md = font:12/700"
+    }
+  },
+  "MxSecondaryButton": {
+    "medium": {
+      "fontSize": 14,
+      "fontWeight": 700,
+      "$evidence": "standard-height nodes, e.g. specs/23-audio-speech.md 23-audio-speech/preview-button = font:14/700"
+    },
+    "compact": {
+      "fontSize": 12,
+      "fontWeight": 700,
+      "$evidence": "78x24 compact button nodes = font:12/700"
+    }
+  }
+}

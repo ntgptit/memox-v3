@@ -28,7 +28,13 @@
 4. **Hai lane golden tách bạch**: regression (fixture ổn định, FE-vs-FE) ‖ parity
    (design-seed hoặc mask, vs-mock).
 5. **Audit shared `Mx*` TRƯỚC** (drift shared = N screen); per-screen sau.
-6. **Không average variant.** Tách variant hoặc báo `needs-variant`.
+6. **Không average variant.** Tách variant hoặc báo `needs-variant`. Resolution path
+   cho `needs-variant`: một file **curated tách rời** (`tool/parity/component-variants.json`,
+   không bị generator `--write` ghi đè — như `symbol-aliases` vs `symbol-map`) gán
+   observed font nào thuộc variant nào; mỗi giá trị curated được **cross-check với
+   `observed` pairs của generator** (fail loud nếu không phải spec value thật → no
+   fabricate). Gate đọc qua `componentVariantTextSpec(comp, variant)` (xem
+   `test/support/component_spec.dart`).
 7. **Debug-contract (nếu làm) phải single-resolver** dùng chung bởi `build()` +
    `debug()`; nếu không → false-green. → defer tới khi cần.
 8. **Không tìm "1 metric thay AI".** AI = bộ phân loại mơ hồ trên changed-ROI, cache

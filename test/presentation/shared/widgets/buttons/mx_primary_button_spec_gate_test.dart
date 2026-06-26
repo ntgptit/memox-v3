@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/core/theme/mx_theme.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_primary_button.dart';
 
+import '../../../../support/component_spec.dart';
+
 /// Phase-1 spec-number gate for MxPrimaryButton — `docs/design/visual-parity-plan.md`
 /// §4. Template: `mx_app_bar_spec_gate_test.dart` + `mx_secondary_button_spec_gate_test.dart`.
 ///
@@ -32,8 +34,6 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_primary_button.dart
 /// NOT asserted (box-model gotcha, plan §3.2): visual height 44 vs the padded
 /// tap-target box — deferred to Phase-0 calibration.
 void main() {
-  const double kSpecLabelFontSize = 14; // spec `font:14/700` (size component)
-
   testWidgets('MxPrimaryButton realizes a FilledButton + 14px label', (
     WidgetTester tester,
   ) async {
@@ -60,7 +60,12 @@ void main() {
           'primary button must be a FilledButton, not OutlinedButton/TextButton',
     );
 
-    // Label typography (size) — measured from the rendered paragraph.
+    // Label typography (size) — measured from the rendered paragraph, asserted
+    // against the curated default ('medium') variant from the contract (one source).
+    final ComponentTextSpec spec = componentVariantTextSpec(
+      'MxPrimaryButton',
+      'medium',
+    );
     final RenderParagraph paragraph = tester.renderObject<RenderParagraph>(
       find.descendant(
         of: find.byType(MxPrimaryButton),
@@ -69,8 +74,8 @@ void main() {
     );
     expect(
       paragraph.text.style?.fontSize,
-      kSpecLabelFontSize,
-      reason: 'kit spec: primary-button label font-size = 14',
+      spec.fontSize,
+      reason: 'primary-button label font-size must equal the contract (medium)',
     );
   });
 }
