@@ -19,9 +19,15 @@ void main() {
 
     int now() => DateTime.now().toUtc().millisecondsSinceEpoch;
 
-    // Drop the v6 study tables to mimic the v5 shape (the rest of the schema is
-    // unchanged across the bump).
+    // Drop the v6 study tables to mimic the v5 shape, so `migrateV5ToV6` can be
+    // exercised in isolation. `study_match_evaluations` (added in v8) FK-references
+    // both `study_session_items` and `study_sessions` (ON DELETE CASCADE), so with
+    // foreign keys ON it must be dropped FIRST — otherwise dropping `study_sessions`
+    // tries to cascade into `study_match_evaluations` and hits the already-dropped
+    // `study_session_items` ("no such table"). v5 predates match-evaluations anyway,
+    // so removing it is part of reducing to the v5 shape. Drop dependents first.
     Future<void> reduceToV5() async {
+      await db.customStatement('DROP TABLE study_match_evaluations');
       await db.customStatement('DROP TABLE study_attempts');
       await db.customStatement('DROP TABLE study_session_items');
       await db.customStatement('DROP TABLE study_sessions');

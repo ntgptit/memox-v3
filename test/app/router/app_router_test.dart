@@ -7,7 +7,7 @@ import 'package:memox/app/di/app_providers.dart';
 import 'package:memox/app/router/app_router.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/core/theme/mx_theme.dart';
-import 'package:memox/domain/models/dashboard_summary.dart';
+import 'package:memox/domain/models/dashboard_engagement.dart';
 import 'package:memox/domain/models/deck_mastery.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/models/stats_overview.dart';
@@ -37,10 +37,14 @@ Future<void> _pumpRouter(WidgetTester tester, GoRouter router) async {
           (ref) =>
               Stream<LibraryOverview>.value(const LibraryOverview(folders: [])),
         ),
-        // /home now renders the real DashboardScreen, which loads a summary from
-        // the DB; stub it so the router test stays deterministic.
-        dashboardSummaryProvider.overrideWith(
-          (ref) async => (failure: null, data: const DashboardSummary()),
+        // /home renders the real (engagement) DashboardScreen, which loads the
+        // engagement read model from the DB; stub it so the router test stays
+        // deterministic. (The dashboard moved from the summary to the engagement
+        // provider, so the old dashboardSummary stub no longer covered /home and the
+        // unstubbed provider left /home in a perpetual loading state → pumpAndSettle
+        // timed out.)
+        dashboardEngagementProvider.overrideWith(
+          (ref) async => (failure: null, data: const DashboardEngagement()),
         ),
         // /progress now renders the real StatsScreen (Stats tab), which loads a
         // read model from the DB; stub it so the router test stays deterministic.
