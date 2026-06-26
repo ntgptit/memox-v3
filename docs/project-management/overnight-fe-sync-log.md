@@ -124,6 +124,7 @@ PROVEN red→green by drifting the source.
 | --- | --- | --- | --- |
 | MxAppBar | `mx_app_bar_spec_gate_test.dart` | title font 24/700 | red on headlineMedium(22) |
 | MxSecondaryButton | `mx_secondary_button_spec_gate_test.dart` | tonal→FilledButton + label 14px | red on label drift (18) |
+| MxPrimaryButton | `mx_primary_button_spec_gate_test.dart` | FilledButton + label 14px | red on label drift (18) |
 
 **LOGGED DRIFT FINDING (not yet fixed) — MxSecondaryButton label weight.** Spec
 `23-audio-speech/preview-button` = `font:14/700` (bold), but the FE renders the label
@@ -135,11 +136,15 @@ deliberate change**: decide the scope, then add the `fontWeight == 700` assertio
 the gate. (Check MxPrimaryButton's spec too — likely the same 14/700 → a shared
 button-label treatment may be the right fix.)
 
-- **Owner action, concretely**: check whether `w600 → w700` should apply to all three
-  `MxSecondaryButton` variants (`tonal`/`text`/`outlined`) and to `MxPrimaryButton`.
-  If uniform → change `labelLarge.fontWeight` in `MxTypography` and regen all button
-  goldens; if per-variant → override `textStyle` per variant. Then add the weight
-  assertion to `mx_secondary_button_spec_gate_test.dart`.
+- **CONFIRMED systemic (MxPrimaryButton iteration)**: `21-account-sync/signin-button`
+  spec is also `font:14/700`, and MxPrimaryButton also reads `labelLarge` (w600). So
+  the drift is the **shared `labelLarge` token vs the button design (700)**, on BOTH
+  the primary and secondary button families — not a per-component issue.
+- **Owner action, concretely**: the design wants button labels at 700. Decide between
+  (a) change `labelLarge.fontWeight` w600→w700 in `MxTypography` (check every other
+  `labelLarge` consumer first — chips, tabs, etc. — for unintended boldening), or
+  (b) a dedicated button-label role / per-button `textStyle.copyWith(bold)`. Then regen
+  all button goldens and add the `fontWeight == 700` assertion to both button gates.
 - **Second potential drift (height)**, surfaced by the recursive review: the spec
   preview-button box is `h:44`, but `MxButtonSize.compact` (the FE default) is `40`
   and `medium` is `48` — the spec matches neither. Either `compact` should be `44`
