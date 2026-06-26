@@ -1,0 +1,12 @@
+#!/bin/sh
+# pre-commit — refuse commits without a valid verify pass-marker.
+#
+# The marker is written only by `node tool/verify/run.mjs` (docs or code chain)
+# and is bound to the exact content state of the tree. Ad-hoc lint/test runs do
+# not produce a marker, so they cannot be committed — every commit is verified.
+#
+# Enable once per clone:  git config core.hooksPath .githooks
+# Temporary escape hatch:  git commit --no-verify   (use sparingly; justify it)
+
+node tool/verify/run.mjs --check-marker || exit 1
+exit 0

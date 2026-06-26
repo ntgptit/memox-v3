@@ -1,0 +1,27 @@
+---
+last_updated: {{DATE}}
+applies_to: code review
+---
+
+# Recursive agent review — {{PROJECT_NAME}}
+
+Review the **working-tree diff** (`git add -N . && git diff`), not whole files. Five axes
+plus project gates.
+
+## Five axes
+1. **Correctness** — does it do what the spec/decision-rows say? Edge cases handled?
+2. **Architecture** — layer boundaries respected? Dependencies inward? No data import in presentation?
+3. **Readability** — matches `docs/contracts/code-style.md`, names, structure?
+4. **Tests** — every new branch has a decision row + test? Regression test for fixes?
+5. **Risk** — migrations, perf budgets, security, breaking changes called out?
+
+## Project gates (must pass)
+- [ ] Doc-code parity: every affected doc updated in the same diff.
+- [ ] No hardcoded strings/colors/routes/durations.
+- [ ] No edits to generated files.
+- [ ] WBS row + Commit Traceability Log updated if affected.
+- [ ] `node tool/verify/run.mjs` PASS.
+
+## Verdict
+- **Blocker** — violates a hard rule / real bug / missing test for a new branch → fix before done.
+- **Minor** — list in report; let the user decide.

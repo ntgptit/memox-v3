@@ -1,0 +1,30 @@
+---
+last_updated: {{DATE}}
+status: contract
+---
+
+# System overview & status — {{PROJECT_NAME}}
+
+The canonical status table. A docs/code change that flips a row's status (Specified ↔
+Implemented) MUST update this table in the same commit (`CLAUDE.md` parity step 7).
+
+## Status legend
+
+| Status | Meaning |
+| --- | --- |
+| Specified | Spec exists; implementation still needed. |
+| Partial | Some pieces exist; feature incomplete. |
+| Implemented | Confirmed by source AND a test. |
+| Future | Intended later; do not implement without approval. |
+| Rejected | Out of scope; do not implement. |
+
+## Feature status
+
+| Feature | Status | Evidence (source + test) |
+| --- | --- | --- |
+| <!-- FILL: feature --> | Specified | <!-- FILL: paths once implemented --> |
+
+## Architecture summary
+
+<!-- FILL: one paragraph — the layers, where the source-of-truth data lives, the inward
+dependency direction, and any non-negotiable constraints (offline-first, etc.) -->

@@ -1,0 +1,13 @@
+#!/bin/sh
+# pre-push — last gate before the change leaves the machine.
+#
+# Runs the full doc_guard check so no drift (missing path refs, broken WBS log)
+# is pushed. Extend with project-specific push-time sync steps as needed.
+#
+# Enable once per clone:  git config core.hooksPath .githooks
+
+node tool/doc_guard/run.mjs check || {
+  echo "pre-push: doc_guard found drift. Fix it or push with --no-verify (and justify)." >&2
+  exit 1
+}
+exit 0

@@ -1,0 +1,23 @@
+---
+last_updated: {{DATE}}
+status: contract
+---
+
+# Observability contract — {{PROJECT_NAME}}
+
+How and what to log. Adding a log site consults this file.
+
+## Levels
+
+| Level | Use for | Example |
+| --- | --- | --- |
+| error | failures the user/operator must know | failed persistence |
+| warn | recoverable anomalies | retry, fallback used |
+| info | significant lifecycle events | session started |
+| debug | development detail | dev only, off in release |
+
+## Rules
+- Never log secrets, tokens, or PII (`docs/database/storage-boundaries.md`).
+- Log at the boundary where a Failure is produced/translated, not everywhere it passes.
+- Use structured fields, not string concatenation, for machine-readable logs.
+<!-- FILL: project logging library + any correlation-id / tracing convention -->

@@ -1,0 +1,45 @@
+---
+last_updated: {{DATE}}
+status: contract
+---
+
+# Agent task template — {{PROJECT_NAME}}
+
+Copy-paste, fill in, submit. Reduces variance across sessions. (Or generate a filled one
+from a WBS row: `node tool/prompt_gen/run.mjs <WBS_ID>`.)
+
+---
+
+## Read first (always)
+- `CLAUDE.md` — agent rules, especially Doc-code parity + Hard rules
+- `AGENTS.md`
+- `docs/business/index.md`, `docs/business/glossary.md`
+- `docs/contracts/error-contract.md`, `docs/contracts/types-catalog.md`, `docs/contracts/code-style.md`
+- `docs/_generated/repo-map.md`
+
+## Read for this task
+- `docs/business/{feature}/{spec}.md`
+- `docs/contracts/usecase-contracts/{entity}.md`
+- `docs/contracts/repository-contracts/{entity}-repository.md`
+- `docs/decision-tables/core-decision-table.md` — rows: {LIST_ROW_IDS}
+- `docs/testing/test-strategy.md`
+
+---
+
+## Task
+**Title:** {one line}
+**Type:** feature | fix | refactor | docs
+**WBS:** {ID or n/a}
+**Description:** {what must happen — keep short, the docs hold the detail}
+
+## Scope
+**Allowed:** `{{SOURCE_DIR}}/{paths}`, `{{TEST_DIR}}/{paths}`, `docs/{paths}` (parity)
+**Not allowed:** generated files, schema (unless migration task), routes (unless routing task), anything out of scope.
+
+## Definition of done
+1. Implement per `docs/contracts/code-style.md` layer order.
+2. 8-step Doc-code parity check; update affected docs in the same commit.
+3. Decision row + test for every new branch.
+4. `node tool/verify/run.mjs` → PASS.
+5. WBS row + §10 traceability log updated if affected.
+6. Report: files changed · docs updated (+why) · verify result · subagent review.

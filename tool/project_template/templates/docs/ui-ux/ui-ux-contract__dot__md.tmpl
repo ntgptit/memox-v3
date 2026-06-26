@@ -1,0 +1,29 @@
+---
+last_updated: {{DATE}}
+status: contract
+---
+
+# UI/UX contract — {{PROJECT_NAME}}
+
+The visual + interaction contract. UI must use the design tokens and shared components
+below — no raw colors/spacing/typography in feature widgets (`CLAUDE.md` hard rule).
+
+> Skip / mark "not applicable" if this project has no UI.
+
+## Design tokens
+<!-- FILL: where tokens live (theme file), color/spacing/radius/type scales, dark mode -->
+
+## Shared components
+| Component | Use for | Do NOT use raw |
+| --- | --- | --- |
+| <!-- FILL: e.g. AppCard --> | <!-- FILL --> | raw Card |
+
+## Per-screen states (every screen must handle)
+- Loaded · Empty · Loading · Error · (search) No-results.
+
+## Copy
+<!-- FILL: localization approach; user-facing strings come from resources, not literals -->
+
+## Parity rule
+- When a mock exists, it is a contract: map every visible element to a component or mark
+  it out-of-scope with a reason. A silently-skipped element is a parity failure.

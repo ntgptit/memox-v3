@@ -1,0 +1,30 @@
+# tool/ — automation for {{PROJECT_NAME}}
+
+All verification and doc-hygiene automation lives here. They are **stack-agnostic**:
+behavior is driven by `scaffold.config.json` (project name, source/test dirs, verify
+command chains), not hardcoded — fill the config, not the scripts.
+
+| Tool | Command | What it does |
+| --- | --- | --- |
+| verify | `node tool/verify/run.mjs` | THE single verification entry. Runs the docs/code chains from `scaffold.config.json`, writes a pass-marker bound to the tree state. The pre-commit hook refuses commits without a matching marker. |
+| doc_guard | `node tool/doc_guard/run.mjs check` | Doc/process linter: backtick `path` refs resolve, WBS traceability log present. `generate` rebuilds `docs/_generated/repo-map.md`; `terms <old>` finds leftover refs after a rename. |
+| prompt_gen | `node tool/prompt_gen/run.mjs <WBS_ID>` | Turns a WBS row into a ready-to-paste Claude Code task prompt. `--list` / `--ready` to browse. |
+
+## The single-entry rule
+
+Do **not** run lint/test/doc_guard ad hoc. Every verification step goes through
+`node tool/verify/run.mjs`:
+
+```
+node tool/verify/run.mjs --quick   # inner dev loop: fast, first code cmd, NO marker
+node tool/verify/run.mjs --docs    # docs-only change → writes docs-chain marker
+node tool/verify/run.mjs --code    # code change → writes code-chain marker
+node tool/verify/run.mjs           # auto-detect scope from git status
+```
+
+A PASS writes `tool/verify/.last-pass.json`. Edit any file after a PASS → the marker
+is stale → re-run before committing. Enable the gate once per clone:
+
+```
+git config core.hooksPath .githooks
+```

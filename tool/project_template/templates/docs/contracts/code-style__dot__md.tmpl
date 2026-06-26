@@ -1,0 +1,34 @@
+---
+last_updated: {{DATE}}
+status: contract
+---
+
+# Code style — {{PROJECT_NAME}}
+
+Naming and structure so any session writes code that reads like the rest. Stack:
+{{STACK_LANGUAGE}} · {{STACK_FRAMEWORK}}.
+
+## Layer order (Clean Architecture)
+
+Build and read in this order; dependencies point inward:
+
+```
+entity → repository contract → use case → state/view-model → UI
+```
+
+- **domain** (`{{SOURCE_DIR}}/<domain>`): entities, value objects, repository interfaces, use cases. Imports nothing outward.
+- **data** (`{{SOURCE_DIR}}/<data>`): repository implementations, data sources. Implements domain interfaces.
+- **presentation** (`{{SOURCE_DIR}}/<presentation>`): state + UI. Imports domain only — never data directly.
+
+## Naming
+<!-- FILL: file naming (snake_case / kebab / PascalCase), class/function conventions,
+test file naming, one-class-per-file rule, etc. -->
+
+## Structure rules
+- One use case = one public entry point.
+- Repository methods return the result type from `docs/contracts/error-contract.md`.
+- No business logic in the UI layer; no UI concerns in domain.
+- No hardcoded strings/colors/durations/routes — use tokens/constants.
+
+## Generated files
+<!-- FILL: globs that must never be hand-edited -->

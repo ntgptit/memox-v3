@@ -1,0 +1,32 @@
+---
+last_updated: {{DATE}}
+status: contract
+---
+
+# Sub-agent orchestration — {{PROJECT_NAME}}
+
+When to fan out to sub-agents, how to budget tokens, and the anti-patterns.
+
+## Custom agents
+Defined in `.claude/agents/`. The starter set:
+- `code-reviewer` — reviews a diff across the five axes + project gates.
+- `docs-drift-detector` — sweeps for doc-code drift.
+- `test-engineer` — designs tests + maps coverage to decision rows.
+<!-- FILL: add domain-specific reviewers (e.g. a core-algorithm reviewer, a UI-parity checker) -->
+
+## When to fan out
+- **After** a code task whose verify PASSed, **before** the final report: run
+  `code-reviewer` + `docs-drift-detector` in parallel on the working-tree diff.
+- For wide, independent work (many files/subsystems): one agent per slice, in parallel.
+- For verify-then-act loops: sequential, with a judge/verify step before committing.
+
+## Rules
+- Review the **diff** (`git add -N . && git diff`), never commit first to "have a diff".
+- Fan out in ONE turn (multiple Agent calls) so they run concurrently.
+- Fix blocker findings before finishing; list minor ones for the user.
+- Skip fan-out for trivial/docs-only changes — and say so in the report.
+
+## Anti-patterns
+- Spawning agents for a one-line change.
+- Re-deriving the architecture inside a sub-agent — it is already in `docs/`.
+- Letting a sub-agent expand scope beyond the task.

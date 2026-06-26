@@ -1,0 +1,173 @@
+// doc_guard — docs/process linter + repo-map generator (stack-agnostic).
+//
+// Guards the zone a code linter cannot: claims that docs make about the
+// codebase. Replaces recurring manual audits (does this backtick `path` still
+// exist? is the WBS traceability log maintained?) with one command, and
+// generates docs/_generated/repo-map.md so a cold agent session reads one small
+// file instead of re-exploring the whole repo.
+//
+// Usage (zero npm deps; Node 18+):
+//   node tool/doc_guard/run.mjs check        # all doc checks (CI / verify gate)
+//   node tool/doc_guard/run.mjs generate     # (re)build docs/_generated/repo-map.md
+//   node tool/doc_guard/run.mjs terms <old>  # find leftover refs to a renamed term
+//
+// Exit: 0 = clean (warnings allowed), 1 = errors, 2 = tool failure.
+//
+// Suppression: a backtick path ref is exempt from the existence check when a
+// negation/target marker ("does not exist", "target", "future", "planned",
+// "example", "rejected", ...) appears within ±2 lines or under the nearest
+// preceding heading — docs are allowed to describe things not built yet.
+
+import { existsSync, readFileSync, writeFileSync, readdirSync, statSync, mkdirSync } from 'node:fs';
+import { join, resolve, dirname, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
+const rel = (p) => p.slice(repoRoot.length + 1).replaceAll(sep, '/');
+const configPath = join(repoRoot, 'scaffold.config.json');
+const cfg = existsSync(configPath) ? JSON.parse(readFileSync(configPath, 'utf8')) : {};
+const sourceDir = cfg.layers?.sourceDir ?? 'src';
+const testDir = cfg.layers?.testDir ?? 'test';
+
+const IGNORE = ['node_modules', '.git', '.dart_tool', 'build', 'dist', 'generated', '__pycache__', '.venv'];
+
+function walk(dir, out = []) {
+  if (!existsSync(dir)) return out;
+  for (const e of readdirSync(dir)) {
+    const p = join(dir, e);
+    if (statSync(p).isDirectory()) { if (!IGNORE.includes(e)) walk(p, out); }
+    else out.push(p);
+  }
+  return out;
+}
+
+const docFiles = () => [
+  ...walk(join(repoRoot, 'docs')).filter((p) => p.endsWith('.md')),
+  ...['CLAUDE.md', 'AGENTS.md'].map((f) => join(repoRoot, f)).filter(existsSync),
+];
+
+// ── suppression ──────────────────────────────────────────────────────────────
+const NEGATION = [
+  'does not exist', 'do not exist', 'not exist', 'no longer', 'there is no', 'removed',
+  'former', 'phantom', 'previous', 'target', 'future', 'tbd', 'deferred', 'specified',
+  'planned', 'when built', 'when implemented', 'rejected', 'not applicable', 'legacy',
+  'pending', 'blocked', 'must not', 'example', 'e.g.', 'fill', 'placeholder', '<!--',
+];
+function suppressed(lines, idx) {
+  for (let i = Math.max(0, idx - 2); i <= Math.min(lines.length - 1, idx + 2); i++) {
+    if (NEGATION.some((m) => lines[i].toLowerCase().includes(m))) return true;
+  }
+  for (let i = idx - 3; i >= Math.max(0, idx - 40); i--) {
+    if (NEGATION.some((m) => lines[i].toLowerCase().includes(m))) return true;
+  }
+  return false;
+}
+
+// ── check: backtick path references resolve ──────────────────────────────────
+// Matches `docs/...`, `src/...`, `test/...`, `CLAUDE.md`, etc. inside backticks.
+const PATH_RE = /`([A-Za-z0-9_.\-]+(?:\/[A-Za-z0-9_.\-*{}]+)*\.[A-Za-z0-9]+)`/g;
+const ROOTS = new Set(['docs', sourceDir, testDir, 'tool', '.claude', '.githooks']);
+
+function checkPathRefs() {
+  let errors = 0, warns = 0;
+  for (const f of docFiles()) {
+    const lines = readFileSync(f, 'utf8').split('\n');
+    lines.forEach((line, idx) => {
+      let m;
+      PATH_RE.lastIndex = 0;
+      while ((m = PATH_RE.exec(line))) {
+        const ref = m[1];
+        if (ref.includes('*') || ref.includes('{')) continue; // glob — skip
+        const hasSlash = ref.includes('/');
+        const top = ref.split('/')[0];
+        // Only check refs that are clearly repo paths we own:
+        //  - with a slash → the top segment is a known root (docs/, src/, tool/, …)
+        //  - without a slash → a capitalized root file (CLAUDE.md, AGENTS.md)
+        // This skips dotted code identifiers (e.g. `verify.docs`, `Math.max`).
+        const owned = hasSlash ? ROOTS.has(top) : /^[A-Z][A-Za-z0-9_-]*\.[A-Za-z]+$/.test(ref);
+        if (!owned) continue;
+        const base = ref.split('/').pop();
+        if (base.startsWith('.')) continue; // generated/runtime dotfiles (.last-pass.json)
+        if (existsSync(join(repoRoot, ref))) continue;
+        if (suppressed(lines, idx)) continue;
+        console.error(`  ✗ ${rel(f)}:${idx + 1}  references missing path \`${ref}\``);
+        errors++;
+      }
+    });
+  }
+  return { errors, warns };
+}
+
+// ── check: WBS commit-traceability log present ───────────────────────────────
+function checkWbs() {
+  const wbs = join(repoRoot, 'docs', 'project-management', 'wbs.md');
+  if (!existsSync(wbs)) { console.error('  ✗ docs/project-management/wbs.md missing'); return { errors: 1 }; }
+  const text = readFileSync(wbs, 'utf8');
+  let errors = 0;
+  if (!/Commit Traceability Log/i.test(text)) {
+    console.error('  ✗ wbs.md missing the "Commit Traceability Log" section (§10).');
+    errors++;
+  }
+  return { errors };
+}
+
+// ── terms: find leftover refs after a rename ─────────────────────────────────
+function findTerm(term) {
+  if (!term) { console.error('terms: pass the old term, e.g. `terms OldName`'); process.exit(2); }
+  const targets = [...docFiles(), ...walk(join(repoRoot, sourceDir)), ...walk(join(repoRoot, testDir))];
+  let hits = 0;
+  for (const f of targets) {
+    let text;
+    try { text = readFileSync(f, 'utf8'); } catch { continue; }
+    text.split('\n').forEach((line, i) => {
+      if (line.includes(term)) { console.log(`  ${rel(f)}:${i + 1}  ${line.trim().slice(0, 120)}`); hits++; }
+    });
+  }
+  console.log(`\n${hits} reference(s) to "${term}".`);
+  return hits;
+}
+
+// ── generate: repo-map ───────────────────────────────────────────────────────
+function generate() {
+  const outDir = join(repoRoot, 'docs', '_generated');
+  mkdirSync(outDir, { recursive: true });
+  const dirs = new Map();
+  for (const root of [sourceDir, testDir, 'docs', 'tool']) {
+    for (const f of walk(join(repoRoot, root))) {
+      const d = dirname(rel(f));
+      dirs.set(d, (dirs.get(d) ?? 0) + 1);
+    }
+  }
+  const rows = [...dirs.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+    .map(([d, n]) => `| \`${d}/\` | ${n} |`).join('\n');
+  const md = `# Repo Map (generated)
+
+> Auto-generated by \`node tool/doc_guard/run.mjs generate\`. Do not edit by hand.
+> Read this first on a cold session instead of re-exploring the tree.
+
+Generated: ${new Date().toISOString().slice(0, 10)}
+
+## Directory file counts
+
+| Directory | Files |
+| --- | --- |
+${rows}
+`;
+  writeFileSync(join(outDir, 'repo-map.md'), md);
+  console.log(`generated docs/_generated/repo-map.md (${dirs.size} directories).`);
+  return 0;
+}
+
+// ── dispatch ─────────────────────────────────────────────────────────────────
+const [cmd, arg] = process.argv.slice(2);
+if (cmd === 'generate') process.exit(generate());
+if (cmd === 'terms') { findTerm(arg); process.exit(0); }
+if (cmd === 'check' || !cmd) {
+  console.log('doc_guard check:');
+  let errors = 0;
+  for (const fn of [checkPathRefs, checkWbs]) errors += (fn().errors ?? 0);
+  console.log(errors ? `\ndoc_guard: ${errors} error(s).` : '\ndoc_guard: clean.');
+  process.exit(errors ? 1 : 0);
+}
+console.error(`doc_guard: unknown command "${cmd}". Use check | generate | terms <old>.`);
+process.exit(2);

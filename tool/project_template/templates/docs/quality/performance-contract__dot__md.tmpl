@@ -1,0 +1,24 @@
+---
+last_updated: {{DATE}}
+status: contract
+---
+
+# Performance contract — {{PROJECT_NAME}}
+
+Budgets and anti-patterns for performance-sensitive paths. Consult before touching a
+hot path; state the impact in the report.
+
+## Budgets
+
+| Path | Budget | Measured how |
+| --- | --- | --- |
+| <!-- FILL: e.g. list load --> | <!-- FILL: e.g. < 16ms/frame, < 200ms --> | <!-- FILL --> |
+
+## Anti-patterns to avoid
+- N+1 / unbounded queries — page or batch.
+- Blocking the main thread with I/O or heavy compute.
+- Rebuilding large subtrees on every state change.
+- Loading full datasets when a count/window suffices.
+
+## Rules
+- A change to a budgeted path must not regress its budget; note the measurement in the report.

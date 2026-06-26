@@ -1,0 +1,21 @@
+---
+last_updated: {{DATE}}
+status: contract
+---
+
+# Migration contract — {{PROJECT_NAME}}
+
+Every schema version bump has a migration row here with a forward step and a test. Never
+edit a shipped migration — add a new one.
+
+## Migration log
+
+| From → To | Change | Migration step | Test |
+| --- | --- | --- | --- |
+| 0 → 1 | initial schema | create tables | <!-- FILL --> |
+| <!-- FILL --> | <!-- FILL --> | <!-- FILL --> | <!-- FILL --> |
+
+## Rules
+- Bumping the version in `docs/database/schema-contract.md` requires a row here.
+- Migrations are forward-only and tested against a populated fixture DB.
+- Data-destructive steps must be called out explicitly and justified.

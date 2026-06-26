@@ -1,0 +1,31 @@
+---
+last_updated: {{DATE}}
+status: contract
+---
+
+# Error contract — {{PROJECT_NAME}}
+
+The single failure taxonomy. Every layer maps errors into these types; the UI maps each
+type to one user-facing behavior. No ad-hoc error strings outside this table.
+
+## Result type
+
+<!-- FILL: the project's result/error convention, e.g. Either<Failure, T>, Result<T, E>,
+exceptions-at-boundary. State it once; every use case and repository follows it. -->
+
+## Failure taxonomy
+
+| Failure | When | Maps to (UI) | Recoverable? |
+| --- | --- | --- | --- |
+| `NotFound` | requested entity absent | <!-- FILL --> | <!-- FILL --> |
+| `Validation` | input fails a business rule | show the rule message | yes |
+| `Conflict` | concurrent / duplicate write | <!-- FILL --> | <!-- FILL --> |
+| `Persistence` | storage read/write failed | generic retry | maybe |
+| `Network` | remote call failed | offline banner / retry | yes |
+| `Unexpected` | unhandled | generic error + log | no |
+<!-- FILL: add/remove rows to match the domain -->
+
+## Rules
+- Repositories return Failures, never throw across the boundary.
+- Use cases translate low-level Failures into domain-meaningful ones.
+- The UI never inspects raw exceptions — only the Failure type.

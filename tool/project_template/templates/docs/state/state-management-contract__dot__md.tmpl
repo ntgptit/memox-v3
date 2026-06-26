@@ -1,0 +1,27 @@
+---
+last_updated: {{DATE}}
+status: contract
+---
+
+# State-management contract — {{PROJECT_NAME}}
+
+How presentation state is owned, derived, and disposed. Prevents the two classic bugs:
+business data living only in memory, and state mutated from the wrong place.
+
+## Approach
+<!-- FILL: the state solution (Riverpod, Redux, signals, hooks...) and the one rule that
+matters: persistent data round-trips through a repository, never lives only in state -->
+
+## Per-notifier contract template
+
+### `<!-- FILL: SomethingNotifier -->`
+- **Owns:** <!-- FILL: what slice of state -->
+- **Reads from:** <!-- FILL: which use case(s) -->
+- **Exposes:** <!-- FILL: state shape (loading/data/error) -->
+- **Mutations:** <!-- FILL: which actions, and the use case each calls -->
+- **Lifecycle:** <!-- FILL: when created/disposed; what survives navigation -->
+
+## Rules
+- No business logic in notifiers beyond orchestration — that belongs in use cases.
+- Loading / empty / error are explicit states, not nulls.
+- Never call a side-effecting read inside a build/render callback.

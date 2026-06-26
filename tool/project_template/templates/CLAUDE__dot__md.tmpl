@@ -1,0 +1,214 @@
+# CLAUDE.md — {{PROJECT_NAME}}
+
+> One-line product description: <!-- FILL: what this project is, for whom, the one thing it must do well -->
+
+`docs/` is the **source of truth** for behavior, schema, routes, and UI contract.
+When `docs/` and code conflict, do NOT silently pick one. Report the mismatch, or
+update both in the SAME commit.
+
+Stack: {{STACK_LANGUAGE}} · {{STACK_FRAMEWORK}} · architecture: Clean (dependencies point inward).
+Machine config: `scaffold.config.json` (source = `{{SOURCE_DIR}}/`, tests = `{{TEST_DIR}}/`, manifest = `{{MANIFEST_FILE}}`).
+
+---
+
+## 🔴 Doc-code parity rule (read first, always apply)
+
+**Every commit that changes code must keep docs in sync with code.** If a code
+change affects any aspect specified in `docs/`, you MUST update the docs **in the
+SAME commit** — never "fix later".
+
+Why: docs drift silently across sessions. A later Claude Code session reads the
+stale spec and does the wrong thing. This rule stops drift at the source.
+
+### Pre-commit parity check (mandatory, never skip)
+
+Before finishing a task, answer in order:
+
+1. **User-visible behavior change?** (flow, dialog copy, button order, empty/error
+   states, validation message, navigation) → update the matching business / UI doc.
+2. **Schema / persistence change?** (column, index, migration, storage key, file
+   path, encoding) → update `docs/database/schema-contract.md` +
+   `docs/database/migration-contract.md` + `docs/database/storage-boundaries.md`.
+3. **Route / navigation change?** → update `docs/business/navigation/navigation-flow.md`
+   + route constants.
+4. **Core domain algorithm / business rule change?** → update the owning business
+   doc + the decision table.
+5. **Rule / edge case / validation change?** → update the matching doc. NEVER quietly
+   relax or tighten a documented rule.
+6. **New testable branch?** → add a row in `docs/decision-tables/core-decision-table.md`
+   and write the matching test.
+7. **Status transition?** (Specified ↔ Implemented) → update the status table in
+   `docs/business/system/overview.md`.
+8. **Behavior changed but old docs still reference the old way?** → fix ALL refs.
+   Use `node tool/doc_guard/run.mjs terms <old_term>` to find them.
+
+If unsure whether an item needs updating, **default to updating it**. The cost of an
+over-update is less than the cost of drift.
+
+---
+
+## WBS maintenance rule
+
+`docs/project-management/wbs.md` is the source of truth for task breakdown.
+
+- Any task that creates/deletes/renames/splits/merges/re-scopes/completes a feature
+  must check whether the WBS is affected and update it in the same commit.
+- If the WBS is unaffected, the final report must state: `WBS update: not needed — <reason>`.
+
+### Commit traceability rule (mandatory)
+
+Every commit that creates, advances, or completes a WBS work package MUST append a
+line to the **Commit Traceability Log (§10 of `docs/project-management/wbs.md`)** in
+the SAME commit: short commit id, date, WBS ID(s) touched, one-line summary.
+Append-only, newest first.
+
+---
+
+## Code change → required docs (trigger map)
+
+This maps a kind of code change to the docs you MUST check (not "might"):
+
+| Code change | Must check & update if affected |
+| --- | --- |
+| `{{SOURCE_DIR}}/<domain entities>/**` | the entity's business doc + `docs/business/glossary.md` |
+| `{{SOURCE_DIR}}/<use cases>/**` | matching use-case contract + business doc + decision table |
+| `{{SOURCE_DIR}}/<repositories / data>/**` | matching repository contract + `docs/database/schema-contract.md` |
+| `{{SOURCE_DIR}}/<persistence / schema>/**` | `docs/database/{schema,migration,storage-boundaries}` + a migration + tests |
+| `{{SOURCE_DIR}}/<routing>/**` | `docs/business/navigation/navigation-flow.md` |
+| `{{SOURCE_DIR}}/<presentation / UI>/**` | matching wireframe / UI contract under `docs/ui-ux/` |
+| `{{MANIFEST_FILE}}` (new dependency) | **Stop and ask. Approval needed.** |
+<!-- FILL: add rows for this project's actual directory layout; one row per code zone that has an owning doc -->
+
+If a change hits multiple rows, check all of them.
+
+---
+
+## Required reading by task
+
+**Universal (every task):**
+- `docs/contracts/error-contract.md` (failure taxonomy)
+- `docs/contracts/types-catalog.md` (enums, value objects)
+- `docs/contracts/code-style.md` (naming, structure, layer order)
+- `docs/_generated/repo-map.md` (cold-start snapshot)
+
+**Task-specific:**
+
+| Task type | Read first |
+| --- | --- |
+| Any task | `docs/business/index.md`, `docs/business/glossary.md`, the 4 universal contracts |
+| Add/change use case | `docs/contracts/usecase-contracts/<entity>.md` + business spec + decision rows |
+| Add/change repository | `docs/contracts/repository-contracts/<entity>-repository.md` |
+| Add/change screen / UI | matching wireframe + `docs/ui-ux/ui-ux-contract.md` + business doc |
+| Add/change route | `docs/business/navigation/navigation-flow.md` |
+| Schema change | `docs/database/schema-contract.md`, `docs/database/migration-contract.md` |
+| State / provider | `docs/state/state-management-contract.md` |
+| Writing tests | `docs/testing/test-strategy.md` |
+| Perf-sensitive | `docs/quality/performance-contract.md` |
+| Adding a log site | `docs/quality/observability-contract.md` |
+| Giving a task to an agent | `docs/agent/agent-task-template.md` |
+| Delegating to sub-agents | `docs/agent/orchestration.md` |
+| Reviewing code | `docs/checklist/recursive-agent-review.md` |
+| Completing a task | `docs/checklist/implementation-checklist.md` |
+<!-- FILL: add project-specific task types and their required reading -->
+
+---
+
+## Path convention for cross-references (canonical)
+
+Whenever a markdown file references another file inside backticks, the path MUST be
+**repo-root absolute, no leading slash**:
+
+```
+✓  `docs/business/<feature>/<spec>.md`     ✓  `CLAUDE.md`
+✗  /docs/...   ✗  ../docs/...   ✗  bare-filename.md
+```
+
+`doc_guard` enforces this. An agent finding a non-conforming ref MUST fix it in the
+same commit and report it under "Drift detected".
+
+---
+
+## Hard rules (violation = task fail)
+
+- Do NOT commit code without running the Pre-commit parity check.
+- Do NOT implement from assumption when docs already define a contract.
+- Do NOT edit generated files <!-- FILL: list generated-file globs, e.g. `*.g.dart`, `dist/**` -->.
+- Do NOT hardcode route strings, colors, text styles, durations, or user-facing strings — use the project's tokens/constants.
+- Do NOT change schema/persistence without a migration, schema docs, migration docs, and tests in the SAME commit.
+- Do NOT mark a docs item from Specified/Target/Future to Implemented unless code truly implements it AND a test verifies it.
+- Do NOT keep persistent data only in memory / provider state.
+- Do NOT bypass the UseCase → Repository → DataSource flow.
+- Do NOT violate dependency direction: domain imports nothing outward; presentation never imports data directly. Dependencies point inward.
+- Do NOT add a route without updating route constants AND `docs/business/navigation/navigation-flow.md` in the same commit.
+- Do NOT leave docs referencing an old term/route/field after a rename.
+- Do NOT mark a task "done" before the Pre-commit parity check passes.
+- Do NOT run verification commands ad hoc — everything goes through `node tool/verify/run.mjs`. Ad-hoc runs write no marker, so the pre-commit hook blocks the commit.
+<!-- FILL: add project-specific hard rules (design system, security boundaries, etc.) -->
+
+---
+
+## Mandatory workflow
+
+1. Read related docs (per "Required reading").
+2. Inspect the source files the docs point to.
+3. **Drift check**: do the docs still match current code? If not, STOP and report (format below).
+4. Confirm acceptance criteria when the spec is unclear.
+5. Implement following Clean Architecture: entity → repository contract → use case → state → UI.
+6. **Pre-commit parity check** (8-step above).
+7. Update related docs if behavior changed (mandatory, same commit).
+8. Update the decision table if a behavior branch was added/changed.
+9. Run verification: `node tool/verify/run.mjs` (see below).
+10. **Auto-review fan-out** (below): after verify PASS, before reporting, fan out to review subagents.
+11. Report per `docs/checklist/implementation-checklist.md`, including a "Docs updated" section, verify result, and subagent-review summary.
+
+### Drift report format
+
+```
+DRIFT DETECTED:
+- Code file: {{SOURCE_DIR}}/...
+- Doc file:  docs/...
+- Mismatch:  {specific description}
+- Suggested fix: {update doc / update code / needs user decision}
+```
+
+---
+
+## Auto-delegation (subagent fan-out)
+
+After a **code-changing** task and once `node tool/verify/run.mjs` PASSes, **before
+the final report**, fan out **in parallel** (one turn, multiple Agent calls):
+
+- `code-reviewer` — review the working-tree diff across correctness, architecture, doc-parity, and project gates.
+- `docs-drift-detector` — sweep for remaining doc-code drift (stale path/symbol refs, WBS gaps).
+
+Review the **working-tree diff**, do NOT commit first. In the fan-out prompt instruct
+each reviewer to run `git add -N . && git diff`. Fix blocker findings before finishing;
+list minor findings in the report for the user to decide.
+
+Skip the fan-out (and say why) when: docs-only task, trivial rename/format, the user
+asked for speed / "no review", or verify has not passed yet.
+
+---
+
+## Verification (single entry)
+
+```
+node tool/verify/run.mjs --quick   # inner dev loop: fast, NO marker
+node tool/verify/run.mjs --docs    # docs-only change → writes marker
+node tool/verify/run.mjs --code    # code change → writes marker
+node tool/verify/run.mjs           # auto-detect scope
+```
+
+Command chains live in `scaffold.config.json` → `verify.docs` / `verify.code`. A PASS
+writes `tool/verify/.last-pass.json` bound to the tree state; the pre-commit hook
+(`--check-marker`) refuses commits without a matching marker. Edit a file after PASS →
+the marker is stale → re-run.
+
+---
+
+## When in doubt
+
+- Prefer a minimal, structurally correct change over a broad refactor.
+- Prefer an over-cautious doc update over skipping the parity check.
+- If a task requires violating any hard rule, STOP and confirm with the user first.
+- If you detect doc drift the task did not ask you to fix, still report it.

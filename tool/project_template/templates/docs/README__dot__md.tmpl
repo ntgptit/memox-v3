@@ -1,0 +1,24 @@
+# docs/ — source of truth for {{PROJECT_NAME}}
+
+This directory is the **contract**, not commentary. Behavior, schema, routes, and UI
+are specified here first; code implements them. When docs and code disagree, that is a
+bug to report — never silently pick one (`CLAUDE.md` → Doc-code parity).
+
+## Layout
+
+| Dir | Holds |
+| --- | --- |
+| `business/` | What the product does, per feature: rules, flows, edge cases, glossary, status. |
+| `contracts/` | The hard interfaces: error taxonomy, type catalog, code style, per-entity use-case + repository contracts. |
+| `database/` | Schema, migrations, storage boundaries. |
+| `decision-tables/` | Every testable branch as a row → maps 1:1 to a test. |
+| `state/` | State-management / provider contracts. |
+| `ui-ux/` | UI contract, wireframes, copy. |
+| `testing/` | Test strategy and the bug-CLASS gate map. |
+| `quality/` | Performance + observability contracts. |
+| `project-management/` | The WBS (task source of truth) + commit traceability log. |
+| `checklist/` | Implementation + review checklists. |
+| `agent/` | Task template + sub-agent orchestration rules. |
+| `_generated/` | Tool output (repo-map). Do not hand-edit. |
+
+Start at `docs/MANIFEST.md` for the full file index, or `docs/business/index.md` for behavior.

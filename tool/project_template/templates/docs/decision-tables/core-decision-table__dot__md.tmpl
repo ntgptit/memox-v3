@@ -1,0 +1,21 @@
+---
+last_updated: {{DATE}}
+status: contract
+---
+
+# Core decision table — {{PROJECT_NAME}}
+
+Every testable behavior branch is a row. Each row maps 1:1 to a test. Adding/changing a
+branch in code requires adding/changing a row here AND its test in the same commit
+(`CLAUDE.md` parity step 6).
+
+## How to use
+- **ID**: stable, referenced by tests and use-case contracts.
+- **Given / When / Then**: the condition, the trigger, the expected outcome.
+- **Test**: the test name that asserts this row.
+
+| ID | Feature | Given | When | Then | Test |
+| --- | --- | --- | --- | --- | --- |
+| D-001 | <!-- FILL --> | <!-- FILL: precondition --> | <!-- FILL: action --> | <!-- FILL: outcome --> | <!-- FILL: test name --> |
+
+> Keep IDs append-only. Never reuse a retired ID.

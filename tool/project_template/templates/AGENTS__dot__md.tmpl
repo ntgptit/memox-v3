@@ -1,0 +1,23 @@
+# AGENTS.md — {{PROJECT_NAME}}
+
+This file is the entry point for any AI agent (Claude Code, etc.) working in this repo.
+It defers to `CLAUDE.md` for the full rule set; read both before any task.
+
+## Responsibilities
+
+- Implement only what the task asks; keep changes minimal and structurally correct.
+- Treat `docs/` as the source of truth. Keep docs and code in sync in the SAME commit (`CLAUDE.md` → Doc-code parity).
+- Run all verification through `node tool/verify/run.mjs`. Never run lint/test ad hoc.
+- Never invent architecture: the skeleton already exists — fill it in, do not re-design it.
+
+## Reporting (end of every task)
+
+1. **Files changed** — grouped by layer.
+2. **Docs updated** — each file + why (or `WBS update: not needed — <reason>`).
+3. **Verify result** — output of `node tool/verify/run.mjs`.
+4. **Subagent review** — summary of `code-reviewer` + `docs-drift-detector` findings (or why skipped).
+5. **Drift detected** — anything found but out of scope.
+
+## Hard rules
+
+See `CLAUDE.md` → "Hard rules". A violation fails the task.

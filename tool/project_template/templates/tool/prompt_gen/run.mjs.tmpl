@@ -1,0 +1,126 @@
+// prompt_gen — generate a ready-to-paste Claude Code task prompt from a WBS row.
+//
+// The WBS (docs/project-management/wbs.md) is the task source of truth. Each row
+// is a narrow, independently deliverable work package. This tool turns a row
+// into a filled task prompt that already points at the required reading, scope,
+// and reporting rules — so you do not re-write the prompt boilerplate per task.
+//
+// Usage (zero npm deps; Node 18+):
+//   node tool/prompt_gen/run.mjs <WBS_ID> [<WBS_ID2> ...]   # print prompt(s)
+//   node tool/prompt_gen/run.mjs --list [--status <S>]      # list rows
+//   node tool/prompt_gen/run.mjs --ready                    # rows whose deps are Implemented
+//
+// WBS table contract (columns, in order):
+//   | WBS ID | Title | Layer | Status | Depends On | Notes |
+//
+// Exit: 0 = ok, 1 = unknown WBS ID / usage error.
+
+import { readFileSync, existsSync } from 'node:fs';
+import { join, resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
+const wbsPath = join(repoRoot, 'docs', 'project-management', 'wbs.md');
+
+if (!existsSync(wbsPath)) { console.error('prompt_gen: docs/project-management/wbs.md not found.'); process.exit(1); }
+
+// ── parse WBS table rows ─────────────────────────────────────────────────────
+function parseRows() {
+  const rows = new Map();
+  for (const line of readFileSync(wbsPath, 'utf8').split('\n')) {
+    if (!line.trim().startsWith('|')) continue;
+    const cells = line.split('|').slice(1, -1).map((c) => c.trim());
+    if (cells.length < 4) continue;
+    const id = cells[0];
+    if (!/^\d+(\.\d+)*$/.test(id)) continue; // header / separator / non-id rows
+    rows.set(id, {
+      id, title: cells[1] ?? '', layer: cells[2] ?? '', status: cells[3] ?? '',
+      dependsOn: cells[4] ?? '', notes: cells[5] ?? '',
+    });
+  }
+  return rows;
+}
+
+const statusToken = (s) => String(s ?? '').split('(')[0].trim();
+const isImplemented = (s) => statusToken(s) === 'Implemented';
+
+function depsReady(row, rows) {
+  const d = row.dependsOn;
+  if (!d || ['none', '-', ''].includes(d.toLowerCase())) return true;
+  return d.split(/[,;/]/).map((x) => x.trim()).filter(Boolean)
+    .every((dep) => isImplemented(rows.get(dep)?.status));
+}
+
+// ── prompt template ──────────────────────────────────────────────────────────
+function promptFor(row, rows) {
+  const blockedBy = (row.dependsOn || '').split(/[,;/]/).map((x) => x.trim())
+    .filter((d) => d && !['none', '-'].includes(d.toLowerCase()) && !isImplemented(rows.get(d)?.status));
+  return `# Task ${row.id} — ${row.title}
+
+## Read first (always)
+- \`CLAUDE.md\` — agent rules, especially Doc-code parity + Hard rules
+- \`AGENTS.md\`
+- \`docs/business/index.md\` and \`docs/business/glossary.md\`
+- \`docs/contracts/error-contract.md\`, \`docs/contracts/types-catalog.md\`, \`docs/contracts/code-style.md\`
+- \`docs/_generated/repo-map.md\`
+
+## Read for this task
+- The business doc for this feature under \`docs/business/**\`
+- The matching use-case + repository contract under \`docs/contracts/**\`
+- Relevant rows in \`docs/decision-tables/core-decision-table.md\`
+- \`docs/testing/test-strategy.md\`
+
+## Task
+**WBS:** ${row.id}  ·  **Layer:** ${row.layer}  ·  **Status:** ${row.status}
+**Title:** ${row.title}
+**Notes:** ${row.notes || '(see business doc)'}
+${blockedBy.length ? `\n> ⚠ Blocked: dependencies not yet Implemented → ${blockedBy.join(', ')}` : ''}
+
+## Scope
+Allowed: source for this feature, its tests, and the docs that describe it (Doc-code parity).
+Not allowed: generated files, schema (unless this is a migration task), routes (unless this is a routing task), anything outside this work package.
+
+## Definition of done
+1. Implement following the layer order in \`docs/contracts/code-style.md\`.
+2. Run the 8-step Doc-code parity check (\`CLAUDE.md\`); update every affected doc in the SAME commit.
+3. Add/Update decision-table rows + tests for any new testable branch.
+4. Verify: \`node tool/verify/run.mjs --code\` (or \`--docs\` for docs-only) → PASS.
+5. Append a line to the WBS Commit Traceability Log (§10) in the same commit.
+6. Report: files changed, docs updated (+why), verify result, subagent review summary.
+`;
+}
+
+// ── dispatch ─────────────────────────────────────────────────────────────────
+const args = process.argv.slice(2);
+const rows = parseRows();
+
+if (args.includes('--list')) {
+  const i = args.indexOf('--status');
+  const filter = i >= 0 ? args[i + 1] : null;
+  for (const r of rows.values()) {
+    if (filter && statusToken(r.status) !== filter) continue;
+    console.log(`${r.id}\t${statusToken(r.status)}\t${r.title}`);
+  }
+  process.exit(0);
+}
+
+if (args.includes('--ready')) {
+  let n = 0;
+  for (const r of rows.values()) {
+    if (statusToken(r.status) === 'Specified' && depsReady(r, rows)) { console.log(`${r.id}\t${r.title}`); n++; }
+  }
+  if (!n) console.log('No ready rows (all Specified rows are blocked or none exist yet).');
+  process.exit(0);
+}
+
+const ids = args.filter((a) => !a.startsWith('--'));
+if (!ids.length) { console.error('prompt_gen: pass a WBS ID, or --list / --ready.'); process.exit(1); }
+
+let bad = false;
+for (const id of ids) {
+  const row = rows.get(id);
+  if (!row) { console.error(`prompt_gen: unknown WBS ID "${id}".`); bad = true; continue; }
+  console.log(promptFor(row, rows));
+  console.log('\n' + '─'.repeat(60) + '\n');
+}
+process.exit(bad ? 1 : 0);

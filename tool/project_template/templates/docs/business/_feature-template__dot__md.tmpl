@@ -1,0 +1,41 @@
+---
+last_updated: {{DATE}}
+status: Specified   # Specified | Partial | Implemented | Future | Rejected
+---
+
+# Feature: <!-- FILL: feature name -->
+
+> Copy this file to `docs/business/<feature>/<spec>.md` and fill every section.
+> Delete the guidance comments as you go. An empty section is a parity gap.
+
+## Purpose
+<!-- FILL: what user problem this solves, in one paragraph -->
+
+## Actors & preconditions
+<!-- FILL: who triggers it, what must be true first -->
+
+## Primary flow
+<!-- FILL: numbered happy-path steps, UI → use case → repository → persistence -->
+
+## Rules & validation
+<!-- FILL: every business rule, with the exact message/behavior. Each rule that has a
+branch becomes a row in docs/decision-tables/core-decision-table.md -->
+
+## Edge cases & errors
+<!-- FILL: empty/loading/error/conflict states; which Failure (docs/contracts/error-contract.md) maps to which UI -->
+
+## Data touched
+<!-- FILL: entities, tables, storage keys (cross-link docs/database/schema-contract.md) -->
+
+## Contracts
+- Use case: `docs/contracts/usecase-contracts/<entity>.md`
+- Repository: `docs/contracts/repository-contracts/<entity>-repository.md`
+
+## Decision-table rows
+<!-- FILL: list the row IDs in docs/decision-tables/core-decision-table.md this feature owns -->
+
+## Tests required
+<!-- FILL: per docs/testing/test-strategy.md — unit/integration/UI rows -->
+
+## Source files
+<!-- FILL: paths under {{SOURCE_DIR}}/ that implement this (once they exist) -->

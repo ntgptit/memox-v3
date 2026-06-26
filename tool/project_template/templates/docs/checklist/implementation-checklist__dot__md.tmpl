@@ -1,0 +1,46 @@
+---
+last_updated: {{DATE}}
+applies_to: every implementation task
+---
+
+# Implementation checklist — {{PROJECT_NAME}}
+
+Use before reporting a task complete.
+
+## Read
+- [ ] `CLAUDE.md` (especially Doc-code parity + Hard rules)
+- [ ] `AGENTS.md`
+- [ ] `docs/business/glossary.md` + the related business doc(s)
+- [ ] Related use-case + repository contracts
+- [ ] `docs/contracts/error-contract.md`, `docs/contracts/types-catalog.md`, `docs/contracts/code-style.md`
+- [ ] `docs/testing/test-strategy.md`
+- [ ] Related decision-table rows
+- [ ] `docs/_generated/repo-map.md`
+
+## Drift detection (do FIRST)
+- [ ] Code and related docs are consistent.
+- [ ] No leftover refs to renamed terms/routes/fields.
+- [ ] If drift found → reported and waited for direction.
+
+## Doc-code parity (8-step from `CLAUDE.md`)
+- [ ] (1) User-visible behavior → business/UI doc updated.
+- [ ] (2) Schema/persistence → `docs/database/**` + migration + tests.
+- [ ] (3) Route/navigation → navigation-flow + route constants.
+- [ ] (4) Core algorithm/rule → owning doc + decision table.
+- [ ] (5) Rule/edge/validation → matching doc; no silent rule change.
+- [ ] (6) New testable branch → decision row + test.
+- [ ] (7) Status transition → `docs/business/system/overview.md`.
+- [ ] (8) Old refs to old behavior → all fixed (`doc_guard terms`).
+
+## WBS
+- [ ] WBS row updated if affected, OR report states "WBS update: not needed — <reason>".
+- [ ] Commit Traceability Log (§10) appended in the same commit.
+
+## Verify
+- [ ] `node tool/verify/run.mjs` (`--code` / `--docs`) → PASS (marker written).
+
+## Review fan-out (code tasks)
+- [ ] `code-reviewer` + `docs-drift-detector` run on the working-tree diff; blockers fixed.
+
+## Report contains
+- [ ] Files changed · Docs updated (+why) · Verify result · Subagent review · Drift detected.

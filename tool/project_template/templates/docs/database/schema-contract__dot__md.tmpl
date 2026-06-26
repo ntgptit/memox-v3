@@ -1,0 +1,28 @@
+---
+last_updated: {{DATE}}
+status: contract
+---
+
+# Schema contract — {{PROJECT_NAME}}
+
+The persisted shape of data and the source of truth. Any schema change requires, in the
+SAME commit: this file + `docs/database/migration-contract.md` + tests + a migration
+(`CLAUDE.md` hard rule).
+
+## Storage engine
+<!-- FILL: SQLite/Drift, Postgres, files, key-value — and where the DB lives -->
+
+## Tables / collections
+
+### `<!-- FILL: table_name -->`
+| Column | Type | Null? | Default | Notes |
+| --- | --- | --- | --- | --- |
+| `id` | <!-- FILL --> | no | — | primary key |
+| <!-- FILL --> | <!-- FILL --> | <!-- FILL --> | <!-- FILL --> | <!-- FILL --> |
+
+- **Indexes:** <!-- FILL -->
+- **Foreign keys:** <!-- FILL -->
+- **Invariants:** <!-- FILL: what the app guarantees beyond DB constraints -->
+
+## Schema version
+- Current version: <!-- FILL: integer, must match the migration contract -->

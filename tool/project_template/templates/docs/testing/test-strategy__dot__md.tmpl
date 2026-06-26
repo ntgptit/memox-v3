@@ -1,0 +1,35 @@
+---
+last_updated: {{DATE}}
+status: contract
+---
+
+# Test strategy — {{PROJECT_NAME}}
+
+What to test, at which layer, for each change. Tests live under `{{TEST_DIR}}/`.
+
+## Layers
+
+| Layer | Tests | Covers |
+| --- | --- | --- |
+| Unit | use cases, value objects, pure logic | every decision-table row for that logic |
+| Repository / data | repository impls against a real/fake store | contract methods + each Failure |
+| Integration / UI | flows across layers, screens | primary flow + empty/loading/error states |
+
+## Bug-CLASS gate map
+
+Fix the bug CLASS, not the instance: push prevention to the lowest layer, add the
+cheapest gate that covers the whole class.
+
+| Bug class | Prevent (lowest layer) | Detect (gate) |
+| --- | --- | --- |
+| Wrong data / count / sort | repository contract | unit test on the read model |
+| Behavior / navigation | use case + state contract | interaction test per decision row |
+| Validation slips | value-object invariant | unit test per rule |
+| Visual / layout (UI) | shared widget + tokens | golden / snapshot test |
+| Boundary / error mapping | error contract | failure-path test |
+<!-- FILL: add project-specific classes -->
+
+## Per-change requirement
+- New testable branch → a decision-table row + its test (no exceptions).
+- A bug fix → a regression test that fails before the fix.
+- Map every test back to a decision-table ID or a contract method.

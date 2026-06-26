@@ -1,0 +1,61 @@
+# {{PROJECT_NAME}} — Work Breakdown Structure (WBS)
+
+Generated: {{DATE}}
+Repository: `{{REPO}}`
+Baseline reviewed: <!-- FILL: date + note on first review -->
+
+## 0. Purpose
+
+This WBS is the delivery plan and the **task source of truth**. It decomposes every
+user-facing flow into function-level work packages so each row is independently
+deliverable, testable, and reviewable by an AI agent in a single narrow prompt.
+
+`Layer` column: **BE** (domain/use case/repository/data), **FE** (presentation/UI/state),
+**Integration** (spans BE+FE), **Docs**, **Test** (cross-cutting quality gates).
+
+## 1. Status legend
+
+| Status | Meaning |
+| --- | --- |
+| Specified | Spec exists; implementation needed. |
+| Partial | Some pieces exist; incomplete. |
+| Implemented | Confirmed by source + tests. |
+| Future | Intended later; needs approval. |
+| Blocked | Needs a prerequisite decision/schema. |
+| Rejected | Out of scope. |
+| Ongoing | Continuous gate; never "done". |
+
+## 2. Delivery guidance
+
+<!-- FILL: the build order strategy. Suggested default: foundation → shared kit →
+BE per subsystem → screen assembly. One prompt may cover up to ~7 tightly-coupled rows
+that share a subsystem and dependency chain; never one giant "build everything" task. -->
+
+## 3. Work packages
+
+Columns: **WBS ID | Title | Layer | Status | Depends On | Notes**
+(`tool/prompt_gen` parses this exact column order.)
+
+### Phase 0 — Foundation
+
+| WBS ID | Title | Layer | Status | Depends On | Notes |
+| --- | --- | --- | --- | --- | --- |
+| 0.1 | <!-- FILL: e.g. project boot + config --> | Integration | Specified | none | <!-- FILL --> |
+| 0.2 | <!-- FILL: e.g. verify + doc_guard wired --> | Test | Specified | 0.1 | <!-- FILL --> |
+
+### Phase 1 — <!-- FILL: next phase -->
+
+| WBS ID | Title | Layer | Status | Depends On | Notes |
+| --- | --- | --- | --- | --- | --- |
+| 1.1 | <!-- FILL --> | BE | Specified | 0.1 | <!-- FILL --> |
+
+<!-- FILL: add phases/rows for the whole project -->
+
+## 10. Commit Traceability Log
+
+Append-only, newest first. Every commit that creates/advances/completes a WBS row adds a
+line here in the SAME commit (`CLAUDE.md` → Commit traceability rule).
+
+| Commit (8) | Date | WBS ID(s) | Summary |
+| --- | --- | --- | --- |
+| <!-- FILL --> | {{DATE}} | — | scaffold created from project_template |

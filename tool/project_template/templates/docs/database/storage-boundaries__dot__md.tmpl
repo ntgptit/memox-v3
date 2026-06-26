@@ -1,0 +1,20 @@
+---
+last_updated: {{DATE}}
+status: contract
+---
+
+# Storage boundaries — {{PROJECT_NAME}}
+
+What is stored where, and why. Prevents data leaking into the wrong store (e.g. business
+data in preferences, secrets in plain files).
+
+| Store | Holds | Must NOT hold | Key/path convention |
+| --- | --- | --- | --- |
+| Primary DB | <!-- FILL: source-of-truth entities --> | transient UI state | <!-- FILL --> |
+| Key-value / preferences | small flags, settings | business records | <!-- FILL: key naming --> |
+| Files / blobs | <!-- FILL --> | <!-- FILL --> | <!-- FILL --> |
+| Secure storage | tokens, secrets | anything non-sensitive | <!-- FILL --> |
+
+## Rules
+- Persistent business data lives in the primary DB only — never solely in memory/state.
+- Storage keys follow the conventions above; adding a key updates this file.
