@@ -125,6 +125,7 @@ PROVEN red→green by drifting the source.
 | MxAppBar | `mx_app_bar_spec_gate_test.dart` | title font 24/700 | red on headlineMedium(22) |
 | MxSecondaryButton | `mx_secondary_button_spec_gate_test.dart` | tonal→FilledButton + label 14px | red on label drift (18) |
 | MxPrimaryButton | `mx_primary_button_spec_gate_test.dart` | FilledButton + label 14px | red on label drift (18) |
+| MxSectionHeader | `mx_section_header_spec_gate_test.dart` | title 16 **read FROM contract** | red on role drift (18) |
 
 **LOGGED DRIFT FINDING (not yet fixed) — MxSecondaryButton label weight.** Spec
 `23-audio-speech/preview-button` = `font:14/700` (bold), but the FE renders the label
@@ -182,3 +183,20 @@ gates therefore needs a small **curated variant-resolution layer** (label
 pairs — the next step, now that the variant structure is known + documented. The
 contract already removes the "is 14 even a real spec number?" question (it is — and
 12 is the compact variant).
+
+**Centralized read proven end-to-end (MxSectionHeader).** Added
+`test/support/component_spec.dart` (`componentTextSpec(component)` — reads the
+contract, FAILS LOUDLY if the component is not `ok`, so a needs-variant/no-font/
+missing component cannot silently centralize a wrong number) and
+`mx_section_header_spec_gate_test.dart`, which asserts the rendered title font-size
+against the value READ FROM the contract (16), not a hardcode. Proven red→green
+(role drift → 18 vs the contract's 16). This is the first gate whose number has a
+single source.
+
+**Weight drift is even more systemic than the buttons.** MxSectionHeader's title
+role (`titleMedium`) is also w600, while its spec is `16/700` — so the
+semibold-vs-bold drift now spans the button families AND section headers. This
+points the owner fix at the **typography role layer** (the `titleMedium`/`labelLarge`
+emphasis roles render w600 where the kit specs want w700 for these emphasis
+elements), not per-component overrides. Decide + regen the affected goldens, then add
+the `fontWeight` assertions across these gates.
