@@ -5,7 +5,7 @@
    classes + shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, PillBtn, Chip, IconTile, TileLg, ListRow, HeroCard, EmptyState, Breadcrumb, SearchDock, Fab, Sk, Modal, Sheet } = window.MX;
+  const { Icon, S, PillBtn, Chip, IconTile, TileLg, ListRow, HeroCard, EmptyState, SearchDock, Fab, Sk, Modal, Sheet, ScreenBody, SubAppBar } = window.MX;
 
   // ---- Data ----------------------------------------------------------------
   const STATUS_TINT = {
@@ -26,22 +26,14 @@
 
   // ---- App bars ------------------------------------------------------------
   const Bar = ({ title }) => (
-    <>
-      <div className="appbar">
-        <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
-        <span className="appbar-title" style={{ flex: 1, minWidth: 0, marginLeft: S(2), overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{title}</span>
-        <button className="icon-btn" aria-label="Deck options"><Icon name="more-vertical" /></button>
-      </div>
-      <Breadcrumb items={[{ label: 'Library', icon: 'library' }, { label: 'Languages' }, { label: title, current: true }]} />
-    </>
+    <SubAppBar title={title} minW ellipsis
+      trail={<button className="icon-btn" aria-label="Deck options"><Icon name="more-vertical" /></button>}
+      breadcrumb={[{ label: 'Library', icon: 'library' }, { label: 'Languages' }, { label: title, current: true }]} />
   );
 
   const ReorderBar = ({ title }) => (
-    <div className="appbar">
-      <button className="icon-btn" aria-label="Cancel"><Icon name="x" /></button>
-      <span className="appbar-title" style={{ flex: 1, minWidth: 0, marginLeft: S(2), overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Reorder · {title}</span>
-      <button className="pill-btn primary sm"><Icon name="check" />Done</button>
-    </div>
+    <SubAppBar lead="x" leadLabel="Cancel" title={`Reorder · ${title}`} minW ellipsis
+      trail={<button className="pill-btn primary sm"><Icon name="check" />Done</button>} />
   );
 
   const SearchBar = ({ query }) => (
@@ -54,11 +46,7 @@
       trail={<Chip status={c.status}>{STATUS_LABEL[c.status]}</Chip>} />
   );
 
-  const Body = ({ children, pad }) => (
-    <div style={{ flex: 1, overflowY: 'auto', padding: `${pad || S(3)} var(--memox-space-screen) var(--memox-space-12)`, display: 'flex', flexDirection: 'column', gap: S(3) }}>
-      {children}
-    </div>
-  );
+  const Body = ({ children }) => <ScreenBody padTop={3} padBottom={12} gap={3}>{children}</ScreenBody>;
 
   const FabSlot = () => (
     <Fab icon="plus" label="Add card" data-mx-node="06-flashcard-list/add-card-fab"
@@ -145,7 +133,7 @@
       return (
         <div className="app" style={{ position: 'relative' }}>
           <ReorderBar title="Japanese · N5" />
-          <Body pad={S(3)}>
+          <Body>
             <div className="muted" style={{ fontSize: 'var(--memox-fs-body-small)', padding: `0 ${S(1)}` }}>Drag the handles to reorder cards.</div>
             <div className="list-card" data-mx-node="06-flashcard-list/card-list">
               {CARDS.slice(0, 5).map((c, i) => (

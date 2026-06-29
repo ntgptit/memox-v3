@@ -4,7 +4,7 @@
    primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, TileLg, EmptyState, Banner, SearchDock, Sk, Modal, Sheet, BusyOverlay } = window.MX;
+  const { Icon, S, TileLg, EmptyState, Banner, SearchDock, Sk, Modal, Sheet, BusyOverlay, ScreenBody, SubAppBar } = window.MX;
 
   // ---- Data ----------------------------------------------------------------
   const TAGS = [
@@ -23,12 +23,7 @@
   ];
 
   // ---- App bars ------------------------------------------------------------
-  const Bar = () => (
-    <div className="appbar">
-      <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
-      <span className="appbar-title" style={{ flex: 1, minWidth: 0, marginLeft: S(2) }}>Tags</span>
-    </div>
-  );
+  const Bar = () => <SubAppBar title="Tags" minW />;
 
   const SearchBar = ({ query }) => (
     <SearchDock query={query} placeholder="Search tags" node="11-tag-management/search-dock" />
@@ -46,11 +41,7 @@
     </div>
   );
 
-  const Body = ({ children }) => (
-    <div style={{ flex: 1, overflowY: 'auto', padding: `${S(3)} var(--memox-space-screen) var(--memox-space-12)`, display: 'flex', flexDirection: 'column', gap: S(3) }}>
-      {children}
-    </div>
-  );
+  const Body = ({ children }) => <ScreenBody padTop={3} padBottom={12} gap={3}>{children}</ScreenBody>;
 
   const TagList = ({ tags }) => (
     <>

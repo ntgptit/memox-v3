@@ -3,7 +3,7 @@
    low/mid/high scale). Token-driven; composes the shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, IconTile, SectionHead, BarChart, MasteryBar, BottomNav } = window.MX;
+  const { Icon, S, IconTile, SectionHead, BarChart, MasteryBar, BottomNav, ScreenBody } = window.MX;
 
   // Cards reviewed per day this week.
   const WEEK = [
@@ -44,7 +44,7 @@
     return (
       <div className="app">
         <div className="appbar"><span className="appbar-title" style={{ flex: 1 }}>Stats</span></div>
-        <div style={{ flex: 1, overflowY: 'auto', padding: `${S(2)} var(--memox-space-screen) var(--memox-space-6)`, display: 'flex', flexDirection: 'column', gap: 'var(--memox-gap-section)' }}>
+        <ScreenBody padTop={2}>
           <div className="card" data-mx-node="18-stats/week-card">
             <div className="section-head" style={{ marginBottom: S(4) }}>
               <div className="ov"><Icon name="calendar-days" />Cards this week</div>
@@ -64,7 +64,7 @@
               ))}
             </div>
           </div>
-        </div>
+        </ScreenBody>
         <BottomNav active="Stats" />
       </div>
     );

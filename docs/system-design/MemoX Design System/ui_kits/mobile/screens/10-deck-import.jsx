@@ -3,7 +3,7 @@
    back). Token-driven; composes contract classes + shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, Progress, IconTile, TileLg, HeroCard, Banner } = window.MX;
+  const { Icon, S, Progress, IconTile, TileLg, HeroCard, Banner, ScreenBody, SubAppBar } = window.MX;
 
   // ---- Data (parsed rows) --------------------------------------------------
   const ROWS = [
@@ -22,19 +22,9 @@
   ];
 
   // ---- App bar -------------------------------------------------------------
-  const Bar = ({ action }) => (
-    <div className="appbar">
-      <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
-      <span className="appbar-title" style={{ flex: 1, minWidth: 0, marginLeft: S(2) }}>Import</span>
-      {action}
-    </div>
-  );
+  const Bar = ({ action }) => <SubAppBar title="Import" minW trail={action} />;
 
-  const Body = ({ children, center }) => (
-    <div style={{ flex: 1, overflowY: 'auto', padding: `${S(4)} var(--memox-space-screen) var(--memox-space-12)`, display: 'flex', flexDirection: 'column', gap: S(4), ...(center ? { justifyContent: 'center' } : null) }}>
-      {children}
-    </div>
-  );
+  const Body = ({ children, center }) => <ScreenBody padBottom={12} gap={4} center={center}>{children}</ScreenBody>;
 
   // file chip card
   const FileCard = ({ status }) => (

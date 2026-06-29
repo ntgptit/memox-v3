@@ -3,7 +3,7 @@
    contract classes + shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, PillBtn, ListRow, SectionHead, HeroCard, EmptyState, SearchDock, BottomNav, Sk } = window.MX;
+  const { Icon, S, PillBtn, ListRow, SectionHead, HeroCard, EmptyState, SearchDock, BottomNav, Sk, ScreenBody } = window.MX;
 
   // ---- Data ----------------------------------------------------------------
   const FOLDER_HITS = [
@@ -44,11 +44,7 @@
   );
 
   // ---- Assembled screen ----------------------------------------------------
-  const Body = ({ children }) => (
-    <div style={{ flex: 1, overflowY: 'auto', padding: `${S(4)} var(--memox-space-screen) var(--memox-space-10)`, display: 'flex', flexDirection: 'column', gap: 'var(--memox-gap-section)' }}>
-      {children}
-    </div>
-  );
+  const Body = ({ children }) => <ScreenBody padBottom={10}>{children}</ScreenBody>;
 
   // Search is a primary bottom-nav destination, so every state renders the SAME
   // shell — search field + BottomNav with `Search` active — and only the body

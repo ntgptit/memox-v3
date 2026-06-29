@@ -3,7 +3,7 @@
    and overflow. Token-driven; composes contract classes + shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, Breadcrumb, TileLg, ListRow, StatSummary, ListGroup, HeroCard, EmptyState, SearchDock, BottomNav, Fab, Sk } = window.MX;
+  const { Icon, S, TileLg, ListRow, StatSummary, ListGroup, HeroCard, EmptyState, SearchDock, BottomNav, Fab, Sk, ScreenBody, SubAppBar } = window.MX;
 
   // ---- Data ----------------------------------------------------------------
   const DECKS = [
@@ -24,14 +24,9 @@
 
   // ---- App bar -------------------------------------------------------------
   const Bar = ({ title }) => (
-    <>
-      <div className="appbar">
-        <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
-        <span className="appbar-title" style={{ flex: 1, minWidth: 0, marginLeft: S(2), overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{title}</span>
-        <button className="icon-btn" aria-label="More"><Icon name="more-vertical" /></button>
-      </div>
-      <Breadcrumb items={[{ label: 'Library', icon: 'library' }, { label: title, current: true }]} />
-    </>
+    <SubAppBar title={title} minW ellipsis
+      trail={<button className="icon-btn" aria-label="More"><Icon name="more-vertical" /></button>}
+      breadcrumb={[{ label: 'Library', icon: 'library' }, { label: title, current: true }]} />
   );
 
   const SearchBar = ({ query }) => (
@@ -85,11 +80,7 @@
   );
 
   // ---- Assembled screen ----------------------------------------------------
-  const Body = ({ children }) => (
-    <div style={{ flex: 1, overflowY: 'auto', padding: `${S(3)} var(--memox-space-screen) var(--memox-space-10)`, display: 'flex', flexDirection: 'column', gap: 'var(--memox-gap-section)' }}>
-      {children}
-    </div>
-  );
+  const Body = ({ children }) => <ScreenBody padTop={3} padBottom={10}>{children}</ScreenBody>;
 
   const FabSlot = ({ icon = 'plus', node }) => (
     <Fab icon={icon} label="Create" data-mx-node={node}

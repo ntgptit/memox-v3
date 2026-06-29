@@ -4,14 +4,7 @@
    in its own theme regardless of the current one. Token-driven. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, RadioRow } = window.MX;
-
-  const Bar = () => (
-    <div className="appbar">
-      <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
-      <span className="appbar-title" style={{ flex: 1, marginLeft: S(2) }}>Appearance</span>
-    </div>
-  );
+  const { Icon, S, RadioRow, ScreenBody, SubAppBar } = window.MX;
 
   // Mini screen preview, forced into `theme` palette.
   const Swatch = ({ theme }) => (
@@ -44,8 +37,8 @@
   function Screen({ selected }) {
     return (
       <div className="app">
-        <Bar />
-        <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `${S(4)} var(--memox-space-screen) var(--memox-space-6)`, display: 'flex', flexDirection: 'column', gap: S(2) }}>
+        <SubAppBar title="Appearance" />
+        <ScreenBody gap={2} minH>
           <div className="ov" style={{ paddingLeft: S(1) }}>Theme</div>
           <div className="list-card" data-mx-node="24-appearance/theme-list">
             {OPTIONS.map((o, i) => (
@@ -58,7 +51,7 @@
           <div className="muted" style={{ fontSize: 'var(--memox-fs-body-small)', padding: `${S(2)} ${S(1)} 0`, display: 'flex', alignItems: 'center', gap: S(2) }}>
             <Icon name="info" style={{ width: 'var(--memox-icon-sm)', height: 'var(--memox-icon-sm)' }} />System follows your device's light/dark schedule.
           </div>
-        </div>
+        </ScreenBody>
       </div>
     );
   }

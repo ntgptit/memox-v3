@@ -5,20 +5,14 @@
    (no cards studied). Composes contract classes + shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, IconTile, StatSummary, HeroCard, Banner } = window.MX;
+  const { Icon, S, IconTile, StatSummary, HeroCard, Banner, ScreenBody, SubAppBar } = window.MX;
 
   const Bar = ({ title }) => (
-    <div className="appbar">
-      <span className="appbar-title" style={{ flex: 1 }}>{title}</span>
-      <button className="icon-btn" aria-label="Close" data-mx-node="17-study-result/close-btn"><Icon name="x" /></button>
-    </div>
+    <SubAppBar title={title} lead={null}
+      trail={<button className="icon-btn" aria-label="Close" data-mx-node="17-study-result/close-btn"><Icon name="x" /></button>} />
   );
 
-  const Body = ({ children }) => (
-    <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `${S(4)} var(--memox-space-screen) var(--memox-space-6)`, display: 'flex', flexDirection: 'column', gap: 'var(--memox-gap-section)' }}>
-      {children}
-    </div>
-  );
+  const Body = ({ children }) => <ScreenBody minH>{children}</ScreenBody>;
 
   const Footer = ({ children }) => (
     <div style={{ flex: 'none', padding: `${S(3)} var(--memox-space-screen) ${S(5)}`, display: 'flex', flexDirection: 'column', gap: S(2), borderTop: '1px solid var(--memox-border-ghost)' }}>

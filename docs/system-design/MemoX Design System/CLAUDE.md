@@ -44,15 +44,17 @@ shared layer (a token / contract class / `_shared.jsx` primitive) once.
    `.rate-btn`, `.field`, `.segmented`, `.banner`, `.skeleton`, `.spinner`, `.hr`,
    `.avatar`, `.switch`, `.waveform`. State fills use `color-mix()` with tokenized
    opacities.
-3. **Shared JSX primitives** — `screens/_shared.jsx` → `window.MX` (46 components
+3. **Shared JSX primitives** — `screens/_shared.jsx` → `window.MX` (48 components
    every screen destructures): `Icon`, `S(n)` (→ `var(--memox-space-${n})`),
    `PillBtn`, `IconBtn`, `Breadcrumb`, `SearchField`, `SearchDock`, `BottomNav`,
    `IconTile`, `TileLg`, `Chip`, `Overline`, `Progress`, `SectionHead`, `ListRow`,
    `StatSummary`, `ListGroup`, `HeroCard`, `InfoRow`, `PickerRow`, `ShortcutRow`,
    `DueSummary`, `Insight`, `GoalRing`, `EmptyState`, `Banner`, `FormField`,
-   `TextArea`, `Modal`, `Sheet`, `BusyOverlay`, `StudyTopBar`, `StudyShell`,
-   `StudyOption`, `RateBtn`, `AnswerReveal`, `Avatar`, `Toggle`, `Slider`,
-   `RadioRow`, `Segmented`, `BarChart`, `MasteryBar`, `Fab`, `Sk`.
+   `TextArea`, `Modal`, `Sheet`, `BusyOverlay`, `ScreenBody` (page scroll column →
+   Flutter `MxContentShell`), `SubAppBar` (nested-screen app bar + breadcrumb →
+   Flutter `MxAppBar`), `StudyTopBar`, `StudyShell`, `StudyOption`, `RateBtn`,
+   `AnswerReveal`, `Avatar`, `Toggle`, `Slider`, `RadioRow`, `Segmented`,
+   `BarChart`, `MasteryBar`, `Fab`, `Sk`.
 
 ## Screen files
 

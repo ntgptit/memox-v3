@@ -7,7 +7,7 @@
    error. Token-driven; composes the shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, Segmented, BarChart, StatSummary, GoalRing, Insight, SectionHead, Banner, EmptyState, HeroCard, Sk } = window.MX;
+  const { Icon, S, Segmented, BarChart, StatSummary, GoalRing, Insight, SectionHead, Banner, EmptyState, HeroCard, Sk, ScreenBody, SubAppBar } = window.MX;
 
   const WEEK = [
     { label: 'M', value: 18 }, { label: 'T', value: 24 }, { label: 'W', value: 12 },
@@ -38,18 +38,11 @@
   };
 
   const Bar = ({ range }) => (
-    <div className="appbar">
-      <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
-      <span className="appbar-title" style={{ flex: 1 }}>Progress</span>
-      <Segmented options={['Week', 'Month']} value={range === 'month' ? 'Month' : 'Week'} />
-    </div>
+    <SubAppBar title="Progress" noGap
+      trail={<Segmented options={['Week', 'Month']} value={range === 'month' ? 'Month' : 'Week'} />} />
   );
 
-  const Body = ({ children }) => (
-    <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `${S(4)} var(--memox-space-screen) var(--memox-space-6)`, display: 'flex', flexDirection: 'column', gap: 'var(--memox-gap-section)' }}>
-      {children}
-    </div>
-  );
+  const Body = ({ children }) => <ScreenBody minH>{children}</ScreenBody>;
 
   // Today status — goal ring + streak. The goal/streak that USED to pressure the
   // Dashboard now reports here as status.

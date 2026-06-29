@@ -5,20 +5,10 @@
    shared primitives + contract classes. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, IconTile, Toggle, Slider, Banner, BusyOverlay } = window.MX;
+  const { Icon, S, IconTile, Toggle, Slider, Banner, BusyOverlay, ScreenBody, SubAppBar } = window.MX;
 
-  const Bar = () => (
-    <div className="appbar">
-      <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
-      <span className="appbar-title" style={{ flex: 1, marginLeft: S(2) }}>Learning</span>
-    </div>
-  );
-
-  const Body = ({ children }) => (
-    <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `${S(4)} var(--memox-space-screen) var(--memox-space-6)`, display: 'flex', flexDirection: 'column', gap: 'var(--memox-gap-section)' }}>
-      {children}
-    </div>
-  );
+  const Bar = () => <SubAppBar title="Learning" />;
+  const Body = ({ children }) => <ScreenBody minH>{children}</ScreenBody>;
 
   const RowHead = ({ icon, tint, title, desc, on, disabled, toggleNode }) => (
     <div style={{ display: 'flex', alignItems: 'center', gap: S(3) }}>

@@ -5,20 +5,10 @@
    Token-driven; composes shared primitives + contract classes. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, PillBtn, Avatar, IconTile, TileLg, HeroCard, Banner, Progress, Modal } = window.MX;
+  const { Icon, S, PillBtn, Avatar, IconTile, TileLg, HeroCard, Banner, Progress, Modal, ScreenBody, SubAppBar } = window.MX;
 
-  const Bar = () => (
-    <div className="appbar">
-      <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
-      <span className="appbar-title" style={{ flex: 1, marginLeft: S(2) }}>Account</span>
-    </div>
-  );
-
-  const Body = ({ children }) => (
-    <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `${S(4)} var(--memox-space-screen) var(--memox-space-6)`, display: 'flex', flexDirection: 'column', gap: 'var(--memox-gap-section)' }}>
-      {children}
-    </div>
-  );
+  const Bar = () => <SubAppBar title="Account" />;
+  const Body = ({ children }) => <ScreenBody minH>{children}</ScreenBody>;
 
   const SectionLabel = ({ children }) => <div className="ov" style={{ paddingLeft: S(1) }}>{children}</div>;
 

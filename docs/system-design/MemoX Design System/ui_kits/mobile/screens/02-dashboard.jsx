@@ -7,7 +7,7 @@
    Token-driven; composes shared primitives (single source: screens/_shared.jsx). */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, TileLg, Progress, ListRow, StatSummary, DueSummary, ShortcutRow, HeroCard, Banner, BottomNav, Sk } = window.MX;
+  const { Icon, S, TileLg, Progress, ListRow, StatSummary, DueSummary, ShortcutRow, HeroCard, Banner, BottomNav, Sk, ScreenBody } = window.MX;
 
   // ---- Header --------------------------------------------------------------
   const Header = () => (
@@ -81,11 +81,7 @@
   );
 
   // ---- Assembled screen ----------------------------------------------------
-  const Body = ({ children }) => (
-    <div style={{ flex: 1, overflowY: 'auto', padding: `${S(2)} var(--memox-space-screen) var(--memox-space-6)`, display: 'flex', flexDirection: 'column', gap: 'var(--memox-gap-section)' }}>
-      {children}
-    </div>
-  );
+  const Body = ({ children }) => <ScreenBody padTop={2}>{children}</ScreenBody>;
 
   function Dashboard({ variant }) {
     if (variant === 'loading') {

@@ -4,27 +4,20 @@
    shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, PillBtn, FormField, TextArea, Chip, Banner, PickerRow, Breadcrumb } = window.MX;
+  const { Icon, S, PillBtn, FormField, TextArea, Chip, Banner, PickerRow, ScreenBody, SubAppBar } = window.MX;
 
   // ---- App bar (back + title + Save) ---------------------------------------
   const Bar = ({ canSave, saving }) => (
-    <>
-      <div className="appbar">
-        <button className="icon-btn" aria-label="Back" data-mx-node="flashcard-editor/back-btn"><Icon name="x" /></button>
-        <span className="appbar-title" style={{ flex: 1, minWidth: 0, marginLeft: S(2) }}>New card</span>
+    <SubAppBar lead="x" leadNode="flashcard-editor/back-btn" title="New card" minW
+      trail={
         <button className="pill-btn primary sm" disabled={!canSave || saving} style={{ minWidth: '76px' }} data-mx-node="flashcard-editor/save-button">
           {saving ? <span className="spinner" style={{ width: 'var(--memox-icon-sm)', height: 'var(--memox-icon-sm)', borderWidth: '2px' }}></span> : <><Icon name="check" />Save</>}
         </button>
-      </div>
-      <Breadcrumb items={[{ label: 'Library', icon: 'library' }, { label: 'Languages' }, { label: 'Japanese \u00B7 N5' }, { label: 'New card', current: true }]} />
-    </>
+      }
+      breadcrumb={[{ label: 'Library', icon: 'library' }, { label: 'Languages' }, { label: 'Japanese \u00B7 N5' }, { label: 'New card', current: true }]} />
   );
 
-  const Body = ({ children }) => (
-    <div style={{ flex: 1, overflowY: 'auto', padding: `${S(4)} var(--memox-space-screen) var(--memox-space-12)`, display: 'flex', flexDirection: 'column', gap: 'var(--memox-gap-section)' }}>
-      {children}
-    </div>
-  );
+  const Body = ({ children }) => <ScreenBody padBottom={12}>{children}</ScreenBody>;
 
   // Collapsible "Details" disclosure header
   const DetailsHeader = ({ open }) => (

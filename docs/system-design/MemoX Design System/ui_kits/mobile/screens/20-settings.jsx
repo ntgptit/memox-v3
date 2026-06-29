@@ -4,7 +4,7 @@
    sync error. App bar + bottom-nav; token-driven, composes shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, Avatar, ListRow, Banner, BottomNav, Sk } = window.MX;
+  const { Icon, S, Avatar, ListRow, Banner, BottomNav, Sk, ScreenBody } = window.MX;
 
   const Header = () => (
     <div className="appbar-lg">
@@ -14,11 +14,7 @@
     </div>
   );
 
-  const Body = ({ children }) => (
-    <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `${S(2)} var(--memox-space-screen) var(--memox-space-6)`, display: 'flex', flexDirection: 'column', gap: 'var(--memox-gap-section)' }}>
-      {children}
-    </div>
-  );
+  const Body = ({ children }) => <ScreenBody padTop={2} minH>{children}</ScreenBody>;
 
   // Account header block — its body switches per variant.
   const AccountBlock = ({ variant }) => {

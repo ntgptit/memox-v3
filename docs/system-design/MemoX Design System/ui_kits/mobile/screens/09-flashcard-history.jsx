@@ -4,7 +4,7 @@
    classes + shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, PillBtn, Chip, HeroCard, EmptyState, Banner, Sk, Breadcrumb } = window.MX;
+  const { Icon, S, PillBtn, Chip, HeroCard, EmptyState, Banner, Sk, ScreenBody, SubAppBar } = window.MX;
 
   // ---- Data ----------------------------------------------------------------
   // grade -> { icon, tint } maps each review outcome to a calm status color.
@@ -26,13 +26,8 @@
 
   // ---- App bar -------------------------------------------------------------
   const Bar = () => (
-    <>
-      <div className="appbar">
-        <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
-        <span className="appbar-title" style={{ flex: 1, minWidth: 0, marginLeft: S(2) }}>History</span>
-      </div>
-      <Breadcrumb items={[{ label: 'Library', icon: 'library' }, { label: 'Languages' }, { label: 'Japanese \u00B7 N5' }, { label: 'History', current: true }]} />
-    </>
+    <SubAppBar title="History" minW
+      breadcrumb={[{ label: 'Library', icon: 'library' }, { label: 'Languages' }, { label: 'Japanese \u00B7 N5' }, { label: 'History', current: true }]} />
   );
 
   // ---- Card summary header -------------------------------------------------
@@ -72,11 +67,7 @@
     );
   };
 
-  const Body = ({ children }) => (
-    <div style={{ flex: 1, overflowY: 'auto', padding: `${S(4)} var(--memox-space-screen) var(--memox-space-12)`, display: 'flex', flexDirection: 'column', gap: 'var(--memox-gap-section)' }}>
-      {children}
-    </div>
-  );
+  const Body = ({ children }) => <ScreenBody padBottom={12}>{children}</ScreenBody>;
 
   const Feed = ({ events }) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: S(2) }}>

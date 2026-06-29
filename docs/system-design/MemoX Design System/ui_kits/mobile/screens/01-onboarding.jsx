@@ -4,7 +4,7 @@
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
   // Shared primitives — single source of truth (screens/_shared.jsx).
-  const { Icon, S, PillBtn, HeroCard, InfoRow } = window.MX;
+  const { Icon, S, PillBtn, HeroCard, InfoRow, ScreenBody } = window.MX;
 
   const AppBar = ({ title, subtitle }) => (
     <div className="appbar-lg">
@@ -19,13 +19,7 @@
     { icon: 'feather', tint: 'var(--memox-status-reviewing)', title: 'No streak pressure', desc: 'Miss a day — nothing breaks.' },
   ];
 
-  function Body({ children }) {
-    return (
-      <div style={{ flex: 1, overflowY: 'auto', padding: `${S(2)} var(--memox-space-screen) var(--memox-space-8)`, display: 'flex', flexDirection: 'column', gap: S(3) }}>
-        {children}
-      </div>
-    );
-  }
+  const Body = ({ children }) => <ScreenBody padTop={2} padBottom={8} gap={3}>{children}</ScreenBody>;
 
   function Onboarding({ variant }) {
     let bar = { title: 'Welcome', subtitle: 'MemoX' };

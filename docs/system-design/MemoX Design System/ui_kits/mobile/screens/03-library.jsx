@@ -3,7 +3,7 @@
    classes + shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, ListRow, HeroCard, SearchDock, BottomNav, Fab, Sk } = window.MX;
+  const { Icon, S, ListRow, HeroCard, SearchDock, BottomNav, Fab, Sk, ScreenBody } = window.MX;
 
   // ---- Data ----------------------------------------------------------------
   const FOLDERS = [
@@ -70,11 +70,7 @@
   );
 
   // ---- Assembled screen ----------------------------------------------------
-  const Body = ({ children }) => (
-    <div style={{ flex: 1, overflowY: 'auto', padding: `${S(3)} var(--memox-space-screen) var(--memox-space-10)`, display: 'flex', flexDirection: 'column', gap: 'var(--memox-gap-section)' }}>
-      {children}
-    </div>
-  );
+  const Body = ({ children }) => <ScreenBody padTop={3} padBottom={10}>{children}</ScreenBody>;
 
   const FabSlot = () => (
     <Fab icon="folder-plus" label="New folder" data-mx-node="03-library/new-folder-fab"

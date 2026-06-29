@@ -316,6 +316,53 @@
     <div className="skeleton" style={{ height: h, width: w || '100%', borderRadius: r || 'var(--memox-radius-sm)' }}></div>
   );
 
+  // ---- Page scaffold -------------------------------------------------------
+  // The scrollable content column every non-study screen hand-rolled (flex:1 +
+  // overflow + screen gutter + section gap). One owner so the body padding/gap is
+  // not re-typed per screen (was duplicated ~16×). Knobs are the only things that
+  // ever varied: `padTop`/`padBottom` (token step n → S(n)), `gap` (a token string
+  // OR a step n), `minH` (flex child can shrink under overflow), `center` (balance
+  // short content). `style` is an escape hatch for the rare extra. Maps 1:1 to the
+  // Flutter MxContentShell — keep them in lockstep.
+  const ScreenBody = ({ padTop = 4, padBottom = 6, gap = 'var(--memox-gap-section)', minH, center, style, children, node }) => (
+    <div data-mx-node={node} style={{
+      flex: 1,
+      ...(minH ? { minHeight: 0 } : null),
+      overflowY: 'auto',
+      padding: `${S(padTop)} var(--memox-space-screen) ${S(padBottom)}`,
+      display: 'flex', flexDirection: 'column',
+      gap: typeof gap === 'number' ? S(gap) : gap,
+      ...(center ? { justifyContent: 'center' } : null),
+      ...style,
+    }}>{children}</div>
+  );
+
+  // Sub-screen top app bar: a leading button (back/close) + title + optional
+  // trailing slot, with an optional Breadcrumb docked underneath. One owner for
+  // the ~14 nested screens that each hand-rolled `.appbar` + back button + title.
+  // `lead` = leading icon (null drops it, e.g. result screen); `leadNode`/`leadLabel`
+  // for its identity/a11y; `trail` is the escape hatch for screen actions (more,
+  // Save, Segmented…). Title quirks kept as faithful knobs so promotion is visually
+  // neutral: `minW` (allow ellipsis truncation), `ellipsis` (clip long titles),
+  // `noGap` (skip the leading gap when the title owns the row). Maps to Flutter
+  // MxAppBar.
+  const SubAppBar = ({ title, lead = 'arrow-left', leadLabel = 'Back', leadNode, minW, ellipsis, noGap, trail, breadcrumb, titleStyle }) => (
+    <React.Fragment>
+      <div className="appbar">
+        {lead && <button className="icon-btn" aria-label={leadLabel} data-mx-node={leadNode}><Icon name={lead} /></button>}
+        <span className="appbar-title" style={{
+          flex: 1,
+          ...(minW ? { minWidth: 0 } : null),
+          ...(lead && !noGap ? { marginLeft: S(2) } : null),
+          ...(ellipsis ? { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } : null),
+          ...titleStyle,
+        }}>{title}</span>
+        {trail}
+      </div>
+      {breadcrumb && <Breadcrumb items={breadcrumb} />}
+    </React.Fragment>
+  );
+
   // ---- Forms ---------------------------------------------------------------
   // Labelled form group: an overline label (optional "Optional"/right slot) above
   // a control, with a red field-error message below when `error` is set. One owner
@@ -547,5 +594,5 @@
     </div>
   );
 
-  window.MX = { Icon, S, PillBtn, IconBtn, Breadcrumb, IconTile, TileLg, Chip, Overline, Progress, SectionHead, ListRow, StatSummary, ListGroup, HeroCard, InfoRow, PickerRow, ShortcutRow, DueSummary, Insight, GoalRing, EmptyState, Banner, SearchField, SearchDock, BottomNav, Fab, Sk, FormField, TextArea, Modal, Sheet, BusyOverlay, StudyTopBar, StudyShell, StudyOption, RateBtn, AnswerReveal, Avatar, Toggle, Slider, RadioRow, Segmented, BarChart, MasteryBar };
+  window.MX = { Icon, S, PillBtn, IconBtn, Breadcrumb, IconTile, TileLg, Chip, Overline, Progress, SectionHead, ListRow, StatSummary, ListGroup, HeroCard, InfoRow, PickerRow, ShortcutRow, DueSummary, Insight, GoalRing, EmptyState, Banner, SearchField, SearchDock, BottomNav, Fab, Sk, ScreenBody, SubAppBar, FormField, TextArea, Modal, Sheet, BusyOverlay, StudyTopBar, StudyShell, StudyOption, RateBtn, AnswerReveal, Avatar, Toggle, Slider, RadioRow, Segmented, BarChart, MasteryBar };
 })();
