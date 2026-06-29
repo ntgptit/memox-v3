@@ -1,0 +1,10 @@
+# Dữ liệu (không commit đề thi / kết quả vào repo)
+data/raw/
+data/interim/
+data/output/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.env

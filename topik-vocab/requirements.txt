@@ -1,0 +1,11 @@
+# Core morphological analysis (BẮT BUỘC cho stage analyze)
+kiwipiepy>=0.18.0
+
+# Claude OCR + enrich (BẮT BUỘC nếu dùng --backend claude hoặc stage enrich)
+anthropic>=0.40.0
+
+# OCR offline (tuỳ chọn — chỉ cần khi --backend tesseract)
+# Ngoài pip còn cần gói hệ thống: tesseract-ocr, tesseract-ocr-kor, poppler-utils
+pytesseract>=0.3.10
+pdf2image>=1.17.0
+Pillow>=10.0.0
