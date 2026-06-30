@@ -44,7 +44,7 @@ shared layer (a token / contract class / `_shared.jsx` primitive) once.
    `.rate-btn`, `.field`, `.segmented`, `.banner`, `.skeleton`, `.spinner`, `.hr`,
    `.avatar`, `.switch`, `.waveform`. State fills use `color-mix()` with tokenized
    opacities.
-3. **Shared JSX primitives** — `screens/_shared.jsx` → `window.MX` (53 components
+3. **Shared JSX primitives** — `screens/_shared.jsx` → `window.MX` (52 components
    every screen destructures): `Icon`, `S(n)` (→ `var(--memox-space-${n})`),
    `PillBtn`, `IconBtn`, `Breadcrumb`, `SearchField`, `SearchDock`, `BottomNav`,
    `IconTile`, `TileLg`, `Chip`, `Overline`, `Progress`, `SectionHead`, `ListRow`,
