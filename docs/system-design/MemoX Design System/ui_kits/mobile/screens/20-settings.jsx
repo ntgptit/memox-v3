@@ -4,7 +4,7 @@
    sync error. App bar + bottom-nav; token-driven, composes shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, Avatar, ListRow, Banner, BottomNav, Sk, ScreenBody } = window.MX;
+  const { Icon, S, Avatar, ListRow, ListCard, Banner, BottomNav, Sk, SkList, ScreenBody } = window.MX;
 
   const Header = () => (
     <div className="appbar-lg">
@@ -70,15 +70,10 @@
   ];
 
   const Group = ({ items, node }) => (
-    <div className="list-card" data-mx-node={node}>
-      {items.map((it, i) => (
-        <div key={it.title}>
-          {i > 0 && <div className="hr inset"></div>}
-          <ListRow icon={it.icon} color={it.tint} title={it.title} meta={it.meta}
-            trail={it.value != null ? <span className="muted" style={{ fontSize: 'var(--memox-fs-label-large)', fontWeight: 'var(--memox-weight-semibold)' }}>{it.value}</span> : undefined} />
-        </div>
-      ))}
-    </div>
+    <ListCard node={node} items={items} row={(it) => (
+      <ListRow icon={it.icon} color={it.tint} title={it.title} meta={it.meta}
+        trail={it.value != null ? <span className="muted" style={{ fontSize: 'var(--memox-fs-label-large)', fontWeight: 'var(--memox-weight-semibold)' }}>{it.value}</span> : undefined} />
+    )} />
   );
 
   function Screen({ variant }) {
@@ -91,16 +86,7 @@
               <Sk h="56px" w="56px" r="var(--memox-radius-full)" />
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: S(2) }}><Sk h="16px" w="50%" /><Sk h="12px" w="70%" /></div>
             </div>
-            {[0, 1].map((g) => (
-              <div key={g} className="card" style={{ display: 'flex', flexDirection: 'column', gap: S(4), padding: `${S(2)} var(--memox-space-card)` }}>
-                {[0, 1, 2].map((i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: S(3) }}>
-                    <Sk h="40px" w="40px" r="var(--memox-radius-md)" />
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: S(2) }}><Sk h="14px" w="45%" /><Sk h="11px" w="62%" /></div>
-                  </div>
-                ))}
-              </div>
-            ))}
+            {[0, 1].map((g) => <SkList key={g} rows={3} w1="45%" w2="62%" />)}
           </Body>
           <BottomNav active="Settings" />
         </div>

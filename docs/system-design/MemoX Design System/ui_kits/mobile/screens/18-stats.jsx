@@ -3,7 +3,7 @@
    low/mid/high scale). Token-driven; composes the shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, IconTile, SectionHead, BarChart, MasteryBar, BottomNav, ScreenBody } = window.MX;
+  const { Icon, S, IconTile, SectionHead, BarChart, MasteryBar, BottomNav, ScreenBody, ListCard } = window.MX;
 
   // Cards reviewed per day this week.
   const WEEK = [
@@ -55,14 +55,7 @@
 
           <div>
             <SectionHead title="Per-deck mastery" node="18-stats/mastery-section" />
-            <div className="list-card" data-mx-node="18-stats/mastery-list" style={{ marginTop: S(2) }}>
-              {DECKS.map((d, i) => (
-                <div key={d.name}>
-                  {i > 0 && <div className="hr inset"></div>}
-                  <MasteryRow d={d} />
-                </div>
-              ))}
-            </div>
+            <ListCard node="18-stats/mastery-list" style={{ marginTop: S(2) }} items={DECKS} row={(d) => <MasteryRow d={d} />} />
           </div>
         </ScreenBody>
         <BottomNav active="Stats" />

@@ -3,7 +3,7 @@
    back). Token-driven; composes contract classes + shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, Progress, IconTile, TileLg, HeroCard, Banner, ScreenBody, SubAppBar } = window.MX;
+  const { Icon, S, Progress, IconTile, TileLg, HeroCard, Banner, ScreenBody, SubAppBar, ListCard } = window.MX;
 
   // ---- Data (parsed rows) --------------------------------------------------
   const ROWS = [
@@ -42,21 +42,16 @@
   const PreviewList = ({ rows }) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: S(2) }}>
       <div className="ov" style={{ paddingLeft: S(1) }}>Preview<span style={{ marginLeft: S(1), color: 'var(--memox-text-3)' }}>{rows.length}</span></div>
-      <div className="list-card" data-mx-node="10-deck-import/preview-list">
-        {rows.map((r, i) => (
-          <div key={i}>
-            {i > 0 && <div className="hr inset"></div>}
-            <div className="list-row" style={{ cursor: 'default' }}>
-              <IconTile icon={r.ok ? 'check' : 'alert-triangle'} color={r.ok ? 'var(--memox-status-mastered)' : 'var(--memox-danger)'} />
-              <div className="list-row-main">
-                <div className="list-row-title" style={r.ok ? undefined : { color: 'var(--memox-text-secondary)' }}>{r.front}</div>
-                {!r.ok && <div className="list-row-meta" style={{ color: 'var(--memox-danger)' }}>{r.why}</div>}
-              </div>
-              {!r.ok && <span className="chip" style={{ '--chip': 'var(--memox-danger)' }}>Skip</span>}
-            </div>
+      <ListCard node="10-deck-import/preview-list" items={rows} row={(r) => (
+        <div className="list-row" style={{ cursor: 'default' }}>
+          <IconTile icon={r.ok ? 'check' : 'alert-triangle'} color={r.ok ? 'var(--memox-status-mastered)' : 'var(--memox-danger)'} />
+          <div className="list-row-main">
+            <div className="list-row-title" style={r.ok ? undefined : { color: 'var(--memox-text-secondary)' }}>{r.front}</div>
+            {!r.ok && <div className="list-row-meta" style={{ color: 'var(--memox-danger)' }}>{r.why}</div>}
           </div>
-        ))}
-      </div>
+          {!r.ok && <span className="chip" style={{ '--chip': 'var(--memox-danger)' }}>Skip</span>}
+        </div>
+      )} />
     </div>
   );
 

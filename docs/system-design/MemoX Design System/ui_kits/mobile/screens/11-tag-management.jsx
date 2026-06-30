@@ -4,7 +4,7 @@
    primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, TileLg, EmptyState, Banner, SearchDock, Sk, Modal, Sheet, BusyOverlay, ScreenBody, SubAppBar } = window.MX;
+  const { Icon, S, EmptyState, Banner, SearchDock, Sk, SkList, Modal, DialogActions, ConfirmDialog, Sheet, BusyOverlay, ScreenBody, SubAppBar, ListCard } = window.MX;
 
   // ---- Data ----------------------------------------------------------------
   const TAGS = [
@@ -46,14 +46,7 @@
   const TagList = ({ tags }) => (
     <>
       <div className="ov" style={{ paddingLeft: S(1) }}>{tags.length} tags</div>
-      <div className="list-card" data-mx-node="11-tag-management/tag-list">
-        {tags.map((t, i) => (
-          <div key={t.name}>
-            {i > 0 && <div className="hr inset"></div>}
-            <TagRow t={t} />
-          </div>
-        ))}
-      </div>
+      <ListCard node="11-tag-management/tag-list" items={tags} row={(t) => <TagRow t={t} />} />
     </>
   );
 
@@ -88,16 +81,16 @@
       {conflict ? (
         <>
           <Banner tone="warn" icon="git-merge" style={{ marginTop: S(3) }}>A tag “vocab” already exists. Merge them?</Banner>
-          <div style={{ display: 'flex', gap: S(2), marginTop: S(5) }}>
+          <DialogActions>
             <button className="pill-btn outline" style={{ flex: 1 }}>Cancel</button>
             <button className="pill-btn primary" style={{ flex: 1 }}><Icon name="git-merge" />Merge tags</button>
-          </div>
+          </DialogActions>
         </>
       ) : (
-        <div style={{ display: 'flex', gap: S(2), marginTop: S(5) }}>
+        <DialogActions>
           <button className="pill-btn outline" style={{ flex: 1 }}>Cancel</button>
           <button className="pill-btn primary" style={{ flex: 1 }}><Icon name="check" />Save</button>
-        </div>
+        </DialogActions>
       )}
     </Modal>
   );
@@ -126,29 +119,21 @@
   );
 
   const DeleteDialog = () => (
-    <Modal>
-      <TileLg icon="trash-2" tint="var(--memox-danger)" style={{ margin: `0 0 ${S(4)}` }} />
-      <div style={{ fontSize: 'var(--memox-size-h1)', fontWeight: 'var(--memox-weight-extrabold)', color: 'var(--memox-text-primary)', letterSpacing: 'var(--memox-tracking-tight)' }}>Delete tag “kanji”?</div>
-      <div className="muted" style={{ fontSize: 'var(--memox-fs-label-large)', lineHeight: 1.5, marginTop: S(2) }}>
-        The tag is removed from <b style={{ color: 'var(--memox-text-primary)' }}>142 cards</b>. The cards themselves stay. This can't be undone.
-      </div>
-      <div style={{ display: 'flex', gap: S(2), marginTop: S(5) }}>
+    <ConfirmDialog icon="trash-2" title="Delete tag “kanji”?"
+      desc={<>The tag is removed from <b style={{ color: 'var(--memox-text-primary)' }}>142 cards</b>. The cards themselves stay. This can't be undone.</>}
+      actions={<>
         <button className="pill-btn outline" style={{ flex: 1 }}>Cancel</button>
         <button className="pill-btn danger" style={{ flex: 1 }}><Icon name="trash-2" />Delete</button>
-      </div>
-    </Modal>
+      </>} />
   );
 
   const ErrorDialog = () => (
-    <Modal>
-      <TileLg icon="alert-triangle" tint="var(--memox-danger)" style={{ margin: `0 0 ${S(4)}` }} />
-      <div style={{ fontSize: 'var(--memox-size-h1)', fontWeight: 'var(--memox-weight-extrabold)', color: 'var(--memox-text-primary)', letterSpacing: 'var(--memox-tracking-tight)' }}>Couldn't rename tag</div>
-      <div className="muted" style={{ fontSize: 'var(--memox-fs-label-large)', lineHeight: 1.5, marginTop: S(2) }}>Something went wrong updating this tag. Your tags are unchanged.</div>
-      <div style={{ display: 'flex', gap: S(2), marginTop: S(5) }}>
+    <ConfirmDialog icon="alert-triangle" title="Couldn't rename tag"
+      desc="Something went wrong updating this tag. Your tags are unchanged."
+      actions={<>
         <button className="pill-btn outline" style={{ flex: 1 }}>Dismiss</button>
         <button className="pill-btn primary" style={{ flex: 1 }}><Icon name="rotate-ccw" />Try again</button>
-      </div>
-    </Modal>
+      </>} />
   );
 
   function Screen({ variant }) {
@@ -158,16 +143,7 @@
           <Bar />
           <Body>
             <Sk h="12px" w="22%" />
-            <div className="card" style={{ padding: `${S(2)} var(--memox-space-card)`, display: 'flex', flexDirection: 'column', gap: S(4) }}>
-              {[0, 1, 2, 3, 4].map((i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: S(3) }}>
-                  <Sk h="40px" w="40px" r="var(--memox-radius-md)" />
-                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: S(2) }}>
-                    <Sk h="14px" w="40%" /><Sk h="11px" w="26%" />
-                  </div>
-                </div>
-              ))}
-            </div>
+            <SkList rows={5} w1="40%" w2="26%" />
           </Body>
         </div>
       );

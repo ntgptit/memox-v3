@@ -7,7 +7,7 @@
    Token-driven; composes shared primitives (single source: screens/_shared.jsx). */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, TileLg, Progress, ListRow, StatSummary, DueSummary, ShortcutRow, HeroCard, Banner, BottomNav, Sk, ScreenBody } = window.MX;
+  const { Icon, S, TileLg, Progress, ListRow, ListCard, StatSummary, DueSummary, ShortcutRow, HeroCard, Banner, BottomNav, Sk, ScreenBody } = window.MX;
 
   // ---- Header --------------------------------------------------------------
   const Header = () => (
@@ -64,14 +64,9 @@
         <div className="ov">RECENT DECKS</div>
         <button className="pill-btn ghost sm">Library<Icon name="chevron-right" /></button>
       </div>
-      <div className="list-card" data-mx-node="02-dashboard/recent-decks">
-        {DECKS.map((d, i) => (
-          <div key={d.name}>
-            {i > 0 && <div className="hr inset"></div>}
-            <ListRow icon={d.icon} color={d.tint} title={d.name} meta={d.meta} due={d.due} />
-          </div>
-        ))}
-      </div>
+      <ListCard node="02-dashboard/recent-decks" items={DECKS} row={(d) => (
+        <ListRow icon={d.icon} color={d.tint} title={d.name} meta={d.meta} due={d.due} />
+      )} />
     </div>
   );
 

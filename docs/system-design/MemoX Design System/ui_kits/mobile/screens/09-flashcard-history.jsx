@@ -4,7 +4,7 @@
    classes + shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, PillBtn, Chip, HeroCard, EmptyState, Banner, Sk, ScreenBody, SubAppBar } = window.MX;
+  const { Icon, S, PillBtn, Chip, ListCard, HeroCard, EmptyState, Banner, Sk, ScreenBody, SubAppBar } = window.MX;
 
   // ---- Data ----------------------------------------------------------------
   // grade -> { icon, tint } maps each review outcome to a calm status color.
@@ -72,14 +72,7 @@
   const Feed = ({ events }) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: S(2) }}>
       <div className="ov" style={{ paddingLeft: S(1) }}>Activity</div>
-      <div className="list-card" data-mx-node="09-flashcard-history/activity">
-        {events.map((e, i) => (
-          <div key={i}>
-            {i > 0 && <div className="hr inset"></div>}
-            <EventRow e={e} />
-          </div>
-        ))}
-      </div>
+      <ListCard node="09-flashcard-history/activity" items={events} row={(e) => <EventRow e={e} />} />
     </div>
   );
 

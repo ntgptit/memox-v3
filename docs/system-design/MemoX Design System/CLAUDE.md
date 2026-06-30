@@ -44,17 +44,20 @@ shared layer (a token / contract class / `_shared.jsx` primitive) once.
    `.rate-btn`, `.field`, `.segmented`, `.banner`, `.skeleton`, `.spinner`, `.hr`,
    `.avatar`, `.switch`, `.waveform`. State fills use `color-mix()` with tokenized
    opacities.
-3. **Shared JSX primitives** — `screens/_shared.jsx` → `window.MX` (48 components
+3. **Shared JSX primitives** — `screens/_shared.jsx` → `window.MX` (53 components
    every screen destructures): `Icon`, `S(n)` (→ `var(--memox-space-${n})`),
    `PillBtn`, `IconBtn`, `Breadcrumb`, `SearchField`, `SearchDock`, `BottomNav`,
    `IconTile`, `TileLg`, `Chip`, `Overline`, `Progress`, `SectionHead`, `ListRow`,
-   `StatSummary`, `ListGroup`, `HeroCard`, `InfoRow`, `PickerRow`, `ShortcutRow`,
+   `StatSummary`, `ListCard` (the `.list-card` surface + inset hairlines — owner of
+   the "map rows, hairline between" pattern), `ListGroup`, `HeroCard`, `InfoRow`,
+   `PickerRow`, `ShortcutRow`,
    `DueSummary`, `Insight`, `GoalRing`, `EmptyState`, `Banner`, `FormField`,
-   `TextArea`, `Modal`, `Sheet`, `BusyOverlay`, `ScreenBody` (page scroll column →
+   `TextArea`, `Modal`, `DialogActions`/`ConfirmDialog` (dialog footer + confirm/
+   alert dialog shape), `Sheet`, `BusyOverlay`, `ScreenBody` (page scroll column →
    Flutter `MxContentShell`), `SubAppBar` (nested-screen app bar + breadcrumb →
    Flutter `MxAppBar`), `StudyTopBar`, `StudyShell`, `StudyOption`, `RateBtn`,
    `AnswerReveal`, `Avatar`, `Toggle`, `Slider`, `RadioRow`, `Segmented`,
-   `BarChart`, `MasteryBar`, `Fab`, `Sk`.
+   `BarChart`, `MasteryBar`, `Fab`, `Sk`, `SkRow`/`SkList` (loading list skeleton).
 
 ## Screen files
 

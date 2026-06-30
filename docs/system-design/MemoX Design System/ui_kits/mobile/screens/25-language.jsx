@@ -3,7 +3,7 @@
    primitives + contract classes. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, RadioRow, ScreenBody, SubAppBar } = window.MX;
+  const { Icon, S, RadioRow, ScreenBody, SubAppBar, ListCard } = window.MX;
 
   const OPTIONS = [
     { key: 'system', icon: 'smartphone', tint: 'var(--memox-text-secondary)', title: 'System default', desc: 'English (United States)' },
@@ -17,14 +17,9 @@
         <SubAppBar title="Language" />
         <ScreenBody gap={2} minH>
           <div className="ov" style={{ paddingLeft: S(1) }}>App language</div>
-          <div className="list-card" data-mx-node="25-language/language-list">
-            {OPTIONS.map((o, i) => (
-              <div key={o.key}>
-                {i > 0 && <div className="hr inset"></div>}
-                <RadioRow icon={o.icon} tint={o.tint} title={o.title} desc={o.desc} selected={o.key === selected} />
-              </div>
-            ))}
-          </div>
+          <ListCard node="25-language/language-list" items={OPTIONS} row={(o) => (
+            <RadioRow icon={o.icon} tint={o.tint} title={o.title} desc={o.desc} selected={o.key === selected} />
+          )} />
           <div className="muted" style={{ fontSize: 'var(--memox-fs-body-small)', padding: `${S(2)} ${S(1)} 0`, display: 'flex', alignItems: 'center', gap: S(2) }}>
             <Icon name="info" style={{ width: 'var(--memox-icon-sm)', height: 'var(--memox-icon-sm)' }} />Changing the language restarts the app.
           </div>

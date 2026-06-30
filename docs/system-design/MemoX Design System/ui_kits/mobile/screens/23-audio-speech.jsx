@@ -4,7 +4,7 @@
    saving. Token-driven; composes shared primitives + contract classes. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, RadioRow, Slider, HeroCard, BusyOverlay, Sk, ScreenBody, SubAppBar } = window.MX;
+  const { Icon, S, RadioRow, Slider, HeroCard, BusyOverlay, Sk, SkList, ScreenBody, SubAppBar, ListCard } = window.MX;
 
   const Bar = () => <SubAppBar title="Audio &amp; speech" />;
   const Body = ({ children }) => <ScreenBody minH>{children}</ScreenBody>;
@@ -69,15 +69,7 @@
           <Bar />
           <Body>
             <Sk h="64px" r="var(--memox-radius-card)" />
-            <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: S(4), padding: `${S(2)} var(--memox-space-card)` }}>
-              {[0, 1, 2].map((i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: S(3) }}>
-                  <Sk h="40px" w="40px" r="var(--memox-radius-md)" />
-                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: S(2) }}><Sk h="14px" w="40%" /><Sk h="11px" w="55%" /></div>
-                  <Sk h="22px" w="22px" r="var(--memox-radius-full)" />
-                </div>
-              ))}
-            </div>
+            <SkList rows={3} w1="40%" w2="55%" trail={<Sk h="22px" w="22px" r="var(--memox-radius-full)" />} />
           </Body>
         </div>
       );
@@ -115,14 +107,9 @@
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: S(2) }}>
             <SectionLabel>Voice</SectionLabel>
-            <div className="list-card" data-mx-node="23-audio-speech/voice-list">
-              {data.list.map((v, i) => (
-                <div key={v.name}>
-                  {i > 0 && <div className="hr inset"></div>}
-                  <RadioRow icon="mic" tint="var(--memox-status-new)" title={v.name} desc={v.desc} selected={v.sel} />
-                </div>
-              ))}
-            </div>
+            <ListCard node="23-audio-speech/voice-list" items={data.list} row={(v) => (
+              <RadioRow icon="mic" tint="var(--memox-status-new)" title={v.name} desc={v.desc} selected={v.sel} />
+            )} />
           </div>
           <PreviewCard sample={data.sample} playing={playing} />
           <Tuning />

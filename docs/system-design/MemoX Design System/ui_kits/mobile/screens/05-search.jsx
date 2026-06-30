@@ -3,7 +3,7 @@
    contract classes + shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, PillBtn, ListRow, SectionHead, HeroCard, EmptyState, SearchDock, BottomNav, Sk, ScreenBody } = window.MX;
+  const { Icon, S, PillBtn, ListRow, ListCard, SectionHead, HeroCard, EmptyState, SearchDock, BottomNav, Sk, ScreenBody } = window.MX;
 
   // ---- Data ----------------------------------------------------------------
   const FOLDER_HITS = [
@@ -25,22 +25,11 @@
   ];
 
   // ---- Result group --------------------------------------------------------
-  const Group = ({ title, count, children }) => (
+  const Group = ({ title, count, items, render }) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: S(2) }}>
       <SectionHead title={title} action={<span className="muted" style={{ fontSize: 'var(--memox-fs-label-medium)', fontWeight: 'var(--memox-weight-bold)' }}>{count}</span>} />
-      <div className="list-card">{children}</div>
+      <ListCard items={items} row={render} />
     </div>
-  );
-
-  const Rows = ({ items, render }) => (
-    <>
-      {items.map((it, i) => (
-        <div key={i}>
-          {i > 0 && <div className="hr inset"></div>}
-          {render(it)}
-        </div>
-      ))}
-    </>
   );
 
   // ---- Assembled screen ----------------------------------------------------
@@ -68,9 +57,7 @@
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: S(2) }}>
             <div className="ov">Jump to</div>
-            <div className="list-card">
-              <Rows items={POPULAR} render={(p) => <ListRow icon={p.icon} color={p.tint} title={p.name} meta={p.meta} />} />
-            </div>
+            <ListCard items={POPULAR} row={(p) => <ListRow icon={p.icon} color={p.tint} title={p.name} meta={p.meta} />} />
           </div>
         </>
       );
@@ -113,17 +100,11 @@
       // results
       content = (
         <>
-          <Group title="Folders" count="1">
-            <Rows items={FOLDER_HITS} render={(f) => <ListRow icon={f.icon} color={f.tint} title={f.name} meta={f.meta} />} />
-          </Group>
-          <Group title="Decks" count="2">
-            <Rows items={DECK_HITS} render={(d) => (
-              <ListRow icon={d.icon} color={d.tint} title={d.name} meta={d.meta} due={d.due} />
-            )} />
-          </Group>
-          <Group title="Flashcards" count="3">
-            <Rows items={CARD_HITS} render={(c) => <ListRow icon={c.icon} color={c.tint} title={c.front} meta={c.meta} />} />
-          </Group>
+          <Group title="Folders" count="1" items={FOLDER_HITS} render={(f) => <ListRow icon={f.icon} color={f.tint} title={f.name} meta={f.meta} />} />
+          <Group title="Decks" count="2" items={DECK_HITS} render={(d) => (
+            <ListRow icon={d.icon} color={d.tint} title={d.name} meta={d.meta} due={d.due} />
+          )} />
+          <Group title="Flashcards" count="3" items={CARD_HITS} render={(c) => <ListRow icon={c.icon} color={c.tint} title={c.front} meta={c.meta} />} />
         </>
       );
     }

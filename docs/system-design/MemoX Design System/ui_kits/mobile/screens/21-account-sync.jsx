@@ -5,7 +5,7 @@
    Token-driven; composes shared primitives + contract classes. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, PillBtn, Avatar, IconTile, TileLg, HeroCard, Banner, Progress, Modal, ScreenBody, SubAppBar } = window.MX;
+  const { Icon, S, PillBtn, Avatar, IconTile, HeroCard, Banner, Progress, ConfirmDialog, ScreenBody, SubAppBar, ListCard } = window.MX;
 
   const Bar = () => <SubAppBar title="Account" />;
   const Body = ({ children }) => <ScreenBody minH>{children}</ScreenBody>;
@@ -95,18 +95,13 @@
   const SyncLog = () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: S(2) }}>
       <SectionLabel>Recent sync</SectionLabel>
-      <div className="list-card">
-        {LOG.map((l, i) => (
-          <div key={i}>
-            {i > 0 && <div className="hr inset"></div>}
-            <div className="list-row" style={{ cursor: 'default' }}>
-              <IconTile icon={l.icon} color={l.tint} />
-              <div className="list-row-main"><div className="list-row-title">{l.t}</div><div className="list-row-meta">{l.meta}</div></div>
-              <span className="list-row-trail muted" style={{ fontSize: 'var(--memox-fs-body-small)', fontWeight: 'var(--memox-weight-semibold)' }}>{l.when}</span>
-            </div>
-          </div>
-        ))}
-      </div>
+      <ListCard rows={LOG.map((l) => (
+        <div className="list-row" style={{ cursor: 'default' }}>
+          <IconTile icon={l.icon} color={l.tint} />
+          <div className="list-row-main"><div className="list-row-title">{l.t}</div><div className="list-row-meta">{l.meta}</div></div>
+          <span className="list-row-trail muted" style={{ fontSize: 'var(--memox-fs-body-small)', fontWeight: 'var(--memox-weight-semibold)' }}>{l.when}</span>
+        </div>
+      ))} />
     </div>
   );
 
@@ -115,17 +110,12 @@
     const showLog = ['ready', 'uploading', 'restoring', 'restore-warn'].includes(variant);
 
     const overlay = variant === 'restore-warn' ? (
-      <Modal>
-        <TileLg icon="alert-triangle" tint="var(--memox-status-learning)" style={{ margin: `0 0 ${S(4)}` }} />
-        <div style={{ fontSize: 'var(--memox-size-h1)', fontWeight: 'var(--memox-weight-extrabold)', color: 'var(--memox-text-primary)', letterSpacing: 'var(--memox-tracking-tight)' }}>Restore from backup?</div>
-        <div className="muted" style={{ fontSize: 'var(--memox-fs-label-large)', lineHeight: 1.5, marginTop: S(2) }}>
-          This <b style={{ color: 'var(--memox-text-primary)' }}>replaces all local decks</b> with the backup from 2h ago. Anything not backed up will be lost.
-        </div>
-        <div style={{ display: 'flex', gap: S(2), marginTop: S(5) }}>
+      <ConfirmDialog icon="alert-triangle" tint="var(--memox-status-learning)" title="Restore from backup?"
+        desc={<>This <b style={{ color: 'var(--memox-text-primary)' }}>replaces all local decks</b> with the backup from 2h ago. Anything not backed up will be lost.</>}
+        actions={<>
           <button className="pill-btn outline" style={{ flex: 1 }}>Cancel</button>
           <button className="pill-btn primary" style={{ flex: 1 }}><Icon name="download" />Restore</button>
-        </div>
-      </Modal>
+        </>} />
     ) : null;
 
     return (

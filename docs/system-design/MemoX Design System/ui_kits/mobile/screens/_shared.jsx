@@ -242,6 +242,29 @@
   // Native grouped list: an optional overline header (+ count) sits ABOVE the
   // rounded card (iOS-style section grouping), with inset hairlines between rows,
   // so a floating list card reads as a labelled group, not a stray web container.
+  // Native grouped list card: the rounded `.list-card` surface with an inset
+  // hairline between rows (iOS-style grouping). The single owner of the
+  // "map rows, hairline between, wrap each in a keyed cell" pattern ~13 screens
+  // hand-rolled. Pass `rows` (already-rendered row nodes) OR `items` + a `row`
+  // renderer. `inset` picks the hairline style (`.hr inset` vs plain `.hr`).
+  // `node`/`style` pass through to the surface. Maps to the Flutter list-card
+  // composition (MxCard + MxListTile + MxDivider).
+  const ListCard = ({ rows, items, row, inset = true, node, style }) => {
+    const cells = rows || (items || []).map(row);
+    return (
+      <div className="list-card" data-mx-node={node} style={style}>
+        {cells.map((cell, i) => (
+          <div key={i}>
+            {i > 0 && <div className={inset ? 'hr inset' : 'hr'}></div>}
+            {cell}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  // Labelled group: an optional overline header (+ count) above a `ListCard` of
+  // `ListRow`s. The deck/folder list shorthand; for arbitrary rows use `ListCard`.
   const ListGroup = ({ heading, items, kind, node }) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: S(2) }}>
       {heading && (
@@ -249,15 +272,10 @@
           {heading}<span style={{ marginLeft: S(1), color: 'var(--memox-text-3)' }}>{items.length}</span>
         </div>
       )}
-      <div className="list-card" data-mx-node={node}>
-        {items.map((it, i) => (
-          <div key={it.name}>
-            {i > 0 && <div className="hr inset"></div>}
-            <ListRow icon={it.icon} color={it.tint} title={it.name} meta={it.meta}
-              due={kind === 'deck' ? it.due : undefined} />
-          </div>
-        ))}
-      </div>
+      <ListCard node={node} items={items} row={(it) => (
+        <ListRow icon={it.icon} color={it.tint} title={it.name} meta={it.meta}
+          due={kind === 'deck' ? it.due : undefined} />
+      )} />
     </div>
   );
 
@@ -314,6 +332,25 @@
   // Skeleton block — the one shimmer shape every loading state composes from.
   const Sk = ({ h, w, r }) => (
     <div className="skeleton" style={{ height: h, width: w || '100%', borderRadius: r || 'var(--memox-radius-sm)' }}></div>
+  );
+
+  // One skeleton list row: a 40px tile + two text lines (widths `w1`/`w2`) and an
+  // optional trailing block. The shimmer unit every "loading list" composes from.
+  const SkRow = ({ w1 = '45%', w2 = '60%', trail }) => (
+    <div style={{ display: 'flex', alignItems: 'center', gap: S(3) }}>
+      <Sk h="40px" w="40px" r="var(--memox-radius-md)" />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: S(2) }}><Sk h="14px" w={w1} /><Sk h="11px" w={w2} /></div>
+      {trail}
+    </div>
+  );
+
+  // A loading-state card of N `SkRow`s — the list skeleton ~11 screens hand-rolled
+  // (a `.card` of evenly-spaced shimmer rows). One owner so every loading list
+  // reads identically; `rows` count, `w1`/`w2` line widths and `trail` are the knobs.
+  const SkList = ({ rows = 3, w1, w2, trail }) => (
+    <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: S(4), padding: `${S(2)} var(--memox-space-card)` }}>
+      {Array.from({ length: rows }).map((_, i) => <SkRow key={i} w1={w1} w2={w2} trail={trail} />)}
+    </div>
   );
 
   // ---- Page scaffold -------------------------------------------------------
@@ -408,6 +445,29 @@
       <div className="scrim"></div>
       <div className="dialog" style={{ position: 'relative', width: '100%' }}>{children}</div>
     </div>
+  );
+
+  // The action row at the foot of a dialog: equal-width pill buttons with the
+  // standard top gap. One owner so every confirm/cancel/retry pair is identical
+  // (was hand-rolled `flex gap marginTop` per dialog).
+  const DialogActions = ({ children }) => (
+    <div style={{ display: 'flex', gap: S(2), marginTop: S(5) }}>{children}</div>
+  );
+
+  // Centered confirm/alert dialog: Modal scrim + an optional icon tile + h1 title
+  // + muted body + a DialogActions footer. The single owner of the
+  // delete/confirm/error dialog shape (~6 screens hand-rolled it, some even
+  // re-implementing Modal). `tint` colors the tile; pass the buttons as `actions`;
+  // `children` is an escape hatch for extra body content (input, banner) between
+  // the copy and the actions.
+  const ConfirmDialog = ({ icon, tint = 'var(--memox-danger)', title, desc, actions, children }) => (
+    <Modal>
+      {icon && <TileLg icon={icon} tint={tint} style={{ margin: `0 0 ${S(4)}` }} />}
+      <div style={{ fontSize: 'var(--memox-size-h1)', fontWeight: 'var(--memox-weight-extrabold)', color: 'var(--memox-text-primary)', letterSpacing: 'var(--memox-tracking-tight)' }}>{title}</div>
+      {desc != null && <div className="muted" style={{ fontSize: 'var(--memox-fs-label-large)', lineHeight: 1.5, marginTop: S(2) }}>{desc}</div>}
+      {children}
+      {actions && <DialogActions>{actions}</DialogActions>}
+    </Modal>
   );
 
   // Bottom sheet: scrim + docked .sheet with grabber and optional title row.
@@ -594,5 +654,5 @@
     </div>
   );
 
-  window.MX = { Icon, S, PillBtn, IconBtn, Breadcrumb, IconTile, TileLg, Chip, Overline, Progress, SectionHead, ListRow, StatSummary, ListGroup, HeroCard, InfoRow, PickerRow, ShortcutRow, DueSummary, Insight, GoalRing, EmptyState, Banner, SearchField, SearchDock, BottomNav, Fab, Sk, ScreenBody, SubAppBar, FormField, TextArea, Modal, Sheet, BusyOverlay, StudyTopBar, StudyShell, StudyOption, RateBtn, AnswerReveal, Avatar, Toggle, Slider, RadioRow, Segmented, BarChart, MasteryBar };
+  window.MX = { Icon, S, PillBtn, IconBtn, Breadcrumb, IconTile, TileLg, Chip, Overline, Progress, SectionHead, ListRow, StatSummary, ListCard, ListGroup, HeroCard, InfoRow, PickerRow, ShortcutRow, DueSummary, Insight, GoalRing, EmptyState, Banner, SearchField, SearchDock, BottomNav, Fab, Sk, SkRow, SkList, ScreenBody, SubAppBar, FormField, TextArea, Modal, DialogActions, ConfirmDialog, Sheet, BusyOverlay, StudyTopBar, StudyShell, StudyOption, RateBtn, AnswerReveal, Avatar, Toggle, Slider, RadioRow, Segmented, BarChart, MasteryBar };
 })();

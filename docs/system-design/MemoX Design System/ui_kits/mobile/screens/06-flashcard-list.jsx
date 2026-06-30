@@ -5,7 +5,7 @@
    classes + shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, PillBtn, Chip, IconTile, TileLg, ListRow, HeroCard, EmptyState, SearchDock, Fab, Sk, Modal, Sheet, ScreenBody, SubAppBar } = window.MX;
+  const { Icon, S, PillBtn, Chip, IconTile, ListRow, ListCard, HeroCard, EmptyState, SearchDock, Fab, Sk, ConfirmDialog, Sheet, ScreenBody, SubAppBar } = window.MX;
 
   // ---- Data ----------------------------------------------------------------
   const STATUS_TINT = {
@@ -135,21 +135,16 @@
           <ReorderBar title="Japanese · N5" />
           <Body>
             <div className="muted" style={{ fontSize: 'var(--memox-fs-body-small)', padding: `0 ${S(1)}` }}>Drag the handles to reorder cards.</div>
-            <div className="list-card" data-mx-node="06-flashcard-list/card-list">
-              {CARDS.slice(0, 5).map((c, i) => (
-                <div key={i}>
-                  {i > 0 && <div className="hr inset"></div>}
-                  <div className="list-row" style={i === 1 ? { background: 'color-mix(in srgb, var(--memox-primary) calc(var(--memox-op-selected) * 100%), transparent)' } : undefined}>
-                    <span className="icon-tile" style={{ '--tile': STATUS_TINT[c.status] }}><Icon name="square-stack" /></span>
-                    <div className="list-row-main">
-                      <div className="list-row-title">{c.front}</div>
-                      <div className="list-row-meta">{c.meta}</div>
-                    </div>
-                    <span className="list-row-trail" style={{ color: 'var(--memox-text-3)', cursor: 'grab' }}><Icon name="grip-vertical" /></span>
-                  </div>
+            <ListCard node="06-flashcard-list/card-list" rows={CARDS.slice(0, 5).map((c, i) => (
+              <div className="list-row" style={i === 1 ? { background: 'color-mix(in srgb, var(--memox-primary) calc(var(--memox-op-selected) * 100%), transparent)' } : undefined}>
+                <span className="icon-tile" style={{ '--tile': STATUS_TINT[c.status] }}><Icon name="square-stack" /></span>
+                <div className="list-row-main">
+                  <div className="list-row-title">{c.front}</div>
+                  <div className="list-row-meta">{c.meta}</div>
                 </div>
-              ))}
-            </div>
+                <span className="list-row-trail" style={{ color: 'var(--memox-text-3)', cursor: 'grab' }}><Icon name="grip-vertical" /></span>
+              </div>
+            ))} />
           </Body>
         </div>
       );
@@ -158,29 +153,19 @@
     // loaded (+ delete-card / delete-deck overlays)
     const overlay =
       variant === 'delete-card' ? (
-        <Modal>
-          <TileLg icon="trash-2" tint="var(--memox-danger)" style={{ margin: `0 0 ${S(4)}` }} />
-          <div style={{ fontSize: 'var(--memox-size-h1)', fontWeight: 'var(--memox-weight-extrabold)', color: 'var(--memox-text-primary)', letterSpacing: 'var(--memox-tracking-tight)' }}>Delete this card?</div>
-          <div className="muted" style={{ fontSize: 'var(--memox-fs-label-large)', lineHeight: 1.5, marginTop: S(2) }}>
-            <b style={{ color: 'var(--memox-text-primary)' }}>“日本 — Japan”</b> and its review history will be removed. This can't be undone.
-          </div>
-          <div style={{ display: 'flex', gap: S(2), marginTop: S(5) }}>
+        <ConfirmDialog icon="trash-2" title="Delete this card?"
+          desc={<><b style={{ color: 'var(--memox-text-primary)' }}>“日本 — Japan”</b> and its review history will be removed. This can't be undone.</>}
+          actions={<>
             <button className="pill-btn outline" style={{ flex: 1 }}>Cancel</button>
             <button className="pill-btn danger" style={{ flex: 1 }}><Icon name="trash-2" />Delete</button>
-          </div>
-        </Modal>
+          </>} />
       ) : variant === 'delete-deck' ? (
-        <Modal>
-          <TileLg icon="layers" tint="var(--memox-danger)" style={{ margin: `0 0 ${S(4)}` }} />
-          <div style={{ fontSize: 'var(--memox-size-h1)', fontWeight: 'var(--memox-weight-extrabold)', color: 'var(--memox-text-primary)', letterSpacing: 'var(--memox-tracking-tight)' }}>Delete “Japanese · N5”?</div>
-          <div className="muted" style={{ fontSize: 'var(--memox-fs-label-large)', lineHeight: 1.5, marginTop: S(2) }}>
-            This deletes the whole deck and all <b style={{ color: 'var(--memox-text-primary)' }}>142 cards</b> inside it. This can't be undone.
-          </div>
-          <div style={{ display: 'flex', gap: S(2), marginTop: S(5) }}>
+        <ConfirmDialog icon="layers" title="Delete “Japanese · N5”?"
+          desc={<>This deletes the whole deck and all <b style={{ color: 'var(--memox-text-primary)' }}>142 cards</b> inside it. This can't be undone.</>}
+          actions={<>
             <button className="pill-btn outline" style={{ flex: 1 }}>Cancel</button>
             <button className="pill-btn danger" style={{ flex: 1 }}><Icon name="trash-2" />Delete deck</button>
-          </div>
-        </Modal>
+          </>} />
       ) : null;
 
     return (
@@ -188,14 +173,7 @@
         <Bar title="Japanese · N5" />
         <Body>
           <CountStrip total="142" due="23" />
-          <div className="list-card" data-mx-node="06-flashcard-list/card-list">
-            {CARDS.map((c, i) => (
-              <div key={i}>
-                {i > 0 && <div className="hr inset"></div>}
-                <CardRow c={c} />
-              </div>
-            ))}
-          </div>
+          <ListCard node="06-flashcard-list/card-list" items={CARDS} row={(c) => <CardRow c={c} />} />
         </Body>
         {!overlay && <FabSlot />}
         <SearchBar query="" />

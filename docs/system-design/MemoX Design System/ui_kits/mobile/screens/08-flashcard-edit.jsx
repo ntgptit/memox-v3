@@ -4,7 +4,7 @@
    contract classes + shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, PillBtn, FormField, TextArea, Chip, TileLg, HeroCard, Banner, Sk, Modal, PickerRow, ScreenBody, SubAppBar } = window.MX;
+  const { Icon, S, PillBtn, FormField, TextArea, Chip, HeroCard, Banner, Sk, ConfirmDialog, PickerRow, ScreenBody, SubAppBar } = window.MX;
 
   // ---- App bar (back + title + delete + Save) ------------------------------
   const Bar = ({ saving, showActions = true }) => (
@@ -79,17 +79,12 @@
 
     const invalid = variant === 'validation';
     const overlay = variant === 'delete' ? (
-      <Modal>
-        <TileLg icon="trash-2" tint="var(--memox-danger)" style={{ margin: `0 0 ${S(4)}` }} />
-        <div style={{ fontSize: 'var(--memox-size-h1)', fontWeight: 'var(--memox-weight-extrabold)', color: 'var(--memox-text-primary)', letterSpacing: 'var(--memox-tracking-tight)' }}>Delete this card?</div>
-        <div className="muted" style={{ fontSize: 'var(--memox-fs-label-large)', lineHeight: 1.5, marginTop: S(2) }}>
-          <b style={{ color: 'var(--memox-text-primary)' }}>“日本 — Japan”</b> and its review history will be removed. This can't be undone.
-        </div>
-        <div style={{ display: 'flex', gap: S(2), marginTop: S(5) }}>
+      <ConfirmDialog icon="trash-2" title="Delete this card?"
+        desc={<><b style={{ color: 'var(--memox-text-primary)' }}>“日本 — Japan”</b> and its review history will be removed. This can't be undone.</>}
+        actions={<>
           <button className="pill-btn outline" style={{ flex: 1 }}>Cancel</button>
           <button className="pill-btn danger" style={{ flex: 1 }}><Icon name="trash-2" />Delete</button>
-        </div>
-      </Modal>
+        </>} />
     ) : null;
 
     return (

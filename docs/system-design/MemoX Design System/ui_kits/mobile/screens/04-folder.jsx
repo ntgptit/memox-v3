@@ -3,7 +3,7 @@
    and overflow. Token-driven; composes contract classes + shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, TileLg, ListRow, StatSummary, ListGroup, HeroCard, EmptyState, SearchDock, BottomNav, Fab, Sk, ScreenBody, SubAppBar } = window.MX;
+  const { Icon, S, ListRow, StatSummary, ListGroup, HeroCard, EmptyState, SearchDock, BottomNav, Fab, Sk, ScreenBody, SubAppBar, ConfirmDialog } = window.MX;
 
   // ---- Data ----------------------------------------------------------------
   const DECKS = [
@@ -35,20 +35,12 @@
 
   // ---- Delete confirm dialog ----------------------------------------------
   const DeleteDialog = () => (
-    <div style={{ position: 'absolute', inset: 0, zIndex: 20, display: 'grid', placeItems: 'center', padding: 'var(--memox-space-6)' }}>
-      <div className="scrim"></div>
-      <div className="dialog" style={{ position: 'relative', width: '100%' }}>
-        <TileLg icon="trash-2" tint="var(--memox-danger)" style={{ margin: `0 0 ${S(4)}` }} />
-        <div style={{ fontSize: 'var(--memox-size-h1)', fontWeight: 'var(--memox-weight-extrabold)', color: 'var(--memox-text-primary)', letterSpacing: 'var(--memox-tracking-tight)' }}>Delete “Languages”?</div>
-        <div className="muted" style={{ fontSize: 'var(--memox-fs-label-large)', lineHeight: 1.5, marginTop: S(2) }}>
-          This removes the folder and its <b style={{ color: 'var(--memox-text-primary)' }}>4 decks · 412 cards</b>. This can't be undone.
-        </div>
-        <div style={{ display: 'flex', gap: S(2), marginTop: S(5) }}>
-          <button className="pill-btn outline" style={{ flex: 1 }}>Cancel</button>
-          <button className="pill-btn danger" style={{ flex: 1 }}><Icon name="trash-2" />Delete</button>
-        </div>
-      </div>
-    </div>
+    <ConfirmDialog icon="trash-2" title="Delete “Languages”?"
+      desc={<>This removes the folder and its <b style={{ color: 'var(--memox-text-primary)' }}>4 decks · 412 cards</b>. This can't be undone.</>}
+      actions={<>
+        <button className="pill-btn outline" style={{ flex: 1 }}>Cancel</button>
+        <button className="pill-btn danger" style={{ flex: 1 }}><Icon name="trash-2" />Delete</button>
+      </>} />
   );
 
   // ---- Move bottom sheet ---------------------------------------------------

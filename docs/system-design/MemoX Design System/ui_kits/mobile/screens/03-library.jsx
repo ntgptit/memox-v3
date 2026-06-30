@@ -3,7 +3,7 @@
    classes + shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, ListRow, HeroCard, SearchDock, BottomNav, Fab, Sk, ScreenBody } = window.MX;
+  const { Icon, S, ListRow, ListCard, HeroCard, SearchDock, BottomNav, Fab, Sk, ScreenBody } = window.MX;
 
   // ---- Data ----------------------------------------------------------------
   const FOLDERS = [
@@ -29,14 +29,9 @@
 
   // ---- List card -----------------------------------------------------------
   const FolderCard = ({ items }) => (
-    <div className="list-card" data-mx-node="03-library/folder-list">
-      {items.map((f, i) => (
-        <div key={f.name}>
-          {i > 0 && <div className="hr inset"></div>}
-          <ListRow icon={f.icon} color={f.tint} title={f.name} meta={f.meta} />
-        </div>
-      ))}
-    </div>
+    <ListCard node="03-library/folder-list" items={items} row={(f) => (
+      <ListRow icon={f.icon} color={f.tint} title={f.name} meta={f.meta} />
+    )} />
   );
 
   // ---- Bottom sheet (overflow actions for one folder) ----------------------
